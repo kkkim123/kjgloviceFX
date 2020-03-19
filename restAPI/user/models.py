@@ -1,9 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from restAPI import settings
-from django.utils.translation import ugettext_lazy as _
-from rest_framework.authtoken.models import Token as DefaultTokenModel
-from .utils import import_callable
+#from pygments.lexers import get_all_lexers
+#from pygments.styles import get_all_styles
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters.html import HtmlFormatter
+from pygments import highlight
+
+from django_countries.fields import CountryField
+
+# LEXERS = [item for item in get_all_lexers() if item[1]]
+# LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
+# STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
 
 
 USER_TYPES = (
@@ -87,19 +94,38 @@ DOC_STATUS = (
     ('P', "Pending"),
     ('R', "Reject"),
 )
-TokenModel = import_callable(
-    getattr(settings, 'REST_AUTH_TOKEN_MODEL', DefaultTokenModel))
+
+# owner = models.ForeignKey('auth.User', related_name='users', on_delete=models.CASCADE)
+# highlighted = models.TextField()
+
+# def save(self, *args, **kwargs):
+#     """
+#     Use the `pygments` library to create a highlighted HTML
+#     representation of the code snippet.
+#     """
+#     lexer = get_lexer_by_name(self.language)
+#     linenos = 'table' if self.linenos else False
+#     options = {'title': self.title} if self.title else {}
+#     formatter = HtmlFormatter(style=self.style, linenos=linenos,
+#                               full=True, **options)
+#     self.highlighted = highlight(self.code, lexer, formatter)
+#     super(User, self).save(*args, **kwargs)
 
 class User(AbstractUser):
-    user_type = models.CharField(default='R', max_length=1, blank=True, choices=USER_TYPES)
+    #country = CountryField()
+    #resident_country = CountryField()
+    created = models.DateTimeField(auto_now_add=True)
     first_name  = models.CharField(max_length=240)
     last_name  = models.CharField(max_length=240)
-    email = models.EmailField()
+    email = models.EmailField(primary_key=True,unique=True)
     password = models.CharField(max_length=240)
-    def __str__(self):
-        return self.last_name
+    user_type = models.CharField(default='R', max_length=1, blank=True, choices=USER_TYPES)
+    #username = models.CharField(max_length=240,unique=False)
+    #REQUIRED_FIELDS = ['email', ]
+    class Meta:
+        ordering = ['created']
 
-# class User(models.Model):
+# class User(models.Model): CountryField()
 #     name = models.CharField("Name", max_length=240)
 #     email = models.EmailField()
 #     document = models.CharField("Document", max_length=20)

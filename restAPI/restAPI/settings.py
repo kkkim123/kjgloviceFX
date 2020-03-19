@@ -26,14 +26,15 @@ INSTALLED_APPS += [
     'rest_framework.authtoken',
     'rest_framework_swagger',
 
-    'allauth',
-    'allauth.account',
+    # 'allauth',
+    # 'allauth.account',
 
-    'rest_auth',
-    'rest_auth.registration',
+    # 'rest_auth',
+    # 'rest_auth.registration',
 
+    'django_countries',
     #'snippets',
-    'user',
+    'user.apps.UserConfig',
     #'api',
     #'djoser',
 
@@ -100,10 +101,22 @@ WSGI_APPLICATION = 'restAPI.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'kjgloviceweb',
+        'USER': 'kj',
+        'PASSWORD': 'admin1234',
+        'HOST': 'localhost',
+        'PORT': '',
+        'OPTIONS': {
+            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
+        }
     }
+
 }
 
 
@@ -146,15 +159,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'user.User'
-REST_SESSION_LOGIN = True
+# REST_SESSION_LOGIN = True
 
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-SITE_ID = 1
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True   
-ACCOUNT_USERNAME_REQUIRED = False
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# SITE_ID = 1
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_EMAIL_REQUIRED = True   
+# ACCOUNT_USERNAME_REQUIRED = False
 
 # REST_USE_JWT = True
 # ACCOUNT_EMAIL_REQUIRED = False
@@ -165,42 +178,34 @@ ACCOUNT_USERNAME_REQUIRED = False
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
-
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.IsAdminUser',
-        'rest_framework.permissions.AllowAny',
-    ),
+        'rest_framework.authentication.TokenAuthentication',
+    )
 }
-#JWT_AUTH 설정을 위해 settings.py 맨 위해 import datetime을 추가하자!!
-JWT_AUTH = {
-# If the secret is wrong, it will raise a jwt.DecodeError telling you as such. You can still get at the payload by setting the JWT_VERIFY to False.
-'JWT_VERIFY': True,
-# You can turn off expiration time verification by setting JWT_VERIFY_EXPIRATION to False.
-# If set to False, JWTs will last forever meaning a leaked token could be used by an attacker indefinitely.
-'JWT_VERIFY_EXPIRATION': True,
-# This is an instance of Python's datetime.timedelta. This will be added to datetime.utcnow() to set the expiration time.
-# Default is datetime.timedelta(seconds=300)(5 minutes).
-'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
-'JWT_ALLOW_REFRESH': True,
-'JWT_AUTH_HEADER_PREFIX': 'JWT',
+# #JWT_AUTH 설정을 위해 settings.py 맨 위해 import datetime을 추가하자!!
+# JWT_AUTH = {
+# # If the secret is wrong, it will raise a jwt.DecodeError telling you as such. You can still get at the payload by setting the JWT_VERIFY to False.
+# 'JWT_VERIFY': True,
+# # You can turn off expiration time verification by setting JWT_VERIFY_EXPIRATION to False.
+# # If set to False, JWTs will last forever meaning a leaked token could be used by an attacker indefinitely.
+# 'JWT_VERIFY_EXPIRATION': True,
+# # This is an instance of Python's datetime.timedelta. This will be added to datetime.utcnow() to set the expiration time.
+# # Default is datetime.timedelta(seconds=300)(5 minutes).
+# 'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
+# 'JWT_ALLOW_REFRESH': True,
+# 'JWT_AUTH_HEADER_PREFIX': 'JWT',
 
-    # 'JWT_SECRET_KEY': SECRET_KEY,
-    # 'JWT_ALGORITHM': 'HS256',
-    # 'JWT_ALLOW_REFRESH': True,
-    # 'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
-    # 'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
-}
-REST_USE_JWT = True
+#     # 'JWT_SECRET_KEY': SECRET_KEY,
+#     # 'JWT_ALGORITHM': 'HS256',
+#     # 'JWT_ALLOW_REFRESH': True,
+#     # 'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+#     # 'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
+# }
+# REST_USE_JWT = True
 
 
-SWAGGER_SETTINGS = {
-    'LOGIN_URL': 'login',
-    'LOGOUT_URL': 'logout',
-}
+# SWAGGER_SETTINGS = {
+#     'LOGIN_URL': 'login',
+#     'LOGOUT_URL': 'logout',
+# }
