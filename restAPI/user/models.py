@@ -1,12 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser
 #from pygments.lexers import get_all_lexers
 #from pygments.styles import get_all_styles
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters.html import HtmlFormatter
 from pygments import highlight
 
-from django_countries.fields import CountryField
+#from django_countries.fields import CountryField
 
 # LEXERS = [item for item in get_all_lexers() if item[1]]
 # LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
@@ -111,19 +111,31 @@ DOC_STATUS = (
 #     self.highlighted = highlight(self.code, lexer, formatter)
 #     super(User, self).save(*args, **kwargs)
 
-class User(AbstractUser):
+class User(AbstractBaseUser):
     #country = CountryField()
     #resident_country = CountryField()
-    created = models.DateTimeField(auto_now_add=True)
+    
+    resident_country = models.CharField(max_length=240)
     first_name  = models.CharField(max_length=240)
     last_name  = models.CharField(max_length=240)
     email = models.EmailField(primary_key=True,unique=True)
     password = models.CharField(max_length=240)
     user_type = models.CharField(default='R', max_length=1, blank=True, choices=USER_TYPES)
-    #username = models.CharField(max_length=240,unique=False)
-    #REQUIRED_FIELDS = ['email', ]
-    class Meta:
-        ordering = ['created']
+    created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
+    updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
+
+    #residential address
+    address = models.CharField(max_length=128, blank=True)
+    postal_code = models.CharField(max_length=36, blank=True)
+    city = models.CharField(max_length=36, blank=True)
+
+    #personal detail
+    resident_country = models.CharField(max_length=128, blank=True)
+    birthday = models.DateTimeField(blank=True, null=True)
+    mobile = models.CharField(max_length=24, blank=True)
+
+    # class Meta:
+    #     ordering = ['created']
 
 # class User(models.Model): CountryField()
 #     name = models.CharField("Name", max_length=240)

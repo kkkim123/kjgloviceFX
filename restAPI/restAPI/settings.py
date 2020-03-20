@@ -19,7 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 INSTALLED_APPS += [
-    'corsheaders',
+    #'corsheaders',
     'django.contrib.sites',
 
     'rest_framework',
@@ -32,16 +32,19 @@ INSTALLED_APPS += [
     # 'rest_auth',
     # 'rest_auth.registration',
 
-    'django_countries',
+    #'django_countries',
     #'snippets',
     'user.apps.UserConfig',
+    'account.apps.AccountConfig',
+    # 'user',
+    # 'account',
     #'api',
     #'djoser',
-
+    #'simple_email_confirmation',
 
 ]
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    #'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -110,8 +113,9 @@ DATABASES = {
         'NAME': 'kjgloviceweb',
         'USER': 'kj',
         'PASSWORD': 'admin1234',
-        'HOST': 'localhost',
-        'PORT': '',
+        #HOST': 'localhost',
+        'HOST': '167.99.76.48',
+        'PORT': '3306',
         'OPTIONS': {
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
         }
@@ -157,10 +161,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
-AUTH_USER_MODEL = 'user.User'
+#LOGIN_URL = '/login/'
+#AUTH_USER_MODEL = 'user.User'
 # REST_SESSION_LOGIN = True
-
+SITE_ID = 1
 
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -176,13 +180,30 @@ AUTH_USER_MODEL = 'user.User'
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    #'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     )
 }
+
+
+
+EMAIL_HOST = 'smtp.gmail.com'
+# 메일을 호스트하는 서버
+EMAIL_PORT = '587'
+# gmail과의 통신하는 포트
+EMAIL_HOST_USER = 'sungchang@fbpasia.com'
+# 발신할 이메일
+EMAIL_HOST_PASSWORD = 'joy1378!'
+# 발신할 메일의 비밀번호
+EMAIL_USE_TLS = True
+# TLS 보안 방법
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# 사이트와 관련한 자동응답을 받을 이메일 주소,'webmaster@localhost'
+
+
 # #JWT_AUTH 설정을 위해 settings.py 맨 위해 import datetime을 추가하자!!
 # JWT_AUTH = {
 # # If the secret is wrong, it will raise a jwt.DecodeError telling you as such. You can still get at the payload by setting the JWT_VERIFY to False.

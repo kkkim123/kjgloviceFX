@@ -3,12 +3,22 @@ from .models import User, USER_TYPES
 
 
 class UserSerializer(serializers.Serializer):
-    #id = serializers.IntegerField(read_only=True)
+
+    resident_country = serializers.CharField(max_length=240)
     email = serializers.EmailField()
     first_name  = serializers.CharField(max_length=240)
     last_name  = serializers.CharField(max_length=240)
     password = serializers.CharField(max_length=240)
-    #user_type = serializers.CharField(choices=USER_TYPES)
+
+    #residential address
+    address = serializers.CharField(max_length=128)
+    postal_code = serializers.CharField(max_length=36)
+    city = serializers.CharField(max_length=36)
+
+    #personal detail
+    resident_country = serializers.CharField(max_length=128)
+    birthday = serializers.DateTimeField()
+    mobile = serializers.CharField(max_length=24)
 
     def create(self, validated_data):
         return User.objects.create(**validated_data)
