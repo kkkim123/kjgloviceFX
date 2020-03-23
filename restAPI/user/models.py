@@ -1,5 +1,7 @@
 from django.db import models
+from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser
+from django.utils.translation import ugettext_lazy as _
 #from pygments.lexers import get_all_lexers
 #from pygments.styles import get_all_styles
 from pygments.lexers import get_lexer_by_name
@@ -95,26 +97,44 @@ DOC_STATUS = (
     ('R', "Reject"),
 )
 
-# owner = models.ForeignKey('auth.User', related_name='users', on_delete=models.CASCADE)
-# highlighted = models.TextField()
+class FxUserManager(BaseUserManager):
+    use_in_migrations = True
 
-# def save(self, *args, **kwargs):
-#     """
-#     Use the `pygments` library to create a highlighted HTML
-#     representation of the code snippet.
-#     """
-#     lexer = get_lexer_by_name(self.language)
-#     linenos = 'table' if self.linenos else False
-#     options = {'title': self.title} if self.title else {}
-#     formatter = HtmlFormatter(style=self.style, linenos=linenos,
-#                               full=True, **options)
-#     self.highlighted = highlight(self.code, lexer, formatter)
-#     super(User, self).save(*args, **kwargs)
+    def create_user(self, email, password=None, **extra_fields):
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save()
+        return user
 
-class User(AbstractBaseUser):
-    #country = CountryField()
-    #resident_country = CountryField()
-    
+#     def create_superuser(self, email, password):
+#         """
+#         Creates and saves a superuser with the given email and password.
+#         """
+#         user = self.create_user(
+#             email,
+#             password=password,
+#         )
+#         user.staff = True
+#         user.admin = True
+#         user.save(using=self._db)
+#         return user
+    # def create_superuser(self, email, password, **extra_fields):
+    #     """
+    #     Create and save a SuperUser with the given email and password.
+    #     """
+    #     extra_fields.setdefault('is_staff', True)
+    #     extra_fields.setdefault('is_superuser', True)
+    #     extra_fields.setdefault('is_active', True)
+
+    #     if extra_fields.get('is_staff') is not True:
+    #         raise ValueError(_('Superuser must have is_staff=True.'))
+    #     if extra_fields.get('is_superuser') is not True:
+    #         raise ValueError(_('Superuser must have is_superuser=True.'))
+    #     return self.create_user(email, password, **extra_fields)
+class FxUser(AbstractBaseUser):
+
+    #username = models.EmailField(primary_key=True,unique=True)
     resident_country = models.CharField(max_length=240)
     first_name  = models.CharField(max_length=240)
     last_name  = models.CharField(max_length=240)
@@ -130,12 +150,21 @@ class User(AbstractBaseUser):
     city = models.CharField(max_length=36, blank=True)
 
     #personal detail
-    resident_country = models.CharField(max_length=128, blank=True)
+    Nationality = models.CharField(max_length=128, blank=True)
     birthday = models.DateTimeField(blank=True, null=True)
     mobile = models.CharField(max_length=24, blank=True)
 
-    # class Meta:
-    #     ordering = ['created']
+    #USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password'
+    ,'address','postal_code','city'
+    ,'Nationality','birthday','mobile']
+
+    objects = FxUserManager()
+
+    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "email"
+
+
 
 # class User(models.Model): CountryField()
 #     name = models.CharField("Name", max_length=240)

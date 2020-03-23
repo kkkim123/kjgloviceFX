@@ -1,36 +1,64 @@
 from rest_framework import serializers
-from .models import User, USER_TYPES
+from .models import FxUser, USER_TYPES
+
+# class LoginSerializer(serializers.ModelSerializer):
+#     email = serializers.EmailField()
+#     password = serializers.CharField(max_length=240)
+#     class Meta:
+#         model = User
+#         fields = ('id', 'email', 'password')
 
 
-class UserSerializer(serializers.Serializer):
+class UserSerializer(serializers.ModelSerializer):
+    # resident_country = serializers.CharField(max_length=240)
+    # email = serializers.EmailField()
+    # first_name  = serializers.CharField(max_length=240)
+    # last_name  = serializers.CharField(max_length=240)
+    # password = serializers.CharField(max_length=240)
 
-    resident_country = serializers.CharField(max_length=240)
-    email = serializers.EmailField()
-    first_name  = serializers.CharField(max_length=240)
-    last_name  = serializers.CharField(max_length=240)
-    password = serializers.CharField(max_length=240)
+    # #residential address
+    # address = serializers.CharField(max_length=128)
+    # postal_code = serializers.CharField(max_length=36)
+    # city = serializers.CharField(max_length=36)
 
-    #residential address
-    address = serializers.CharField(max_length=128)
-    postal_code = serializers.CharField(max_length=36)
-    city = serializers.CharField(max_length=36)
+    # #personal detail
+    # resident_country = serializers.CharField(max_length=128)
+    # birthday = serializers.DateTimeField()
+    # mobile = serializers.CharField(max_length=24)
 
-    #personal detail
-    resident_country = serializers.CharField(max_length=128)
-    birthday = serializers.DateTimeField()
-    mobile = serializers.CharField(max_length=24)
+    user=serializers.StringRelatedField(read_only=True)
+    class Meta:
+        model = FxUser
+        fields = '__all__'
+# class UserSerializer(serializers.Serializer):
 
-    def create(self, validated_data):
-        return User.objects.create(**validated_data)
+#     resident_country = serializers.CharField(max_length=240)
+#     email = serializers.EmailField()
+#     first_name  = serializers.CharField(max_length=240)
+#     last_name  = serializers.CharField(max_length=240)
+#     password = serializers.CharField(max_length=240)
 
-    def update(self, instance, validated_data):
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.email = validated_data.get('email', instance.email)
-        instance.password = validated_data.get('password', instance.password)
-        #instance.user_type = validated_data.get('user_type', instance.user_type)
-        instance.save()
-        return instance
+#     #residential address
+#     address = serializers.CharField(max_length=128)
+#     postal_code = serializers.CharField(max_length=36)
+#     city = serializers.CharField(max_length=36)
+
+#     #personal detail
+#     resident_country = serializers.CharField(max_length=128)
+#     birthday = serializers.DateTimeField()
+#     mobile = serializers.CharField(max_length=24)
+
+#     def create(self, validated_data):
+#         return User.objects.create(**validated_data)
+
+#     def update(self, instance, validated_data):
+#         instance.first_name = validated_data.get('first_name', instance.first_name)
+#         instance.last_name = validated_data.get('last_name', instance.last_name)
+#         instance.email = validated_data.get('email', instance.email)
+#         instance.password = validated_data.get('password', instance.password)
+#         #instance.user_type = validated_data.get('user_type', instance.user_type)
+#         instance.save()
+#         return instance
 
 
 

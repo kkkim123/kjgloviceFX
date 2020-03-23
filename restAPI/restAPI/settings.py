@@ -19,28 +19,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 INSTALLED_APPS += [
-    #'corsheaders',
-    'django.contrib.sites',
-
+	#third party package for user registration and authentication endpoints 	
+    'djoser',
+	'django.contrib.sites',
+     #rest API implementation library for django
     'rest_framework',
-    'rest_framework.authtoken',
-    'rest_framework_swagger',
-
-    # 'allauth',
-    # 'allauth.account',
-
-    # 'rest_auth',
-    # 'rest_auth.registration',
-
-    #'django_countries',
-    #'snippets',
+    "rest_framework.authtoken",
+	'rest_framework_swagger',
+	#JWT authentication backend library
+    'rest_framework_simplejwt',
     'user.apps.UserConfig',
-    'account.apps.AccountConfig',
-    # 'user',
-    # 'account',
-    #'api',
-    #'djoser',
-    #'simple_email_confirmation',
+    #'account.apps.AccountConfig',
+    'allauth',
+    'allauth.account',
 
 ]
 MIDDLEWARE = [
@@ -56,31 +47,31 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'restAPI.urls'
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = [
-"http://127.0.0.1:8000"
-]
-CORS_ALLOW_METHODS = (
-'DELETE',
-'GET',
-'OPTIONS',
-'PATCH',
-'POST',
-'PUT',
-)
-CORS_ALLOW_HEADERS = (
-'accept',
-'accept-encoding',
-'authorization',
-'access-control-request-method',
-'access-control-request-headers',
-'content-type',
-'dnt',
-'origin',
-'user-agent',
-'x-csrftoken',
-'x-requested-with',
-)
+# CORS_ORIGIN_ALLOW_ALL = False
+# CORS_ORIGIN_WHITELIST = [
+# "http://127.0.0.1:8000"
+# ]
+# CORS_ALLOW_METHODS = (
+# 'DELETE',
+# 'GET',
+# 'OPTIONS',
+# 'PATCH',
+# 'POST',
+# 'PUT',
+# )
+# CORS_ALLOW_HEADERS = (
+# 'accept',
+# 'accept-encoding',
+# 'authorization',
+# 'access-control-request-method',
+# 'access-control-request-headers',
+# 'content-type',
+# 'dnt',
+# 'origin',
+# 'user-agent',
+# 'x-csrftoken',
+# 'x-requested-with',
+# )
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -123,6 +114,7 @@ DATABASES = {
 
 }
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -162,9 +154,20 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 #LOGIN_URL = '/login/'
-#AUTH_USER_MODEL = 'user.User'
-# REST_SESSION_LOGIN = True
+AUTH_USER_MODEL = 'user.FxUser'
+# # REST_SESSION_LOGIN = True
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+# ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+# ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/?verification=1'
+# ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/?verification=1'
+
 SITE_ID = 1
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -177,18 +180,26 @@ SITE_ID = 1
 # ACCOUNT_EMAIL_REQUIRED = False
 # ACCOUNT_EMAIL_VERIFICATION = None
 # ACCOUNT_LOGOUT_ON_GET = True
-
-
-REST_FRAMEWORK = {
-    #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    #'PAGE_SIZE': 10,
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    )
+DJOSER = {
+    "SEND_ACTIVATION_EMAIL": False,
+    "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
+    "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
+    "ACTIVATION_URL": "#/activate/{uid}/{token}",
 }
 
+JWT_AUTH = {"JWT_ALLOW_REFRESH": True}
 
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    ),
+}
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 EMAIL_HOST = 'smtp.gmail.com'
 # 메일을 호스트하는 서버

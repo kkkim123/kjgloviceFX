@@ -1,21 +1,44 @@
-from .models import User
+from .models import FxUser
 from .serializers import UserSerializer
-from rest_framework import generics
+#from rest_framework_jwt.settings import api_settings
+#from rest_framework import status, generics
+from .permissions import IsOwnerProfileOrReadOnly
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import (ListCreateAPIView,RetrieveUpdateDestroyAPIView,)
+
+class UserProfileListCreateView(ListCreateAPIView):
+    queryset=FxUser.objects.all()
+    serializer_class=UserSerializer
+    permission_classes=[IsAuthenticated]
+
+    def perform_create(self, serializer):
+        user=self.request.user
+        serializer.save(user=user)
 
 
-class UserList(generics.ListCreateAPIView):
-    #queryset = User.objects.all()
-    serializer_class = UserSerializer
-    def get_queryset(self):
-        queryset = User.objects.all()
-        email = self.request.query_params.get('email', None)
-        if email is not None:
-            queryset = queryset.filter(email=email)
-        return queryset
+class userProfileDetailView(RetrieveUpdateDestroyAPIView):
+    queryset=FxUser.objects.all()
+    serializer_class=UserSerializer
+    permission_classes=[IsOwnerProfileOrReadOnly,IsAuthenticated]
+# class LoginView(generics.):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+# class UserList(generics.ListCreateAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
 
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+# class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+
+
+
+    # def get_queryset(self):
+    #     queryset = User.objects.all()
+    #     email = self.request.query_params.get('email', None)
+    #     if email is not None:
+    #         queryset = queryset.filter(email=email)
+    #     return queryset
 
 
 # class LoginView(GenericAPIView):

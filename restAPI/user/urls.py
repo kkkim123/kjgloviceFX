@@ -1,13 +1,22 @@
-from django.urls import path
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 from user import views
 
+
 urlpatterns = [
-    path('user/', views.UserList.as_view()), #http://127.0.0.1:8000/user/?email=qqq@qqq.com
-    path('user/detail/', views.UserDetail.as_view()),
+    #gets all user profiles and create a new profile
+    path("all-profiles",views.UserProfileListCreateView.as_view(),name="all-profiles"),
+   # retrieves profile details of the currently logged in user
+    path("profile/<int:pk>",views.userProfileDetailView.as_view(),name="profile"),
 ]
-#
-urlpatterns = format_suffix_patterns(urlpatterns)
+
+# urlpatterns = [
+#     path('user/', views.UserList.as_view()), #http://127.0.0.1:8000/user/?email=qqq@qqq.com
+#     path('user/detail/', views.UserDetail.as_view()),
+# ]
+# #
+# urlpatterns = format_suffix_patterns(urlpatterns)
 # urlpatterns = [
 #     # URLs that do not require a session or valid token
 #     path("password/reset/", PasswordResetView.as_view(), name="rest_password_reset"),
