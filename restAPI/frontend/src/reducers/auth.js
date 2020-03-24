@@ -16,7 +16,6 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case REGISTER_SUCCESS:
-      console.log(action.type); return false;
     case LOGIN_SUCCESS:
       localStorage.setItem('token', action.payload.auth_token);
       return {

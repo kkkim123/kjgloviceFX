@@ -10,7 +10,8 @@ class Header extends Component {
     const userLinks = (
       <div className='right menu'>
         <div className='ui simple dropdown item'>
-          {user ? user.username : ''}
+          {/* {user ? user.username : ''} */}
+          로그인 성공
           <i className='dropdown icon' />
           <div className='menu'>
             <a onClick={this.props.logout} className='item'>

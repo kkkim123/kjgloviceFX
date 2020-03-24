@@ -25,7 +25,7 @@ class App extends Component {
          <Header />
           <Switch>
             <PrivateRoute exact path='/' />
-            // <Route exact path='/register' component={RegisterForm} />
+            <Route exact path='/register' component={RegisterForm} />
             <Route exact path='/login' component={LoginForm} />
          </Switch>
        </Router>

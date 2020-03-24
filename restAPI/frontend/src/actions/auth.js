@@ -33,7 +33,6 @@ export const register = ({ resident_country, first_name, last_name, email, passw
     dispatch({
       type: REGISTER_FAIL
     });
-    console.log(err)
     dispatch(stopSubmit('registerForm', err.response.data));
   }
 };
@@ -62,9 +61,7 @@ export const login = ({ email, password }) => async dispatch => {
     dispatch({
       type: LOGIN_FAIL
     });
-    console.log(err);
-    return false;
-    dispatch(stopSubmit('loginForm', err.response.data));
+    dispatch(stopSubmit('loginForm', err.response));
   }
 };
 
