@@ -32,6 +32,7 @@ INSTALLED_APPS += [
     #'account.apps.AccountConfig',
     'allauth',
     'allauth.account',
+    'frontend',
 
 ]
 MIDDLEWARE = [
