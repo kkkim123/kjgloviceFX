@@ -17,15 +17,6 @@ class RegisterForm extends Component {
     );
   };
 
-  hiddenField = ({ type }) => {
-    return (
-      <div className='field'>
-        <input type={type} />
-      </div>
-    );
-  };
-
-
   onSubmit = formValues => {
     this.props.register(formValues);
   };
@@ -83,36 +74,6 @@ class RegisterForm extends Component {
               label='Confirm Password'
               validate={[required, passwordsMatch]}
             />
-            <Field
-              name='address'
-              type='hidden'
-              component={this.hiddenField}
-            />
-            <Field
-              name='postal_code'
-              type='hidden'
-              component={this.hiddenField}
-            />
-            <Field
-              name='city'
-              type='hidden'
-              component={this.hiddenField}
-            />
-            <Field
-              name='Nationality'
-              type='hidden'
-              component={this.hiddenField}
-            />
-            <Field
-              name='birthday'
-              type='hidden'
-              component={this.hiddenField}
-            />
-            <Field
-              name='mobile'
-              type='hidden'
-              component={this.hiddenField}
-            />
             <button className='ui primary button'>Register</button>
           </form>
           <p style={{ marginTop: '1rem' }}>
@@ -125,6 +86,7 @@ class RegisterForm extends Component {
 }
 
 const required = value => (value ? undefined : 'Required');
+
 
 const minLength = min => value =>
   value && value.length < min

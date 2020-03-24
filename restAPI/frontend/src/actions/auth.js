@@ -16,14 +16,15 @@ export const register = ({ resident_country, first_name, last_name, email, passw
     headers: {
       'Content-Type': 'application/json'
     }
-  };
+  }; 
 
   // Request Body
-  const body = JSON.stringify({ resident_country, first_name, last_name, email, password, address, postal_code, city, Nationality, birthday, mobile });
-  console.log(body);
-  return false;
+  const body = JSON.stringify({ resident_country, first_name, last_name, email, password, 
+    "address" : "" , "postal_code" : "", "city" : "" , "Nationality" : "" , "birthday" : null , "mobile" : ""});
+
   try {
     const res = await axios.post('/auth/users', body, config);
+    console.log(res);
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data
@@ -32,6 +33,7 @@ export const register = ({ resident_country, first_name, last_name, email, passw
     dispatch({
       type: REGISTER_FAIL
     });
+    console.log(err)
     dispatch(stopSubmit('registerForm', err.response.data));
   }
 };
