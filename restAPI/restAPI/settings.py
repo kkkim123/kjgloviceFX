@@ -187,7 +187,7 @@ DJOSER = {
     "ACTIVATION_URL": "#/activate/{uid}/{token}",
 }
 
-JWT_AUTH = {"JWT_ALLOW_REFRESH": True}
+JWT_AUTH = {'JWT_AUTH_HEADER_PREFIX': 'Token',}
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
@@ -214,7 +214,8 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # 사이트와 관련한 자동응답을 받을 이메일 주소,'webmaster@localhost'
 
-
+MEDIA_URL =  '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # #JWT_AUTH 설정을 위해 settings.py 맨 위해 import datetime을 추가하자!!
 # JWT_AUTH = {
 # # If the secret is wrong, it will raise a jwt.DecodeError telling you as such. You can still get at the payload by setting the JWT_VERIFY to False.
