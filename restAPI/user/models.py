@@ -18,7 +18,7 @@ from pygments import highlight
 USER_TYPES = (
     ('', 'Please Choose...'),
     ('R', 'Retail'),
-    ('C', 'Corporate'),
+    ('I', 'IB'),
 )
 
 EST_ANNUAL_INCOME = (
@@ -45,13 +45,42 @@ EMPLOYMENT_STATUS_CHOICES = (
     ('4', 'Retired'),
     ('5', 'Student'),
 )
+EMPLOYMENT_POSITION_CHOICES = (
+    ('', 'Please Choose...'),
+    ('1', 'Senior level Management'),
+    ('2', 'Middle Management'),
+    ('3', 'Entry Level'),
+)
 
+EDUCATION_LEVEL_CHOICES = (
+    ('', 'Please Choose...'),
+    ('1', 'Bachelors Degree or Equivalent'),
+    ('2', 'Masters Degree or equivalent'),
+    ('3', 'Phd / Research Degree'),
+    ('4', 'Diploma or Equivalent'),
+)
+
+INDUSTRY_CHOICES = (
+    ('', 'Please Choose...'),
+    ('1', 'Employed'),
+    ('2', 'Self-Employed'),
+    ('3', 'Unemployed'),
+    ('4', 'Retired'),
+    ('5', 'Student'),
+)
 TRADING_EXPERIENCE = (
     ('', 'Please Choose...'),
-    ('1', '0'),
-    ('2', '1-3'),
-    ('3', '4-7'),
-    ('4', '8+'),
+    ('1', 'Y'),
+    ('2', 'N'),
+)
+
+TRADING_PERIOD = (
+    ('', 'Please Choose...'),
+    ('1', 'I have a relevant education/professional qualification'),
+    ('2', 'I regularly monitor the news/markets'),
+    ('3', 'I have read educational material on FX trading'),
+    ('4', 'all of the above'),
+    ('5', 'none of above'),
 )
 
 IS_TRADED_INSTRUMENT_CHOICES = (
@@ -129,45 +158,48 @@ class FxUserManager(BaseUserManager):
         return user
 
 class FxUser(AbstractBaseUser):
-
-    #username = models.EmailField(primary_key=True,unique=True)
+    username_validator = None
+    username = None
+    id = models.AutoField(primary_key=True)
     resident_country = models.CharField(max_length=240)
     first_name  = models.CharField(max_length=240)
     last_name  = models.CharField(max_length=240)
-    email = models.EmailField(primary_key=True,unique=True)
+    email = models.EmailField(unique=True)
     password = models.CharField(max_length=240)
+
     user_type = models.CharField(default='R', max_length=1, blank=True, choices=USER_TYPES)
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
 
     #residential address
-    address = models.CharField(max_length=128, blank=True)
-    postal_code = models.CharField(max_length=36, blank=True)
-    city = models.CharField(max_length=36, blank=True)
+    address = models.CharField(max_length=128, blank=True,null=True)
+    postal_code = models.CharField(max_length=36, blank=True,null=True)
+    city = models.CharField(max_length=36, blank=True,null=True)
 
     #personal detail
-    Nationality = models.CharField(max_length=128, blank=True)
-    birthday = models.DateTimeField(blank=True, null=True)
-    mobile = models.CharField(max_length=24, blank=True)
+    Nationality = models.CharField(max_length=128, blank=True,null=True)
+    birthday = models.DateField(blank=True,null=True)
+    mobile = models.CharField(max_length=24, blank=True,null=True)
+
     #Empoyment Info 
-    employment_status = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES)
-    industry = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES)
-    employment_position = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES)
-    education_level = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES)
+    employment_status = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
+    industry = models.CharField(max_length=256, blank=True,null=True)
+    employment_position = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_POSITION_CHOICES,null=True)
+    education_level = models.CharField(default='1', max_length=1, blank=True, choices=EDUCATION_LEVEL_CHOICES,null=True)
 
     #Financial Info 
-    annual_income = models.CharField(default='1', max_length=1, blank=True, choices=EST_ANNUAL_INCOME)
-    income_source = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES)
-    expected_invest = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES)
-    education_level = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES)
+    annual_income = models.CharField(_("annual income"),default='1', max_length=1, blank=True, choices=EST_ANNUAL_INCOME,null=True)
+    income_source = models.CharField(_("income source"),default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
+    expected_deposit = models.CharField(_("expected deposit"),default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
+    trading_experience = models.CharField(_("trading experience"),default='1', max_length=1, blank=True, choices=TRADING_EXPERIENCE,null=True)
+    trading_period = models.CharField(_("trading period"),default='1', max_length=1, blank=True, choices=TRADING_PERIOD,null=True)
 
     user_status = models.CharField(default='1', max_length=2, blank=True, choices=USER_STATUS_CHOICE)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
-    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password'
-    ,'address','postal_code','city'
-    ,'Nationality','birthday','mobile','education_level','is_admin']
+    USER_CREATE_PASSWORD_RETYPE = True
+    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin']
 
     objects = FxUserManager()
 
