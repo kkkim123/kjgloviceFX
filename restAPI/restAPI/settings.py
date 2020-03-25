@@ -29,10 +29,11 @@ INSTALLED_APPS += [
 	#JWT authentication backend library
     'rest_framework_simplejwt',
     'user.apps.UserConfig',
-    #'account.apps.AccountConfig',
+    'fxaccount.apps.FxaccountConfig',
     'allauth',
     'allauth.account',
-
+    'simple_email_confirmation',
+    'treebeard',
 ]
 MIDDLEWARE = [
     #'corsheaders.middleware.CorsMiddleware',
@@ -190,6 +191,9 @@ DJOSER = {
 JWT_AUTH = {'JWT_AUTH_HEADER_PREFIX': 'Token',}
 
 REST_FRAMEWORK = {
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -213,6 +217,8 @@ EMAIL_USE_TLS = True
 # TLS 보안 방법
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # 사이트와 관련한 자동응답을 받을 이메일 주소,'webmaster@localhost'
+
+
 
 MEDIA_URL =  '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")

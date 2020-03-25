@@ -30,7 +30,7 @@ urlpatterns = [
     path('user/', include("user.urls")),
     # path('rest-auth/', include('rest_auth.urls')),
     # path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    # path('account/', include('allauth.urls')),
+    path('fxaccount/', include('fxaccount.urls')),
     # path('accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
 
 	#path to djoser end points

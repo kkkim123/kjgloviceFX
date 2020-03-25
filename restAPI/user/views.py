@@ -10,6 +10,18 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
+
+# @receiver(email_confirmed)
+# def change_user_status(sender, **kwargs):
+#     user_email_address = kwargs.pop('email_address')
+#     qs = FxUser.objects.filter(email=user_email_address.email)
+#     if qs.count() > 0:
+#         user = qs[0]
+#         user.user_status = '2'      # CONFIRMED_EMAIL_ADDRESS
+#         user.save()
+
+
+
 class UserProfileListCreateView(ListCreateAPIView):
     queryset=FxUser.objects.all()
     serializer_class=UserSerializer
@@ -19,11 +31,11 @@ class UserProfileListCreateView(ListCreateAPIView):
         user=self.request.user
         serializer.save(user=user)
 
-
+#IsOwnerProfileOrReadOnly,
 class userProfileDetailView(RetrieveUpdateDestroyAPIView):
     queryset=FxUser.objects.all()
     serializer_class=UserSerializer
-    permission_classes=[IsOwnerProfileOrReadOnly,IsAuthenticated]
+    permission_classes=[IsAuthenticated]
 
 class DocUploadView(APIView):
     parser_class = (FileUploadParser,)
