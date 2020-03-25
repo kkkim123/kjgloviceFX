@@ -1,7 +1,8 @@
 # React & Django 연동 테스트
 
-#### 참고 포스팅 : https://www.valentinog.com/blog/drf/#Django_REST_with_React_Django_and_React_together
-####            https://medium.com/technest/implement-user-auth-in-a-django-react-app-with-knox-fc56cdc9211c
+#### 참고 포스팅
+###### https://www.valentinog.com/blog/drf/#Django_REST_with_React_Django_and_React_together
+###### https://medium.com/technest/implement-user-auth-in-a-django-react-app-with-knox-fc56cdc9211c
 ***
 ### 1. python, nodejs, yarn 공식홈페이지 설치
 #### python : https://nodejs.org/ko/download/
