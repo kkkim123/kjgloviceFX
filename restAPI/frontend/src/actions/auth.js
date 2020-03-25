@@ -2,12 +2,32 @@ import axios from 'axios';
 import { stopSubmit } from 'redux-form';
 
 import {
+  USER_LOADING,
+  USER_LOADED,
+  AUTH_ERROR,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT_SUCCESS
 } from './types';
+
+// LOAD USER
+export const loadUser = () => async (dispatch, getState) => {
+  dispatch({ type: USER_LOADING });
+
+  try {
+    const res = await axios.get('/auth/users/me', tokenConfig(getState));
+    dispatch({
+      type: USER_LOADED,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: AUTH_ERROR
+    });
+  }
+};
 
 // REGISTER USER
 export const register = ({ resident_country, first_name, last_name, email, password, is_admin }) => async dispatch => {
@@ -47,6 +67,8 @@ export const login = ({ email, password }) => async dispatch => {
   // Request Body
   const body = JSON.stringify({ email, password });
 
+  console.log(body)
+
   try {
     const res = await axios.post('/auth/token/login', body, config);
     const authConfig = {
@@ -55,11 +77,11 @@ export const login = ({ email, password }) => async dispatch => {
       }
     }
     const resAuth = await axios.get('/auth/users/me', authConfig);
+    resAuth.data.token = res.data.auth_token;
 
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: resAuth.data,
-      token: res.data.auth_token
+      payload: resAuth.data
     });
   } catch (err) {
     dispatch({
