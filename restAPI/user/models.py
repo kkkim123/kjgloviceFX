@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser)
+
 from django.utils.translation import ugettext_lazy as _
 #from pygments.lexers import get_all_lexers
 #from pygments.styles import get_all_styles
@@ -18,7 +18,7 @@ from pygments import highlight
 USER_TYPES = (
     ('', 'Please Choose...'),
     ('R', 'Retail'),
-    ('C', 'Corporate'),
+    ('I', 'IB'),
 )
 
 EST_ANNUAL_INCOME = (
@@ -45,13 +45,42 @@ EMPLOYMENT_STATUS_CHOICES = (
     ('4', 'Retired'),
     ('5', 'Student'),
 )
+EMPLOYMENT_POSITION_CHOICES = (
+    ('', 'Please Choose...'),
+    ('1', 'Senior level Management'),
+    ('2', 'Middle Management'),
+    ('3', 'Entry Level'),
+)
 
+EDUCATION_LEVEL_CHOICES = (
+    ('', 'Please Choose...'),
+    ('1', 'Bachelors Degree or Equivalent'),
+    ('2', 'Masters Degree or equivalent'),
+    ('3', 'Phd / Research Degree'),
+    ('4', 'Diploma or Equivalent'),
+)
+
+INDUSTRY_CHOICES = (
+    ('', 'Please Choose...'),
+    ('1', 'Employed'),
+    ('2', 'Self-Employed'),
+    ('3', 'Unemployed'),
+    ('4', 'Retired'),
+    ('5', 'Student'),
+)
 TRADING_EXPERIENCE = (
     ('', 'Please Choose...'),
-    ('1', '0'),
-    ('2', '1-3'),
-    ('3', '4-7'),
-    ('4', '8+'),
+    ('1', 'Y'),
+    ('2', 'N'),
+)
+
+TRADING_PERIOD = (
+    ('', 'Please Choose...'),
+    ('1', 'I have a relevant education/professional qualification'),
+    ('2', 'I regularly monitor the news/markets'),
+    ('3', 'I have read educational material on FX trading'),
+    ('4', 'all of the above'),
+    ('5', 'none of above'),
 )
 
 IS_TRADED_INSTRUMENT_CHOICES = (
@@ -86,8 +115,17 @@ USER_STATUS_CHOICE = (
     ('', 'Please Choose...'),
     ('1', 'PENDING EMAIL ADDRESS'),
     ('2', 'CONFIRMED EMAIL ADDRESS'),
-    ('3', 'PENDING DOCUMENTS'),
-    ('4', 'CONFIRMED DOCUMENTS'),
+    ('3', 'PENDING PROFILE'),
+    ('4', 'CONFIRMED PROFILE'),
+    ('5', 'PENDING DOCUMENTS'),
+    ('6', 'CONFIRMED DOCUMENTS'),
+    ('7', 'PENDING OPEN ACCOUNT'),
+    ('8', 'CONFIRMED OPEN ACCOUNT'),
+    ('9', 'PENDING MAKE DEPOSIT'),
+    ('10', 'CONFIRMED MAKE DEPOSIT'),
+    ('11', 'PENDING ALL COMPLETE'),
+    ('12', 'CONFIRMED ALL COMPLETE'),
+
 )
 
 
@@ -104,97 +142,157 @@ class FxUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save()
+        user.save(using=self._db)
+        return user
+    def create_superuser(self, *args, **kwargs):
+        """
+        Creates and saves a superuser with the given email, password.
+        """
+        user = self.create_user(
+            **kwargs
+        )
+        #user.is_superuser = True
+        user.is_admin = True
+        #user.is_staff = True
+        user.save(using=self._db)
         return user
 
-#     def create_superuser(self, email, password):
-#         """
-#         Creates and saves a superuser with the given email and password.
-#         """
-#         user = self.create_user(
-#             email,
-#             password=password,
-#         )
-#         user.staff = True
-#         user.admin = True
-#         user.save(using=self._db)
-#         return user
-    # def create_superuser(self, email, password, **extra_fields):
-    #     """
-    #     Create and save a SuperUser with the given email and password.
-    #     """
-    #     extra_fields.setdefault('is_staff', True)
-    #     extra_fields.setdefault('is_superuser', True)
-    #     extra_fields.setdefault('is_active', True)
-
-    #     if extra_fields.get('is_staff') is not True:
-    #         raise ValueError(_('Superuser must have is_staff=True.'))
-    #     if extra_fields.get('is_superuser') is not True:
-    #         raise ValueError(_('Superuser must have is_superuser=True.'))
-    #     return self.create_user(email, password, **extra_fields)
 class FxUser(AbstractBaseUser):
-
-    #username = models.EmailField(primary_key=True,unique=True)
+    username_validator = None
+    username = None
+    id = models.AutoField(primary_key=True)
     resident_country = models.CharField(max_length=240)
     first_name  = models.CharField(max_length=240)
     last_name  = models.CharField(max_length=240)
-    email = models.EmailField(primary_key=True,unique=True)
+    email = models.EmailField(unique=True)
     password = models.CharField(max_length=240)
+
     user_type = models.CharField(default='R', max_length=1, blank=True, choices=USER_TYPES)
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
 
     #residential address
-    address = models.CharField(max_length=128, blank=True)
-    postal_code = models.CharField(max_length=36, blank=True)
-    city = models.CharField(max_length=36, blank=True)
+    address = models.CharField(max_length=128, blank=True,null=True)
+    postal_code = models.CharField(max_length=36, blank=True,null=True)
+    city = models.CharField(max_length=36, blank=True,null=True)
 
     #personal detail
-    Nationality = models.CharField(max_length=128, blank=True)
-    birthday = models.DateTimeField(blank=True, null=True)
-    mobile = models.CharField(max_length=24, blank=True)
+    Nationality = models.CharField(max_length=128, blank=True,null=True)
+    birthday = models.DateField(blank=True,null=True)
+    mobile = models.CharField(max_length=24, blank=True,null=True)
 
-    #USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password'
-    ,'address','postal_code','city'
-    ,'Nationality','birthday','mobile']
+    #Empoyment Info 
+    employment_status = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
+    industry = models.CharField(max_length=256, blank=True,null=True)
+    employment_position = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_POSITION_CHOICES,null=True)
+    education_level = models.CharField(default='1', max_length=1, blank=True, choices=EDUCATION_LEVEL_CHOICES,null=True)
+
+    #Financial Info 
+    annual_income = models.CharField(_("annual income"),default='1', max_length=1, blank=True, choices=EST_ANNUAL_INCOME,null=True)
+    income_source = models.CharField(_("income source"),default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
+    expected_deposit = models.CharField(_("expected deposit"),default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
+    trading_experience = models.CharField(_("trading experience"),default='1', max_length=1, blank=True, choices=TRADING_EXPERIENCE,null=True)
+    trading_period = models.CharField(_("trading period"),default='1', max_length=1, blank=True, choices=TRADING_PERIOD,null=True)
+
+    user_status = models.CharField(default='1', max_length=2, blank=True, choices=USER_STATUS_CHOICE)
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+
+    USER_CREATE_PASSWORD_RETYPE = True
+    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin']
 
     objects = FxUserManager()
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"
 
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
+
+    @property
+    def is_staff(self):
+        return self.is_admin
 
 
-# class User(models.Model): CountryField()
-#     name = models.CharField("Name", max_length=240)
-#     email = models.EmailField()
-#     document = models.CharField("Document", max_length=20)
-#     phone = models.CharField(max_length=20)
-#     registrationDate = models.DateField("Registration Date", auto_now_add=True)
 
-#     def __str__(self):
-#         return self.name
+def user_id_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    return 'user_{0}/id/{1}/{2}/{3}/{4}'.format(
+        instance.fxuser.id,
+        datetime.date.today().year,
+        datetime.date.today().month,
+        datetime.date.today().day,
+        filename.encode('UTF-8').lower())
 
 
-# class Friend(models.Model):
-#     name = models.CharField(max_length=100)
+def user_residence_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    return 'user_{0}/residence/{1}/{2}/{3}/{4}'.format(
+        instance.fxuser.id,
+        datetime.date.today().year,
+        datetime.date.today().month,
+        datetime.date.today().day,
+        filename.encode('UTF-8').lower())
 
-# class Belonging(models.Model):
-#     name = models.CharField(max_length=100)
 
-# class Borrowed(models.Model):
-#     what = models.ForeignKey(Belonging, on_delete=models.CASCADE)
-#     to_who = models.ForeignKey(Friend, on_delete=models.CASCADE)
-#     when = models.DateTimeField(auto_now_add=True)
-#     returned = models.DateTimeField(null=True, blank=True)
+class FxUserDocument(models.Model):
+    fxuser = models.ForeignKey(FxUser, on_delete=models.CASCADE)
+    doc_photo_id = models.FileField(upload_to=user_id_directory_path, blank=True, null=True)
+    doc_photo_id_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
+    doc_photo_id_updated_at = models.DateTimeField(auto_now=True)
+    doc_proof_of_residence = models.FileField(upload_to=user_residence_directory_path, blank=True, null=True)
+    doc_proof_of_residence_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
+    doc_proof_of_residence_updated_at = models.DateTimeField(auto_now=True)
+    doc_photo_id_2 = models.FileField(upload_to=user_id_directory_path, blank=True, null=True)
+    doc_photo_id_2_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
+    doc_photo_id_2_updated_at = models.DateTimeField(auto_now=True)
+    doc_proof_of_residence_2 = models.FileField(upload_to=user_residence_directory_path, blank=True, null=True)
+    doc_proof_of_residence_2_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
+    doc_proof_of_residence_2_updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+  
+    def __str__(self):
+        return self.fxuser
+    
+    class Meta:
+        ordering = ['created_at']
 
-# class OwnedModel(models.Model):
-#     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
-#     on_delete=models.CASCADE)
 
-#     class Meta:
-#         abstract = True
 
-# class Belonging(OwnedModel):
-#     name = models.CharField(max_length=100)
+
+
+
+
+
+
+class UserInvoices(models.Model):
+    fxuser = models.ForeignKey(FxUser, on_delete=models.CASCADE)
+    name = models.CharField(_("Name"), max_length=256, blank=True, default='')
+    email = models.EmailField(_("Email"), max_length=512, blank=True, default='')
+    mobile = models.CharField(_("Mobile"), max_length=50, blank=True, default='')
+    address1 = models.CharField(_("Address 1"), max_length=128, blank=True, default='')
+    address2 = models.CharField(_("Address 2"), max_length=128, blank=True, default='')
+    address3 = models.CharField(_("Address 3"), max_length=128, blank=True, default='')
+    address4 = models.CharField(_("Address 4"), max_length=128, blank=True, default='')
+    invoice_no = models.CharField(blank=True, max_length=36, null=True)
+    invoice_date = models.DateField(auto_now_add=True)
+    item_code = models.CharField(_("Item Code"), max_length=128, blank=True, default='')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return self.invoice_no
+
+    def save(self, *args, **kwargs):
+        import uuid
+        if not self.pk:
+            self.invoice_no = str(uuid.uuid4()).replace('-', '')[:16]
+        super(UserInvoices, self).save(args, kwargs)

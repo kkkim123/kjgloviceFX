@@ -10,7 +10,7 @@ import {
 } from './types';
 
 // REGISTER USER
-export const register = ({ resident_country, first_name, last_name, email, password }) => async dispatch => {
+export const register = ({ resident_country, first_name, last_name, email, password, is_admin }) => async dispatch => {
   // Headers
   const config = {
     headers: {
@@ -19,12 +19,10 @@ export const register = ({ resident_country, first_name, last_name, email, passw
   }; 
 
   // Request Body
-  const body = JSON.stringify({ resident_country, first_name, last_name, email, password, 
-    "address" : "" , "postal_code" : "", "city" : "" , "Nationality" : "" , "birthday" : null , "mobile" : ""});
+  const body = JSON.stringify({ resident_country, first_name, last_name, email, password, is_admin});
 
   try {
-    const res = await axios.post('/auth/users', body, config);
-    console.log(res);
+    const res = await axios.post('/auth/users/', body, config);
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data
@@ -51,17 +49,23 @@ export const login = ({ email, password }) => async dispatch => {
 
   try {
     const res = await axios.post('/auth/token/login', body, config);
-    // console.log(res.data);
+    const authConfig = {
+      headers: {
+        'Authorization': `Token ${res.data.auth_token}`
+      }
+    }
+    const resAuth = await axios.get('/auth/users/me', authConfig);
 
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: res.data
+      payload: resAuth.data,
+      token: res.data.auth_token
     });
   } catch (err) {
     dispatch({
       type: LOGIN_FAIL
     });
-    dispatch(stopSubmit('loginForm', err.response));
+    dispatch(stopSubmit('loginForm', err.response.data));
   }
 };
 
@@ -77,7 +81,7 @@ export const logout = () => async (dispatch, getState) => {
 export const tokenConfig = getState => {
   // Get token
   const token = getState().auth.token;
-
+ 
   // Headers
   const config = {
     headers: {

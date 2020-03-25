@@ -5,13 +5,13 @@ import { logout } from '../../actions/auth';
 
 class Header extends Component {
   render() {
-    const { user, isAuthenticated } = this.props.auth;
+    const { email, isAuthenticated } = this.props.auth;
 
     const userLinks = (
       <div className='right menu'>
         <div className='ui simple dropdown item'>
-          {/* {user ? user.username : ''} */}
-          로그인 성공
+          {email ? email : ''}
+          {/* 로그인 성공 */}
           <i className='dropdown icon' />
           <div className='menu'>
             <a onClick={this.props.logout} className='item'>

@@ -1,5 +1,5 @@
 from django.db import models
-from user.models import User
+from user.models import FxUser
 
 #
 # TradingAccountTransaction 전용
@@ -86,7 +86,7 @@ class AccountTransaction(models.Model):
     transaction_type = models.CharField(default='N', max_length=2, blank=False, choices=ACCOUNT_TRANSACTION_TYPES_CHOICE)
     account_type = models.CharField(default='L', max_length=1, blank=False, choices=ACCOUNT_TYPES)
     status = models.CharField(default='P', max_length=1, blank=False, choices=ACCOUNT_TRANSACTION_STATUS)
-    request_user = models.ForeignKey(User,on_delete=models.CASCADE)
+    request_user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
     mt4_account = models.CharField(default='', max_length=36, blank=False)
     trading_platform = models.CharField(default='1', max_length=1, blank=True, choices=TRADING_PLATFORM_CHOICE)
     base_currency = models.CharField(default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)

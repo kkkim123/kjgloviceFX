@@ -13,7 +13,7 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
       } else {
         // return <Component {...props} />;
         console.log(props);
-        return true;
+        return <div>{props.email}로 인증 메일을 전송하였습니다.</div>
       }
     }}
   />

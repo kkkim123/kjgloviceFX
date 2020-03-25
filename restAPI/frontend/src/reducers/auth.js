@@ -9,15 +9,23 @@ import {
 const initialState = {
   isLoading: false,
   isAuthenticated: null,
-  user: null,
+  email: null,
   token: localStorage.getItem('token')
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
     case REGISTER_SUCCESS:
+      // localStorage.setItem('token', action.payload.auth_token);
+      // return {
+      //   ...state,
+      //   isLoading: false,
+      //   isAuthenticated: true,
+      //   ...action.payload
+      // };
+      return {isLoading: false, ...action.payload};
     case LOGIN_SUCCESS:
-      localStorage.setItem('token', action.payload.auth_token);
+      localStorage.setItem('token', action.token);
       return {
         ...state,
         isLoading: false,
@@ -32,7 +40,7 @@ export default function(state = initialState, action) {
         ...state,
         isLoading: false,
         isAuthenticated: false,
-        user: null,
+        email: null,
         token: null
       };
     default:
