@@ -112,9 +112,19 @@ DATABASES = {
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
         }
     }
+    # },
+    # 'backOffice': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'OPTIONS': {
+    #         'read_default_file': "path/to/backoffice.cnf",
+    #         'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"',
+    #     },
+    # }
 
 }
-
+# DATABASE_ROUTERS = [
+#     'fxaccount.routers.AuthRouter',  
+# ]
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Password validation

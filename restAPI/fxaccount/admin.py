@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FxAccount
+from .models import FxAccount, DepositTransaction ,WithdrawTransaction
 
 # from treebeard.admin import TreeAdmin
 # from treebeard.forms import movenodeform_factory
@@ -46,3 +46,29 @@ class FxAccountAdmin(admin.ModelAdmin):
     search_fields = ('mt4_account',)
 
 admin.site.register(FxAccount, FxAccountAdmin)
+
+class DepositTransAdmin(admin.ModelAdmin):
+    list_display = (
+        'request_user', 'transaction_type', 'amount',  'status',
+    )
+    # search_fields = ('mt4_account', 'fxuser')
+    # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
+
+    list_per_page = 10
+    list_editable = ('status',)
+    search_fields = ('status',)
+
+admin.site.register(DepositTransaction,DepositTransAdmin)
+
+class WithdrawTransAdmin(admin.ModelAdmin):
+    list_display = (
+        'request_user', 'transaction_type', 'amount',  'status',
+    )
+    # search_fields = ('mt4_account', 'fxuser')
+    # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
+
+    list_per_page = 10
+    list_editable = ('status',)
+    search_fields = ('status',)
+
+admin.site.register(WithdrawTransaction,WithdrawTransAdmin)
