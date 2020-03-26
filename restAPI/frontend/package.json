@@ -39,5 +39,6 @@
     "redux-form": "^8.2.6",
     "redux-thunk": "^2.3.0",
     "serialize-javascript": "^2.1.2"
-  }
+  },
+  "proxy": "18.139.160.178"
 }
