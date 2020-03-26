@@ -18,6 +18,8 @@ from django.urls import include, path
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+
+#from django.views.generic import TemplateView
 #from rest_framework.routers import DefaultRouter
 #from user import views
 
@@ -45,6 +47,7 @@ urlpatterns = [
     #path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
     #path("user/registration/", include("user.registration.urls")),
     path('', include('frontend.urls')),
+    #path('',frontend.views.frontend),
 ]
 
 if settings.DEBUG:
