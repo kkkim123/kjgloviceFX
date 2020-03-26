@@ -157,3 +157,7 @@ sketch
 
 ### Database ###
 my.cnf
+
+### AWS ###
+.static_root/
+media

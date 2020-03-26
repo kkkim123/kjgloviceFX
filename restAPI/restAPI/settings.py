@@ -3,12 +3,15 @@ import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+#박찬영 추가
+ROOT_DIR = os.path.dirname(BASE_DIR)
+
 SECRET_KEY = '2)em3z^i^s$m!%dz#adud@!5+cfv-nfr3_i20v^n!tlxh9z&lv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["18.139.160.178", "ec2-18-139-160-178.ap-southeast-1.compute.amazonaws.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "18.139.160.178", "ec2-18-139-160-178.ap-southeast-1.compute.amazonaws.com"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -32,7 +35,7 @@ INSTALLED_APPS += [
     #'account.apps.AccountConfig',
     'allauth',
     'allauth.account',
-    'frontend',
+    'frontend.apps.FrontendConfig',
 ]
 MIDDLEWARE = [
     #'corsheaders.middleware.CorsMiddleware',
@@ -152,7 +155,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/frontend/static/'
+
+#박찬영 추가
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
+
+
+
 #LOGIN_URL = '/login/'
 AUTH_USER_MODEL = 'user.FxUser'
 # # REST_SESSION_LOGIN = True
