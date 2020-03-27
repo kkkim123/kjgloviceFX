@@ -4,6 +4,9 @@
 ###### https://www.valentinog.com/blog/drf/#Django_REST_with_React_Django_and_React_together
 ###### https://medium.com/technest/implement-user-auth-in-a-django-react-app-with-knox-fc56cdc9211c
 ***
+### Django
+***
+
 ### 1. python, nodejs, yarn 공식홈페이지 설치
 #### python : https://nodejs.org/ko/download/
 #### nodejs : https://nodejs.org/ko/download/
@@ -14,11 +17,7 @@
 
 ### 2. pip 버전 업데이트(react의 npm과 같은 패키지 관리자)
 ```python -m pip install --upgrade pip```
-
-#### 2_1. React 단에서 사용된 패키지 업데이트(시간 다소 소요)
-```npm install```
 	
-
 ### 3. 가상환경 설치
 
 ***
@@ -61,17 +60,39 @@
 
 ***
 
-### 4. 마이그레이션 적용
+
+~~### 4. 마이그레이션 적용~~
 ```python manage.py makemigrations```
 ```python manage.py migrate```
 
-### 5. 서버 실행
+~~### 5. 서버 실행 (로컬환경)~~
 ```python manage.py runserver```
 
-****
+***
+### React
 
+#### restAPI/frontend 에서 front단 작업 진행하면 됩니다.
+```npm install```
+
+#### 적용하기 위해서 작업 후
+```npm run build```
+
+#### 웹팩으로 빌드 하여 frontend/static/frontend/main.js로 저장
+#### frontend/templates/frontend/index.html에서 외부 script 적용
+
+***
 # AWS
 
 #### 참고포스팅
 ###### https://nachwon.github.io/django-deploy-1-aws/
 ###### https://velog.io/@loakick/2019-11-19-0011-%EC%9E%91%EC%84%B1%EB%90%A8-2ck34lupye
+
+# React Build 와 Django 작업 완료 후 서버 내에서
+## collectstatic
+```python manage.py collectstatic```
+## 정적인 파일들을 모아줍니다. 
+
+```sudo systemctl daemon-reload```
+```sudo systemctl restart nginx uwsgi```
+
+### 서버 실행 관련 재 부팅
