@@ -67,3 +67,11 @@
 
 ### 5. 서버 실행
 ```python manage.py runserver```
+
+****
+
+# AWS
+
+#### 참고포스팅
+###### https://nachwon.github.io/django-deploy-1-aws/
+###### https://velog.io/@loakick/2019-11-19-0011-%EC%9E%91%EC%84%B1%EB%90%A8-2ck34lupye
