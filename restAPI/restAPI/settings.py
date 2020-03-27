@@ -158,12 +158,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 #박찬영 추가
-STATIC_DIR = os.path.join(BASE_DIR,'static/frontend/')
+#STATIC_DIR = os.path.join(BASE_DIR,'static/frontend/')
 #FRONTEND_DIR = ROOT_DIR.path('frontend')
-STATICFILES_DIRS = [
-    STATIC_DIR,
-]
-STATIC_ROOT = os.path.join(ROOT_DIR, 'restAPI/frontend', '.static_root')
+STATICFILES_DIRS = ( 
+        os.path.join(BASE_DIR,'frontend/'),
+)
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 
 
 
