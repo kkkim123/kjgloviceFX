@@ -196,6 +196,11 @@ def send_mt4_details(sender, **kwargs):
         #     raise Exception("mt4_account blank")
         #     pass
 
+class MyModel(models.Model):
+    COMPANY_IDX = models.IntegerField()
+
+
+
 class FxAccountTransaction(models.Model):
     id = models.AutoField(primary_key=True)
     account_type = models.CharField(default='L', max_length=1, blank=False, choices=ACCOUNT_TYPES)
@@ -330,3 +335,12 @@ class WithdrawTransaction(BaseTransaction):
     class Meta:
         verbose_name = "Withdraw Request"
         verbose_name_plural = "Withdraw Requests"
+
+
+
+#class CallSP(models.Model):
+
+
+
+
+#class GetIBCOMMISSIONLIST(models.Model):

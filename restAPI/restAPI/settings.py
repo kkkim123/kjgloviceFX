@@ -34,6 +34,7 @@ INSTALLED_APPS += [
     'allauth.account',
     'simple_email_confirmation',
     'treebeard',
+    'debug_toolbar',
 ]
 MIDDLEWARE = [
     #'corsheaders.middleware.CorsMiddleware',
@@ -44,7 +45,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'restAPI.urls'
@@ -76,7 +77,7 @@ ROOT_URLCONF = 'restAPI.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -111,8 +112,22 @@ DATABASES = {
         'OPTIONS': {
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
         }
+    },
+    'backOffice': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'fbp_live',
+        'USER': 'fbplive',
+        'PASSWORD': 'j&serw$75',
+        #HOST': 'localhost',
+        'HOST': '222.122.34.248',
+        'PORT': '33306',
+        'OPTIONS': {
+            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
+        }
     }
-    # },
+}
+
+
     # 'backOffice': {
     #     'ENGINE': 'django.db.backends.mysql',
     #     'OPTIONS': {
@@ -121,7 +136,8 @@ DATABASES = {
     #     },
     # }
 
-}
+
+
 # DATABASE_ROUTERS = [
 #     'fxaccount.routers.AuthRouter',  
 # ]
@@ -191,11 +207,22 @@ SITE_ID = 1
 # ACCOUNT_EMAIL_REQUIRED = False
 # ACCOUNT_EMAIL_VERIFICATION = None
 # ACCOUNT_LOGOUT_ON_GET = True
+
+
+PROTOCOL = "https"
+DOMAIN = "127.0.0.1:8000"
+SITE_NAME = "kjgloiveFX.com"
 DJOSER = {
-    "SEND_ACTIVATION_EMAIL": False,
     "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
     "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
-    "ACTIVATION_URL": "#/activate/{uid}/{token}",
+    #'ACTIVATION_URL': 'auth/user/activation?uid={uid}&token={token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SEND_CONFRIMATION_EMAIL':True,
+    'SERIALIZERS': {"activation": "djoser.serializers.ActivationSerializer",},
+    'EMAIL':{
+        'activation': 'djoser.email.ActivationEmail',
+    },
 }
 
 JWT_AUTH = {'JWT_AUTH_HEADER_PREFIX': 'Token',}
@@ -214,19 +241,13 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-# 메일을 호스트하는 서버
-EMAIL_PORT = '587'
-# gmail과의 통신하는 포트
-EMAIL_HOST_USER = 'sungchang@fbpasia.com'
-# 발신할 이메일
-EMAIL_HOST_PASSWORD = 'joy1378!'
-# 발신할 메일의 비밀번호
 EMAIL_USE_TLS = True
-# TLS 보안 방법
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-# 사이트와 관련한 자동응답을 받을 이메일 주소,'webmaster@localhost'
+EMAIL_HOST_USER = 'sungchang@fbpasia.com'
+EMAIL_HOST_PASSWORD='joy1378!'
+EMAIL_PORT = 587
+
 
 
 
@@ -258,3 +279,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 #     'LOGIN_URL': 'login',
 #     'LOGOUT_URL': 'logout',
 # }
+
+
+INTERNAL_IPS = ["127.0.0.1"]

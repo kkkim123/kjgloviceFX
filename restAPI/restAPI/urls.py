@@ -18,12 +18,16 @@ from django.urls import include, path
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-#from rest_framework.routers import DefaultRouter
+from user.views import UserActivationView
 #from user import views
 
 #router = DefaultRouter()
 #router.register(r'user', views.UserList)
 #router.register(r'userdetail', views.UserDetail)
+
+
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,7 +43,7 @@ urlpatterns = [
     #http://127.0.0.1:8000/auth/users/
     #http://127.0.0.1:8000/auth/token/login/
     path('authjwt/', include('djoser.urls.jwt')),
-	
+	#path('activate/<str:uid>/<str:token>/', UserActivationView.as_view()),
 	#path to our account's app endpoints
     #path("api/user/",include("user.urls"))
     #path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
@@ -47,5 +51,9 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-  urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    import debug_toolbar
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ]
 #urlpatterns += router.urls

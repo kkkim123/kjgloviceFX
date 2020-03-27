@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-
+import requests
 # @receiver(email_confirmed)
 # def change_user_status(sender, **kwargs):
 #     user_email_address = kwargs.pop('email_address')
@@ -19,8 +19,64 @@ from rest_framework import status
 #         user = qs[0]
 #         user.user_status = '2'      # CONFIRMED_EMAIL_ADDRESS
 #         user.save()
+# def ActivateUserAccount(request, uidb64=None,token=None):
+#  #print(force_text(urlsafe_base64_decode(uidb64)))
+#     #print(token)
+#     try:
+#         uid = force_text(urlsafe_base64_decode(uidb64))
+#         #print(type(uid),uid)
+#         user = FxUser.objects.get(pk=uid)
+#         print(user)
+#     except User.DoesNotExist:
+#         user = None
+#     if user and default_token_generator.check_token(user,token):
+#         user.is_email_verified = True
+#         user.is_active = True
+#         user.save()
+#         login(request,user)
+#         print("Activaton done")
+#     else:
+#         print("Activation failed")
+# class UserActivationView(APIView):
+#     try:
+#         #uid = force_text(urlsafe_base64_decode(uidb64))
+#         #print(type(uid),uid)
+#         user = FxUser.objects.get(pk=uid)
+#         print(user)
+#     except FxUser.DoesNotExist:
+#         user = None
+#     if user and default_token_generator.check_token(user,token):
+#         #user.is_email_verified = True
+#         user.is_active = True
+#         user.save()
+#         #login(request,user)
+#         print("Activaton done")
+#     else:
+#         print("Activation failed")
 
 
+class UserActivationView(APIView):
+
+
+
+
+
+    def get (self, request, uid, token):
+        protocol = 'https://' if request.is_secure() else 'http://'
+        web_url = protocol + request.get_host()
+        post_url = web_url + "/auth/users/activate/"
+        post_data = {'uid': uid, 'token': token}
+        result = requests.post(post_url, data = post_data)
+        content = result.text()
+        return Response(content)
+    # def get (self, request, uid, token):
+    #     protocol = 'https://' if request.is_secure() else 'http://'
+    #     web_url = protocol + request.get_host()
+    #     post_url = web_url + "/auth/users/activate/"
+    #     post_data = {'uid': uid, 'token': token}
+    #     result = requests.post(post_url, data = post_data)
+    #     content = result.text()
+    #     return Response(content)
 
 class UserProfileListCreateView(ListCreateAPIView):
     queryset=FxUser.objects.all()
