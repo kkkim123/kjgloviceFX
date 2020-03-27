@@ -95,4 +95,4 @@
 ```sudo systemctl daemon-reload```
 ```sudo systemctl restart nginx uwsgi```
 
-### 서버 실행 관련 재 부팅
+### 서버 재부팅
