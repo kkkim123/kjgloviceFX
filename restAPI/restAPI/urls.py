@@ -47,7 +47,6 @@ urlpatterns = [
     #path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
     #path("user/registration/", include("user.registration.urls")),
     path('', include('frontend.urls')),
-    #path('',frontend.views.frontend),
 ]
 
 if settings.DEBUG:

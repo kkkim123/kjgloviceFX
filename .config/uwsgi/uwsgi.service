@@ -3,7 +3,7 @@ Description=uWSGI service
 After=syslog.target
 
 [Service]
-ExecStart=/home/ubuntu/.pyenv/versions/uwsgi-env/bin/uwsgi -i /srv/kj_test/restAPI/.config/uwsgi/restAPI.ini
+ExecStart=/home/ubuntu/.pyenv/versions/uwsgi-env/bin/uwsgi -i /srv/kjgloviceFX/.config/uwsgi/restAPI.ini
 
 Restart=always
 KillSignal=SIGQUIT
