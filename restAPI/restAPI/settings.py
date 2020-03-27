@@ -78,7 +78,7 @@ ROOT_URLCONF = 'restAPI.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -158,7 +158,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 #박찬영 추가
-STATIC_DIR = os.path.join(BASE_DIR, 'frontend', 'static')
+STATIC_DIR = os.path.join(BASE_DIR,'static/frontend/')
+#FRONTEND_DIR = ROOT_DIR.path('frontend')
 STATICFILES_DIRS = [
     STATIC_DIR,
 ]
