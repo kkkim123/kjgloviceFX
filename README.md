@@ -88,3 +88,5 @@
 ```sudo systemctl restart nginx uwsgi```
 
 ### 서버 재부팅
+
+commit test
