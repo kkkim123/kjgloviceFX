@@ -196,9 +196,24 @@ def send_mt4_details(sender, **kwargs):
         #     raise Exception("mt4_account blank")
         #     pass
 
-class MyModel(models.Model):
+class IBListCommission(models.Model):
     COMPANY_IDX = models.IntegerField()
+    LIVE_YN = models.CharField(max_length=1)
+    IB_LOGIN = models.IntegerField(primary_key=True)
+    TOT_COMMISSION = models.FloatField()
+    class Meta:
+        verbose_name = "IBListCommission"
+        verbose_name_plural = "IBListCommission"
 
+
+class IBListStructure(models.Model):
+    COMPANY_IDX = models.IntegerField()
+    LIVE_YN = models.CharField(max_length=1)
+    IB_LOGIN = models.IntegerField(primary_key=True)
+    TOT_COMMISSION = models.FloatField()
+    class Meta:
+        verbose_name = "IBListCommission"
+        verbose_name_plural = "IBListCommission"
 
 
 class FxAccountTransaction(models.Model):
@@ -336,6 +351,11 @@ class WithdrawTransaction(BaseTransaction):
         verbose_name = "Withdraw Request"
         verbose_name_plural = "Withdraw Requests"
 
+
+# class DummyModel(models.Model):
+#     bank_name = models.CharField(default='', max_length=48, blank=True)
+#     bank_account = models.CharField(default='', max_length=48, blank=True)
+#     bank_address = models.CharField(default='', max_length=128, blank=True)
 
 
 #class CallSP(models.Model):

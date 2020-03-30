@@ -1,9 +1,40 @@
 from django.contrib import admin
-from .models import FxAccount, DepositTransaction ,WithdrawTransaction ,MyModel
+from .models import FxAccount, DepositTransaction ,WithdrawTransaction ,IBListCommission
 from django.db import connections
-# from treebeard.admin import TreeAdmin
-# from treebeard.forms import movenodeform_factory
+from django.http import HttpResponse,HttpResponseRedirect
+from django.urls import path
+from django.template.response import TemplateResponse
 
+# class MyModelAdmin2(admin.ModelAdmin):
+#     def get_urls(self):
+#         urls = super().get_urls()
+#         my_urls = [
+#             path('my_view/', self.my_view),
+#         ]
+#         return my_urls + urls
+
+#     def my_view(self, request):
+#         # ...
+#         context = dict(
+#            # Include common variables for rendering the admin template.
+#            self.admin_site.each_context(request),
+#            # Anything else you want in the context...
+#            key=value,
+#         )
+#         return TemplateResponse(request, "sometemplate.html", context)
+# def my_custom_view(request):
+# 	return HttpResponse('Admin Custom View')
+ 
+# class DummyModelAdmin(admin.ModelAdmin):
+#     model = DummyModel
+ 
+#     def get_urls(self):
+#         view_name = '{}_{}_changelist'.format(
+#             self.model._meta.app_label, self.model._meta.model_name)
+#         return [
+#             path('my_admin_path/', my_custom_view, name=view_name),
+#         ]
+# admin.site.register(DummyModel, DummyModelAdmin)
 
 # class MyAdmin(TreeAdmin):
 #     form = movenodeform_factory(MyNode)
@@ -76,12 +107,12 @@ admin.site.register(WithdrawTransaction,WithdrawTransAdmin)
 
 #admin.site.register()
 
-
+#@admin.register(MyModel)
 class MyModelAdmin(admin.ModelAdmin):
     #print('MyModelAdmin')
+    list_display = ("IB_LOGIN", "COMPANY_IDX","TOT_COMMISSION","LIVE_YN")
 
-
-    actions = ['make_published']
+    actions = ['set_immortal']
     # cursor =  connections['backOffice'].cursor()
     # #cursor.execute("{call fbp_live.SP_IB_COMMISSION_IB_LIST(?)}", [id])
     # #cursor.execute(call 'SP_IB_COMMISSION_IB_LIST()')
@@ -98,16 +129,38 @@ class MyModelAdmin(admin.ModelAdmin):
 
 
 
-    change_form_template = "admin/change_form.html"
-
-
-
-    def make_published(self, request, queryset):
+    change_list_template  = "admin/change_list_.html"
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('immortal/', self.set_immortal),
+        ]
+        return my_urls + urls
+    # COMPANY_IDX = models.IntegerField(primary_key=True)
+    # LIVE_YN = models.CharField(max_length=1)
+    # IB_LOGIN = models.IntegerField()
+    # TOT_COMMISSION = models.IntegerField()
+    def set_immortal(self, request):
         if "_make-unique" in request.GET:
             cursor =  connections['backOffice'].cursor()
-            cursor.callproc("SP_IB_COMMISSION_IB_LIST", [1, 'Y'])
+            cursor.callproc("SP_IB_COMMISSION_IB_LIST", [request.GET['i_company_id'], request.GET['i_live_yn']])
             results = list(cursor.fetchall())
             print(results)
+            for t in results:
+                IBListCommission(COMPANY_IDX=1,LIVE_YN='Y',IB_LOGIN=t[0],TOT_COMMISSION=t[1]).save()
+        return HttpResponseRedirect("../")
+
+
+
+    # def make_published(self, request, queryset):
+    #     if "_make-unique" in request.GET:
+    #         cursor =  connections['backOffice'].cursor()
+    #         cursor.callproc("SP_IB_COMMISSION_IB_LIST", [1, 'Y'])
+    #         results = list(cursor.fetchall())
+    #         print(results)
+    #         for t in results:
+    #             MyModel(COMPANY_IDX=t[0]).save()
+    #     return HttpResponseRedirect("../")
         # cursor =  connections['backOffice'].cursor()
         # cursor.callproc("SP_IB_COMMISSION_IB_LIST", [1, 'Y'])
         # results = list(cursor.fetchall())
@@ -119,4 +172,77 @@ class MyModelAdmin(admin.ModelAdmin):
         #     result_list.append(p)
         # return result_list
 
-admin.site.register(MyModel,MyModelAdmin)
+admin.site.register(IBListCommission,MyModelAdmin)
+
+
+	# IN i_admin_id varchar(30)
+	# , IN i_company_idx int
+    # , IN i_account int 
+    # , IN i_group varchar(20)
+	# , IN i_sorting 		varchar(20) 
+	# , IN	 i_sort_colume   varchar(50) 
+# class IBListStructureAdmin(admin.ModelAdmin):
+
+#     list_display = ("IB_LOGIN", "COMPANY_IDX","TOT_COMMISSION","LIVE_YN")
+
+#     actions = ['set_immortal']
+#     # cursor =  connections['backOffice'].cursor()
+#     # #cursor.execute("{call fbp_live.SP_IB_COMMISSION_IB_LIST(?)}", [id])
+#     # #cursor.execute(call 'SP_IB_COMMISSION_IB_LIST()')
+#     # #result = cursor.fetchall()
+#     # #with connections['backOffice'].cursor() as cursor:
+#     # cursor.callproc('SP_IB_COMMISSION_IB_LIST', [1, 'Y'])
+#     # MyModel = cursor.fetchall()
+#     # result_list = []   
+
+#     # from row in rows:
+#     #     p = MyModel(id=row[0], fist_name=row[1], last_name=row[2], birthday=row[3])
+#     #     result_list.append(p)
+#     # return result_list
+
+
+
+#     change_list_template  = "admin/change_list_.html"
+#     def get_urls(self):
+#         urls = super().get_urls()
+#         my_urls = [
+#             path('immortal/', self.set_immortal),
+#         ]
+#         return my_urls + urls
+#     # COMPANY_IDX = models.IntegerField(primary_key=True)
+#     # LIVE_YN = models.CharField(max_length=1)
+#     # IB_LOGIN = models.IntegerField()
+#     # TOT_COMMISSION = models.IntegerField()
+#     def set_immortal(self, request):
+#         if "_make-unique" in request.GET:
+#             cursor =  connections['backOffice'].cursor()
+#             cursor.callproc("SP_IB_COMMISSION_IB_LIST", [request.GET['i_company_id'], request.GET['i_live_yn']])
+#             results = list(cursor.fetchall())
+#             print(results)
+#             for t in results:
+#                 IBListCommission(COMPANY_IDX=1,LIVE_YN='Y',IB_LOGIN=t[0],TOT_COMMISSION=t[1]).save()
+#         return HttpResponseRedirect("../")
+
+
+
+#     # def make_published(self, request, queryset):
+#     #     if "_make-unique" in request.GET:
+#     #         cursor =  connections['backOffice'].cursor()
+#     #         cursor.callproc("SP_IB_COMMISSION_IB_LIST", [1, 'Y'])
+#     #         results = list(cursor.fetchall())
+#     #         print(results)
+#     #         for t in results:
+#     #             MyModel(COMPANY_IDX=t[0]).save()
+#     #     return HttpResponseRedirect("../")
+#         # cursor =  connections['backOffice'].cursor()
+#         # cursor.callproc("SP_IB_COMMISSION_IB_LIST", [1, 'Y'])
+#         # results = list(cursor.fetchall())
+#         # print('backOffice')
+#         # result_list = []   
+#         # print(results)
+#         # from row in results:
+#         #     p = MyModel(id=row[0], fist_name=row[1], last_name=row[2], birthday=row[3])
+#         #     result_list.append(p)
+#         # return result_list
+
+# admin.site.register(IBListCommission,MyModelAdmin)
