@@ -22,21 +22,7 @@
 
 ***
 
-### 3_1. pipenv
-
-##### 설치
-```pip install pipenv```
-
-##### 패키지 종속성 관리(pipfile 생성)
-##### 생성 : ```pipenv lock```
-##### 패키지 설치 : ```pipenv install``` (requirements.txt가 있을경우 자동으로 Pipfile로 변환시켜 실행됨)
-
-##### 가상환경 실행
-```pipenv shell```
-
-***
-
-### 3_2. virtualenv
+### 3_1. virtualenv
 
 ##### 설치
 ```pip install virtualenv```
@@ -56,14 +42,14 @@
 ##### mac에서 pip install mysqlclient 실행 시 오류 해결 방법
 ##### 호환성 문제로 인해 오류가 발생하여, 수동설치로 해결
 ##### mysqlclient : https://github.com/PyMySQL/mysqlclient-python/archive/master.zip
-##### 가상환경 실행 후, unzip한 폴더에서 python setup.py install
+##### 가상환경 실행 후, mysqlclient 폴더로 이동 후 python setup.py install
 
 ***
 
 
 ~~4. 마이그레이션 적용~~
-```python manage.py makemigrations```
-```python manage.py migrate```
+~~python manage.py makemigrations~~
+~~python manage.py migrate~~
 
 ### 5. 서버 실행 (로컬환경)
 ```python manage.py runserver```
