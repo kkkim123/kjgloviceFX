@@ -30,7 +30,7 @@ export const loadUser = () => async (dispatch, getState) => {
 };
 
 // REGISTER USER
-export const register = ({ resident_country, first_name, last_name, email, password, is_admin }) => async dispatch => {
+export const register = ({ resident_country, first_name, last_name, email, password, is_admin=false }) => async dispatch => {
   // Headers
   const config = {
     headers: {

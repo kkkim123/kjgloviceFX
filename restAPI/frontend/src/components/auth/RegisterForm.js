@@ -20,7 +20,7 @@ class RegisterForm extends Component {
   onSubmit = formValues => {
     this.props.register(formValues);
     alert(`${formValues.email}로 인증메일이 전송되었습니다.`)
-    window.location.href='/'
+    // window.location.href='/'
   };
 
   render() {
@@ -75,12 +75,6 @@ class RegisterForm extends Component {
               component={this.renderField}
               label='Confirm Password'
               validate={[required, passwordsMatch]}
-            />
-            <Field 
-              name='is_admin'
-              type='checkbox'
-              component={this.renderField}
-              label='Is admin'
             />
             <button className='ui primary button'>Register</button>
           </form>
