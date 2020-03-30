@@ -67,24 +67,23 @@ python manage.py migrate~~
 #### frontend/templates/frontend/index.html에서 외부 script 적용
 
 ***
-# AWS
+# AWS 환경
 
 #### 참고포스팅
 ###### https://nachwon.github.io/django-deploy-1-aws/
 ###### https://velog.io/@loakick/2019-11-19-0011-%EC%9E%91%EC%84%B1%EB%90%A8-2ck34lupye
 
-# 서버 실행 (터미널)
+## React Build 와 Django 작업 완료 후 서버 터미널
+
+### 서버 실행 (터미널)
 ```ssh -i (pem파일 경로) ubuntu@ec2-18-139-160-178.ap-southeast-1.compute.amazonaws.com```
 
-# 가상환경 실행
+### 가상환경 실행
 ```pyenv shell (로컬에서 작업할때와 동일한 가상환경 명)```
 
-# React Build 와 Django 작업 완료 후 서버 내에서
-## collectstatic
+### collectstatic (manage.py가 존재하는 디렉토리에서)
 ```python manage.py collectstatic```
-## 정적인 파일들을 모아줍니다. 
-
-```sudo systemctl daemon-reload```
-```sudo systemctl restart nginx uwsgi```
 
 ### 서버 재부팅
+```sudo systemctl daemon-reload```
+```sudo systemctl restart nginx uwsgi```
