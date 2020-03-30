@@ -73,6 +73,12 @@
 ###### https://nachwon.github.io/django-deploy-1-aws/
 ###### https://velog.io/@loakick/2019-11-19-0011-%EC%9E%91%EC%84%B1%EB%90%A8-2ck34lupye
 
+# 서버 실행 (터미널)
+```ssh -i (pem파일 경로) ubuntu@ec2-18-139-160-178.ap-southeast-1.compute.amazonaws.com```
+
+# 가상환경 실행
+```pyenv shell (로컬에서 작업할때와 동일한 가상환경 명)```
+
 # React Build 와 Django 작업 완료 후 서버 내에서
 ## collectstatic
 ```python manage.py collectstatic```
