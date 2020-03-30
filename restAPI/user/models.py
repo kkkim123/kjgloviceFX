@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters.html import HtmlFormatter
 from pygments import highlight
-
+from simple_email_confirmation.models import SimpleEmailConfirmationUserMixin
 #from django_countries.fields import CountryField
 
 # LEXERS = [item for item in get_all_lexers() if item[1]]
@@ -157,7 +157,7 @@ class FxUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class FxUser(AbstractBaseUser):
+class FxUser(SimpleEmailConfirmationUserMixin,AbstractBaseUser):
     username_validator = None
     username = None
     id = models.AutoField(primary_key=True)
@@ -296,3 +296,4 @@ class UserInvoices(models.Model):
         if not self.pk:
             self.invoice_no = str(uuid.uuid4()).replace('-', '')[:16]
         super(UserInvoices, self).save(args, kwargs)
+

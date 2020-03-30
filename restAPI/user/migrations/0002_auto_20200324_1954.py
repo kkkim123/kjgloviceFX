@@ -86,3 +86,4 @@ class Migration(migrations.Migration):
             field=models.CharField(blank=True, choices=[('', 'Please Choose...'), ('1', 'I have a relevant education/professional qualification'), ('2', 'I regularly monitor the news/markets'), ('3', 'I have read educational material on FX trading'), ('4', 'all of the above'), ('5', 'none of above')], default='1', max_length=1, null=True, verbose_name='trading period'),
         ),
     ]
+

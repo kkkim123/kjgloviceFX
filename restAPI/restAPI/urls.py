@@ -18,21 +18,23 @@ from django.urls import include, path
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-
-#from django.views.generic import TemplateView
-#from rest_framework.routers import DefaultRouter
+from user.views import UserActivationView
 #from user import views
 
 #router = DefaultRouter()
 #router.register(r'user', views.UserList)
 #router.register(r'userdetail', views.UserDetail)
 
+
+
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include("user.urls")),
     # path('rest-auth/', include('rest_auth.urls')),
     # path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    # path('account/', include('allauth.urls')),
+    path('fxaccount/', include('fxaccount.urls')),
     # path('accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
 
 	#path to djoser end points
@@ -41,14 +43,22 @@ urlpatterns = [
     #http://127.0.0.1:8000/auth/users/
     #http://127.0.0.1:8000/auth/token/login/
     path('authjwt/', include('djoser.urls.jwt')),
-	
+	#path('activate/<str:uid>/<str:token>/', UserActivationView.as_view()),
 	#path to our account's app endpoints
     #path("api/user/",include("user.urls"))
     #path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
     #path("user/registration/", include("user.registration.urls")),
+]
+
+#박찬영
+urlpatterns += [
     path('', include('frontend.urls')),
 ]
 
 if settings.DEBUG:
-  urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    import debug_toolbar
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ]
 #urlpatterns += router.urls

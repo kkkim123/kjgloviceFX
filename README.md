@@ -22,21 +22,7 @@
 
 ***
 
-### 3_1. pipenv
-
-##### 설치
-```pip install pipenv```
-
-##### 패키지 종속성 관리(pipfile 생성)
-##### 생성 : ```pipenv lock```
-##### 패키지 설치 : ```pipenv install``` (requirements.txt가 있을경우 자동으로 Pipfile로 변환시켜 실행됨)
-
-##### 가상환경 실행
-```pipenv shell```
-
-***
-
-### 3_2. virtualenv
+### 3_1. virtualenv
 
 ##### 설치
 ```pip install virtualenv```
@@ -56,14 +42,14 @@
 ##### mac에서 pip install mysqlclient 실행 시 오류 해결 방법
 ##### 호환성 문제로 인해 오류가 발생하여, 수동설치로 해결
 ##### mysqlclient : https://github.com/PyMySQL/mysqlclient-python/archive/master.zip
-##### 가상환경 실행 후, unzip한 폴더에서 python setup.py install
+##### 가상환경 실행 후, mysqlclient 폴더로 이동 후 python setup.py install
 
 ***
 
 
-~~4. 마이그레이션 적용~~
-```python manage.py makemigrations```
-```python manage.py migrate```
+~4. 마이그레이션 적용~~
+~python manage.py makemigrations~~
+~python manage.py migrate~~
 
 ### 5. 서버 실행 (로컬환경)
 ```python manage.py runserver```
@@ -86,6 +72,12 @@
 #### 참고포스팅
 ###### https://nachwon.github.io/django-deploy-1-aws/
 ###### https://velog.io/@loakick/2019-11-19-0011-%EC%9E%91%EC%84%B1%EB%90%A8-2ck34lupye
+
+# 서버 실행 (터미널)
+```ssh -i (pem파일 경로) ubuntu@ec2-18-139-160-178.ap-southeast-1.compute.amazonaws.com```
+
+# 가상환경 실행
+```pyenv shell (로컬에서 작업할때와 동일한 가상환경 명)```
 
 # React Build 와 Django 작업 완료 후 서버 내에서
 ## collectstatic

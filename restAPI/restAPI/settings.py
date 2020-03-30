@@ -3,7 +3,6 @@ import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-#박찬영 추가
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
 SECRET_KEY = '2)em3z^i^s$m!%dz#adud@!5+cfv-nfr3_i20v^n!tlxh9z&lv'
@@ -11,6 +10,7 @@ SECRET_KEY = '2)em3z^i^s$m!%dz#adud@!5+cfv-nfr3_i20v^n!tlxh9z&lv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "18.139.160.178", "ec2-18-139-160-178.ap-southeast-1.compute.amazonaws.com"]
 
 INSTALLED_APPS = [
@@ -32,9 +32,12 @@ INSTALLED_APPS += [
 	#JWT authentication backend library
     'rest_framework_simplejwt',
     'user.apps.UserConfig',
-    #'account.apps.AccountConfig',
+    'fxaccount.apps.FxaccountConfig',
     'allauth',
     'allauth.account',
+    'simple_email_confirmation',
+    'treebeard',
+    'debug_toolbar',
     'frontend.apps.FrontendConfig',
 ]
 MIDDLEWARE = [
@@ -46,7 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'restAPI.urls'
@@ -78,7 +81,7 @@ ROOT_URLCONF = 'restAPI.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -113,10 +116,35 @@ DATABASES = {
         'OPTIONS': {
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
         }
+    },
+    'backOffice': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'fbp_live',
+        'USER': 'fbplive',
+        'PASSWORD': 'j&serw$75',
+        #HOST': 'localhost',
+        'HOST': '222.122.34.248',
+        'PORT': '33306',
+        'OPTIONS': {
+            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
+        }
     }
-
 }
 
+
+    # 'backOffice': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'OPTIONS': {
+    #         'read_default_file': "path/to/backoffice.cnf",
+    #         'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"',
+    #     },
+    # }
+
+
+
+# DATABASE_ROUTERS = [
+#     'fxaccount.routers.AuthRouter',  
+# ]
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Password validation
@@ -156,16 +184,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
-#박찬영 추가
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    STATIC_DIR,
-]
-STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
-
-
-
 #LOGIN_URL = '/login/'
 AUTH_USER_MODEL = 'user.FxUser'
 # # REST_SESSION_LOGIN = True
@@ -193,16 +211,30 @@ SITE_ID = 1
 # ACCOUNT_EMAIL_REQUIRED = False
 # ACCOUNT_EMAIL_VERIFICATION = None
 # ACCOUNT_LOGOUT_ON_GET = True
+
+
+PROTOCOL = "https"
+DOMAIN = "127.0.0.1:8000"
+SITE_NAME = "kjgloiveFX.com"
 DJOSER = {
-    "SEND_ACTIVATION_EMAIL": False,
     "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
     "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
-    "ACTIVATION_URL": "#/activate/{uid}/{token}",
+    #'ACTIVATION_URL': 'auth/user/activation?uid={uid}&token={token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SEND_CONFRIMATION_EMAIL':True,
+    'SERIALIZERS': {"activation": "djoser.serializers.ActivationSerializer",},
+    'EMAIL':{
+        'activation': 'djoser.email.ActivationEmail',
+    },
 }
 
 JWT_AUTH = {'JWT_AUTH_HEADER_PREFIX': 'Token',}
 
 REST_FRAMEWORK = {
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -213,19 +245,15 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-# 메일을 호스트하는 서버
-EMAIL_PORT = '587'
-# gmail과의 통신하는 포트
-EMAIL_HOST_USER = 'sungchang@fbpasia.com'
-# 발신할 이메일
-EMAIL_HOST_PASSWORD = 'joy1378!'
-# 발신할 메일의 비밀번호
 EMAIL_USE_TLS = True
-# TLS 보안 방법
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-# 사이트와 관련한 자동응답을 받을 이메일 주소,'webmaster@localhost'
+EMAIL_HOST_USER = 'sungchang@fbpasia.com'
+EMAIL_HOST_PASSWORD='joy1378!'
+EMAIL_PORT = 587
+
+
+
 
 MEDIA_URL =  '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -255,3 +283,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 #     'LOGIN_URL': 'login',
 #     'LOGOUT_URL': 'logout',
 # }
+
+
+INTERNAL_IPS = ["127.0.0.1"]
+
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
