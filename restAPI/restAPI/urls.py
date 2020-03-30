@@ -50,6 +50,11 @@ urlpatterns = [
     #path("user/registration/", include("user.registration.urls")),
 ]
 
+#박찬영
+urlpatterns += [
+    path('', include('frontend.urls')),
+]
+
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

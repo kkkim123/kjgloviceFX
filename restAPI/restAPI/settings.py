@@ -3,12 +3,15 @@ import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+ROOT_DIR = os.path.dirname(BASE_DIR)
+
 SECRET_KEY = '2)em3z^i^s$m!%dz#adud@!5+cfv-nfr3_i20v^n!tlxh9z&lv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "18.139.160.178", "ec2-18-139-160-178.ap-southeast-1.compute.amazonaws.com"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -35,6 +38,7 @@ INSTALLED_APPS += [
     'simple_email_confirmation',
     'treebeard',
     'debug_toolbar',
+    'frontend.apps.FrontendConfig',
 ]
 MIDDLEWARE = [
     #'corsheaders.middleware.CorsMiddleware',
@@ -282,3 +286,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 INTERNAL_IPS = ["127.0.0.1"]
+
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
