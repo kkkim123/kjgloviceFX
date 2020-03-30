@@ -47,9 +47,9 @@
 ***
 
 
-~4. 마이그레이션 적용~~
-~python manage.py makemigrations~~
-~python manage.py migrate~~
+~~4. 마이그레이션 적용
+python manage.py makemigrations
+python manage.py migrate~~
 
 ### 5. 서버 실행 (로컬환경)
 ```python manage.py runserver```
