@@ -1,4 +1,5 @@
 module.exports = {
+  mode: "production",
   module: {
     rules: [
       {
@@ -7,7 +8,23 @@ module.exports = {
         use: {
           loader: 'babel-loader'
         }
-      }
+      },
+      {
+        test: /\.(sa|sc|c)ss$/,
+        use: ["style-loader", "css-loader", "sass-loader"]
+      },
+      {
+        test: /\.(png|jp(e*)g)$/,
+        loader: 'url-loader',
+        options: { 
+            limit: 8000,
+            name: 'images/[hash]-[name].[ext]'
+        } 
+      },
+      {
+        test: /\.svg$/,
+        loader: 'file-loader'
+    } 
     ]
   }
 };
