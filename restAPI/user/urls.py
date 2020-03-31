@@ -9,8 +9,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('document/new', views.DocUploadView.as_view()),
     #path("all-profiles",views.UserProfileListCreateView.as_view(),name="all-profiles"),
-   # retrieves profile details of the currently logged in user
-    path("profile/<int:pk>",views.userProfileDetailView.as_view(),name="profile"),
+   # retrieves profile details of the currently logged in user    ,name="profile"
+    path("profile/<int:pk>",views.userProfileDetailView.as_view()),
 ]
 if settings.DEBUG:
   urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

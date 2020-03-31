@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import FxAccount, DepositTransaction, WithdrawTransaction
+from .models import FxAccount, DepositTransaction, WithdrawTransaction,TradingHistory
 
 
 class FxAccountSerializer(serializers.ModelSerializer):
@@ -40,4 +40,9 @@ class DepositSerializer(serializers.ModelSerializer):
 class WithdrawSerializer(serializers.ModelSerializer):
     class Meta:
         model = WithdrawTransaction
+        fields = "__all__"
+
+class TradingHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TradingHistory
         fields = "__all__"

@@ -352,6 +352,13 @@ class WithdrawTransaction(BaseTransaction):
         verbose_name_plural = "Withdraw Requests"
 
 
+
+
+class TradingHistory(models.Model):
+    OPEN_TIME = models.DateTimeField()
+    CLOSE_TIME = models.DateTimeField()
+
+
 # class DummyModel(models.Model):
 #     bank_name = models.CharField(default='', max_length=48, blank=True)
 #     bank_account = models.CharField(default='', max_length=48, blank=True)
