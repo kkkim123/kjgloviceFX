@@ -29,8 +29,8 @@ INSTALLED_APPS += [
     'fxaccount.apps.FxaccountConfig',
     'allauth',
     'allauth.account',
-    'simple_email_confirmation',
-    'treebeard',
+    #'simple_email_confirmation',
+    #'treebeard',
     'debug_toolbar',
 ]
 MIDDLEWARE = [

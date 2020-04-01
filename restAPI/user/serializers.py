@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import FxUser, FxUserDocument
+from .models import FxUser, FxUserDocument,IntroducingBroker
 
 class UserSerializer(serializers.ModelSerializer):
     user=serializers.StringRelatedField(read_only=True)
@@ -13,6 +13,10 @@ class DocumentSerializer ( serializers.ModelSerializer ) :
         model = FxUserDocument
         fields = "__all__"
 
+class IntroducingBrokerSerializer ( serializers.ModelSerializer ) :
+    class Meta:
+        model = IntroducingBroker
+        fields = "__all__"
 # class DocumentFileSerializer(serializers.ModelSerializer):
 
 #     class Meta:

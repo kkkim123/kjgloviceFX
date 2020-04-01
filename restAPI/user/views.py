@@ -1,5 +1,5 @@
-from .models import FxUser, FxUserDocument
-from .serializers import UserSerializer, DocumentSerializer
+from .models import FxUser, FxUserDocument,IntroducingBroker
+from .serializers import UserSerializer, DocumentSerializer,IntroducingBrokerSerializer
 #from rest_framework_jwt.settings import api_settings
 #from rest_framework import status, generics
 from .permissions import IsOwnerProfileOrReadOnly,IsOwnerOnly
@@ -92,6 +92,12 @@ class userProfileDetailView(RetrieveUpdateDestroyAPIView):
     queryset=FxUser.objects.all()
     serializer_class=UserSerializer
     permission_classes=[IsOwnerOnly,IsAuthenticated]
+
+class IntroducingBrokerView(ListCreateAPIView):
+    queryset=IntroducingBroker.objects.all()
+    serializer_class=IntroducingBrokerSerializer
+    permission_classes=[IsOwnerOnly,IsAuthenticated]
+
 
 class DocUploadView(APIView):
     parser_class = (FileUploadParser,)

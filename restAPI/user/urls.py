@@ -7,8 +7,8 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('document/new', views.DocUploadView.as_view()),
-    #path("all-profiles",views.UserProfileListCreateView.as_view(),name="all-profiles"),
+    path('document', views.DocUploadView.as_view()),
+    path("introducingbroker",views.IntroducingBrokerView.as_view()),
    # retrieves profile details of the currently logged in user    ,name="profile"
     path("profile/<int:pk>",views.userProfileDetailView.as_view()),
 ]
