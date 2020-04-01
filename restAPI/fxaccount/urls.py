@@ -7,6 +7,7 @@ urlpatterns = [
     path('deposit', views.DepositViews.as_view()),
     path('withdraw', views.WithdrawViews.as_view()),
     path('tradinghistory/<int:user>', views.TradingHistoryViews.as_view()),
+    path('clientaccount/<int:user>', views.ClientAccountViews.as_view()),
     path('withdraw', views.WithdrawViews.as_view()),
 ]
 #<int:pk>
