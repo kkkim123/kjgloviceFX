@@ -204,7 +204,7 @@ class FxUser(AbstractBaseUser):
     # ib_website = models.CharField(max_length=128, blank=True, null=True, default='')
 
     referral_code = models.CharField(max_length=36, blank=True,null=True)
-    referral_website = models.CharField(max_length=128, blank=True, null=True, default='')
+    referral_website = models.URLField(max_length=128, blank=True, null=True, default='')
 
     user_status = models.CharField(default='1', max_length=2, blank=True, choices=USER_STATUS_CHOICE)
     is_active = models.BooleanField(default=True)

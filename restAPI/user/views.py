@@ -57,10 +57,6 @@ import requests
 
 class UserActivationView(APIView):
 
-
-
-
-
     def get (self, request, uid, token):
         protocol = 'https://' if request.is_secure() else 'http://'
         web_url = protocol + request.get_host()

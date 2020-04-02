@@ -31,10 +31,10 @@ ACCOUNT_TRANSACTION_STATUS = (
 ACCOUNT_TYPES = (
     ('L', 'Live MT4 Account'),
     ('D', 'Live IB Account'),
-    ('P', 'PAMM-Master'),
-    ('T', 'CopyTrader-Master'),
-    ('Q', 'PAMM-Slave'),
-    ('U', 'CopyTrader-Slave')
+    # ('P', 'PAMM-Master'),
+    # ('T', 'CopyTrader-Master'),
+    # ('Q', 'PAMM-Slave'),
+    # ('U', 'CopyTrader-Slave')
 )
 
 
