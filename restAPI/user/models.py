@@ -328,3 +328,5 @@ class IntroducingBroker(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=240, null=True)
     send_report = models.CharField(blank=True, max_length=1, null=True)
+    back_index = models.IntegerField(blank=True, null=True)
+    refrralurl = models.URLField(blank=True, null=True)

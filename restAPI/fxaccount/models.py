@@ -4,27 +4,12 @@ from user.models import FxUser
 from datetime import datetime, timedelta
 # from pytz import timezone
 
-# from django.db.models.signals import post_save
-# from django.core.mail import EmailMessage
+#from django.db.models.signals import post_save
+#from django.core.mail import EmailMessage
 #from treebeard.mp_tree import MP_Node
 
-# class Category(MP_Node):
-#     name = models.CharField(max_length=30)
 
-#     node_order_by = ['name']
-
-#     # def __str__(self):
-#     #     return 'Category: %s' % self.name
-
-
-
-# class PLAYER(models.Model):
-#     PLAYER_ID = models.CharField(max_length = 7)
-#     PLAYER_NAME = models.CharField(max_length = 7)
-#     TEAM_ID = models.CharField(max_length = 7)
-#
 # TradingAccountTransaction 전용
-#
 ACCOUNT_TRANSACTION_TYPES_CHOICE = (
     ('N', 'Normal'),
     ('I', 'IB'),
@@ -41,10 +26,8 @@ ACCOUNT_TRANSACTION_STATUS = (
 )
 
 
-#
-# TradingTransaction 전용
-#
 
+# TradingTransaction 전용
 ACCOUNT_TYPES = (
     ('L', 'Live MT4 Account'),
     ('D', 'Live IB Account'),
@@ -103,9 +86,8 @@ IB_STATUS_CHOICES = (
 )
 
 
-#
+
 # Deposit & Withdraw
-#
 DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE = (
     ('D', 'Deposit'),
     ('W', 'Withdraw'),
@@ -292,8 +274,6 @@ class BaseTransaction(models.Model):
     def history_id(self):
         return "{}{}".format(self.transaction_type, self.id)
 
-
-
 class DepositTransaction(BaseTransaction):
     transaction_type = models.CharField(default='D', max_length=1, choices=DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE)
     request_user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
@@ -318,7 +298,6 @@ class DepositTransaction(BaseTransaction):
     class Meta:
         verbose_name = "Deposit Transaction"
         verbose_name_plural = "Deposit Transactions"
-
 
 class WithdrawTransaction(BaseTransaction):
     transaction_type = models.CharField(default='W', max_length=1, choices=DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE)
@@ -350,24 +329,3 @@ class WithdrawTransaction(BaseTransaction):
     class Meta:
         verbose_name = "Withdraw Request"
         verbose_name_plural = "Withdraw Requests"
-
-
-
-
-class TradingHistory(models.Model):
-    OPEN_TIME = models.DateTimeField()
-    CLOSE_TIME = models.DateTimeField()
-
-
-# class DummyModel(models.Model):
-#     bank_name = models.CharField(default='', max_length=48, blank=True)
-#     bank_account = models.CharField(default='', max_length=48, blank=True)
-#     bank_address = models.CharField(default='', max_length=128, blank=True)
-
-
-#class CallSP(models.Model):
-
-
-
-
-#class GetIBCOMMISSIONLIST(models.Model):

@@ -39,29 +39,36 @@ class TradingHistoryViews(RetrieveUpdateDestroyAPIView):
         return HttpResponse(json_val)
 
 
-class ClientAccountViews(RetrieveUpdateDestroyAPIView):
+class ClientAccountListViews(RetrieveUpdateDestroyAPIView):
     permission_classes=[IsOwnerOnly,IsAuthenticated]
     def get(self,request,user):
         queryset = IntroducingBroker.objects.filter(fxuser = user)
-        #serializer_class = FxAccountSerializer
-        accRows = queryset
-        #print(queryset[1].mt4_account)
-        historyRows = []
+        rows = []
         for acc in queryset : 
             print(acc.ib_code)
             with connections['backOffice'].cursor() as cursor:
                 cursor.execute("select MT4_LOGIN from IB_COMMISSION_STRUTURE where IB_LOGIN = '" + str(acc.ib_code) +"' AND IB_SEQ = 1;")
                 print(cursor.description)
                 columns = [col[0] for col in cursor.description]
-                historyRows += [list(zip(columns, row)) for row in cursor.fetchall()]
-                #historyRows.update(historyRows2)  SUM ('PROFIT') OVER (ORDER BY 'TICKET' ASC) as TOT_PROFIT
-        json_val = json.dumps(historyRows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
-        #json_val = json.dumps(historyRows)
-        
+                rows += [list(zip(columns, row)) for row in cursor.fetchall()]
+
+        json_val = json.dumps(rows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
         return HttpResponse(json_val)
 
+class CommissionHistoryViews(RetrieveUpdateDestroyAPIView):
+    permission_classes=[IsOwnerOnly,IsAuthenticated]
+    def get(self,request,user):
+        queryset = IntroducingBroker.objects.filter(fxuser = user)
+        rows = []
+        for ib in queryset : 
+            print(ib.ib_code)
+            with connections['backOffice'].cursor() as cursor:
+                cursor.callproc("SP_IB_COMMISSION_HISTORY_LIST", (ib.company_idx,ib.back_index,'Y','','',0,'','','',))
+                columns = [col[0] for col in cursor.description]
+                rows += [list(zip(columns, row)) for row in cursor.fetchall()]
 
-
+        json_val = json.dumps(rows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
+        return HttpResponse(json_val)
 
 
 class DepositViews(generics.CreateAPIView):

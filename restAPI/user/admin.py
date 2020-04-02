@@ -22,21 +22,25 @@ class IBAdmin(admin.ModelAdmin):
     # send_report = models.CharField(blank=True, max_length=1)
     actions = ['addIBtoBackoffice',]
     list_display = ('fxuser', 'company_idx', 'parent_idx', 'ib_code','ib_name',
-    'point', 'live_yn', 'email', 'password','send_report')
+    'point', 'live_yn', 'email', 'password','send_report','back_index')
     # list_filter = ('is_admin',)
-    list_editable = ('company_idx','parent_idx','ib_code','ib_name','point','live_yn','send_report',)
+    list_editable = ('company_idx','parent_idx','ib_code','ib_name','point','live_yn','send_report','back_index',)
     # search_fields = ('email',)
     # ordering = ('email',)
     # filter_horizontal = ()
 
     def addIBtoBackoffice(self, request, queryset):
+        if queryset.count() != 1:
+            self.message_user(request, 'Let\'s do it slowly one by one')
+            return
         cursor =  connections['backOffice'].cursor()
         #selected = queryset.values('company_idx', 'parent_idx', 'ib_code','ib_name'
          #                                   ,'point', 'live_yn', 'email', 'password','send_report')
 
         ibs = queryset.values_list('company_idx', 'parent_idx', 'ib_code','ib_name'
-                                           ,'point', 'live_yn', 'email', 'password','send_report')
+                                           ,'point', 'live_yn', 'email', 'password','send_report','back_index')
         #print(type(selected))
+
         for ib in ibs:
             print(ib[2])
             cursor.callproc("SP_IB_CHECKING_ID", (ib[2],))
@@ -46,7 +50,13 @@ class IBAdmin(admin.ModelAdmin):
                 if row[0] == 'SUCCESS':
                     cursor.nextset()
                     cursor.callproc("SP_IB_STRUCTURE_ADD", (ib[0],ib[1],ib[2],ib[3],ib[4],ib[5],ib[6],ib[7],ib[8]))
-
+                    cursor.nextset()
+                    cursor.execute("select IDX from IB_STRUCTURE where IB_LOGIN = '" + str(ib[2]) +"';")
+                    #print(cursor.description)
+                    
+                    for row in cursor.fetchall():
+                        queryset.update(back_index=row[0])
+                        #print(row[0])
                     self.message_user(request, 'SP_IB_STRUCTURE_ADD {}'.format(cursor.fetchall()))
                 else :
                     self.message_user(request, '{}'.format(row))
