@@ -1,35 +1,44 @@
-from .models import FxAccount,DepositTransaction,WithdrawTransaction
+from .models import FxAccount,DepositTransaction,WithdrawTransaction,FxAccountTransaction
 from user.models import IntroducingBroker
-from .serializers import FxAccountSerializer,DepositSerializer,WithdrawSerializer
+from .serializers import FxAccountSerializer,DepositSerializer,WithdrawSerializer,WithdrawSerializer,FxAccountTransactionSerializer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwnerOnly
 from django.db import connections
 from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from django.core import serializers
-from rest_framework.generics import (ListCreateAPIView,RetrieveUpdateDestroyAPIView,)
+from rest_framework.generics import (CreateAPIView,ListCreateAPIView,RetrieveUpdateDestroyAPIView,)
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 class FxAccountViews(generics.ListCreateAPIView):
+    permission_classes=[IsOwnerOnly,IsAuthenticated]
     queryset = FxAccount.objects.all()
     serializer_class = FxAccountSerializer
-    permission_classes=[IsOwnerOnly,IsAuthenticated]
+    # def get_queryset(self):
+    #     return FxAccount.objects.get(id=self.request.user
 
 
-class TradingHistoryViews(RetrieveUpdateDestroyAPIView):
+class FxAccountTransactionViews(generics.CreateAPIView,generics.DestroyAPIView):
+    permission_classes=[IsAuthenticated]
+    queryset = FxAccountTransaction.objects.all()
+    serializer_class = FxAccountTransactionSerializer
+
+
+
+class TradingHistoryViews(generics.ListAPIView):
     permission_classes=[IsOwnerOnly,IsAuthenticated]
     def get(self,request,user):
         queryset = FxAccount.objects.filter(user = user)
         #serializer_class = FxAccountSerializer
-        accRows = queryset
-        print(queryset[1].mt4_account)
+        #accRows = queryset
+        #print(queryset[0].mt4_account)
         historyRows = []
         for acc in queryset : 
             with connections['backOffice'].cursor() as cursor:
                 cursor.execute("set @CumSum := 0;")
                 cursor.execute("select LOGIN as mt4_account, SYMBOL, CMD, VOLUME, OPEN_TIME, OPEN_PRICE, SL, TP, CLOSE_TIME, CLOSE_PRICE, PROFIT,"
                 + "(@CumSum := @CumSum + PROFIT) as TOT_PROFIT from MT4_TRADES where LOGIN = " + acc.mt4_account +" AND CMD < 5 order by OPEN_TIME;")
-                print(cursor.description)
+                #print(cursor.description)
                 columns = [col[0] for col in cursor.description]
                 historyRows += [list(zip(columns, row)) for row in cursor.fetchall()]
                 #historyRows.update(historyRows2)  SUM ('PROFIT') OVER (ORDER BY 'TICKET' ASC) as TOT_PROFIT
@@ -39,7 +48,7 @@ class TradingHistoryViews(RetrieveUpdateDestroyAPIView):
         return HttpResponse(json_val)
 
 
-class ClientAccountListViews(RetrieveUpdateDestroyAPIView):
+class ClientAccountListViews(generics.ListAPIView):
     permission_classes=[IsOwnerOnly,IsAuthenticated]
     def get(self,request,user):
         queryset = IntroducingBroker.objects.filter(fxuser = user)
@@ -55,7 +64,7 @@ class ClientAccountListViews(RetrieveUpdateDestroyAPIView):
         json_val = json.dumps(rows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
         return HttpResponse(json_val)
 
-class CommissionHistoryViews(RetrieveUpdateDestroyAPIView):
+class CommissionHistoryViews(generics.ListAPIView):
     permission_classes=[IsOwnerOnly,IsAuthenticated]
     def get(self,request,user):
         queryset = IntroducingBroker.objects.filter(fxuser = user)
@@ -71,12 +80,12 @@ class CommissionHistoryViews(RetrieveUpdateDestroyAPIView):
         return HttpResponse(json_val)
 
 
-class DepositViews(generics.CreateAPIView):
+class DepositViews(CreateAPIView,RetrieveUpdateDestroyAPIView):
     queryset = WithdrawTransaction.objects.all()
     serializer_class = DepositSerializer
     permission_classes=[IsOwnerOnly,IsAuthenticated]
 
-class WithdrawViews(generics.CreateAPIView):
+class WithdrawViews(CreateAPIView,RetrieveUpdateDestroyAPIView):
     queryset = WithdrawTransaction.objects.all()
     serializer_class = WithdrawSerializer
     permission_classes=[IsOwnerOnly,IsAuthenticated]

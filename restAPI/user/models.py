@@ -211,7 +211,7 @@ class FxUser(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
 
     USER_CREATE_PASSWORD_RETYPE = True
-    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin']
+    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin','referral_code']
 
     objects = FxUserManager()
 
@@ -318,7 +318,7 @@ class UserInvoices(models.Model):
 # IN i_send_report char(1)
 class IntroducingBroker(models.Model):
     fxuser = models.ForeignKey(FxUser, on_delete=models.CASCADE)
-    company_idx = models.IntegerField(default = 8, blank=True, null=True)
+    company_idx = models.IntegerField(default = 1, blank=True, null=True)
     #자신의 referral code 가져오기 
     parent_idx = models.IntegerField(default = 0, blank=True, null=True)
     ib_code = models.IntegerField(blank=True, null=True)
@@ -329,4 +329,4 @@ class IntroducingBroker(models.Model):
     password = models.CharField(max_length=240, null=True)
     send_report = models.CharField(blank=True, max_length=1, null=True)
     back_index = models.IntegerField(blank=True, null=True)
-    refrralurl = models.URLField(blank=True, null=True)
+    referralurl = models.URLField(blank=True, null=True)

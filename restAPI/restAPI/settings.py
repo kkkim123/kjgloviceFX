@@ -210,10 +210,10 @@ PROTOCOL = "https"
 DOMAIN = "127.0.0.1:8000"
 SITE_NAME = "kjgloiveFX.com"
 DJOSER = {
-    "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
-    "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_URL": "/password/reset/confirm/{uid}/{token}",
+    #"USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
     #'ACTIVATION_URL': 'auth/user/activation?uid={uid}&token={token}',
-    'ACTIVATION_URL': 'auth/user/activation/{uid}/{token}',
+    'ACTIVATION_URL': 'auth/users/activation/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SEND_CONFRIMATION_EMAIL':True,
     'SERIALIZERS': {
@@ -247,7 +247,9 @@ REST_FRAMEWORK = {
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",
+                                    "fxaccount.permissions.IsOwnerOnly",
+                                    "user.permissions.IsOwnerOnly",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.TokenAuthentication",

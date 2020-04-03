@@ -43,11 +43,13 @@ urlpatterns = [
     #http://127.0.0.1:8000/auth/users/
     #http://127.0.0.1:8000/auth/token/login/
     path('authjwt/', include('djoser.urls.jwt')),
-	#path('activate/<str:uid>/<str:token>/', UserActivationView.as_view()),
+	#path('auth/users/activation/<str:uid>/<str:token>/', UserActivationView.as_view()),
 	#path to our account's app endpoints
     #path("api/user/",include("user.urls"))
     #path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
     #path("user/registration/", include("user.registration.urls")),
+    #path('/auth/users/activate/(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$', UserActivationView.as_view()),
+
 ]
 
 if settings.DEBUG:

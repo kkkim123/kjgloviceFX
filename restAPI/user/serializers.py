@@ -7,6 +7,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = FxUser
         fields = '__all__'
 
+class ClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FxUser
+        fields = ('resident_country' , 'first_name','last_name',
+        'user_type' , 'user_status','is_active','created_at',)
 
 class DocumentSerializer ( serializers.ModelSerializer ) :
     class Meta:

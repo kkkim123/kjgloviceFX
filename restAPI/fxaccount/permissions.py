@@ -13,7 +13,8 @@ class IsOwnerOnly(BasePermission):
         if request.user.is_authenticated:
             print(request.user.id)
             print(obj.id)
-            return obj.id == request.user.id
+            return obj.FxUser.id == request.user
+            #return obj.user == request.user.id
             # True
             # if hasattr(obj, 'profile'):
             #     return obj.profile.id == request.user.id

@@ -1,14 +1,13 @@
 from django.contrib import admin
-from .models import FxAccount, DepositTransaction ,WithdrawTransaction ,IBListCommission
+from .models import FxAccount, DepositTransaction ,WithdrawTransaction ,IBListCommission,FxAccountTransaction
 from django.db import connections
 from django.http import HttpResponse,HttpResponseRedirect
 from django.urls import path
 from django.template.response import TemplateResponse
 
-
 class FxAccountAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'mt4_account', 'account_type',  'ib_commission',
+        'user', 'mt4_account', 'referral_code','ib_commission','account_status','updated_at',
     )
     # search_fields = ('mt4_account', 'fxuser')
     # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
@@ -23,15 +22,29 @@ class FxAccountAdmin(admin.ModelAdmin):
     get_ib_code.admin_order_field = 'fxuser__ib_code'
 
     list_per_page = 10
-    list_editable = ('ib_commission',)
-    search_fields = ('mt4_account',)
+    list_editable = ('ib_commission','account_status',)
+    search_fields = ('user','mt4_account','referral_code',)
 
 admin.site.register(FxAccount, FxAccountAdmin)
 
+class FxAccountTransactionAdmin(admin.ModelAdmin):
+    list_display = (
+        'requesct_user', 'from_account', 'to_account','status','transaction_type','created_at','updated_at',
+    )
+    # search_fields = ('mt4_account', 'fxuser')
+    # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
+
+    list_per_page = 10
+    list_editable = ('status',)
+    search_fields = ('user','from_account','to_account','referral_code',)
+
+
+admin.site.register(FxAccountTransaction,FxAccountTransactionAdmin)
+
 class DepositTransAdmin(admin.ModelAdmin):
     list_display = (
-        'transaction_no', 'request_user', 'mt4_account', 'currency','amount', 'bank_name','cellphone_number',
-        'created_at','updated_at','status',
+        'transaction_no', 'request_user', 'mt4_account', 'currency','amount', 'bank_name','cellphone_number','status',
+        'created_at','updated_at',
     )
     # search_fields = ('mt4_account', 'fxuser')
     # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
@@ -54,7 +67,7 @@ class WithdrawTransAdmin(admin.ModelAdmin):
     list_editable = ('status',)
     search_fields = ('status',)
     #list_display_links = ['emp_no', 'first_name']
-    
+
 admin.site.register(WithdrawTransaction,WithdrawTransAdmin)
 
 

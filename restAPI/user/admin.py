@@ -22,7 +22,7 @@ class IBAdmin(admin.ModelAdmin):
     # send_report = models.CharField(blank=True, max_length=1)
     actions = ['addIBtoBackoffice',]
     list_display = ('fxuser', 'company_idx', 'parent_idx', 'ib_code','ib_name',
-    'point', 'live_yn', 'email', 'password','send_report','back_index')
+    'point', 'live_yn', 'email', 'password','send_report','back_index','referralurl')
     # list_filter = ('is_admin',)
     list_editable = ('company_idx','parent_idx','ib_code','ib_name','point','live_yn','send_report','back_index',)
     # search_fields = ('email',)
@@ -56,7 +56,7 @@ class IBAdmin(admin.ModelAdmin):
                     
                     for row in cursor.fetchall():
                         queryset.update(back_index=row[0])
-                        #print(row[0])
+                        queryset.update(referralurl="127.0.0.1:8000/user?refcode = "+ str(ib[2]))
                     self.message_user(request, 'SP_IB_STRUCTURE_ADD {}'.format(cursor.fetchall()))
                 else :
                     self.message_user(request, '{}'.format(row))
@@ -69,6 +69,7 @@ class IBAdmin(admin.ModelAdmin):
     #     print(cursor.description)
     # applayforIB.short_description = "check IB code in Backoffice"
 admin.site.register(IntroducingBroker, IBAdmin)
+
 class UserAdmin( admin.ModelAdmin):
     #form = UserChangeForm
     #actions = ['applayforIB']
