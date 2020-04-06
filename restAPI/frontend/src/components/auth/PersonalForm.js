@@ -102,7 +102,7 @@ class PersonalForm extends Component {
                     <p className="">
                       By registering you agree to our 
                       <Link to="#" className="link">
-                        privacy policy
+                        {" "}privacy policy
                       </Link>
                     </p>
                   </div>
