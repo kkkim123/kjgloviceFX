@@ -1,0 +1,141 @@
+.form-logo-box {
+    width: 70px;
+    height: 70px;
+    margin-top:5px;
+    border-radius: 70%;
+    overflow: hidden;
+  }
+  
+.form-logo-area {
+    width: 100%;
+    height: 100%;
+    background-color: #006536;
+    object-fit: cover;
+}
+
+/*login*/
+
+/*common*/
+.underline input {
+    border-style:none;
+    border-bottom:solid 1px #cacaca;
+    border-collapse:collapse;
+    width: 100%;
+}
+
+.underline input:focus {
+    outline: none;
+}
+
+.underline input[type="text"]:focus {
+    border-bottom: 1.5px solid #006536;
+}
+
+.underline input:focus::-webkit-input-placeholder { 
+    color: #006536; 
+}
+.underline input:focus::-moz-placeholder { 
+    color: #006536; 
+}
+.underline input:focus:-ms-input-placeholder { 
+    color: #006536;
+}
+.underline input:focus::-ms-input-placeholder {
+    color: #006536;
+}
+
+.underline input[type="password"]:focus {
+    border-bottom: 1.5px solid #006536;
+}
+
+.underline select {
+    width: 100%;
+    border-style:none;
+    border-bottom: 1px solid #cacaca;
+    border-collapse:collapse;
+    color: gray;
+    text-align-last: left;
+    background-color: #fff;
+    font-family: inherit; /* 폰트 상속 */
+    background: url('../../images/svg/caret-down-solid.svg') no-repeat 95% 50%;
+    border-radius: 0px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.underline select::-ms-expand {
+    display: none;
+}
+
+.underline select:focus {
+    border-bottom: 1.5px solid #006536;
+    outline: none;
+    color: #006536;
+}
+
+.form{
+    max-width: 1140px;
+}
+
+.title {
+  color: black;
+  font-size: 1.7rem;
+}
+
+.choose {
+  color: #959595;
+}
+
+.card {
+  border-radius: 4%;
+  box-shadow: 0 0 10px lightgray;
+  /* font-size: 1.4rem; */
+}
+
+.main-img {
+  width: 35px;
+}
+
+.item-box p {
+  color: #959595;
+}
+
+.item-box a {
+    color: black;
+}
+
+.check-img {
+  width: 15px;
+}
+
+.submit-img {
+    width:100%;
+    max-width:150px;
+}
+
+.submit-text {
+  width: 100%;
+  color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.submit-text p{
+    margin: 0 auto;
+}
+
+.form a{
+    color: black;
+}
+
+.cancel-btn {
+    width:100%;
+    max-width:80px;
+}
+
+.submit-btn {
+    width:100%;
+    max-width:80px;
+}

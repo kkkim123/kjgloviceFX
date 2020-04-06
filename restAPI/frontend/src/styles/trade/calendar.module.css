@@ -1,0 +1,22 @@
+.main {
+    background-color: #0E112C;
+    color: white;
+    height: 1000px;
+}
+
+.calendar {
+    background-color: #006536;
+    box-shadow: 0 0 10px #013a1f;
+    border: 0;
+    border-radius: 4%;
+    height: 800px;
+  }
+  
+  .calendar .cal-title {
+    font-weight: 300;
+    font-size: 2.5rem;
+  }
+
+  .cal-signin .cal-body {
+    padding: 2rem;
+  }

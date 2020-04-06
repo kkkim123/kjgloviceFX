@@ -4,34 +4,19 @@ from user.models import FxUser
 from datetime import datetime, timedelta
 # from pytz import timezone
 
-# from django.db.models.signals import post_save
-# from django.core.mail import EmailMessage
+#from django.db.models.signals import post_save
+#from django.core.mail import EmailMessage
 #from treebeard.mp_tree import MP_Node
 
-# class Category(MP_Node):
-#     name = models.CharField(max_length=30)
 
-#     node_order_by = ['name']
-
-#     # def __str__(self):
-#     #     return 'Category: %s' % self.name
-
-
-
-# class PLAYER(models.Model):
-#     PLAYER_ID = models.CharField(max_length = 7)
-#     PLAYER_NAME = models.CharField(max_length = 7)
-#     TEAM_ID = models.CharField(max_length = 7)
-#
 # TradingAccountTransaction 전용
-#
 ACCOUNT_TRANSACTION_TYPES_CHOICE = (
-    ('N', 'Normal'),
+    ('R', 'Retail'),
     ('I', 'IB'),
-    ('PM', 'PAMM Master'),
-    ('PS', 'PAMM Slave'),
-    ('CM', 'CopyTrader Master'),
-    ('CS', 'CopyTrader Slave')
+    # ('PM', 'PAMM Master'),
+    # ('PS', 'PAMM Slave'),
+    # ('CM', 'CopyTrader Master'),
+    # ('CS', 'CopyTrader Slave')
 )
 
 ACCOUNT_TRANSACTION_STATUS = (
@@ -41,17 +26,15 @@ ACCOUNT_TRANSACTION_STATUS = (
 )
 
 
-#
-# TradingTransaction 전용
-#
 
+# TradingTransaction 전용
 ACCOUNT_TYPES = (
     ('L', 'Live MT4 Account'),
     ('D', 'Live IB Account'),
-    ('P', 'PAMM-Master'),
-    ('T', 'CopyTrader-Master'),
-    ('Q', 'PAMM-Slave'),
-    ('U', 'CopyTrader-Slave')
+    # ('P', 'PAMM-Master'),
+    # ('T', 'CopyTrader-Master'),
+    # ('Q', 'PAMM-Slave'),
+    # ('U', 'CopyTrader-Slave')
 )
 
 
@@ -74,11 +57,11 @@ TRADING_PLATFORM_CHOICE = (
 ACCOUNT_BASE_CURRENCY_CHOICE = (
     ('', 'Please Choose...'),
     ('1', 'USD'),
-    ('2', 'CNY'),
-    ('3', 'BTC'),
-    ('4', 'ETH'),
-    ('5', 'GLC'),
-    ('6', 'WTX'),
+    # ('2', 'CNY'),
+    # ('3', 'BTC'),
+    # ('4', 'ETH'),
+    # ('5', 'GLC'),
+    # ('6', 'WTX'),
 )
 
 LEVERAGE_CHOICES = (
@@ -103,9 +86,8 @@ IB_STATUS_CHOICES = (
 )
 
 
-#
+
 # Deposit & Withdraw
-#
 DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE = (
     ('D', 'Deposit'),
     ('W', 'Withdraw'),
@@ -196,15 +178,30 @@ def send_mt4_details(sender, **kwargs):
         #     raise Exception("mt4_account blank")
         #     pass
 
-class MyModel(models.Model):
+class IBListCommission(models.Model):
     COMPANY_IDX = models.IntegerField()
+    LIVE_YN = models.CharField(max_length=1)
+    IB_LOGIN = models.IntegerField(primary_key=True)
+    TOT_COMMISSION = models.FloatField()
+    class Meta:
+        verbose_name = "IBListCommission"
+        verbose_name_plural = "IBListCommission"
 
+
+class IBListStructure(models.Model):
+    COMPANY_IDX = models.IntegerField()
+    LIVE_YN = models.CharField(max_length=1)
+    IB_LOGIN = models.IntegerField(primary_key=True)
+    TOT_COMMISSION = models.FloatField()
+    class Meta:
+        verbose_name = "IBListCommission"
+        verbose_name_plural = "IBListCommission"
 
 
 class FxAccountTransaction(models.Model):
     id = models.AutoField(primary_key=True)
-    account_type = models.CharField(default='L', max_length=1, blank=False, choices=ACCOUNT_TYPES)
-    mt4_account = models.CharField(default='', max_length=36, blank=False)
+    from_account = models.CharField(default='', max_length=36, blank=False)
+    to_account = models.CharField(default='', max_length=36, blank=False)
 
     new_pending_at = models.DateTimeField(blank=True, null=True)
     approved_at = models.DateTimeField(blank=True, null=True)
@@ -212,26 +209,10 @@ class FxAccountTransaction(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
 
-    user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
-
-    account_description = models.TextField(default='', blank=True)
-    account_name = models.CharField(default='', max_length=32, blank=True)
-    account_trader_code = models.CharField(default='', max_length=32, blank=True)
+    requesct_user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
 
     status = models.CharField(default='P', max_length=1, blank=False, choices=ACCOUNT_TRANSACTION_STATUS)
-    transaction_type = models.CharField(default='N', max_length=2, blank=False, choices=ACCOUNT_TRANSACTION_TYPES_CHOICE)
-
-    base_currency = models.CharField(default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)
-    leverage = models.CharField(default='5', max_length=1, blank=False, choices=LEVERAGE_CHOICES)
-    trading_platform = models.CharField(default='1', max_length=1, blank=True, choices=TRADING_PLATFORM_CHOICE)
-
-
-
-    # pamm_name = models.CharField(default='', max_length=32, blank=True)  
-    # pamm_description = models.TextField(default='', blank=True)   
-    # pamm_trader_code = models.CharField(default='', max_length=32, blank=True)  # investor 로 신청할 경우 trader 의 pamm code 가 들어감
-      # investor 로 신청할 경우 trader 의 pamm code 가 들어감
-    
+    transaction_type = models.CharField(default='R', max_length=2, blank=False, choices=ACCOUNT_TRANSACTION_TYPES_CHOICE)
 
     class Meta:
         verbose_name = "FxAccount Transaction"
@@ -277,10 +258,8 @@ class BaseTransaction(models.Model):
     def history_id(self):
         return "{}{}".format(self.transaction_type, self.id)
 
-
-
 class DepositTransaction(BaseTransaction):
-    transaction_type = models.CharField(default='D', max_length=1, choices=DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE)
+    #transaction_type = models.CharField(default='D', max_length=1, choices=DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE)
     request_user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
     status = models.CharField( default='P', max_length=20, blank=True, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
     approval_no = models.CharField(default='', max_length=40, blank=True)
@@ -304,9 +283,8 @@ class DepositTransaction(BaseTransaction):
         verbose_name = "Deposit Transaction"
         verbose_name_plural = "Deposit Transactions"
 
-
 class WithdrawTransaction(BaseTransaction):
-    transaction_type = models.CharField(default='W', max_length=1, choices=DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE)
+    #transaction_type = models.CharField(default='W', max_length=1, choices=DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE)
     request_user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
     status = models.CharField(default='P', max_length=1, blank=False, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
     payment_method = models.CharField(default='', max_length=2, blank=True, choices=WITHDRAW_METHOD_CHOICE)
@@ -335,12 +313,3 @@ class WithdrawTransaction(BaseTransaction):
     class Meta:
         verbose_name = "Withdraw Request"
         verbose_name_plural = "Withdraw Requests"
-
-
-
-#class CallSP(models.Model):
-
-
-
-
-#class GetIBCOMMISSIONLIST(models.Model):

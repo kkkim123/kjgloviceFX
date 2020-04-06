@@ -1,0 +1,166 @@
+.logo-box {
+  width: 70px;
+  height: 70px;
+  margin-right:5px;
+  border-radius: 70%;
+  overflow: hidden;
+}
+
+.logo-area {
+  width: 100%;
+  height: 100%;
+  background-color: #006536;
+  object-fit: cover;
+}
+
+.card-signin {
+  border: 0;
+  border-radius: 4%;
+  box-shadow: 0 0 10px lightgray;
+}
+
+.card-signin .card-title {
+  font-weight: 300;
+  font-size: 2rem;
+}
+
+.card-signin .card-body {
+  padding: 2rem;
+}
+
+.form-signin {
+  width: 100%;
+}
+
+.form-signin .btn {
+  border-radius: 5rem;
+  transition: all 0.2s;
+  background-color: #006536;
+  border-style: none;
+  margin-top: 2.5rem;
+  font-weight: 300;
+}
+
+.form-signin .btn:hover {
+  color: #fff;
+  background-color: #03502c;
+  border-color: #03502c;
+}
+
+.form-label-group {
+  position: relative;
+  margin-bottom: 2.5rem;
+}
+
+.p-gray p{
+  color: #959595
+}
+
+.form-label-group input {
+  height: auto;
+  border-style:none;
+  border-bottom:solid 1px #cacaca;
+  border-collapse:collapse;
+  border-radius: 0%;
+  width: 100%;
+}
+
+*:focus {
+  outline:0px !important;
+  -webkit-appearance:none;
+  box-shadow: none !important;
+}
+
+.form-label-group input[type="text"]:focus {
+  border-bottom: 1.5px solid #006536;
+}
+
+.form-label-group input[type="email"]:focus {
+  border-bottom: 1.5px solid #006536;
+}
+
+.form-label-group input:focus::-webkit-input-placeholder { 
+  color: #006536; 
+}
+.form-label-group input:focus::-moz-placeholder { 
+  color: #006536; 
+}
+.form-label-group input:focus:-ms-input-placeholder { 
+  color: #006536;
+}
+.form-label-group input:focus::-ms-input-placeholder {
+  color: #006536;
+}
+
+.form-label-group input[type="password"]:focus {
+  border-bottom: 1.5px solid #006536;
+}
+
+.form-label-group select {
+  height: auto;
+  width: 100%;
+  border-style:none;
+  border-bottom: 1px solid #cacaca;
+  border-collapse:collapse;
+  color: gray;
+  background-color: #fff;
+  font-family: inherit; /* 폰트 상속 */
+  background: url('../../images/svg/caret-down-solid.svg') no-repeat 95% 50%;
+  border-radius: 0px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.form-label-group select::-ms-expand {
+  display: none;
+}
+
+.form-label-group select:focus {
+  border-bottom: 1.5px solid #006536;
+  outline: none;
+  color: #006536;
+}
+.link {
+  color: black !important;
+  font-weight: bold;
+}
+
+.link:hover {
+  text-decoration: none;
+}
+
+.mt-10 {
+  margin-top: 5rem !important;
+}
+
+.card-bar {
+  height: 5px;
+  width: 40px;
+  margin-top: -1.5rem;;
+}
+
+.bg-green {
+  background-color: #006536;
+  border-radius: 1.5rem !important;
+}
+
+.progress {
+  background-color: #959595 !important;
+  border-radius: 1.5rem !important;
+}
+
+.bg-gray {
+  background-color: #959595 !important;
+}
+
+.bg-gray.btn:hover {
+  color: #fff;
+  background-color: #6d6b6b !important;
+  border-color: #6d6b6b !important;
+}
+
+
+.ft-green {
+  color: #006536;
+}

@@ -4,14 +4,24 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from user import views
 from django.conf import settings
 from django.conf.urls.static import static
+from . import views
+
+
+#router = DefaultRouter()
+#router.register('myclient',ClientViewSet)
+
+
 
 
 urlpatterns = [
-    path('document/new', views.DocUploadView.as_view()),
-    #path("all-profiles",views.UserProfileListCreateView.as_view(),name="all-profiles"),
-   # retrieves profile details of the currently logged in user
-    path("profile/<int:pk>",views.userProfileDetailView.as_view(),name="profile"),
+    path('myclient', views.Client_list), 
+    path('document', views.DocUploadView.as_view()),
+    path("introducingbroker",views.IntroducingBrokerView.as_view()),
+   # retrieves profile details of the currently logged in user    ,name="profile"
+    path('',views.userProfileDetailView.as_view()),
+    #path('myclient/<int:referral_code>', views.ClientView.as_view()),
 ]
+urlpatterns = format_suffix_patterns(urlpatterns)
 if settings.DEBUG:
   urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # urlpatterns = [

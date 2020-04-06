@@ -1,0 +1,40 @@
+.main {
+    background-color: white;
+    border: 0;
+    padding: 0;
+    min-height: 100%;
+    width: 100%;
+    height: auto;
+}
+
+.card {
+    border: 0;
+    border-radius: 4%;
+    box-shadow: 0 0 10px lightgray;
+    height: 650px;
+  }
+  
+.card .card-title {
+    font-weight: 300;
+    font-size: 2rem;
+}
+
+.card .card-body {
+    padding: 2rem;
+}
+
+.card p {
+    margin: 0 !important;
+    color: lightgray;
+    font-size: 19px;
+}
+
+.title{
+    color: #006536;
+    font-weight: bold;
+}
+
+.info p {
+    color: lightgray;
+    margin: 0 !important;
+}

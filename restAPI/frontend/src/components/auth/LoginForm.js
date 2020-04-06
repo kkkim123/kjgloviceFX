@@ -1,69 +1,94 @@
-import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
-import { login } from '../../actions/auth';
+import React, { Component } from "react";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { Field, reduxForm } from "redux-form";
+import { login } from "../../actions/auth";
 
 class LoginForm extends Component {
-  renderField = ({ input, label, type, meta: { touched, error } }) => {
+  renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
-      <div className={`field ${touched && error ? 'error' : ''}`}>
-        <label>{label}</label>
-        <input {...input} type={type} />
-        {touched && error && (
-          <span className='ui pointing red basic label'>{error}</span>
-        )}
+      <div
+        className={`underline text-left item-box 
+        ${touched && error ? "error" : ""}`}
+      >
+        <input {...input} type={type} placeholder={placeholder} />
+        {touched && error && <span className="">{error}</span>}
       </div>
     );
   };
 
   hiddenField = ({ type, meta: { error } }) => {
     return (
-      <div className='field'>
+      <div className="field">
         <input type={type} />
-        {error && <div className='ui red message'>{error}</div>}
+        {error && <div className="ui red message">{error}</div>}
       </div>
     );
   };
 
   onSubmit = formValues => {
     this.props.login(formValues);
-    // console.log(formValues)
   };
 
   render() {
-    if (this.props.isAuthenticated) {
-      return <Redirect to='/' />;
-    }
+    // if (this.props.isAuthenticated) {
+    //   return <Redirect to="/" />;
+    // }
     return (
-      <div className='ui container'>
-        <div className='ui segment'>
-          <form
-            onSubmit={this.props.handleSubmit(this.onSubmit)}
-            className='ui form'
-          >
-            <Field
-              name='email'
-              type='text'
-              component={this.renderField}
-              label='Email'
-            />
-            <Field
-              name='password'
-              type='password'
-              component={this.renderField}
-              label='Password'
-            />
-            <Field
-              name='non_field_errors'
-              type='hidden'
-              component={this.hiddenField}
-            />
-            <button className='ui primary button'>Login</button>
-          </form>
-          <p style={{ marginTop: '1rem' }}>
-            Don't have an account? <Link to='/register'>Register</Link>
-          </p>
+      <div className="container">
+        <div className="row">
+          <div className="row">
+            <div className="logo-box mx-auto">
+              <div className="logo-area"></div>
+            </div>
+          </div>
+          <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div className="card card-signin my-5">
+              <div className="card-body text-center p-gray">
+                <h5 className="card-title">Log in now</h5>
+                <p className="mb-4">
+                  Do not have an account? 
+                  <Link to="/register/user" className="link">
+                    {" "}Register
+                  </Link>
+                </p>
+                <form className="form-signin text-left">
+                  <div className="form-label-group">
+                    <input
+                      type="email"
+                      id="inputEmail"
+                      className="form-control"
+                      placeholder="Email*"
+                      required
+                      autoFocus
+                    />
+                  </div>
+                  <div className="form-label-group">
+                    <input
+                      type="password"
+                      id="inputPassword"
+                      className="form-control"
+                      placeholder="Password*"
+                      required
+                    />
+                  </div>
+                  <div className="form-label-group text-right p-2">
+                    <p className="">
+                      <Link to="/reset" className="link">
+                        Forgot your password?
+                      </Link>
+                    </p>
+                  </div>
+                  <button
+                    className="btn btn-lg btn-block btn-primary content-center  mt-10"
+                    type="submit"
+                  >
+                    Sign in
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -74,11 +99,8 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated
 });
 
-LoginForm = connect(
-  mapStateToProps,
-  { login }
-)(LoginForm);
+LoginForm = connect(mapStateToProps, { login })(LoginForm);
 
 export default reduxForm({
-  form: 'loginForm'
+  form: "loginForm"
 })(LoginForm);

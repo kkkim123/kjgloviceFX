@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 import '../../styles/footer.css';
 import iconTwitter from '../../images/icon_twitter.png';
 import iconFacebook from '../../images/icon_facebook.png';
@@ -21,7 +22,7 @@ class Footer extends Component {
     }
     render() {
         return (
-            <div className="footer">
+            <div className="container-flud footer">
                 <div className="d-flex justify-content-center align-content-center flex-wrap ft1">
                     <div className="item">
                         <span className="name">GOLD</span><br></br>
@@ -52,7 +53,7 @@ class Footer extends Component {
                         <span className="desc">Trading CFDs involves significant risks</span><br></br>
                     </div>
                     <div className="item pt-2">
-                        <span className="resister-button">Resister</span>
+                        <span className="resister-button"><Link to="/register/user">Resister</Link></span>
                     </div>
                 </div>
                 <div className="d-flex justify-content-around align-content-center flex-wrap ft2">

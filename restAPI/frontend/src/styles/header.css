@@ -105,3 +105,25 @@
   border-radius: 20%; */
 
 }
+
+.mypage a{
+  background-color: white;
+  color: black;
+  padding: 28px 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+}
+
+.resister a{
+  background-color: white;
+  color: #006536;
+  padding: 28px 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+}

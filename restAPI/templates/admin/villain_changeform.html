@@ -1,0 +1,10 @@
+{% extends 'admin/change_form.html' %}
+
+{% block submit_buttons_bottom %}
+    {{ block.super }}
+    <div class="submit-row">
+        <input type="text" name="i_company_id">COMPANY_IDX : </input><br>
+        <input type="text" name="i_live_yn">LIVE_YN : </input><br>
+        <button type="submit" value="POST" name="_make-unique">get</button>
+    </div>
+{% endblock %}

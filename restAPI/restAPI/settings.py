@@ -21,22 +21,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-INSTALLED_APPS += [
-	#third party package for user registration and authentication endpoints 	
-    'djoser',
+INSTALLED_APPS += [	
 	'django.contrib.sites',
-     #rest API implementation library for django
     'rest_framework',
     "rest_framework.authtoken",
 	'rest_framework_swagger',
-	#JWT authentication backend library
     'rest_framework_simplejwt',
+    'djoser',
     'user.apps.UserConfig',
     'fxaccount.apps.FxaccountConfig',
     'allauth',
     'allauth.account',
-    'simple_email_confirmation',
-    'treebeard',
+    #'simple_email_confirmation',
+    #'treebeard',
     'debug_toolbar',
     'frontend.apps.FrontendConfig',
 ]
@@ -217,16 +214,35 @@ PROTOCOL = "https"
 DOMAIN = "127.0.0.1:8000"
 SITE_NAME = "kjgloiveFX.com"
 DJOSER = {
-    "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
-    "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_URL": "/password/reset/confirm/{uid}/{token}",
+    #"USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
     #'ACTIVATION_URL': 'auth/user/activation?uid={uid}&token={token}',
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'ACTIVATION_URL': 'auth/users/activation/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SEND_CONFRIMATION_EMAIL':True,
-    'SERIALIZERS': {"activation": "djoser.serializers.ActivationSerializer",},
+    'SERIALIZERS': {
+        "activation": "djoser.serializers.ActivationSerializer",
+    },
     'EMAIL':{
         'activation': 'djoser.email.ActivationEmail',
     },
+    'PERMISSIONS':{
+        'activation': ['rest_framework.permissions.AllowAny'],
+        'password_reset': ['rest_framework.permissions.AllowAny'],
+        'password_reset_confirm': ['rest_framework.permissions.AllowAny'],
+        'set_password': ['djoser.permissions.CurrentUserOrAdmin'],
+        'username_reset': ['rest_framework.permissions.AllowAny'],
+        'username_reset_confirm': ['rest_framework.permissions.AllowAny'],
+        'set_username': ['djoser.permissions.CurrentUserOrAdmin'],
+        'user_create': ['rest_framework.permissions.AllowAny'],
+        'user_delete': ['djoser.permissions.CurrentUserOrAdmin'],
+        'user': ['djoser.permissions.CurrentUserOrAdmin'],
+        'user_list': ['djoser.permissions.CurrentUserOrAdmin'],
+        'token_create': ['rest_framework.permissions.AllowAny'],
+        'token_destroy': ['rest_framework.permissions.IsAuthenticated'],
+    },
+
+
 }
 
 JWT_AUTH = {'JWT_AUTH_HEADER_PREFIX': 'Token',}
@@ -235,7 +251,9 @@ REST_FRAMEWORK = {
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",
+                                    "fxaccount.permissions.IsOwnerOnly",
+                                    "user.permissions.IsOwnerOnly",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.TokenAuthentication",
@@ -249,7 +267,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'sungchang@fbpasia.com'
-# EMAIL_HOST_PASSWORD='joy1378!'
 EMAIL_HOST_PASSWORD='fbp2020!'
 EMAIL_PORT = 587
 

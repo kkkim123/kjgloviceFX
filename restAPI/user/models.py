@@ -7,9 +7,10 @@ from django.utils.translation import ugettext_lazy as _
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters.html import HtmlFormatter
 from pygments import highlight
-from simple_email_confirmation.models import SimpleEmailConfirmationUserMixin
+#from simple_email_confirmation.models import SimpleEmailConfirmationUserMixin
 #from django_countries.fields import CountryField
-
+from uuid import uuid4
+import datetime
 # LEXERS = [item for item in get_all_lexers() if item[1]]
 # LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
 # STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
@@ -157,7 +158,8 @@ class FxUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class FxUser(SimpleEmailConfirmationUserMixin,AbstractBaseUser):
+class FxUser(AbstractBaseUser):
+
     username_validator = None
     username = None
     id = models.AutoField(primary_key=True)
@@ -194,12 +196,22 @@ class FxUser(SimpleEmailConfirmationUserMixin,AbstractBaseUser):
     trading_experience = models.CharField(_("trading experience"),default='1', max_length=1, blank=True, choices=TRADING_EXPERIENCE,null=True)
     trading_period = models.CharField(_("trading period"),default='1', max_length=1, blank=True, choices=TRADING_PERIOD,null=True)
 
+
+
+    # is_ib = models.BooleanField(default=False)
+
+    # ib_code = models.CharField(max_length=6, blank=True,null=True)
+    # ib_website = models.CharField(max_length=128, blank=True, null=True, default='')
+
+    referral_code = models.CharField(max_length=36, blank=True,null=True)
+    referral_website = models.URLField(max_length=128, blank=True, null=True, default='')
+
     user_status = models.CharField(default='1', max_length=2, blank=True, choices=USER_STATUS_CHOICE)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
     USER_CREATE_PASSWORD_RETYPE = True
-    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin']
+    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin','referral_code']
 
     objects = FxUserManager()
 
@@ -218,10 +230,11 @@ class FxUser(SimpleEmailConfirmationUserMixin,AbstractBaseUser):
 
 
 
+
 def user_id_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     ext = filename.split('.')[-1]
-    filename = "%s.%s" % (uuid.uuid4(), ext)
+    filename = "%s.%s" % (uuid4, ext)
     return 'user_{0}/id/{1}/{2}/{3}/{4}'.format(
         instance.fxuser.id,
         datetime.date.today().year,
@@ -233,7 +246,7 @@ def user_id_directory_path(instance, filename):
 def user_residence_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     ext = filename.split('.')[-1]
-    filename = "%s.%s" % (uuid.uuid4(), ext)
+    filename = "%s.%s" % (uuid4(), ext)
     return 'user_{0}/residence/{1}/{2}/{3}/{4}'.format(
         instance.fxuser.id,
         datetime.date.today().year,
@@ -266,13 +279,6 @@ class FxUserDocument(models.Model):
         ordering = ['created_at']
 
 
-
-
-
-
-
-
-
 class UserInvoices(models.Model):
     fxuser = models.ForeignKey(FxUser, on_delete=models.CASCADE)
     name = models.CharField(_("Name"), max_length=256, blank=True, default='')
@@ -297,3 +303,30 @@ class UserInvoices(models.Model):
             self.invoice_no = str(uuid.uuid4()).replace('-', '')[:16]
         super(UserInvoices, self).save(args, kwargs)
 
+
+
+
+
+# IN i_company_idx	int ,
+#  IN i_parent_idx   int,
+#  IN i_login int,
+#  IN i_name varchar(33),
+# IN i_point int,
+# IN i_live_yn  char(1),
+# IN i_email varchar(33),
+# IN i_password varchar(33),
+# IN i_send_report char(1)
+class IntroducingBroker(models.Model):
+    fxuser = models.ForeignKey(FxUser, on_delete=models.CASCADE)
+    company_idx = models.IntegerField(default = 1, blank=True, null=True)
+    #자신의 referral code 가져오기 
+    parent_idx = models.IntegerField(default = 0, blank=True, null=True)
+    ib_code = models.IntegerField(blank=True, null=True)
+    ib_name = models.CharField(blank=True, max_length=36)
+    point = models.IntegerField(blank=True)
+    live_yn = models.CharField(blank=True, max_length=1, null=True)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=240, null=True)
+    send_report = models.CharField(blank=True, max_length=1, null=True)
+    back_index = models.IntegerField(blank=True, null=True)
+    referralurl = models.URLField(blank=True, null=True)

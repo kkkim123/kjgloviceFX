@@ -1,100 +1,146 @@
-import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
-import { register } from '../../actions/auth';
+import React, { Component } from "react";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { Field, reduxForm } from "redux-form";
+import { register } from "../../actions/auth";
+import { CountryDropdown } from "react-country-region-selector";
+import "../../styles/auth/form.css";
+import $ from "jquery";
 
 class RegisterForm extends Component {
-  renderField = ({ input, label, type, meta: { touched, error } }) => {
+  constructor(props) {
+    super(props);
+    this.state = { country: "" };
+  }
+
+  componentDidMount() {
+    $("select").prop("required", true);
+    $("select").prop("autofocus", true);
+  }
+
+  selectCountry = val => {
+    this.setState({
+      country: val
+    });
+  };
+
+  renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
-      <div className={`field ${touched && error ? 'error' : ''}`}>
-        <label>{label}</label>
-        <input {...input} type={type} />
-        {touched && error && (
-          <span className='ui pointing red basic label'>{error}</span>
-        )}
+      <div
+        className={`underline text-left item-box ${
+          touched && error ? "error" : ""
+        }`}
+      >
+        <input {...input} type={type} placeholder={placeholder} />
+        {touched && error && <span className="">{error}</span>}
+        {/* {touched && error && <i className="fas fa-check-circle"></i>} */}
       </div>
     );
   };
 
   onSubmit = formValues => {
-    this.props.register(formValues);
-    alert(`${formValues.email}로 인증메일이 전송되었습니다.`)
-    window.location.href='/'
+    if (this.state.country) {
+      formValues.resident_country = this.state.country;
+      formValues.is_admin = false;
+      this.props.register(formValues);
+      // alert(`${formValues.email}로 인증메일이 전송되었습니다.`);
+      // window.location.href = "/";
+    } else {
+      alert("Select your Counrty");
+    }
   };
 
   render() {
-    if (this.props.isAuthenticated) {
-      return <Redirect to='/' />;
-    }
+    // if (this.props.isAuthenticated) {
+    //   return <Redirect to="/" />;
+    // }
+    const { country } = this.state;
     return (
-      <div className='ui container'>
-        <div className='ui segment'>
-          <form
-            onSubmit={this.props.handleSubmit(this.onSubmit)}
-            className='ui form'
-          >
-            <Field
-              name='resident_country'
-              type='text'
-              component={this.renderField}
-              label='Resident country'
-              validate={[required, minLength3, maxLength15]}
-            />
-            <Field
-              name='first_name'
-              type='text'
-              component={this.renderField}
-              label='First name'
-              validate={[required, minLength3, maxLength15]}
-            />
-            <Field
-              name='last_name'
-              type='text'
-              component={this.renderField}
-              label='Last name'
-              validate={[required, minLength3, maxLength15]}
-            />                        
-            <Field
-              name='email'
-              type='email'
-              component={this.renderField}
-              label='Email'
-              validate={required}
-            />
-            <Field
-              name='password'
-              type='password'
-              component={this.renderField}
-              label='Password'
-              validate={required}
-            />
-            <Field
-              name='password2'
-              type='password'
-              component={this.renderField}
-              label='Confirm Password'
-              validate={[required, passwordsMatch]}
-            />
-            <Field 
-              name='is_admin'
-              type='checkbox'
-              component={this.renderField}
-              label='Is admin'
-            />
-            <button className='ui primary button'>Register</button>
-          </form>
-          <p style={{ marginTop: '1rem' }}>
-            Already have an account? <Link to='/login'>Login</Link>
-          </p>
+      <div className="container">
+        <div className="row">
+          <div className="row">
+            <div className="logo-box mx-auto">
+              <div className="logo-area"></div>
+            </div>
+          </div>
+          <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div className="card card-signin my-5">
+              <div className="card-body text-center">
+                <h5 className="card-title">Register</h5>
+                <form className="form-signin text-left">
+                  <div className="form-label-group">
+                    <CountryDropdown
+                      value={country}
+                      onChange={val => this.selectCountry(val)}
+                      defaultOptionLabel="Country of residence*"
+                      classes="form-control"
+                    />
+                  </div>
+                  <div className="form-label-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="First Name*"
+                      required
+                    />
+                  </div>
+                  <div className="form-label-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Last Name*"
+                      required
+                    />
+                  </div>
+                  <div className="form-label-group">
+                    <input
+                      type="email"
+                      className="form-control"
+                      placeholder="Enter e-mail*"
+                      required
+                    />
+                  </div>
+                  <div className="form-label-group">
+                    <input
+                      type="password"
+                      className="form-control"
+                      placeholder="Enter your password*"
+                      required
+                    />
+                  </div>
+                  <div className="form-label-group">
+                    <input
+                      type="password"
+                      className="form-control"
+                      placeholder="Confirm your password*"
+                      required
+                    />
+                  </div>
+                  <div className="form-label-group text-center p-2 p-gray">
+                    <p className="">
+                      By registering you agree to our 
+                      <Link to="#" className="link">
+                        {" "}privacy policy
+                      </Link>
+                    </p>
+                  </div>
+                  <button
+                    className="btn btn-lg btn-primary btn-block  mt-10"
+                    type="submit"
+                  >
+                    Register
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 }
 
-const required = value => (value ? undefined : 'Required');
-
+const required = value => (value ? undefined : "Required");
 
 const minLength = min => value =>
   value && value.length < min
@@ -109,17 +155,14 @@ const maxLength = max => value =>
 const maxLength15 = maxLength(15);
 
 const passwordsMatch = (value, allValues) =>
-  value !== allValues.password ? 'Passwords do not match' : undefined;
+  value !== allValues.password ? "Passwords do not match" : undefined;
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated
 });
 
-RegisterForm = connect(
-  mapStateToProps,
-  { register }
-)(RegisterForm);
+RegisterForm = connect(mapStateToProps, { register })(RegisterForm);
 
 export default reduxForm({
-  form: 'registerForm'
+  form: "registerForm"
 })(RegisterForm);

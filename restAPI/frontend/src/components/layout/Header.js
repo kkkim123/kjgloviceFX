@@ -10,29 +10,36 @@ class Header extends Component {
     const { user, isAuthenticated } = this.props.auth;
 
     const userLinks = (
-      <div className='right menu'>
-        <div className='ui simple dropdown item'>
+      <>
+        <div className="col mypage">
           {user ? user.email : ''}
-          {/* 로그인 성공 */}
-          <i className='dropdown icon' />
-          <div className='menu'>
-            <a onClick={this.props.logout} className='item'>
+          {/* My page dropdown */}
+        </div>
+        <div className="col resister">
+          <div className="resister-content">
+            <a onClick={this.props.logout} className='link'>
               Logout
             </a>
           </div>
         </div>
-      </div>
+      </>
     );
 
     const guestLinks = (
-      <div className='right menu'>
-        <Link to='/register' className='item'>
-          Sign Up
-        </Link>
-        <Link to='/login' className='item'>
-          Login
-        </Link>
-      </div>
+      <>
+        <div className="col mypage">
+          <Link to='/login' className="link">
+            My Page
+          </Link>
+        </div>
+        <div className="col resister">
+          <div className="resister-content">
+            <Link to='/register/user'>
+              Register
+            </Link>          
+          </div>
+        </div>
+      </>
     );
 
     return (
@@ -53,7 +60,8 @@ class Header extends Component {
               <div className="col">
                 <div className="logo-box mx-auto">
                   <div className="logo-area">
-                  </div>
+
+                  </div> 
                 </div>
               </div>
               <div className="col dropdown">
@@ -98,17 +106,9 @@ class Header extends Component {
                   <a href="#">CN</a>
                 </div>
               </div>
-              <div className="col mypage">
-                My Page
-              </div>
-              <div className="col resister">
-                <div className="resister-content">
-                  Register
-                </div>
-              </div>
+              {isAuthenticated ? userLinks : guestLinks}
             </div>
           </div>
-
         </div>
       </div>
     );
