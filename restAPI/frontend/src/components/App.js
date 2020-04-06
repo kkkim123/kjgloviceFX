@@ -40,7 +40,7 @@ class App extends Component {
             <Route exact path="/login" component={LoginForm} />
             <Route exact path="/register/user" component={RegisterForm} />
             <Route exact path="/reset" component={ResetForm} />
-            <Route exact path="/resetConfirm" component={ResetConfirm} />
+            <Route exact path="/reset/confirm" component={ResetConfirm} />
             <Route exact path="/register/address" component={AddressForm} />
             <Route exact path="/register/personal" component={PersonalForm} />
             <Route exact path="/trading" component={Trading} />

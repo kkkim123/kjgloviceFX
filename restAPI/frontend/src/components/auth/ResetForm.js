@@ -33,7 +33,7 @@ class ResetForm extends Component {
     // if(!formValues.email) {
     //     alert('빈 칸')
     // } else {
-    window.location.href = "/resetConfirm";
+    window.location.href = "/reset/confirm";
     // this.props.reset(formValues);
     // }
   };
