@@ -7,4 +7,5 @@ urlpatterns = [
     re_path('register/', views.index),
     re_path('reset/', views.index),
     path('trading', views.index),
+    path('company', views.index),
 ]

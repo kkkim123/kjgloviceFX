@@ -21,7 +21,6 @@ module.exports = {
             options: {
               importLoaders: 1,
               modules: true,
-              sourceMap: true
               // name: 'images/[name].[ext]?[hash]',              
             }
           }

@@ -21,6 +21,7 @@ import ResetConfirm from "./auth/ResetConfirm";
 import AddressForm from "./auth/AddressForm";
 import PersonalForm from "./auth/PersonalForm";
 import Trading from "./trade/Trading";
+import Company from "./company/company";
 
 
 class App extends Component {
@@ -30,6 +31,7 @@ class App extends Component {
 
   render() {
     return (
+      // redux로 생성된 store에 하위 컴포넌트들 접근 가능
       <Provider store={store}>
         <Router history={history}>
           <Header/>
@@ -44,6 +46,7 @@ class App extends Component {
             <Route exact path="/register/address" component={AddressForm} />
             <Route exact path="/register/personal" component={PersonalForm} />
             <Route exact path="/trading" component={Trading} />
+            <Route exact path="/company" component={Company} />
           </Switch>
           <Footer />
         </Router>

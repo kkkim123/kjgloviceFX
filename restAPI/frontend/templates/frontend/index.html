@@ -14,8 +14,10 @@
 </head>
 
 <body>
-  <div id='app'></div>
-  <div id="modal"></div>
+  <div id="root">
+    <div id='app' class="App"></div>
+    <div id="modal"></div>
+  </div>
 
   {% load static %}
   <script src="{% static 'frontend/main.js' %}"></script>

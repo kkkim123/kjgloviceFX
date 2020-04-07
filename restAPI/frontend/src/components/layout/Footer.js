@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import '../../styles/footer.css';
+import '../../styles/layout/footer.css';
 import iconTwitter from '../../images/icon_twitter.png';
 import iconFacebook from '../../images/icon_facebook.png';
 import iconInstagram from '../../images/icon_instagram.png';

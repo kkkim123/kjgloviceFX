@@ -1,0 +1,51 @@
+.partnership{
+    max-width: 1140px;
+}
+
+.title {
+  color: black;
+  font-size: 1.7rem;
+}
+
+.choose {
+  color: #959595;
+}
+
+.card {
+  border-radius: 4%;
+  box-shadow: 0 0 10px lightgray;
+  /* font-size: 1.4rem; */
+}
+
+.main-img {
+  width: 35px;
+}
+
+.card .title {
+  color: #006536;
+}
+
+.item-box p {
+  color: #959595;
+}
+
+.check-img {
+  width: 15px;
+}
+
+.submit-img {
+    width:100%;
+    max-width:250px;
+}
+
+.submit-text {
+  width: 100%;
+  color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.submit-text p{
+    margin: 0 auto;
+}

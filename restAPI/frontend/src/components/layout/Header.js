@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/auth';
-
-import "../../styles/header.css";
+import "../../styles/layout/header.css";
 
 class Header extends Component {
   render() {
