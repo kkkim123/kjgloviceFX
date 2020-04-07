@@ -7,24 +7,46 @@ from .permissions import IsOwnerOnly
 from django.db import connections
 from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from django.core import serializers
-from rest_framework.generics import (CreateAPIView,ListCreateAPIView,RetrieveUpdateDestroyAPIView,)
+from rest_framework.generics import (CreateAPIView,ListCreateAPIView,RetrieveUpdateDestroyAPIView,DestroyAPIView,)
 from django.core.serializers.json import DjangoJSONEncoder
 import json
-class FxAccountViews(generics.ListCreateAPIView):
+from rest_framework.response import Response
+from rest_framework import status, viewsets
+from django.shortcuts import get_object_or_404
+#신규 요청, 요청내역 조회 , 취소
+class FxAccountViewSet(viewsets.ModelViewSet):
     permission_classes=[IsOwnerOnly,IsAuthenticated]
     queryset = FxAccount.objects.all()
     serializer_class = FxAccountSerializer
+    lookup_field = 'user'
+
+    def destroy(self, request, user,pk=None):
+        instance = FxAccount.objects.get(user=user)
+        if (instance.status != 'A') : 
+            instance.delete()
+            serializer = FxAccountSerializer(instance)
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_304_NOT_MODIFIED)
+
+FxAccount = FxAccountViewSet.as_view({
+    'post' : 'create',
+    'get': 'list',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete' : 'destroy'
+})
+
     # def get_queryset(self):
     #     return FxAccount.objects.get(id=self.request.user
 
-
-class FxAccountTransactionViews(generics.CreateAPIView,generics.DestroyAPIView):
+#신규 요청, 요청내역 조회 , 취소
+class FxAccountTransactionViews(ListCreateAPIView,DestroyAPIView):
     permission_classes=[IsAuthenticated]
     queryset = FxAccountTransaction.objects.all()
     serializer_class = FxAccountTransactionSerializer
 
 
-
+#조회
 class TradingHistoryViews(generics.ListAPIView):
     permission_classes=[IsOwnerOnly,IsAuthenticated]
     def get(self,request,user):
@@ -47,7 +69,7 @@ class TradingHistoryViews(generics.ListAPIView):
         
         return HttpResponse(json_val)
 
-
+#조회
 class ClientAccountListViews(generics.ListAPIView):
     permission_classes=[IsOwnerOnly,IsAuthenticated]
     def get(self,request,user):
@@ -63,7 +85,7 @@ class ClientAccountListViews(generics.ListAPIView):
 
         json_val = json.dumps(rows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
         return HttpResponse(json_val)
-
+#조회
 class CommissionHistoryViews(generics.ListAPIView):
     permission_classes=[IsOwnerOnly,IsAuthenticated]
     def get(self,request,user):
@@ -79,29 +101,78 @@ class CommissionHistoryViews(generics.ListAPIView):
         json_val = json.dumps(rows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
         return HttpResponse(json_val)
 
-
-class DepositViews(CreateAPIView,RetrieveUpdateDestroyAPIView):
-    queryset = WithdrawTransaction.objects.all()
+#신규 요청, 요청내역 조회 , 취소
+class DepositViewSet(viewsets.ModelViewSet):
+    permission_classes=[IsOwnerOnly,IsAuthenticated]  
+    queryset = DepositTransaction.objects.all()
     serializer_class = DepositSerializer
-    permission_classes=[IsOwnerOnly,IsAuthenticated]
+    lookup_field = 'user'
+    
+    def destroy(self, request, user, pk):   
+        instance = DepositTransaction.objects.get(user=user,pk = pk)
+        if (instance.status != 'A') :
+            instance.delete()
+            serializer = DepositSerializer(instance)
+            return Response(status=status.HTTP_200_OK)
 
-class WithdrawViews(CreateAPIView,RetrieveUpdateDestroyAPIView):
+        return Response(status=status.HTTP_304_NOT_MODIFIED)
+
+Deposit = DepositViewSet.as_view({
+    'post' : 'create',
+    'get': 'list',
+})
+AlterDeposit = DepositViewSet.as_view({
+    #'put': 'update',
+    #'patch': 'partial_update',
+    'delete' : 'destroy',
+})
+
+#신규 요청, 요청내역 조회 , 취소
+class WithdrawViewSet(viewsets.ModelViewSet):
+    permission_classes=[IsOwnerOnly,IsAuthenticated]  
     queryset = WithdrawTransaction.objects.all()
     serializer_class = WithdrawSerializer
-    permission_classes=[IsOwnerOnly,IsAuthenticated]
-    
-    # def post(self,request):
-    #     with connections['backOffice'].cursor() as cursor:
-    #         cursor.execute("select LOGIN, SYMBOL, CMD, VOLUME, OPEN_TIME, OPEN_PRICE, SL, TP,CLOSE_TIME,CLOSE_PRICE,PROFIT from MT4_TRADES where LOGIN = '10000003' AND CMD < 5")
-    #         columns = [col[0] for col in cursor.description]
-    #         rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
-    #         #rint(columns)
-    #         #print(rows)
-    #         # Can't use query parameters here as they'll add single quotes which are not
-    #         # supported by postgres
-    #         #for table in tables:
-    #         #   cursor.execute('drop table "' + table + '" cascade')
-    #         #post_list = serializers.serialize('json', posts)
+    lookup_field = 'user'
+
+    def destroy(self, request, user):
+        instance = WithdrawTransaction.objects.get(user=user)
+        if (instance.status != 'A') : 
+            instance.delete()
+            serializer = WithdrawSerializer(instance)
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_304_NOT_MODIFIED)
+
+Withdraw = WithdrawViewSet.as_view({
+    'post' : 'create',
+    'get': 'list',
+})
+AlterWithdraw = WithdrawViewSet.as_view({
+   # 'put': 'update',
+   # 'patch': 'partial_update',
+    'delete' : 'destroy'
+})
+
+
+
+
+
+
+
+
+
+
+# def post(self,request):
+#     with connections['backOffice'].cursor() as cursor:
+#         cursor.execute("select LOGIN, SYMBOL, CMD, VOLUME, OPEN_TIME, OPEN_PRICE, SL, TP,CLOSE_TIME,CLOSE_PRICE,PROFIT from MT4_TRADES where LOGIN = '10000003' AND CMD < 5")
+#         columns = [col[0] for col in cursor.description]
+#         rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
+#         #rint(columns)
+#         #print(rows)
+#         # Can't use query parameters here as they'll add single quotes which are not
+#         # supported by postgres
+#         #for table in tables:
+#         #   cursor.execute('drop table "' + table + '" cascade')
+#         #post_list = serializers.serialize('json', posts)
 #     #         return HttpResponse(rows)
 # #HttpResponse(post_list, content_type="text/json-comment-filtered")
 # class TradingHistoryViews(generics.ListAPIView):

@@ -11,9 +11,9 @@ class IsOwnerOnly(BasePermission):
     # 작성자만 접근
     def has_object_permission(self, request, view, obj):
         if request.user.is_authenticated:
-            print(request.user.id)
-            print(obj.id)
-            return obj.FxUser.id == request.user
+            print(request.user)
+            print(obj.user)
+            return obj.user== request.user
             #return obj.user == request.user.id
             # True
             # if hasattr(obj, 'profile'):

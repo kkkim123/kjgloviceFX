@@ -8,8 +8,8 @@ SECRET_KEY = '2)em3z^i^s$m!%dz#adud@!5+cfv-nfr3_i20v^n!tlxh9z&lv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
+CSRF_COOKIE_SECURE = True
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -25,10 +25,11 @@ INSTALLED_APPS += [
 	'rest_framework_swagger',
     'rest_framework_simplejwt',
     'djoser',
-    'user.apps.UserConfig',
-    'fxaccount.apps.FxaccountConfig',
     'allauth',
     'allauth.account',
+    'user.apps.UserConfig',
+    'fxaccount.apps.FxaccountConfig',
+    #'django_countries', 
     #'simple_email_confirmation',
     #'treebeard',
     'debug_toolbar',
@@ -210,7 +211,7 @@ PROTOCOL = "https"
 DOMAIN = "127.0.0.1:8000"
 SITE_NAME = "kjgloiveFX.com"
 DJOSER = {
-    "PASSWORD_RESET_CONFIRM_URL": "/password/reset/confirm/{uid}/{token}",
+    'PASSWORD_RESET_CONFIRM_URL': 'auth/users/password/reset/confirm/{uid}/{token}',
     #"USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
     #'ACTIVATION_URL': 'auth/user/activation?uid={uid}&token={token}',
     'ACTIVATION_URL': 'auth/users/activation/{uid}/{token}',
@@ -244,7 +245,7 @@ DJOSER = {
 JWT_AUTH = {'JWT_AUTH_HEADER_PREFIX': 'Token',}
 
 REST_FRAMEWORK = {
-
+    'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema', 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",
@@ -254,6 +255,7 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -298,5 +300,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 #     'LOGOUT_URL': 'logout',
 # }
 
-
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        }
+    },
+}
 INTERNAL_IPS = ["127.0.0.1"]
+

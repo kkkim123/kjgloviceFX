@@ -14,8 +14,8 @@ import datetime
 # LEXERS = [item for item in get_all_lexers() if item[1]]
 # LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
 # STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
-
-
+#from model_utils import Choices
+#from django_countries.fields import CountryField
 USER_TYPES = (
     ('', 'Please Choose...'),
     ('R', 'Retail'),
@@ -163,7 +163,8 @@ class FxUser(AbstractBaseUser):
     username_validator = None
     username = None
     id = models.AutoField(primary_key=True)
-    resident_country = models.CharField(max_length=240)
+    #resident_country = CountryField(blank_label='(select country)')
+    resident_country = models.CharField(max_length=128)
     first_name  = models.CharField(max_length=240)
     last_name  = models.CharField(max_length=240)
     email = models.EmailField(unique=True)
@@ -317,7 +318,7 @@ class UserInvoices(models.Model):
 # IN i_password varchar(33),
 # IN i_send_report char(1)
 class IntroducingBroker(models.Model):
-    fxuser = models.ForeignKey(FxUser, on_delete=models.CASCADE)
+    fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
     company_idx = models.IntegerField(default = 1, blank=True, null=True)
     #자신의 referral code 가져오기 
     parent_idx = models.IntegerField(default = 0, blank=True, null=True)

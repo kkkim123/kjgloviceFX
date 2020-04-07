@@ -70,16 +70,16 @@ import json
 #         print("Activation failed")
 
 
-class UserActivationView(APIView):
+# class UserActivationView(APIView):
 
-    def get (self, request, uid, token):
-        protocol = 'https://' if request.is_secure() else 'http://'
-        web_url = protocol + request.get_host()
-        post_url = web_url + "/auth/users/activate/"
-        post_data = {'uid': uid, 'token': token}
-        result = requests.post(post_url, data = post_data)
-        content = result.text()
-        return Response(content)
+#     def get (self, request, uid, token):
+#         protocol = 'https://' if request.is_secure() else 'http://'
+#         web_url = protocol + request.get_host()
+#         post_url = web_url + "/auth/users/activate/"
+#         post_data = {'uid': uid, 'token': token}
+#         result = requests.post(post_url, data = post_data)
+#         content = result.text()
+#         return Response(content)
     # def get (self, request, uid, token):
     #     protocol = 'https://' if request.is_secure() else 'http://'
     #     web_url = protocol + request.get_host()
@@ -89,76 +89,53 @@ class UserActivationView(APIView):
     #     content = result.text()
     #     return Response(content)
 
-class UserProfileListCreateView(ListCreateAPIView):
-    queryset=FxUser.objects.all()
-    serializer_class=UserSerializer
-    permission_classes=[IsAuthenticated]
+# class UserProfileListCreateView(ListCreateAPIView):
+#     queryset=FxUser.objects.all()
+#     serializer_class=UserSerializer
+#     permission_classes=[IsAuthenticated]
 
-    def perform_create(self, serializer):
-        user=self.request.user
-        serializer.save(user=user)
+#     def perform_create(self, serializer):
+#         user=self.request.user
+#         serializer.save(user=user)
 
-#IsOwnerProfileOrReadOnly,
-class userProfileDetailView(RetrieveUpdateDestroyAPIView):
+#조회 수정 
+class UserProfileViewSet(viewsets.ModelViewSet):
     queryset=FxUser.objects.all()
     serializer_class=UserSerializer
     permission_classes=[IsOwnerOnly,IsAuthenticated]
 
-class IntroducingBrokerView(CreateAPIView,RetrieveUpdateDestroyAPIView):
+UserProfile = UserProfileViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update'
+})
+
+
+
+class IntroducingBrokerViewSet(viewsets.ModelViewSet):
     queryset=IntroducingBroker.objects.all()
     serializer_class=IntroducingBrokerSerializer
     permission_classes=[IsOwnerOnly,IsAuthenticated]
+    lookup_field = 'fxuser'
 
-class ClientView(ListAPIView):
-    permission_classes=[IsAuthenticated]
-    def get(self,request,referral_code):
-        queryset = FxUser.objects.filter(referral_code = referral_code)
-        serializer = UserSerializer(queryset, many=True)
-
-
-
-
-        return Response(serializer)
-
-
+IntroducingBroker = IntroducingBrokerViewSet.as_view({
+    'post' : 'create',
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update'
+})
+#IB 해지 신청 
 
 class ClientViewSet(viewsets.ModelViewSet):
-    #queryset=FxUser.objects.all()
-    #serializer_class=UserSerializer
     permission_classes=[IsAuthenticated]
     def retrieve(self, request, pk=None):
-        print(request.GET.get('referral_code'))
         queryset = FxUser.objects.filter(referral_code = request.GET.get('referral_code'))
-        print(queryset)
         serializer = ClientSerializer(queryset, many=True)
         return Response(serializer.data)
 
 Client_list = ClientViewSet.as_view({
 'get': 'retrieve',
 })
-
-    # def Client_list(self, request):
-    #     queryset = FxUser.objects.all()
-    #     serializer = UserSerializer(queryset, many=True)
-    #     return Response(serializer.data)
-
-    # def create(self, request):
-    #     pass
-    # def retrieve(self, request, pk=None):
-    #     pass
-    #     # queryset = User.objects.all()
-    #     # user = get_object_or_404(queryset, pk=pk)
-    #     # serializer = UserSerializer(user)
-    #     # return Response(serializer.data)
-    # def update(self, request, pk=None):
-    #     pass
-
-    # def partial_update(self, request, pk=None):
-    #     pass
-
-    # def destroy(self, request, pk=None):
-    #     pass
-
 
 class DocUploadView(APIView):
     parser_class = (FileUploadParser,)
@@ -172,6 +149,9 @@ class DocUploadView(APIView):
           return Response(file_serializer.data, status=status.HTTP_201_CREATED)
       else:
           return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 # class DocUploadViewSet(viewsets.ModelViewSet):
 #     serializer_class = DocumentSerializer
 #     parser_classes = (MultiPartParser, FormParser,)

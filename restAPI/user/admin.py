@@ -57,6 +57,7 @@ class IBAdmin(admin.ModelAdmin):
                     for row in cursor.fetchall():
                         queryset.update(back_index=row[0])
                         queryset.update(referralurl="127.0.0.1:8000/user?refcode = "+ str(ib[2]))
+                        #IB Code가 정상적으로 생성되면 유저정보의 계
                     self.message_user(request, 'SP_IB_STRUCTURE_ADD {}'.format(cursor.fetchall()))
                 else :
                     self.message_user(request, '{}'.format(row))
@@ -73,7 +74,7 @@ admin.site.register(IntroducingBroker, IBAdmin)
 class UserAdmin( admin.ModelAdmin):
     #form = UserChangeForm
     #actions = ['applayforIB']
-    list_display = ('email', 'first_name', 'user_type', 'user_type','user_status')
+    list_display = ('id','email', 'first_name', 'user_type', 'user_type','user_status')
     list_filter = ('is_admin',)
     list_editable = ('user_status',)
     search_fields = ('email',)
@@ -101,5 +102,7 @@ class DocumentAdmin( admin.ModelAdmin):
     list_filter = ['created_at']
     
     # search_fields = ['file_origin_name']
-    
+    # def __str__ (self): 
+    #     return str(self.fxuser)
+
 admin.site.register(FxUserDocument, DocumentAdmin)
