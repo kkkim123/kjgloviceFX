@@ -11,7 +11,12 @@ SECRET_KEY = '2)em3z^i^s$m!%dz#adud@!5+cfv-nfr3_i20v^n!tlxh9z&lv'
 DEBUG = True
 
 #ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".ap-southeast-1.compute.amazonaws.com", "glovicefx.com"]
+ALLOWED_HOSTS = [
+    "localhost", 
+    "127.0.0.1", 
+    ".ap-southeast-1.compute.amazonaws.com", 
+    "glovicefx.com",
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
