@@ -161,3 +161,4 @@ my.cnf
 ### AWS ###
 .static_root/
 media
+.config_secret/
