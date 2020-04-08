@@ -1,4 +1,3 @@
- 
 from django.contrib import admin
 #from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -20,11 +19,11 @@ class IBAdmin(admin.ModelAdmin):
     # email = models.EmailField(unique=True)
     # password = models.CharField(max_length=240)
     # send_report = models.CharField(blank=True, max_length=1)
-    actions = ['addIBtoBackoffice',]
+    actions = ['addIBtoBackoffice','updateIBtoBackoffice','moveIBtoBackoffice']
     list_display = ('fxuser', 'company_idx', 'parent_idx', 'ib_code','ib_name',
-    'point', 'live_yn', 'email', 'password','send_report','back_index','referralurl')
+    'point', 'live_yn', 'email', 'password','send_report','back_index','referralurl','status')
     # list_filter = ('is_admin',)
-    list_editable = ('company_idx','parent_idx','ib_code','ib_name','point','live_yn','send_report','back_index',)
+    list_editable = ('company_idx','parent_idx','ib_code','ib_name','point','live_yn','send_report','back_index','status')
     # search_fields = ('email',)
     # ordering = ('email',)
     # filter_horizontal = ()
@@ -34,12 +33,9 @@ class IBAdmin(admin.ModelAdmin):
             self.message_user(request, 'Let\'s do it slowly one by one')
             return
         cursor =  connections['backOffice'].cursor()
-        #selected = queryset.values('company_idx', 'parent_idx', 'ib_code','ib_name'
-         #                                   ,'point', 'live_yn', 'email', 'password','send_report')
 
         ibs = queryset.values_list('company_idx', 'parent_idx', 'ib_code','ib_name'
                                            ,'point', 'live_yn', 'email', 'password','send_report','back_index')
-        #print(type(selected))
 
         for ib in ibs:
             print(ib[2])
@@ -64,19 +60,63 @@ class IBAdmin(admin.ModelAdmin):
         #
     addIBtoBackoffice.short_description = "add IB to Backoffice"
 
-    # def chk_IBcode(self, request, queryset):
-    #     cursor =  connections['backOffice'].cursor()
-    #     cursor.callproc("SP_IB_CHECKING_ID", ('1'))
-    #     print(cursor.description)
-    # applayforIB.short_description = "check IB code in Backoffice"
+
+
+
+	# IN i_idx	int ,
+	# IN i_parent_idx int, 
+    # IN i_login int,
+    # IN i_name varchar(33),
+	# IN i_point int,
+	# IN i_email varchar(50),
+	# IN i_send_report int,
+	# IN i_new_pass varchar(50)
+
+    def updateIBtoBackoffice(self, request, queryset):
+        if queryset.count() != 1:
+            self.message_user(request, 'Let\'s do it slowly one by one')
+            return
+        cursor =  connections['backOffice'].cursor()
+
+        ibs = queryset.values_list('back_index', 'parent_idx', 'ib_code','ib_name'
+                                    ,'point', 'email', 'send_report','password')
+
+        for ib in ibs:
+            cursor.callproc("SP_IB_STRUCTURE_EDIT", (ib[0],ib[1],ib[2],ib[3],ib[4],ib[5],1 if ib[6] == 'Y' else 0,ib[7]))           
+            self.message_user(request, 'SP_IB_STRUCTURE_EDIT {}'.format(cursor.fetchall()))
+
+        
+    updateIBtoBackoffice.short_description = "update IB to Backoffice"
+
+    def moveIBtoBackoffice(self, request, queryset):
+        if queryset.count() != 1:
+            self.message_user(request, 'Let\'s do it slowly one by one')
+            return
+        cursor =  connections['backOffice'].cursor()
+
+        ibs = queryset.values_list('back_index')
+        cursor.callproc("SP_IB_STRUCTURE_GET_ITEM", (ibs[0]))
+        #print(cursor.fetchall())
+        old_parent_idx = 0
+        for row in cursor.fetchall():
+            old_parent_idx = row[2]
+        
+        ibs = queryset.values_list('back_index', 'parent_idx')
+
+        for ib in ibs:
+             cursor.nextset()
+             cursor.callproc("SP_IB_STRUCTURE_MOVE", (ib[0],ib[1],old_parent_idx))           
+             self.message_user(request, 'SP_IB_STRUCTURE_MOVE {}'.format(cursor.fetchall()))
+
+    moveIBtoBackoffice.short_description = "move IB to Backoffice"
+
+
 admin.site.register(IntroducingBroker, IBAdmin)
 
 class UserAdmin( admin.ModelAdmin):
-    #form = UserChangeForm
-    #actions = ['applayforIB']
-    list_display = ('id','email', 'first_name', 'user_type', 'user_type','user_status')
+    list_display = ('id','email', 'first_name', 'last_name', 'user_type','user_status','referral_code')
     list_filter = ('is_admin',)
-    list_editable = ('user_status',)
+    list_editable = ('user_status','referral_code')
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()	
@@ -84,25 +124,11 @@ class UserAdmin( admin.ModelAdmin):
 admin.site.register(FxUser, UserAdmin)
 
 class DocumentAdmin( admin.ModelAdmin):
-    # fieldsets = [
-    #     (None,                  {'fields':['file_origin_name']}),
-    #     ('Date information' ,   {'fields':['file_path']})
-    # ]
-    
     list_display = ('fxuser', 'doc_photo_id', 'doc_photo_id_status' , 'doc_proof_of_residence', 'doc_proof_of_residence_status' 
     ,'doc_photo_id_2', 'doc_photo_id_2_status' ,'doc_proof_of_residence_2', 'doc_proof_of_residence_2_status','created_at')
 
-    # def was_published_recently(self):
-    #     return self.create_date >= timezone.now() - datetime.timedelta(days=1)
-    
-    # was_published_recently.admin_order_field = 'create_date'
-    # was_published_recently.boolean = True
-    # was_published_recently.short_description = '  '
     list_editable = ('doc_photo_id_status','doc_proof_of_residence_status','doc_photo_id_2_status','doc_proof_of_residence_2_status')
     list_filter = ['created_at']
-    
-    # search_fields = ['file_origin_name']
-    # def __str__ (self): 
-    #     return str(self.fxuser)
+
 
 admin.site.register(FxUserDocument, DocumentAdmin)

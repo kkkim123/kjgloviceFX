@@ -135,7 +135,11 @@ DOC_STATUS = (
     ('P', "Pending"),
     ('R', "Reject"),
 )
-
+IB_STATUS = (
+    ('A', "Approved"),
+    ('P', "Pending"),
+    ('R', "Reject"),
+)
 class FxUserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -159,7 +163,6 @@ class FxUserManager(BaseUserManager):
         return user
 
 class FxUser(AbstractBaseUser):
-
     username_validator = None
     username = None
     id = models.AutoField(primary_key=True)
@@ -196,13 +199,6 @@ class FxUser(AbstractBaseUser):
     expected_deposit = models.CharField(_("expected deposit"),default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
     trading_experience = models.CharField(_("trading experience"),default='1', max_length=1, blank=True, choices=TRADING_EXPERIENCE,null=True)
     trading_period = models.CharField(_("trading period"),default='1', max_length=1, blank=True, choices=TRADING_PERIOD,null=True)
-
-
-
-    # is_ib = models.BooleanField(default=False)
-
-    # ib_code = models.CharField(max_length=6, blank=True,null=True)
-    # ib_website = models.CharField(max_length=128, blank=True, null=True, default='')
 
     referral_code = models.CharField(max_length=36, blank=True,null=True)
     referral_website = models.URLField(max_length=128, blank=True, null=True, default='')
@@ -305,9 +301,6 @@ class UserInvoices(models.Model):
         super(UserInvoices, self).save(args, kwargs)
 
 
-
-
-
 # IN i_company_idx	int ,
 #  IN i_parent_idx   int,
 #  IN i_login int,
@@ -321,7 +314,8 @@ class IntroducingBroker(models.Model):
     fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
     company_idx = models.IntegerField(default = 1, blank=True, null=True)
     #자신의 referral code 가져오기 
-    parent_idx = models.IntegerField(default = 0, blank=True, null=True)
+    #FBP Main backoffice inx 69
+    parent_idx = models.IntegerField(default = 69, blank=True, null=True)
     ib_code = models.IntegerField(blank=True, null=True)
     ib_name = models.CharField(blank=True, max_length=36)
     point = models.IntegerField(blank=True)
@@ -331,3 +325,4 @@ class IntroducingBroker(models.Model):
     send_report = models.CharField(blank=True, max_length=1, null=True)
     back_index = models.IntegerField(blank=True, null=True)
     referralurl = models.URLField(blank=True, null=True)
+    status = models.CharField(default='P', max_length=1, blank=True, choices=IB_STATUS,null=True)

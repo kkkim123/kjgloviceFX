@@ -208,7 +208,7 @@ class FxAccountTransaction(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
 
-    requesct_user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
+    user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
 
     status = models.CharField(default='P', max_length=1, blank=False, choices=ACCOUNT_TRANSACTION_STATUS)
     transaction_type = models.CharField(default='R', max_length=2, blank=False, choices=ACCOUNT_TRANSACTION_TYPES_CHOICE)
@@ -222,13 +222,14 @@ class FxAccount(models.Model):
     id = models.AutoField(primary_key=True)
 
     account_type = models.CharField(default='L', max_length=1, blank=False, choices=ACCOUNT_TYPES)
-    mt4_account = models.CharField(default='', max_length=36, blank=False)
+    mt4_account = models.CharField(default='', max_length=36, blank=False,null=True)
     balance = models.FloatField(default=0.0, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
 
     user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
+    #user = models.ForeignKey(FxUser, db_column='a_id', related_name='b_objects',on_delete=models.CASCADE)
     status = models.CharField(default='P', max_length=1, blank=False, choices=ACCOUNT_STATUS)
     ib_status = models.BooleanField(default=False, blank=True, choices=IB_STATUS_CHOICES)
     #account_type_status = models.CharField(default='N', max_length=1, blank=True, choices=ACCOUNT_PAMM_STATUS)

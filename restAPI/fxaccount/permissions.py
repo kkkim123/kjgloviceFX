@@ -8,22 +8,20 @@ class IsOwnerProfileOrReadOnly(BasePermission):
 
 
 class IsOwnerOnly(BasePermission):
-    # 작성자만 접근
     def has_object_permission(self, request, view, obj):
         if request.user.is_authenticated:
-            print(request.user)
-            print(obj.user)
-            return obj.user== request.user
-            #return obj.user == request.user.id
-            # True
-            # if hasattr(obj, 'profile'):
-            #     return obj.profile.id == request.user.id
-            # if request.user. == '10':
-            #     return True
-            # elif hasattr(obj, 'profile'):
-            #     return obj.profile.id == request.user.id
-            # elif obj.__class__ == get_user_model():
-            #     return obj.id == request.user.id
-            #return False
+            print(request.user.id)
+            print(obj.user_id )
+            return obj.user_id == request.user.id
+        else:
+            return False
+
+class IsFKOwnerOnly(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_authenticated:
+            print('[IsFKOwnerOnly]')
+            print('request.user.id:',request.user.id)
+            print('obj.user_id:',obj.user_id)
+            return obj.user_id == request.user.id
         else:
             return False

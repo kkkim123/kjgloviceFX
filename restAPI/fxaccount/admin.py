@@ -23,14 +23,14 @@ class FxAccountAdmin(admin.ModelAdmin):
     get_ib_code.admin_order_field = 'fxuser__ib_code'
 
     list_per_page = 10
-    list_editable = ('ib_commission','status',)
+    list_editable = ('mt4_account','ib_commission','status',)
     search_fields = ('user','mt4_account','referral_code',)
 
 admin.site.register(FxAccount, FxAccountAdmin)
 
 class FxAccountTransactionAdmin(admin.ModelAdmin):
     list_display = (
-        'requesct_user', 'from_account', 'to_account','status','transaction_type','created_at','updated_at',
+        'user', 'from_account', 'to_account','status','transaction_type','created_at','updated_at',
     )
     # search_fields = ('mt4_account', 'fxuser')
     # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')

@@ -9,7 +9,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('myclient', views.Client_list), 
     path('document', views.DocUploadView.as_view()),
-    path('introducingbroker/<int:fxuser>',views.IntroducingBroker),
+    path('introducingbroker/new',views.IntroducingBroker),
+    path('introducingbroker/<int:fxuser>',views.AlterIntroducingBroker),
     path('<int:pk>',views.UserProfile),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

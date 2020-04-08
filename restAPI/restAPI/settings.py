@@ -247,7 +247,7 @@ JWT_AUTH = {'JWT_AUTH_HEADER_PREFIX': 'Token',}
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema', 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 100,
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",
                                     "fxaccount.permissions.IsOwnerOnly",
                                     "user.permissions.IsOwnerOnly",),
@@ -265,7 +265,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'sungchang@fbpasia.com'
-EMAIL_HOST_PASSWORD='fbp2020!'
+EMAIL_HOST_PASSWORD='opercent21!@#'
 EMAIL_PORT = 587
 
 
