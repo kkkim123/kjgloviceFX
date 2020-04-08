@@ -1,5 +1,6 @@
 import os
 import datetime
+import json
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,6 +42,7 @@ INSTALLED_APPS += [
     #'treebeard',
     'debug_toolbar',
     'frontend.apps.FrontendConfig',
+    'storages',
 ]
 MIDDLEWARE = [
     #'corsheaders.middleware.CorsMiddleware',
@@ -275,11 +277,6 @@ EMAIL_HOST_USER = 'sungchang@fbpasia.com'
 EMAIL_HOST_PASSWORD='fbp2020!'
 EMAIL_PORT = 587
 
-
-
-
-MEDIA_URL =  '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # #JWT_AUTH 설정을 위해 settings.py 맨 위해 import datetime을 추가하자!!
 # JWT_AUTH = {
 # # If the secret is wrong, it will raise a jwt.DecodeError telling you as such. You can still get at the payload by setting the JWT_VERIFY to False.
@@ -308,10 +305,31 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # }
 
 
-INTERNAL_IPS = ["127.0.0.1"]
+CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
+CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
 
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     STATIC_DIR,
 ]
-STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
+# STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
+
+MEDIA_URL =  '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# S3 Storage
+DEFAULT_FILE_STORAGE = 'restAPI.storages.MediaStorage'
+STATICFILES_STORAGE = 'restAPI.storages.StaticStorage'
+MEDIAFILES_LOCATION = 'media'
+STATICFILES_LOCATION = 'static'
+
+# AWS Access
+config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
+AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
+AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
+AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
+
+# DATA_UPLOAD_MAX_MEMORY_SIZE = 1024000000 # value in bytes 1GB here
+# FILE_UPLOAD_MAX_MEMORY_SIZE = 1024000000
+
+INTERNAL_IPS = ["127.0.0.1"]
