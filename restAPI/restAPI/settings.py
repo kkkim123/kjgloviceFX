@@ -305,29 +305,29 @@ EMAIL_PORT = 587
 # }
 
 
-CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
-CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
+# CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
+# CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
 
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     STATIC_DIR,
 ]
-# STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 
 MEDIA_URL =  '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # S3 Storage
-DEFAULT_FILE_STORAGE = 'restAPI.storages.MediaStorage'
-STATICFILES_STORAGE = 'restAPI.storages.StaticStorage'
-MEDIAFILES_LOCATION = 'media'
-STATICFILES_LOCATION = 'static'
+# DEFAULT_FILE_STORAGE = 'restAPI.storages.MediaStorage'
+# STATICFILES_STORAGE = 'restAPI.storages.StaticStorage'
+# MEDIAFILES_LOCATION = 'media'
+# STATICFILES_LOCATION = 'static'
 
 # AWS Access
-config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
-AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
-AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
-AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
+# config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
+# AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
+# AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
+# AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
 
 # DATA_UPLOAD_MAX_MEMORY_SIZE = 1024000000 # value in bytes 1GB here
 # FILE_UPLOAD_MAX_MEMORY_SIZE = 1024000000
