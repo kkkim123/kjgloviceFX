@@ -5,17 +5,11 @@ import { Field, reduxForm } from "redux-form";
 import { register } from "../../actions/auth";
 import { CountryDropdown } from "react-country-region-selector";
 import "../../styles/auth/form.css";
-import $ from "jquery";
 
 class RegisterForm extends Component {
   constructor(props) {
     super(props);
     this.state = { country: "" };
-  }
-
-  componentDidMount() {
-    $("select").prop("required", true);
-    $("select").prop("autofocus", true);
   }
 
   selectCountry = val => {
@@ -27,13 +21,16 @@ class RegisterForm extends Component {
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
       <div
-        className={`underline text-left item-box ${
-          touched && error ? "error" : ""
-        }`}
+        className={`form-label-group
+        ${touched && error ? "error" : ""}`}
       >
-        <input {...input} type={type} placeholder={placeholder} />
+        <input
+          {...input}
+          type={type}
+          className="form-control"
+          placeholder={placeholder}
+        />
         {touched && error && <span className="">{error}</span>}
-        {/* {touched && error && <i className="fas fa-check-circle"></i>} */}
       </div>
     );
   };
@@ -43,31 +40,22 @@ class RegisterForm extends Component {
       formValues.resident_country = this.state.country;
       formValues.is_admin = false;
       this.props.register(formValues);
-      // alert(`${formValues.email}로 인증메일이 전송되었습니다.`);
-      // window.location.href = "/";
+      this.props.history.push("/");
     } else {
       alert("Select your Counrty");
     }
   };
 
   render() {
-    // if (this.props.isAuthenticated) {
-    //   return <Redirect to="/" />;
-    // }
     const { country } = this.state;
     return (
       <div className="container">
         <div className="row">
-          <div className="row">
-            <div className="logo-box mx-auto">
-              <div className="logo-area"></div>
-            </div>
-          </div>
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
               <div className="card-body text-center">
                 <h5 className="card-title">Register</h5>
-                <form className="form-signin text-left">
+                <form className="form-signin text-left" onSubmit={this.props.handleSubmit(this.onSubmit)}>
                   <div className="form-label-group">
                     <CountryDropdown
                       value={country}
@@ -76,46 +64,47 @@ class RegisterForm extends Component {
                       classes="form-control"
                     />
                   </div>
-                  <div className="form-label-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="First Name*"
-                      required
-                    />
-                  </div>
-                  <div className="form-label-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Last Name*"
-                      required
-                    />
-                  </div>
-                  <div className="form-label-group">
-                    <input
-                      type="email"
-                      className="form-control"
-                      placeholder="Enter e-mail*"
-                      required
-                    />
-                  </div>
-                  <div className="form-label-group">
-                    <input
-                      type="password"
-                      className="form-control"
-                      placeholder="Enter your password*"
-                      required
-                    />
-                  </div>
-                  <div className="form-label-group">
-                    <input
-                      type="password"
-                      className="form-control"
-                      placeholder="Confirm your password*"
-                      required
-                    />
-                  </div>
+                  <Field
+                    name="first_name"
+                    type="text"
+                    component={this.renderField}
+                    placeholder="First Name*"
+                    validate={required}
+                  />
+                  <Field
+                    name="last_name"
+                    type="text"
+                    component={this.renderField}
+                    placeholder="Last Name*"
+                    validate={required}
+                  />
+                  <Field
+                    name="email"
+                    type="email"
+                    component={this.renderField}
+                    placeholder="Enter e-mail*"
+                    validate={required}
+                  />
+                  <Field
+                    name="referral_code"
+                    type="text"
+                    component={this.renderField}
+                    placeholder="Referral code"
+                  />                  
+                  <Field
+                    name="password"
+                    type="password"
+                    component={this.renderField}
+                    placeholder="Enter your password*"
+                    validate={required}
+                  />
+                  <Field
+                    name="password2"
+                    type="password"
+                    component={this.renderField}
+                    placeholder="Confirm your password*"
+                    validate={[required, passwordsMatch]}
+                  />                                                                        
                   <div className="form-label-group text-center p-2 p-gray">
                     <p className="">
                       By registering you agree to our 

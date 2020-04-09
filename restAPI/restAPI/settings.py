@@ -3,7 +3,6 @@ import datetime
 import json
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
 SECRET_KEY = '2)em3z^i^s$m!%dz#adud@!5+cfv-nfr3_i20v^n!tlxh9z&lv'
@@ -11,14 +10,8 @@ SECRET_KEY = '2)em3z^i^s$m!%dz#adud@!5+cfv-nfr3_i20v^n!tlxh9z&lv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = []
-ALLOWED_HOSTS = [
-    "localhost", 
-    "127.0.0.1", 
-    ".ap-southeast-1.compute.amazonaws.com", 
-    "glovicefx.com",
-]
-
+ALLOWED_HOSTS = ['*']
+CSRF_COOKIE_SECURE = True
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -34,10 +27,11 @@ INSTALLED_APPS += [
 	'rest_framework_swagger',
     'rest_framework_simplejwt',
     'djoser',
-    'user.apps.UserConfig',
-    'fxaccount.apps.FxaccountConfig',
     'allauth',
     'allauth.account',
+    'user.apps.UserConfig',
+    'fxaccount.apps.FxaccountConfig',
+    #'django_countries', 
     #'simple_email_confirmation',
     #'treebeard',
     'debug_toolbar',
@@ -221,7 +215,7 @@ PROTOCOL = "https"
 DOMAIN = "127.0.0.1:8000"
 SITE_NAME = "kjgloiveFX.com"
 DJOSER = {
-    "PASSWORD_RESET_CONFIRM_URL": "/password/reset/confirm/{uid}/{token}",
+    'PASSWORD_RESET_CONFIRM_URL': 'auth/users/password/reset/confirm/{uid}/{token}',
     #"USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
     #'ACTIVATION_URL': 'auth/user/activation?uid={uid}&token={token}',
     'ACTIVATION_URL': 'auth/users/activation/{uid}/{token}',
@@ -255,9 +249,9 @@ DJOSER = {
 JWT_AUTH = {'JWT_AUTH_HEADER_PREFIX': 'Token',}
 
 REST_FRAMEWORK = {
-
+    'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema', 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 100,
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",
                                     "fxaccount.permissions.IsOwnerOnly",
                                     "user.permissions.IsOwnerOnly",),
@@ -265,6 +259,7 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -274,9 +269,14 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'sungchang@fbpasia.com'
-EMAIL_HOST_PASSWORD='fbp2020!'
+EMAIL_HOST_PASSWORD='opercent21!@#'
 EMAIL_PORT = 587
 
+
+
+
+MEDIA_URL =  '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # #JWT_AUTH 설정을 위해 settings.py 맨 위해 import datetime을 추가하자!!
 # JWT_AUTH = {
 # # If the secret is wrong, it will raise a jwt.DecodeError telling you as such. You can still get at the payload by setting the JWT_VERIFY to False.
@@ -304,6 +304,26 @@ EMAIL_PORT = 587
 #     'LOGOUT_URL': 'logout',
 # }
 
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        }
+    },
+}
+INTERNAL_IPS = ["127.0.0.1"]
+
+# Local
+# STATIC_DIR = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [
+#     STATIC_DIR,
+# ]
+# STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
+
+# MEDIA_URL =  '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# AWS S3
 
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
 CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
@@ -312,7 +332,6 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     STATIC_DIR,
 ]
-# STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 
 MEDIA_URL =  '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -331,5 +350,3 @@ AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
 
 # DATA_UPLOAD_MAX_MEMORY_SIZE = 1024000000 # value in bytes 1GB here
 # FILE_UPLOAD_MAX_MEMORY_SIZE = 1024000000
-
-INTERNAL_IPS = ["127.0.0.1"]

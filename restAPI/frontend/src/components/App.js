@@ -26,7 +26,7 @@ import Company from "./company/company";
 
 class App extends Component {
   componentDidMount() {
-    //store.dispatch(loadUser());
+    store.dispatch(loadUser());
   }
 
   render() {
@@ -38,7 +38,7 @@ class App extends Component {
           {/* 로그인 관련 작업 진행 예정 */}
           {/* url 구분 / Header 구분 예정 */}
           <Switch>
-            {/* <PrivateRoute exact path="/" /> */}
+            <PrivateRoute exact path="/" />
             <Route exact path="/login" component={LoginForm} />
             <Route exact path="/register/user" component={RegisterForm} />
             <Route exact path="/reset" component={ResetForm} />

@@ -8,38 +8,43 @@ import "../../styles/auth/form.css";
 class AddressForm extends Component {
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
-      <div className={`underline ${touched && error ? "error" : ""}`}>
-        <input {...input} type={type} placeholder={placeholder} />
+      <div
+        className={`form-label-group
+        ${touched && error ? "error" : ""}`}
+      >
+        <input
+          {...input}
+          type={type}
+          className="form-control"
+          placeholder={placeholder}
+        />
         {touched && error && <span className="">{error}</span>}
-        {/* {touched && error && <i className="fas fa-check-circle"></i>} */}
       </div>
     );
   };
 
   onSubmit = formValues => {
-    // this.props.registDetail(formValues);
-    window.location.href = "/register/personal";
+    // 토큰, 인덱스
+    formValues.user_id = this.props.user.id;
+    formValues.token = this.props.token;
+    this.props.registDetail(formValues);
+    this.props.history.push("/register/personal");
   };
 
   render() {
-    // if (this.props.isAuthenticated) {
-    //   return <Redirect to="/" />;
-    // }
+    if (!this.props.isAuthenticated) {
+      return <Redirect to="/login" />;
+    }
     return (
       <div className="container">
         <div className="row">
-          <div className="row">
-            <div className="logo-box mx-auto">
-              <div className="logo-area"></div>
-            </div>
-          </div>
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
               <div className="card-body text-center p-gray">
                 <h5 className="card-title">Residential Address</h5>
-                <div class="progress card-bar float-right">
+                <div className="progress card-bar float-right">
                   <div
-                    class="progress-bar bg-green"
+                    className="progress-bar bg-green"
                     role="progressbar"
                     style={{ width: "50%" }}
                     aria-valuenow="50"
@@ -47,32 +52,31 @@ class AddressForm extends Component {
                     aria-valuemax="100"
                   />
                 </div>
-                <form className="form-signin text-left">
-                  <div className="form-label-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Street & Number*"
-                      required
-                      autoFocus
-                    />
-                  </div>
-                  <div className="form-label-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Postal/Zip Code*"
-                      required
-                    />
-                  </div>
-                  <div className="form-label-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="City/Town*"
-                      required
-                    />
-                  </div>
+                <form
+                  className="form-signin text-left"
+                  onSubmit={this.props.handleSubmit(this.onSubmit)}
+                >
+                  <Field
+                    name="address"
+                    type="text"
+                    component={this.renderField}
+                    placeholder="Street & Number*"
+                    validate={required}
+                  />
+                  <Field
+                    name="postal_code"
+                    type="text"
+                    component={this.renderField}
+                    placeholder="Postal/Zip Code*"
+                    validate={required}
+                  />
+                  <Field
+                    name="city"
+                    type="text"
+                    component={this.renderField}
+                    placeholder="City/Town*"
+                    validate={required}
+                  />
                   <div className="form-label-group text-center p-2 p-gray">
                     <p className="">
                       By registering you agree to our{" "}
@@ -115,7 +119,9 @@ const passwordsMatch = (value, allValues) =>
   value !== allValues.password ? "Passwords do not match" : undefined;
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user,
+  token: state.auth.token
 });
 
 AddressForm = connect(mapStateToProps, { registDetail })(AddressForm);

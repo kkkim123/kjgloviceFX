@@ -2,7 +2,7 @@ from .models import FxUser, FxUserDocument,IntroducingBroker
 from .serializers import UserSerializer, DocumentSerializer,IntroducingBrokerSerializer , ClientSerializer
 #from rest_framework_jwt.settings import api_settings
 #from rest_framework import status, generics
-from .permissions import IsOwnerProfileOrReadOnly,IsOwnerOnly
+from .permissions import IsOwnerProfileOrReadOnly,IsOwnerOnly,IsFKOwnerOnly
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import (CreateAPIView,ListCreateAPIView,ListAPIView,RetrieveUpdateDestroyAPIView,)
 from rest_framework.parsers import FileUploadParser
@@ -13,151 +13,91 @@ from rest_framework import viewsets
 import requests
 from django.core.serializers.json import DjangoJSONEncoder
 import json
-# class UserActivationView(APIView):
-#     def get (self, request, uid, token):
-#         protocol = 'https://' if request.is_secure() else 'http://'
-#         web_url = protocol + request.get_host()
-#         post_url = web_url + "/auth/users/activation/"
-#         post_data = {'uid': uid, 'token': token}
-#         result = requests.post(post_url, data = post_data)
-#         content = result.text()
-#         queryset = 
-#         return Response(content)
+from django.shortcuts import get_list_or_404, get_object_or_404
 
-
-
-# @receiver(email_confirmed)
-# def change_user_status(sender, **kwargs):
-#     user_email_address = kwargs.pop('email_address')
-#     qs = FxUser.objects.filter(email=user_email_address.email)
-#     if qs.count() > 0:
-#         user = qs[0]
-#         user.user_status = '2'      # CONFIRMED_EMAIL_ADDRESS
-#         user.save()
-# def ActivateUserAccount(request, uidb64=None,token=None):
-#  #print(force_text(urlsafe_base64_decode(uidb64)))
-#     #print(token)
-#     try:
-#         uid = force_text(urlsafe_base64_decode(uidb64))
-#         #print(type(uid),uid)
-#         user = FxUser.objects.get(pk=uid)
-#         print(user)
-#     except User.DoesNotExist:
-#         user = None
-#     if user and default_token_generator.check_token(user,token):
-#         user.is_email_verified = True
-#         user.is_active = True
-#         user.save()
-#         login(request,user)
-#         print("Activaton done")
-#     else:
-#         print("Activation failed")
-# class UserActivationView(APIView):
-#     try:
-#         #uid = force_text(urlsafe_base64_decode(uidb64))
-#         #print(type(uid),uid)
-#         user = FxUser.objects.get(pk=uid)
-#         print(user)
-#     except FxUser.DoesNotExist:
-#         user = None
-#     if user and default_token_generator.check_token(user,token):
-#         #user.is_email_verified = True
-#         user.is_active = True
-#         user.save()
-#         #login(request,user)
-#         print("Activaton done")
-#     else:
-#         print("Activation failed")
-
-
-class UserActivationView(APIView):
-
-    def get (self, request, uid, token):
-        protocol = 'https://' if request.is_secure() else 'http://'
-        web_url = protocol + request.get_host()
-        post_url = web_url + "/auth/users/activate/"
-        post_data = {'uid': uid, 'token': token}
-        result = requests.post(post_url, data = post_data)
-        content = result.text()
-        return Response(content)
-    # def get (self, request, uid, token):
-    #     protocol = 'https://' if request.is_secure() else 'http://'
-    #     web_url = protocol + request.get_host()
-    #     post_url = web_url + "/auth/users/activate/"
-    #     post_data = {'uid': uid, 'token': token}
-    #     result = requests.post(post_url, data = post_data)
-    #     content = result.text()
-    #     return Response(content)
-
-class UserProfileListCreateView(ListCreateAPIView):
-    queryset=FxUser.objects.all()
-    serializer_class=UserSerializer
-    permission_classes=[IsAuthenticated]
-
-    def perform_create(self, serializer):
-        user=self.request.user
-        serializer.save(user=user)
-
-#IsOwnerProfileOrReadOnly,
-class userProfileDetailView(RetrieveUpdateDestroyAPIView):
+#조회 수정 
+class UserProfileViewSet(viewsets.ModelViewSet):
     queryset=FxUser.objects.all()
     serializer_class=UserSerializer
     permission_classes=[IsOwnerOnly,IsAuthenticated]
 
-class IntroducingBrokerView(CreateAPIView,RetrieveUpdateDestroyAPIView):
-    queryset=IntroducingBroker.objects.all()
-    serializer_class=IntroducingBrokerSerializer
-    permission_classes=[IsOwnerOnly,IsAuthenticated]
-
-class ClientView(ListAPIView):
-    permission_classes=[IsAuthenticated]
-    def get(self,request,referral_code):
-        queryset = FxUser.objects.filter(referral_code = referral_code)
-        serializer = UserSerializer(queryset, many=True)
-
-
-
-
-        return Response(serializer)
-
-
-
-class ClientViewSet(viewsets.ModelViewSet):
-    #queryset=FxUser.objects.all()
-    #serializer_class=UserSerializer
-    permission_classes=[IsAuthenticated]
-    def retrieve(self, request, pk=None):
-        print(request.GET.get('referral_code'))
-        queryset = FxUser.objects.filter(referral_code = request.GET.get('referral_code'))
-        print(queryset)
-        serializer = ClientSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-Client_list = ClientViewSet.as_view({
-'get': 'retrieve',
+UserProfile = UserProfileViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update'
 })
 
-    # def Client_list(self, request):
-    #     queryset = FxUser.objects.all()
-    #     serializer = UserSerializer(queryset, many=True)
+
+
+class IntroducingBrokerViewSet(viewsets.ModelViewSet):
+    queryset=IntroducingBroker.objects.all()
+    serializer_class=IntroducingBrokerSerializer
+    permission_classes=[IsFKOwnerOnly,IsAuthenticated]
+    lookup_field = 'fxuser'
+    #print('create')
+    def create(self, request):
+        permission_classes=[IsFKOwnerOnly,IsAuthenticated]
+        print(request.data['fxuser'])
+        serializer = self.get_serializer(data=request.data )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+IntroducingBroker = IntroducingBrokerViewSet.as_view({
+    'post' : 'create',
+})
+AlterIntroducingBroker = IntroducingBrokerViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update'
+})
+#작업 IB 해지 신청 및 신청 취소 
+
+class ClientViewSet(viewsets.ModelViewSet):
+    permission_classes=[IsAuthenticated]
+    queryset = FxUser.objects.all()
+    serializer_class = ClientSerializer
+    lookup_field = 'referral_code'
+    # def list(self, request, pk=None):
+    #     queryset = FxUser.objects.filter(referral_code = request.GET.get('referral_code'))
+    #     print(queryset)
+    #     serializer = ClientSerializer(queryset, many=True)
     #     return Response(serializer.data)
+    def list(self, request, *args, **kwargs):
+        clients = get_list_or_404(self.queryset, referral_code=kwargs['referral_code'])
+        serialized = ClientSerializer(clients, many=True)
+        return Response(serialized.data)
+Client_list = ClientViewSet.as_view({
+'get': 'list',
+})
 
-    # def create(self, request):
-    #     pass
-    # def retrieve(self, request, pk=None):
-    #     pass
-    #     # queryset = User.objects.all()
-    #     # user = get_object_or_404(queryset, pk=pk)
-    #     # serializer = UserSerializer(user)
-    #     # return Response(serializer.data)
-    # def update(self, request, pk=None):
-    #     pass
 
-    # def partial_update(self, request, pk=None):
-    #     pass
+class DocUploadViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = FxUserDocument.objects.all()
+    serializer_class = DocumentSerializer
+    parser_class = (FileUploadParser,)
 
-    # def destroy(self, request, pk=None):
-    #     pass
+    def retrieve(self, request, *args, **kwargs):
+        queryset = FxUserDocument.objects.all()
+        doc = get_object_or_404(queryset, fxuser=kwargs['fxuser'])
+        serializer = DocumentSerializer(doc)
+        return Response(serializer.data)
+        # instance = self.get_object(fxuser=kwargs['fxuser'])
+        # serializer = self.get_serializer(instance)
+        # return Response(serializer.data)
+
+DocUpload = DocUploadViewSet.as_view({
+    'post': 'create'
+})
+AlterDocUpload = DocUploadViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete' : 'destroy',
+})
+
 
 
 class DocUploadView(APIView):
@@ -172,6 +112,9 @@ class DocUploadView(APIView):
           return Response(file_serializer.data, status=status.HTTP_201_CREATED)
       else:
           return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 # class DocUploadViewSet(viewsets.ModelViewSet):
 #     serializer_class = DocumentSerializer
 #     parser_classes = (MultiPartParser, FormParser,)
@@ -273,4 +216,3 @@ class DocUploadView(APIView):
 #         # )
 
 #         return super(UploadDocumentCreate, self).form_valid(form)
-

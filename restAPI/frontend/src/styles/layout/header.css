@@ -1,3 +1,21 @@
+.mypage a:hover{
+  color:black !important; 
+  text-decoration: none !important;
+}
+
+.resister a:hover{
+  color:#006536 !important; 
+  text-decoration: none !important;
+}
+
+a{
+  color:black;
+}
+
+.resister a{
+  color:#006536;
+}
+
 .header {
   /* height: 80px; */
   background-color: white;
@@ -41,6 +59,7 @@
 }
 
 .dropdown {
+  width:100%;
   position: relative;
   display: inline-block;
   padding:0;
@@ -83,7 +102,7 @@
   padding: 28px 16px;
   font-size: 16px;
   border: none;
-  cursor: pointer;
+  /* cursor: pointer; */
   width: 100%;
   font-weight: bold;
 }
@@ -93,37 +112,16 @@
   color: #006536;
   padding: 28px 16px;
   font-size: 16px;
-  border: none;
-  cursor: pointer;
   width: 100%;
   font-weight: bold;
 }
 
 .resister-content{
-/*   
   border: #006536 2px solid;
-  border-radius: 20%; */
-
+  border-radius: 20%;
+  padding:15px;
 }
 
-.mypage a{
-  background-color: white;
-  color: black;
-  padding: 28px 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  font-weight: bold;
-}
-
-.resister a{
-  background-color: white;
-  color: #006536;
-  padding: 28px 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  font-weight: bold;
+.header .item{
+  width:150px;
 }

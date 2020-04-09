@@ -6,6 +6,7 @@ import {
   USER_LOADED,
   AUTH_ERROR,
   REGISTER_SUCCESS,
+  REGISTER_DETAIL_SUCCESS,
   REGISTER_FAIL,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
@@ -38,7 +39,8 @@ export const register = ({
   last_name,
   email,
   password,
-  is_admin
+  is_admin,
+  referral_code
 }) => async dispatch => {
   // Headers
   const config = {
@@ -54,11 +56,9 @@ export const register = ({
     last_name,
     email,
     password,
-    is_admin
+    is_admin,
+    referral_code
   });
-
-  console.log(body);
-  return false;
 
   try {
     const res = await axios.post("/auth/users/", body, config);
@@ -81,12 +81,16 @@ export const registDetail = ({
   city,
   Nationality,
   birthday,
-  mobile
+  mobile,
+  user_id,
+  token,
+  user_status
 }) => async dispatch => {
   // Headers
   const config = {
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Authorization: `Token ${token}`
     }
   };
 
@@ -97,16 +101,14 @@ export const registDetail = ({
     city,
     Nationality,
     birthday,
-    mobile
+    mobile,
+    user_status
   });
-
-  console.log(body);
-  return false;
-
+console.log(body);
   try {
-    const res = await axios.post("/auth/users/me", body, config);
+    const res = await axios.patch(`/user/${user_id}`, body, config);
     dispatch({
-      type: REGISTER_SUCCESS,
+      type: REGISTER_DETAIL_SUCCESS,
       payload: res.data
     });
   } catch (err) {

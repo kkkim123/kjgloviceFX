@@ -5,17 +5,11 @@ import { Field, reduxForm } from "redux-form";
 import { registDetail } from "../../actions/auth";
 import "../../styles/auth/form.css";
 import { CountryDropdown } from "react-country-region-selector";
-import $ from "jquery";
 
 class PersonalForm extends Component {
   constructor(props) {
     super(props);
     this.state = { country: "" };
-  }
-
-  componentDidMount() {
-    $("select").prop("required", true);
-    $("select").prop("autofocus", true);
   }
 
   selectCountry = val => {
@@ -26,37 +20,42 @@ class PersonalForm extends Component {
 
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
-      <div className={`underline ${touched && error ? "error" : ""}`}>
-        <input {...input} type={type} placeholder={placeholder} />
+      <div
+        className={`form-label-group
+        ${touched && error ? "error" : ""}`}
+      >
+        <input
+          {...input}
+          type={type}
+          className="form-control"
+          placeholder={placeholder}
+        />
         {touched && error && <span className="">{error}</span>}
-        {/* {touched && error && <i className="fas fa-check-circle"></i>} */}
       </div>
     );
   };
 
   onSubmit = formValues => {
-    // if (this.state.country) {
-    // formValues.Nationality = this.state.country;
-    // this.props.registDetail(formValues);
-    window.location.href = "/";
-    // } else {
-    // alert("Select your Nationality");
-    // }
+    if (this.state.country) {
+      formValues.Nationality = this.state.country;
+      formValues.user_id = this.props.user.id;
+      formValues.token = this.props.token;
+      formValues.user_status = 4;
+      this.props.registDetail(formValues);
+      this.props.history.push("/");
+    } else {
+      alert("Select your Nationality");
+    }
   };
 
   render() {
-    // if (this.props.isAuthenticated) {
-    //   return <Redirect to="/" />;
-    // }
+    if (!this.props.isAuthenticated) {
+      return <Redirect to="/login" />;
+    }
     const { country } = this.state;
     return (
       <div className="container">
         <div className="row">
-          <div className="row">
-            <div className="logo-box mx-auto">
-              <div className="logo-area"></div>
-            </div>
-          </div>
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
               <div className="card-body text-center p-gray">
@@ -73,7 +72,10 @@ class PersonalForm extends Component {
                     />
                   </div>
                 </div>
-                <form className="form-signin text-left">
+                <form
+                  className="form-signin text-left"
+                  onSubmit={this.props.handleSubmit(this.onSubmit)}
+                >
                   <div className="form-label-group">
                     <CountryDropdown
                       value={country}
@@ -82,27 +84,26 @@ class PersonalForm extends Component {
                       classes="form-control"
                     />
                   </div>
-                  <div className="form-label-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Date of Birth*"
-                      required
-                    />
-                  </div>
-                  <div className="form-label-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Your Mobile Phone*"
-                      required
-                    />
-                  </div>
+                  <Field
+                    name="birthday"
+                    type="text"
+                    component={this.renderField}
+                    placeholder="Date of Birth*"
+                    validate={[required, date]}
+                  />
+                  <Field
+                    name="mobile"
+                    type="text"
+                    component={this.renderField}
+                    placeholder="Your Mobile Phone*"
+                    validate={required}
+                  />
                   <div className="form-label-group text-center p-2 p-gray">
                     <p className="">
-                      By registering you agree to our 
+                      By registering you agree to our
                       <Link to="#" className="link">
-                        {" "}privacy policy
+                        {" "}
+                        privacy policy
                       </Link>
                     </p>
                   </div>
@@ -129,6 +130,11 @@ const minLength = min => value =>
     ? `Must be at least ${min} characters`
     : undefined;
 
+const date = value =>
+  value && !/^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/.test(value)
+    ? "Invalid date format"
+    : undefined;
+
 const minLength3 = minLength(3);
 
 const maxLength = max => value =>
@@ -140,7 +146,9 @@ const passwordsMatch = (value, allValues) =>
   value !== allValues.password ? "Passwords do not match" : undefined;
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user,
+  token: state.auth.token
 });
 
 PersonalForm = connect(mapStateToProps, { registDetail })(PersonalForm);

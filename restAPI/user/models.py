@@ -14,8 +14,8 @@ import datetime
 # LEXERS = [item for item in get_all_lexers() if item[1]]
 # LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
 # STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
-
-
+#from model_utils import Choices
+#from django_countries.fields import CountryField
 USER_TYPES = (
     ('', 'Please Choose...'),
     ('R', 'Retail'),
@@ -124,8 +124,8 @@ USER_STATUS_CHOICE = (
     ('8', 'CONFIRMED OPEN ACCOUNT'),
     ('9', 'PENDING MAKE DEPOSIT'),
     ('10', 'CONFIRMED MAKE DEPOSIT'),
-    ('11', 'PENDING ALL COMPLETE'),
-    ('12', 'CONFIRMED ALL COMPLETE'),
+    # ('11', 'PENDING ALL COMPLETE'),
+    # ('12', 'CONFIRMED ALL COMPLETE'),
 
 )
 
@@ -135,7 +135,11 @@ DOC_STATUS = (
     ('P', "Pending"),
     ('R', "Reject"),
 )
-
+IB_STATUS = (
+    ('A', "Approved"),
+    ('P', "Pending"),
+    ('R', "Reject"),
+)
 class FxUserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -159,11 +163,11 @@ class FxUserManager(BaseUserManager):
         return user
 
 class FxUser(AbstractBaseUser):
-
     username_validator = None
     username = None
     id = models.AutoField(primary_key=True)
-    resident_country = models.CharField(max_length=240)
+    #resident_country = CountryField(blank_label='(select country)')
+    resident_country = models.CharField(max_length=128)
     first_name  = models.CharField(max_length=240)
     last_name  = models.CharField(max_length=240)
     email = models.EmailField(unique=True)
@@ -196,13 +200,6 @@ class FxUser(AbstractBaseUser):
     trading_experience = models.CharField(_("trading experience"),default='1', max_length=1, blank=True, choices=TRADING_EXPERIENCE,null=True)
     trading_period = models.CharField(_("trading period"),default='1', max_length=1, blank=True, choices=TRADING_PERIOD,null=True)
 
-
-
-    # is_ib = models.BooleanField(default=False)
-
-    # ib_code = models.CharField(max_length=6, blank=True,null=True)
-    # ib_website = models.CharField(max_length=128, blank=True, null=True, default='')
-
     referral_code = models.CharField(max_length=36, blank=True,null=True)
     referral_website = models.URLField(max_length=128, blank=True, null=True, default='')
 
@@ -211,7 +208,7 @@ class FxUser(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
 
     USER_CREATE_PASSWORD_RETYPE = True
-    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin','referral_code']
+    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin','referral_code','user_status']
 
     objects = FxUserManager()
 
@@ -256,7 +253,7 @@ def user_residence_directory_path(instance, filename):
 
 
 class FxUserDocument(models.Model):
-    fxuser = models.ForeignKey(FxUser, on_delete=models.CASCADE)
+    fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
     doc_photo_id = models.FileField(upload_to=user_id_directory_path, blank=True, null=True)
     doc_photo_id_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
     doc_photo_id_updated_at = models.DateTimeField(auto_now=True)
@@ -304,9 +301,6 @@ class UserInvoices(models.Model):
         super(UserInvoices, self).save(args, kwargs)
 
 
-
-
-
 # IN i_company_idx	int ,
 #  IN i_parent_idx   int,
 #  IN i_login int,
@@ -317,10 +311,11 @@ class UserInvoices(models.Model):
 # IN i_password varchar(33),
 # IN i_send_report char(1)
 class IntroducingBroker(models.Model):
-    fxuser = models.ForeignKey(FxUser, on_delete=models.CASCADE)
+    fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
     company_idx = models.IntegerField(default = 1, blank=True, null=True)
     #자신의 referral code 가져오기 
-    parent_idx = models.IntegerField(default = 0, blank=True, null=True)
+    #FBP Main backoffice inx 69
+    parent_idx = models.IntegerField(default = 69, blank=True, null=True)
     ib_code = models.IntegerField(blank=True, null=True)
     ib_name = models.CharField(blank=True, max_length=36)
     point = models.IntegerField(blank=True)
@@ -330,3 +325,4 @@ class IntroducingBroker(models.Model):
     send_report = models.CharField(blank=True, max_length=1, null=True)
     back_index = models.IntegerField(blank=True, null=True)
     referralurl = models.URLField(blank=True, null=True)
+    status = models.CharField(default='P', max_length=1, blank=True, choices=IB_STATUS,null=True)

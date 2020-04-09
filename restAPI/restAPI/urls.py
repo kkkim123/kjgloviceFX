@@ -14,11 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from allauth.account.views import confirm_email
-from django.urls import include, path, re_path
+from django.urls import include, path
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from user.views import UserActivationView
+#from user.views import UserActivationView
 #from user import views
 
 #router = DefaultRouter()
@@ -26,6 +26,9 @@ from user.views import UserActivationView
 #router.register(r'userdetail', views.UserDetail)
 
 
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='Pastebin API')
 
 
 
@@ -49,10 +52,9 @@ urlpatterns = [
     #path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
     #path("user/registration/", include("user.registration.urls")),
     #path('/auth/users/activate/(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$', UserActivationView.as_view()),
-
+    path('swagger', schema_view)
 ]
 
-#박찬영
 urlpatterns += [
     path('', include('frontend.urls')),
 ]

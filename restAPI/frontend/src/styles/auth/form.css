@@ -47,6 +47,12 @@
   border-color: #03502c;
 }
 
+.form-signin .btn:active {
+  color: #fff;
+  background-color: #03502c !important;
+  border-color: #03502c !important;
+}
+
 .form-label-group {
   position: relative;
   margin-bottom: 2.5rem;

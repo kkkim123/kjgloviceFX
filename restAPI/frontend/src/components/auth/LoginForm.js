@@ -8,10 +8,16 @@ class LoginForm extends Component {
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
       <div
-        className={`underline text-left item-box 
+        className={`form-label-group
         ${touched && error ? "error" : ""}`}
       >
-        <input {...input} type={type} placeholder={placeholder} />
+        <input
+          {...input}
+          type={type}
+          className="form-control"
+          required
+          placeholder={placeholder}
+        />
         {touched && error && <span className="">{error}</span>}
       </div>
     );
@@ -19,9 +25,9 @@ class LoginForm extends Component {
 
   hiddenField = ({ type, meta: { error } }) => {
     return (
-      <div className="field">
+      <div className="form-label-group">
         <input type={type} />
-        {error && <div className="ui red message">{error}</div>}
+        {error && <div className="">{error}</div>}
       </div>
     );
   };
@@ -31,47 +37,44 @@ class LoginForm extends Component {
   };
 
   render() {
-    // if (this.props.isAuthenticated) {
-    //   return <Redirect to="/" />;
-    // }
+    if (this.props.isAuthenticated) {
+      return <Redirect to="/" />;
+    }
     return (
       <div className="container">
         <div className="row">
-          <div className="row">
-            <div className="logo-box mx-auto">
-              <div className="logo-area"></div>
-            </div>
-          </div>
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
               <div className="card-body text-center p-gray">
                 <h5 className="card-title">Log in now</h5>
                 <p className="mb-4">
-                  Do not have an account? 
+                  Do not have an account?
                   <Link to="/register/user" className="link">
-                    {" "}Register
+                    {" "}
+                    Register
                   </Link>
                 </p>
-                <form className="form-signin text-left">
-                  <div className="form-label-group">
-                    <input
-                      type="email"
-                      id="inputEmail"
-                      className="form-control"
-                      placeholder="Email*"
-                      required
-                      autoFocus
-                    />
-                  </div>
-                  <div className="form-label-group">
-                    <input
-                      type="password"
-                      id="inputPassword"
-                      className="form-control"
-                      placeholder="Password*"
-                      required
-                    />
-                  </div>
+                <form
+                  className="form-signin text-left"
+                  onSubmit={this.props.handleSubmit(this.onSubmit)}
+                >
+                  <Field
+                    name="email"
+                    type="email"
+                    component={this.renderField}
+                    placeholder="Email *"
+                  />
+                  <Field
+                    name="password"
+                    type="password"
+                    component={this.renderField}
+                    placeholder="Password*"
+                  />
+                  <Field
+                    name="non_field_errors"
+                    type="hidden"
+                    component={this.hiddenField}
+                  />
                   <div className="form-label-group text-right p-2">
                     <p className="">
                       <Link to="/reset" className="link">
