@@ -8,8 +8,6 @@ class Header extends Component {
   render() {
     const { user, isAuthenticated } = this.props.auth;
 
-    console.log(this.props.auth)
-
     const userLinks = (
       <>
         <div className="item">
