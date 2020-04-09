@@ -104,7 +104,7 @@ export const registDetail = ({
     mobile,
     user_status
   });
-console.log(body);
+  
   try {
     const res = await axios.patch(`/user/${user_id}`, body, config);
     dispatch({
