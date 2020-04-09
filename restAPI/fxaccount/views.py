@@ -28,8 +28,8 @@ class FxAccountViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         history = get_list_or_404(self.queryset, user=kwargs['user'])
-        serialized = FxAccountSerializer(history, many=True)
-        return Response(serialized.data)
+        serializer = FxAccountSerializer(history, many=True)
+        return Response(serializer.data)
 
     def destroy(self, request, user, pk):   
         permission_classes=[IsOwnerOnly,IsAuthenticated]
@@ -91,7 +91,9 @@ class ClientAccountListViews(generics.ListAPIView):
         for acc in queryset : 
             print(acc.ib_code)
             with connections['backOffice'].cursor() as cursor:
-                cursor.execute("select MT4_LOGIN from IB_COMMISSION_STRUTURE where IB_LOGIN = '" + str(acc.ib_code) +"' AND IB_SEQ = 1;")
+                cursor.execute("select * from IB_COMMISSION_STRUTURE where IB_LOGIN = '" + str(acc.ib_code) +"' ;")
+                #cursor.execute("select MT4_LOGIN from IB_COMMISSION_STRUTURE where IB_LOGIN = '" + str(acc.ib_code) +"' ;")
+                #AND IB_SEQ = 1
                 print(cursor.description)
                 columns = [col[0] for col in cursor.description]
                 rows += [list(zip(columns, row)) for row in cursor.fetchall()]
@@ -101,18 +103,68 @@ class ClientAccountListViews(generics.ListAPIView):
 #조회
 class CommissionHistoryViews(generics.ListAPIView):
     permission_classes=[IsAuthenticated]
-    def get(self,request,user):
-        queryset = IntroducingBroker.objects.filter(fxuser = user)
+    def get(self,request,*args, **kwargs ):
+        from_date = request.data['from_date']
+        to_date = request.data['to_date']
+        queryset = IntroducingBroker.objects.filter(fxuser = kwargs['user'])
         rows = []
         for ib in queryset : 
             print(ib.ib_code)
             with connections['backOffice'].cursor() as cursor:
-                cursor.callproc("SP_IB_COMMISSION_HISTORY_LIST", (ib.company_idx,ib.back_index,'Y','','',0,'','','',))
+                cursor.callproc("SP_IB_COMMISSION_HISTORY_LIST", (ib.company_idx,ib.back_index,'Y',from_date,to_date,0,'','','',))
                 columns = [col[0] for col in cursor.description]
                 rows += [list(zip(columns, row)) for row in cursor.fetchall()]
 
         json_val = json.dumps(rows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
         return HttpResponse(json_val)
+
+class CommissionHistoryViewsDetail(generics.ListAPIView):
+    permission_classes=[IsAuthenticated]
+    def get(self,request,*args, **kwargs ):
+        
+        from_date = request.data['from_date']
+        to_date = request.data['to_date']
+        print(from_date)
+        print(to_date)
+
+        print(kwargs)
+        queryset = IntroducingBroker.objects.filter(fxuser = kwargs['user'])
+        rows = []
+        #from_date = referral_code=kwargs['referral_code']
+        for ib in queryset : 
+            print(ib.ib_code)
+            with connections['backOffice'].cursor() as cursor:
+                cursor.callproc("SP_IB_COMMISSION_HISTORY_LIST", (ib.company_idx,ib.back_index,'Y',from_date,to_date,kwargs['mt4_login'],'','','',))
+                columns = [col[0] for col in cursor.description]
+                rows += [list(zip(columns, row)) for row in cursor.fetchall()]
+
+        json_val = json.dumps(rows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
+        return HttpResponse(json_val)
+
+
+# class CommissionHistoryViewset(viewsets.ModelViewSet):
+#     permission_classes=[IsAuthenticated]
+#     def get(self,request,user):
+#         queryset = IntroducingBroker.objects.filter(fxuser = user)
+#         rows = []
+#         for ib in queryset : 
+#             print(ib.ib_code)
+#             with connections['backOffice'].cursor() as cursor:
+#                 cursor.callproc("SP_IB_COMMISSION_HISTORY_LIST", (ib.company_idx,ib.back_index,'Y','','',0,'','','',))
+#                 columns = [col[0] for col in cursor.description]
+#                 rows += [list(zip(columns, row)) for row in cursor.fetchall()]
+
+#         json_val = json.dumps(rows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
+#         return HttpResponse(json_val)
+# CommissionHistory = FxAccountViewSet.as_view({
+#     'post' : 'create',
+#     'get': 'list',
+# })
+# DetailCommissionHistory = FxAccountViewSet.as_view({
+#     #'put': 'update',
+#     #'patch': 'partial_update',
+#     'get' : 'destroy',
+# })
 
 #신규 요청, 요청내역 조회 , 취소
 class DepositViewSet(viewsets.ModelViewSet):

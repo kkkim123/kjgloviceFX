@@ -115,8 +115,8 @@ WITHDRAW_METHOD_CHOICE = (
     ('3', 'Paypal'),
     ('8', 'Bitcoin'),
     ('9', 'Ethereum'),
-    ('10', 'GELD Coin'),
-    ('11', 'WTX'),
+    # ('10', 'GELD Coin'),
+    # ('11', 'WTX'),
 )
 
 WITHDRAW_METHOD_DICT = dict()
@@ -282,8 +282,8 @@ class DepositTransaction(BaseTransaction):
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
 
     class Meta:
-        verbose_name = "Deposit Transaction"
-        verbose_name_plural = "Deposit Transactions"
+        verbose_name = "Request Deposit"
+        verbose_name_plural = "Request Deposit"
 
 class WithdrawTransaction(BaseTransaction):
     #transaction_type = models.CharField(default='W', max_length=1, choices=DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE)
@@ -314,5 +314,5 @@ class WithdrawTransaction(BaseTransaction):
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
 
     class Meta:
-        verbose_name = "Withdraw Request"
-        verbose_name_plural = "Withdraw Requests"
+        verbose_name = "Request Withdraw"
+        verbose_name_plural = "Request Withdraw"

@@ -7,8 +7,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('myclient', views.Client_list), 
-    path('document', views.DocUploadView.as_view()),
+    path('myclient/<int:referral_code>', views.Client_list), 
+    path('document/new', views.DocUpload),
+    path('document/<int:fxuser>', views.AlterDocUpload),
     path('introducingbroker/new',views.IntroducingBroker),
     path('introducingbroker/<int:fxuser>',views.AlterIntroducingBroker),
     path('<int:pk>',views.UserProfile),

@@ -124,8 +124,8 @@ USER_STATUS_CHOICE = (
     ('8', 'CONFIRMED OPEN ACCOUNT'),
     ('9', 'PENDING MAKE DEPOSIT'),
     ('10', 'CONFIRMED MAKE DEPOSIT'),
-    ('11', 'PENDING ALL COMPLETE'),
-    ('12', 'CONFIRMED ALL COMPLETE'),
+    # ('11', 'PENDING ALL COMPLETE'),
+    # ('12', 'CONFIRMED ALL COMPLETE'),
 
 )
 
@@ -208,7 +208,7 @@ class FxUser(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
 
     USER_CREATE_PASSWORD_RETYPE = True
-    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin','referral_code']
+    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin','referral_code','user_status']
 
     objects = FxUserManager()
 
@@ -253,7 +253,7 @@ def user_residence_directory_path(instance, filename):
 
 
 class FxUserDocument(models.Model):
-    fxuser = models.ForeignKey(FxUser, on_delete=models.CASCADE)
+    fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
     doc_photo_id = models.FileField(upload_to=user_id_directory_path, blank=True, null=True)
     doc_photo_id_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
     doc_photo_id_updated_at = models.DateTimeField(auto_now=True)

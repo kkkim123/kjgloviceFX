@@ -13,6 +13,7 @@ from rest_framework import viewsets
 import requests
 from django.core.serializers.json import DjangoJSONEncoder
 import json
+from django.shortcuts import get_list_or_404, get_object_or_404
 
 #조회 수정 
 class UserProfileViewSet(viewsets.ModelViewSet):
@@ -55,14 +56,49 @@ AlterIntroducingBroker = IntroducingBrokerViewSet.as_view({
 
 class ClientViewSet(viewsets.ModelViewSet):
     permission_classes=[IsAuthenticated]
-    def retrieve(self, request, pk=None):
-        queryset = FxUser.objects.filter(referral_code = request.GET.get('referral_code'))
-        serializer = ClientSerializer(queryset, many=True)
-        return Response(serializer.data)
-
+    queryset = FxUser.objects.all()
+    serializer_class = ClientSerializer
+    lookup_field = 'referral_code'
+    # def list(self, request, pk=None):
+    #     queryset = FxUser.objects.filter(referral_code = request.GET.get('referral_code'))
+    #     print(queryset)
+    #     serializer = ClientSerializer(queryset, many=True)
+    #     return Response(serializer.data)
+    def list(self, request, *args, **kwargs):
+        clients = get_list_or_404(self.queryset, referral_code=kwargs['referral_code'])
+        serialized = ClientSerializer(clients, many=True)
+        return Response(serialized.data)
 Client_list = ClientViewSet.as_view({
-'get': 'retrieve',
+'get': 'list',
 })
+
+
+class DocUploadViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = FxUserDocument.objects.all()
+    serializer_class = DocumentSerializer
+    parser_class = (FileUploadParser,)
+
+    def retrieve(self, request, *args, **kwargs):
+        queryset = FxUserDocument.objects.all()
+        doc = get_object_or_404(queryset, fxuser=kwargs['fxuser'])
+        serializer = DocumentSerializer(doc)
+        return Response(serializer.data)
+        # instance = self.get_object(fxuser=kwargs['fxuser'])
+        # serializer = self.get_serializer(instance)
+        # return Response(serializer.data)
+
+DocUpload = DocUploadViewSet.as_view({
+    'post': 'create'
+})
+AlterDocUpload = DocUploadViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete' : 'destroy',
+})
+
+
 
 class DocUploadView(APIView):
     parser_class = (FileUploadParser,)
