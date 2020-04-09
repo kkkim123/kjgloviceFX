@@ -1,8 +1,8 @@
 module.exports = {
   mode: "production",
-  // output: {
-  //   publicPath: "/static/frontend/"
-  // },
+  output: {
+    publicPath: "/static/frontend/"
+  },
   module: {
     rules: [
       {
