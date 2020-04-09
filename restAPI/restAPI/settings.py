@@ -10,7 +10,7 @@ SECRET_KEY = '2)em3z^i^s$m!%dz#adud@!5+cfv-nfr3_i20v^n!tlxh9z&lv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*.glovice.com, *.compute.amazonaws.com']
 CSRF_COOKIE_SECURE = True
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -212,7 +212,7 @@ SITE_ID = 1
 
 
 PROTOCOL = "https"
-DOMAIN = "127.0.0.1:8000"
+DOMAIN = "glovicefx.com"
 SITE_NAME = "kjgloiveFX.com"
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'auth/users/password/reset/confirm/{uid}/{token}',
