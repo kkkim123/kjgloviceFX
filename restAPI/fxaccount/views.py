@@ -7,7 +7,6 @@ from .permissions import IsOwnerOnly,IsFKOwnerOnly
 from django.db import connections
 from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from django.core import serializers
-from rest_framework.generics import (CreateAPIView,ListCreateAPIView,RetrieveUpdateDestroyAPIView,DestroyAPIView,)
 from django.core.serializers.json import DjangoJSONEncoder
 
 from rest_framework.response import Response
@@ -54,7 +53,7 @@ AlterFxAccount = FxAccountViewSet.as_view({
     #     return FxAccount.objects.get(id=self.request.user
 #Person.filter(name='신사임당').exclude('male')
 #신규 요청, 요청내역 조회 , 취소
-class FxAccountTransactionViews(ListCreateAPIView,DestroyAPIView):
+class FxAccountTransactionViews(generics.ListCreateAPIView,generics.DestroyAPIView):
     permission_classes=[IsAuthenticated]
     queryset = FxAccountTransaction.objects.all()
     serializer_class = FxAccountTransactionSerializer

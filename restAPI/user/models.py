@@ -279,32 +279,6 @@ class FxUserDocument(models.Model):
     class Meta:
         ordering = ['created_at']
 
-
-# class UserInvoices(models.Model):
-#     fxuser = models.ForeignKey(FxUser, on_delete=models.CASCADE)
-#     name = models.CharField(_("Name"), max_length=256, blank=True, default='')
-#     email = models.EmailField(_("Email"), max_length=512, blank=True, default='')
-#     mobile = models.CharField(_("Mobile"), max_length=50, blank=True, default='')
-#     address1 = models.CharField(_("Address 1"), max_length=128, blank=True, default='')
-#     address2 = models.CharField(_("Address 2"), max_length=128, blank=True, default='')
-#     address3 = models.CharField(_("Address 3"), max_length=128, blank=True, default='')
-#     address4 = models.CharField(_("Address 4"), max_length=128, blank=True, default='')
-#     invoice_no = models.CharField(blank=True, max_length=36, null=True)
-#     invoice_date = models.DateField(auto_now_add=True)
-#     item_code = models.CharField(_("Item Code"), max_length=128, blank=True, default='')
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-#     def __unicode__(self):
-#         return self.invoice_no
-
-#     def save(self, *args, **kwargs):
-#         import uuid
-#         if not self.pk:
-#             self.invoice_no = str(uuid.uuid4()).replace('-', '')[:16]
-#         super(UserInvoices, self).save(args, kwargs)
-
-
 # IN i_company_idx	int ,
 #  IN i_parent_idx   int,
 #  IN i_login int,

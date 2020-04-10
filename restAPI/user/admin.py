@@ -110,7 +110,6 @@ class IBAdmin(admin.ModelAdmin):
 
     moveIBtoBackoffice.short_description = "move IB to Backoffice"
 
-
 admin.site.register(IntroducingBroker, IBAdmin)
 
 class UserAdmin( admin.ModelAdmin):

@@ -9,7 +9,9 @@ SECRET_KEY = '2)em3z^i^s$m!%dz#adud@!5+cfv-nfr3_i20v^n!tlxh9z&lv'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+
 CSRF_COOKIE_SECURE = True
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,10 +31,7 @@ INSTALLED_APPS += [
     'allauth.account',
     'user.apps.UserConfig',
     'fxaccount.apps.FxaccountConfig',
-    #'django_countries', 
-    #'simple_email_confirmation',
-    #'treebeard',
-    'debug_toolbar',
+    #'debug_toolbar',
 ]
 MIDDLEWARE = [
     #'corsheaders.middleware.CorsMiddleware',
@@ -95,50 +94,24 @@ WSGI_APPLICATION = 'restAPI.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'kjgloviceweb',
-        'USER': 'kj',
-        'PASSWORD': 'admin1234',
-        #HOST': 'localhost',
-        'HOST': '167.99.76.48',
-        'PORT': '3306',
         'OPTIONS': {
+            'read_default_file': "./my.cnf",
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
         }
     },
+
     'backOffice': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'fbp_live',
-        'USER': 'fbplive',
-        'PASSWORD': 'j&serw$75',
-        #HOST': 'localhost',
-        'HOST': '222.122.34.248',
-        'PORT': '33306',
         'OPTIONS': {
-            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
-        }
+            'read_default_file': "./backoffice.cnf",
+            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"',
+        },
     }
 }
 
 
-    # 'backOffice': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'OPTIONS': {
-    #         'read_default_file': "path/to/backoffice.cnf",
-    #         'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"',
-    #     },
-    # }
-
-
-
-# DATABASE_ROUTERS = [
-#     'fxaccount.routers.AuthRouter',  
-# ]
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Password validation
@@ -192,20 +165,6 @@ ACCOUNT_USERNAME_REQUIRED = False
 # ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/?verification=1'
 
 SITE_ID = 1
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# SITE_ID = 1
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
-# ACCOUNT_EMAIL_REQUIRED = True   
-# ACCOUNT_USERNAME_REQUIRED = False
-
-# REST_USE_JWT = True
-# ACCOUNT_EMAIL_REQUIRED = False
-# ACCOUNT_EMAIL_VERIFICATION = None
-# ACCOUNT_LOGOUT_ON_GET = True
-
 
 PROTOCOL = "https"
 DOMAIN = "127.0.0.1:8000"
@@ -247,7 +206,7 @@ JWT_AUTH = {'JWT_AUTH_HEADER_PREFIX': 'Token',}
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema', 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 100,
+    'PAGE_SIZE': 20,
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",
                                     "fxaccount.permissions.IsOwnerOnly",
                                     "user.permissions.IsOwnerOnly",),
@@ -273,39 +232,12 @@ EMAIL_PORT = 587
 
 MEDIA_URL =  '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-# #JWT_AUTH 설정을 위해 settings.py 맨 위해 import datetime을 추가하자!!
-# JWT_AUTH = {
-# # If the secret is wrong, it will raise a jwt.DecodeError telling you as such. You can still get at the payload by setting the JWT_VERIFY to False.
-# 'JWT_VERIFY': True,
-# # You can turn off expiration time verification by setting JWT_VERIFY_EXPIRATION to False.
-# # If set to False, JWTs will last forever meaning a leaked token could be used by an attacker indefinitely.
-# 'JWT_VERIFY_EXPIRATION': True,
-# # This is an instance of Python's datetime.timedelta. This will be added to datetime.utcnow() to set the expiration time.
-# # Default is datetime.timedelta(seconds=300)(5 minutes).
-# 'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=1),
-# 'JWT_ALLOW_REFRESH': True,
-# 'JWT_AUTH_HEADER_PREFIX': 'JWT',
-
-#     # 'JWT_SECRET_KEY': SECRET_KEY,
-#     # 'JWT_ALGORITHM': 'HS256',
-#     # 'JWT_ALLOW_REFRESH': True,
-#     # 'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
-#     # 'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
-# }
-# REST_USE_JWT = True
-
 
 # SWAGGER_SETTINGS = {
-#     'LOGIN_URL': 'login',
-#     'LOGOUT_URL': 'logout',
+#     'SECURITY_DEFINITIONS': {
+#         'basic': {
+#             'type': 'basic'
+#         }
+#     },
 # }
-
-SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        'basic': {
-            'type': 'basic'
-        }
-    },
-}
-#INTERNAL_IPS = ["127.0.0.1"]
 
