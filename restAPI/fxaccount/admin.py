@@ -13,14 +13,14 @@ class FxAccountAdmin(admin.ModelAdmin):
     # search_fields = ('mt4_account', 'fxuser')
     # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
 
-    def get_ib_code(self, obj):
-        if obj.ib_status :
-            return obj.fxuser.ib_code
-        else:
-            return "N/A"
+    # def get_ib_code(self, obj):
+    #     if obj.ib_status :
+    #         return obj.fxuser.ib_code
+    #     else:
+    #         return "N/A"
 
-    get_ib_code.short_description = 'IB Code'
-    get_ib_code.admin_order_field = 'fxuser__ib_code'
+    # get_ib_code.short_description = 'IB Code'
+    # get_ib_code.admin_order_field = 'fxuser__ib_code'
 
     list_per_page = 10
     list_editable = ('mt4_account','ib_commission','status',)

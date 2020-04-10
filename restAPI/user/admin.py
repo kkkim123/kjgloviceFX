@@ -2,7 +2,7 @@ from django.contrib import admin
 #from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from datetime import timezone, datetime
-from .forms import UserChangeForm
+#from .forms import UserChangeForm
 from .models import FxUser,FxUserDocument,IntroducingBroker
 from django.db import connections
 # from django.http import HttpResponse,HttpResponseRedirect
@@ -129,6 +129,6 @@ class DocumentAdmin( admin.ModelAdmin):
 
     list_editable = ('doc_photo_id_status','doc_proof_of_residence_status','doc_photo_id_2_status','doc_proof_of_residence_2_status')
     list_filter = ['created_at']
-
+    actions = ['levelUpUser']
 
 admin.site.register(FxUserDocument, DocumentAdmin)

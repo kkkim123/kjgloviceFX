@@ -22,7 +22,8 @@ ACCOUNT_TRANSACTION_TYPES_CHOICE = (
 ACCOUNT_TRANSACTION_STATUS = (
     ('P', 'Pending'),
     ('A', 'Approved'),
-    ('R', 'Rejected'),
+    ('D', 'Declined'),
+    ('S', 'Processed'),
 )
 
 
@@ -41,8 +42,8 @@ ACCOUNT_TYPES = (
 ACCOUNT_STATUS = (
     ('P', 'Pending'),
     ('A', 'Approved'),
-    ('R', 'Rejected'),
     ('D', 'Declined'),
+    ('S', 'Processed'),
 )
 
 TRADING_PLATFORM_CHOICE = (
@@ -95,26 +96,30 @@ DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE = (
 
 DEPOSIT_METHOD_CHOICE = (
     ('', 'Please Choose'),
-    ('1', 'Bank Wire'),
-    ('2', 'i-Account'),
-    ('3', 'Paypal'),
-    ('4', 'EzPay'),
-    ('5', 'i-Pay'),
-    ('6', 'ZotaPay'),
-    ('7', 'ConceptPay'),
-    ('8', 'Bitcoin'),
-    ('9', 'Ethereum'),
-    ('10', 'GELD Coin'),
-    ('11', 'WTX'),
+    ('1', 'Bitcoin'),
+    ('2', 'Ethereum'),
+    ('3', 'JKL'),
+    # ('1', 'Bank Wire'),
+    # ('2', 'i-Account'),
+    # ('3', 'Paypal'),
+    # ('4', 'EzPay'),
+    # ('5', 'i-Pay'),
+    # ('6', 'ZotaPay'),
+    # ('7', 'ConceptPay'),
+    # ('8', 'Bitcoin'),
+    # ('9', 'Ethereum'),
+    # ('10', 'GELD Coin'),
+    # ('11', 'WTX'),
 )
 
 WITHDRAW_METHOD_CHOICE = (
     ('', 'Please Choose'),
-    ('1', 'Bank Wire'),
-    ('2', 'i-Account'),
-    ('3', 'Paypal'),
-    ('8', 'Bitcoin'),
-    ('9', 'Ethereum'),
+    # ('1', 'Bank Wire'),
+    # ('2', 'i-Account'),
+    # ('3', 'Paypal'),
+    ('1', 'Bitcoin'),
+    ('2', 'Ethereum'),
+    ('3', 'JKL'),
     # ('10', 'GELD Coin'),
     # ('11', 'WTX'),
 )
@@ -127,7 +132,7 @@ for wc in WITHDRAW_METHOD_CHOICE:
 DEPOSIT_WITHDRAW_TRANSACTION_STATUS = (
     ('P', 'Pending'),
     ('A', 'Approved'),
-    ('R', 'Rejected'),
+    ('D', 'Declined'),
     ('S', 'Processed'),
 )
 
@@ -233,7 +238,7 @@ class FxAccount(models.Model):
     status = models.CharField(default='P', max_length=1, blank=False, choices=ACCOUNT_STATUS)
     ib_status = models.BooleanField(default=False, blank=True, choices=IB_STATUS_CHOICES)
     #account_type_status = models.CharField(default='N', max_length=1, blank=True, choices=ACCOUNT_PAMM_STATUS)
-    referral_code = models.CharField(default='', max_length=6, blank=True)
+    referral_code = models.CharField(default='2002', max_length=6, blank=True)
     ib_commission = models.FloatField(default=0.0, blank=True)
 
     
@@ -243,7 +248,7 @@ class FxAccount(models.Model):
     trading_platform = models.CharField(default='1', max_length=1, blank=True, choices=TRADING_PLATFORM_CHOICE)
     account_description = models.TextField(default='', blank=True)
     account_name = models.CharField(default='', max_length=32, blank=True)
-    account_trader_code = models.CharField(default='', max_length=32, blank=True)  # investor 로 신청할 경우 trader 의 pamm code 가 들어감
+    #account_trader_code = models.CharField(default='', max_length=32, blank=True)  # investor 로 신청할 경우 trader 의 pamm code 가 들어감
 
 
     class Meta:
@@ -272,10 +277,10 @@ class DepositTransaction(BaseTransaction):
     payment_method = models.CharField( default='', max_length=2, blank=True, choices=DEPOSIT_METHOD_CHOICE)
     currency = models.CharField( default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)
     crypto_sender_address = models.CharField(default='', max_length=64, blank=True, null=True)
-    #bank_name = models.CharField(default='', max_length=48, blank=True)  # for wire transfer
-    cellphone_number = models.CharField(default='', max_length=30, blank=True)  # for wire transfer
+    sender_memo = models.CharField(default='', max_length=128, blank=True)  
+    cellphone_number = models.CharField(default='', max_length=30, blank=True)  
     #description = models.TextField( default='', blank=True)
-    gateway_status = models.CharField(default='', max_length=20, blank=True)
+    #gateway_status = models.CharField(default='', max_length=20, blank=True)
     status_remark = models.TextField( default='', blank=True)
     
     created_at = models.DateTimeField( auto_now_add=True, auto_now=False)

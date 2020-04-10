@@ -194,11 +194,11 @@ class FxUser(AbstractBaseUser):
     education_level = models.CharField(default='1', max_length=1, blank=True, choices=EDUCATION_LEVEL_CHOICES,null=True)
 
     #Financial Info 
-    annual_income = models.CharField(_("annual income"),default='1', max_length=1, blank=True, choices=EST_ANNUAL_INCOME,null=True)
-    income_source = models.CharField(_("income source"),default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
-    expected_deposit = models.CharField(_("expected deposit"),default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
-    trading_experience = models.CharField(_("trading experience"),default='1', max_length=1, blank=True, choices=TRADING_EXPERIENCE,null=True)
-    trading_period = models.CharField(_("trading period"),default='1', max_length=1, blank=True, choices=TRADING_PERIOD,null=True)
+    annual_income = models.CharField(default='1', max_length=1, blank=True, choices=EST_ANNUAL_INCOME,null=True)
+    income_source = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
+    expected_deposit = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
+    trading_experience = models.CharField(default='1', max_length=1, blank=True, choices=TRADING_EXPERIENCE,null=True)
+    trading_period = models.CharField(default='1', max_length=1, blank=True, choices=TRADING_PERIOD,null=True)
 
     referral_code = models.CharField(max_length=36, blank=True,null=True)
     referral_website = models.URLField(max_length=128, blank=True, null=True, default='')
@@ -239,7 +239,6 @@ def user_id_directory_path(instance, filename):
         datetime.date.today().day,
         filename.encode('UTF-8').lower())
 
-
 def user_residence_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     ext = filename.split('.')[-1]
@@ -254,18 +253,23 @@ def user_residence_directory_path(instance, filename):
 
 class FxUserDocument(models.Model):
     fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
+
     doc_photo_id = models.FileField(upload_to=user_id_directory_path, blank=True, null=True)
     doc_photo_id_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
     doc_photo_id_updated_at = models.DateTimeField(auto_now=True)
+
     doc_proof_of_residence = models.FileField(upload_to=user_residence_directory_path, blank=True, null=True)
     doc_proof_of_residence_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
     doc_proof_of_residence_updated_at = models.DateTimeField(auto_now=True)
+
     doc_photo_id_2 = models.FileField(upload_to=user_id_directory_path, blank=True, null=True)
     doc_photo_id_2_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
     doc_photo_id_2_updated_at = models.DateTimeField(auto_now=True)
+
     doc_proof_of_residence_2 = models.FileField(upload_to=user_residence_directory_path, blank=True, null=True)
     doc_proof_of_residence_2_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
     doc_proof_of_residence_2_updated_at = models.DateTimeField(auto_now=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
   
@@ -276,29 +280,29 @@ class FxUserDocument(models.Model):
         ordering = ['created_at']
 
 
-class UserInvoices(models.Model):
-    fxuser = models.ForeignKey(FxUser, on_delete=models.CASCADE)
-    name = models.CharField(_("Name"), max_length=256, blank=True, default='')
-    email = models.EmailField(_("Email"), max_length=512, blank=True, default='')
-    mobile = models.CharField(_("Mobile"), max_length=50, blank=True, default='')
-    address1 = models.CharField(_("Address 1"), max_length=128, blank=True, default='')
-    address2 = models.CharField(_("Address 2"), max_length=128, blank=True, default='')
-    address3 = models.CharField(_("Address 3"), max_length=128, blank=True, default='')
-    address4 = models.CharField(_("Address 4"), max_length=128, blank=True, default='')
-    invoice_no = models.CharField(blank=True, max_length=36, null=True)
-    invoice_date = models.DateField(auto_now_add=True)
-    item_code = models.CharField(_("Item Code"), max_length=128, blank=True, default='')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+# class UserInvoices(models.Model):
+#     fxuser = models.ForeignKey(FxUser, on_delete=models.CASCADE)
+#     name = models.CharField(_("Name"), max_length=256, blank=True, default='')
+#     email = models.EmailField(_("Email"), max_length=512, blank=True, default='')
+#     mobile = models.CharField(_("Mobile"), max_length=50, blank=True, default='')
+#     address1 = models.CharField(_("Address 1"), max_length=128, blank=True, default='')
+#     address2 = models.CharField(_("Address 2"), max_length=128, blank=True, default='')
+#     address3 = models.CharField(_("Address 3"), max_length=128, blank=True, default='')
+#     address4 = models.CharField(_("Address 4"), max_length=128, blank=True, default='')
+#     invoice_no = models.CharField(blank=True, max_length=36, null=True)
+#     invoice_date = models.DateField(auto_now_add=True)
+#     item_code = models.CharField(_("Item Code"), max_length=128, blank=True, default='')
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
 
-    def __unicode__(self):
-        return self.invoice_no
+#     def __unicode__(self):
+#         return self.invoice_no
 
-    def save(self, *args, **kwargs):
-        import uuid
-        if not self.pk:
-            self.invoice_no = str(uuid.uuid4()).replace('-', '')[:16]
-        super(UserInvoices, self).save(args, kwargs)
+#     def save(self, *args, **kwargs):
+#         import uuid
+#         if not self.pk:
+#             self.invoice_no = str(uuid.uuid4()).replace('-', '')[:16]
+#         super(UserInvoices, self).save(args, kwargs)
 
 
 # IN i_company_idx	int ,

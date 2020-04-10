@@ -29,13 +29,13 @@ from .models import FxUser
 #         return user
 
 
-class UserChangeForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField()
+# class UserChangeForm(forms.ModelForm):
+#     password = ReadOnlyPasswordHashField()
 
-    class Meta:
-        model = FxUser
-        fields = '__all__'
+#     class Meta:
+#         model = FxUser
+#         fields = '__all__'
 
 
-    def clean_password(self):
-        return self.initial["password"]
+#     def clean_password(self):
+#         return self.initial["password"]
