@@ -129,5 +129,18 @@ class DocumentAdmin( admin.ModelAdmin):
     list_editable = ('doc_photo_id_status','doc_proof_of_residence_status','doc_photo_id_2_status','doc_proof_of_residence_2_status')
     list_filter = ['created_at']
     actions = ['levelUpUser']
-
+    def save_model(self, request, obj, form, change):
+        fxuser = FxUser.objects.get(id = obj.fxuser_id)
+        if(obj.doc_photo_id_status =='A'
+        and obj.doc_proof_of_residence_status =='A'
+        and obj.doc_photo_id_2_status =='A'
+        and obj.doc_proof_of_residence_2_status =='A'
+        and 6 > int(fxuser.user_status)):
+            fxuser.user_status = '6'     
+            fxuser.save()    
+        else :
+            fxuser.user_status = '5'     
+            fxuser.save()       
+        
+        super().save_model(request, obj, form, change)
 admin.site.register(FxUserDocument, DocumentAdmin)

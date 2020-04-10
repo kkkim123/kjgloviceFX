@@ -91,6 +91,20 @@ class DocUploadViewSet(viewsets.ModelViewSet):
     queryset = FxUserDocument.objects.all()
     serializer_class = DocumentSerializer
     parser_class = (FileUploadParser,)
+    lookup_field = 'fxuser'
+
+
+    def create(self, request, *args, **kwargs):
+        permission_classes = [IsAuthenticated]
+        queryset = FxUserDocument.objects.all()
+        serializer_class = DocumentSerializer
+        parser_class = (FileUploadParser,)
+
+        fxuser = FxUser.objects.get(id = request.data['fxuser'])
+        if(5 > int(fxuser.user_status)):
+            fxuser.user_status = '5'     
+            fxuser.save()    
+        return Response(status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, *args, **kwargs):
         queryset = FxUserDocument.objects.all()
