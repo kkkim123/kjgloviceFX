@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from .models import FxUser, FxUserDocument,IntroducingBroker
+from .models import FxUser, FxUserDocument,IntroducingBroker ,EMPLOYMENT_STATUS_CHOICES
 
 
 class UserSerializer(serializers.ModelSerializer):
     #user=serializers.StringRelatedField(read_only=True)
+    employment_status = serializers.ChoiceField(choices=EMPLOYMENT_STATUS_CHOICES, default='1')
     class Meta:
         model = FxUser
         fields = '__all__'

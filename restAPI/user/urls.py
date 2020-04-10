@@ -11,7 +11,9 @@ urlpatterns = [
 
     path('introducingbroker/new',views.IntroducingBroker),
     path('introducingbroker/<int:fxuser>',views.AlterIntroducingBroker),
-    path('myclient/<int:referral_code>', views.Client_list), 
+    path('myclient/<int:referral_code>', views.Client_list),
+
+    path('choices', views.ChoicesView.as_view()), 
 
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

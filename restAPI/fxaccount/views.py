@@ -1,4 +1,5 @@
 from .models import FxAccount,DepositTransaction,WithdrawTransaction,FxAccountTransaction
+from .models import LEVERAGE_CHOICES,DEPOSIT_METHOD_CHOICE,WITHDRAW_METHOD_CHOICE
 from user.models import IntroducingBroker
 from .serializers import FxAccountSerializer,DepositSerializer,WithdrawSerializer,WithdrawSerializer,FxAccountTransactionSerializer
 from rest_framework import generics
@@ -13,6 +14,18 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 from django.shortcuts import get_list_or_404, get_object_or_404
 import json
+from django.views import View
+
+class ChoicesView(View):
+    def get(self, request):
+        dummy_data = {
+            'leverage' : json.dumps(LEVERAGE_CHOICES),
+            'dp_payment_method' : json.dumps(DEPOSIT_METHOD_CHOICE),
+            'wd_payment_method' : json.dumps(WITHDRAW_METHOD_CHOICE),
+        }
+        print(dummy_data)
+        return JsonResponse(dummy_data)
+
 
 #신규 요청, 요청내역 조회 , 취소
 class FxAccountViewSet(viewsets.ModelViewSet):

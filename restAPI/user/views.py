@@ -1,4 +1,7 @@
 from .models import FxUser, FxUserDocument,IntroducingBroker
+from .models import EMPLOYMENT_STATUS_CHOICES, EMPLOYMENT_POSITION_CHOICES
+from .models import EDUCATION_LEVEL_CHOICES,EST_ANNUAL_INCOME,INCOME_OF_SOURCE,TRADING_PERIOD
+
 from .serializers import UserSerializer, DocumentSerializer,IntroducingBrokerSerializer , ClientSerializer
 from .permissions import IsOwnerOnly,IsFKOwnerOnly
 
@@ -7,11 +10,27 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
-
+from django.views import View
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_list_or_404, get_object_or_404
 import requests
 import json
+from django.http import HttpResponse,JsonResponse
+
+class ChoicesView(View):
+    def get(self, request):
+        dummy_data = {
+            'employment_status' : json.dumps(EMPLOYMENT_STATUS_CHOICES),
+            'employment_position' : json.dumps(EMPLOYMENT_POSITION_CHOICES),
+            'education_level' : json.dumps(EDUCATION_LEVEL_CHOICES),
+
+            'annual_income' : json.dumps(EST_ANNUAL_INCOME),
+            'income_source' : json.dumps(INCOME_OF_SOURCE),
+            'trading_period' : json.dumps(TRADING_PERIOD),
+        }
+        print(dummy_data)
+        return JsonResponse(dummy_data)
+
 #조회 수정 
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset=FxUser.objects.all()

@@ -29,6 +29,14 @@ EST_ANNUAL_INCOME = (
     ('3', '50,000 to 100,000'),
     ('4', 'Over 100,000'),
 )
+INCOME_OF_SOURCE = (
+    ('', 'Please Choose...'),
+    ('1', 'salary'),
+    ('2', 'Business/Profession'),
+    ('3', 'capital gain'),
+    ('4', 'House Property'),
+    ('5', 'other sources'),
+)
 
 EST_NET_WORTH = (
     ('', 'Please Choose...'),
@@ -195,7 +203,7 @@ class FxUser(AbstractBaseUser):
 
     #Financial Info 
     annual_income = models.CharField(default='1', max_length=1, blank=True, choices=EST_ANNUAL_INCOME,null=True)
-    income_source = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
+    income_source = models.CharField(default='1', max_length=1, blank=True, choices=INCOME_OF_SOURCE,null=True)
     expected_deposit = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
     trading_experience = models.CharField(default='1', max_length=1, blank=True, choices=TRADING_EXPERIENCE,null=True)
     trading_period = models.CharField(default='1', max_length=1, blank=True, choices=TRADING_PERIOD,null=True)

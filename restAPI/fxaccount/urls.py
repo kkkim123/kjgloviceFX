@@ -19,6 +19,7 @@ urlpatterns = [
     path('clientaccountlist/<int:user>', views.ClientAccountListViews.as_view()),
     path('commissionhistory/<int:user>', views.CommissionHistoryViews.as_view()),
     path('commissionhistory/<int:user>/<int:mt4_login>', views.CommissionHistoryViewsDetail.as_view()),
+    path('choices', views.ChoicesView.as_view()), 
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
