@@ -99,6 +99,7 @@ class DocUploadViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+
 DocUpload = DocUploadViewSet.as_view({
     'post': 'create'
 })

@@ -282,7 +282,7 @@ class FxUserDocument(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
   
     def __str__(self):
-        return self.fxuser
+        return self.fxuser.email
     
     class Meta:
         ordering = ['created_at']
