@@ -71,7 +71,8 @@ class Footer extends Component {
               {!isAuthenticated ? (
                 <Link to="/register/user">Register</Link>
               ) : (
-                  <a onClick={this.props.logout}>Logout</a>
+                <Link onClick={this.props.logout} to="#">Logout</Link>
+                  // <a onClick={this.props.logout}>Logout</a>
               )}
             </span>
           </div>

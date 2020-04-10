@@ -25,18 +25,20 @@ class ResetConfirm extends Component {
                   you click the "Confirmation" button in the e-mail.
                 </p>
                 <p className="mb-4">
-                  Please contact us at 
+                  Please contact us at
                   <span className="link"> support@pearlblackfs.com</span> if you
                   do not receive it within a few minutes.
                 </p>
                 <div className="form-signin">
-                  <button
+                  <Link to="/login">
+                    <button
                       className="btn btn-lg btn-block btn-primary content-center  mt-10"
                       type="button"
                     >
                       Main
                     </button>
-                  </div>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

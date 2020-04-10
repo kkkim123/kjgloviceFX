@@ -10,11 +10,16 @@ class ResetForm extends Component {
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
       <div
-        className={`underline text-left item-box ${
-          touched && error ? "error" : ""
-        }`}
+        className={`form-label-group py-5
+        ${touched && error ? "error" : ""}`}
       >
-        <input {...input} type={type} placeholder={placeholder} />
+        <input
+          {...input}
+          type={type}
+          className="form-control"
+          required
+          placeholder={placeholder}
+        />
         {touched && error && <span className="">{error}</span>}
       </div>
     );
@@ -22,9 +27,9 @@ class ResetForm extends Component {
 
   hiddenField = ({ type, meta: { error } }) => {
     return (
-      <div className="field">
+      <div className="form-label-group">
         <input type={type} />
-        {error && <div className="ui red message">{error}</div>}
+        {error && <div className="">{error}</div>}
       </div>
     );
   };
@@ -33,15 +38,12 @@ class ResetForm extends Component {
     // if(!formValues.email) {
     //     alert('빈 칸')
     // } else {
-    window.location.href = "/reset/confirm";
     // this.props.reset(formValues);
+    this.props.history.push("/reset/confirm");
     // }
   };
 
   render() {
-    // if (this.props.isAuthenticated) {
-    //   return <Redirect to="/" />;
-    // }
     return (
       <div className="container">
         <div className="row">
@@ -54,23 +56,25 @@ class ResetForm extends Component {
             <div className="card card-signin my-5">
               <div className="card-body text-center p-gray">
                 <h5 className="card-title">Reset Password</h5>
-                <form className="form-signin text-left">
-                  <div className="form-label-group pt-4 pb-5">
-                    <input
-                      type="email"
-                      className="form-control"
-                      placeholder="Email Address*"
-                      required
-                      autoFocus
-                    />
-                  </div>
+                <form
+                  className="form-signin text-left"
+                  onSubmit={this.props.handleSubmit(this.onSubmit)}
+                >
+                  <Field
+                    name="email"
+                    type="email"
+                    component={this.renderField}
+                    placeholder="Email *"
+                  />
                   <div className="text-center">
-                    <button
-                      type="button"
-                      className="btn btn-secondary mr-4 bg-gray btn-lg"
-                    >
-                      Close
-                    </button>
+                    <Link to="/login">
+                      <button
+                        type="button"
+                        className="btn btn-secondary mr-4 bg-gray btn-lg"
+                      >
+                        Close
+                      </button>
+                    </Link>
                     <button type="submit" className="btn btn-primary btn-lg">
                       Apply
                     </button>

@@ -23,7 +23,8 @@ class Header extends Component {
         </div>
         <div className="item">
           <div className="mypage">
-            <a onClick={this.props.logout}>Logout</a>
+            <Link onClick={this.props.logout} to="#">Logout</Link>
+            {/* <a onClick={this.props.logout}>Logout</a> */}
           </div>
         </div>
       </>
@@ -105,14 +106,14 @@ class Header extends Component {
           </div>
           <div className="item"></div>
           <div className="item">
-            <div className="dropdown">
+            {/* <div className="dropdown">
               <button className="dropbtn">EN</button>
               <div className="dropdown-content">
                 <a href="#">KR</a>
                 <a href="#">JP</a>
                 <a href="#">CN</a>
               </div>
-            </div>
+            </div> */}
           </div>
           {isAuthenticated ? userLinks : guestLinks}
         </div>
