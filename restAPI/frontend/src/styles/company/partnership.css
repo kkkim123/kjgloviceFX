@@ -1,0 +1,40 @@
+a:hover{
+   color:white !important; 
+   text-decoration: none !important;
+}
+
+.ps-content {
+  color: #959595;
+}
+.box {
+  box-shadow: lightgray 0 0 15px 1px;
+  border-radius: 25px;
+}
+.ps-icon {
+  width: 35px;
+}
+.ps-title {
+  color: #006536;
+  font-size: 1.4rem;
+}
+.ps-subtitle {
+  font-size: 1.1rem;
+}
+.ps-detail {
+  color: #959595;
+  font-size: 0.9rem;
+}
+.ps-check {
+  width: 15px;
+}
+
+/* .submit-img {
+  width: 90%;
+  position: absolute;
+} */
+
+.submit-text {
+  height: 50px;
+  background-color: #006536;
+  color: white;
+}

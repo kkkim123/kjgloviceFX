@@ -6,6 +6,6 @@ urlpatterns = [
     path('login', views.index),
     re_path('register/', views.index),
     re_path('reset/', views.index),
-    path('trading', views.index),
-    path('company', views.index),
+    re_path('trading/', views.index),
+    re_path('company/', views.index),
 ]

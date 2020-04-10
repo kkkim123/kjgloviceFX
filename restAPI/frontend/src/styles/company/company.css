@@ -1,0 +1,19 @@
+.icon{
+    width:40px;
+    height:40px;
+}
+
+.title{
+    font-size : 1.5rem;
+}
+
+.content{
+    color : #959595;
+    height:180px;
+    /* width:95%; */
+    /* margin: 0 auto; */
+}
+
+.learn-more{
+    color : #006536;
+}

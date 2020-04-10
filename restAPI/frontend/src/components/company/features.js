@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 import styles from '../../styles/company/features.module.css'
 import icon_about from '../../images/icon_about.png'
 import icon_privacy from '../../images/icon_privacy.png'

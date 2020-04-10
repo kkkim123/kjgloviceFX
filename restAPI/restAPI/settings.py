@@ -11,6 +11,7 @@ SECRET_KEY = '2)em3z^i^s$m!%dz#adud@!5+cfv-nfr3_i20v^n!tlxh9z&lv'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "localhost",
     ".ap-southeast-1.compute.amazonaws.com", 
     "glovicefx.com",
 ]
@@ -316,7 +317,10 @@ SWAGGER_SETTINGS = {
 }
 INTERNAL_IPS = ["127.0.0.1"]
 
-# Local
+#########
+# Local #
+#########
+
 # STATIC_DIR = os.path.join(BASE_DIR, 'static')
 # STATICFILES_DIRS = [
 #     STATIC_DIR,
@@ -326,7 +330,9 @@ INTERNAL_IPS = ["127.0.0.1"]
 # MEDIA_URL =  '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# AWS S3
+##########
+# AWS S3 #
+##########
 
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
 CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
@@ -350,6 +356,3 @@ config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
 AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
 AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
 AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
-
-# DATA_UPLOAD_MAX_MEMORY_SIZE = 1024000000 # value in bytes 1GB here
-# FILE_UPLOAD_MAX_MEMORY_SIZE = 1024000000

@@ -8,6 +8,8 @@ class Header extends Component {
   render() {
     const { user, isAuthenticated } = this.props.auth;
 
+    console.log(this.props.auth);
+
     const userLinks = (
       <>
         <div className="item">
@@ -72,11 +74,17 @@ class Header extends Component {
                 <button className="dropbtn">Trading</button>
               </Link>
               <div className="dropdown-content">
-                <a href="#">MT4</a>
-                <a href="#">Commodity</a>
-                <a href="#">PAMM/COPY</a>
-                <a href="#">Calendars</a>
-                <a href="#">Indicators</a>
+                <Link to="/trading/info">
+                  MT4
+                </Link>
+                <Link to="/trading/calendar">
+                  Calendars
+                </Link>
+                {/* <a href="#">MT4</a> */}
+                {/* <a href="#">Commodity</a> */}
+                {/* <a href="#">PAMM/COPY</a> */}
+                {/* <a href="#">Calendars</a> */}
+                {/* <a href="#">Indicators</a> */}
               </div>
             </div>
           </div>
@@ -86,7 +94,10 @@ class Header extends Component {
                 <button className="dropbtn">Company</button>
               </Link>
               <div className="dropdown-content">
-                <a href="#">About</a>
+                <Link to="/company/about">
+                  About
+                </Link>                
+                {/* <a href="#">About</a> */}
                 <a href="#">Partnership</a>
                 <a href="#">Help Center</a>
               </div>

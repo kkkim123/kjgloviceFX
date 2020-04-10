@@ -16,8 +16,8 @@ class Trading extends Component {
         <DownloadMT4 />
         <EcnomicCalendars />
         {/* <IndicatorsSummary /> */}
-        <ServiceInfo />
-        <CalendarsDetail />
+        {/* <ServiceInfo />
+        <CalendarsDetail /> */}
         {/* <IndicatorsDetail /> */}
       </>
     );

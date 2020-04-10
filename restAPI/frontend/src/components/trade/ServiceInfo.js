@@ -7,7 +7,7 @@ class ServiceInfo extends Component {
   render() {
     return (
       <div className={cx("container", "text-center", "main")}>
-        <div className="row justify-content-between">
+        <div className="row my-5 justify-content-between">
           <div className="col-lg-6 col-xs-12 mb-3 p-4 text-center">
             <div className={cx("card", "p-5")}>
               <div className={cx("title", "text-center", "mb-4")}>

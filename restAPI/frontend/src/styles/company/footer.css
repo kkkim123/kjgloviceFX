@@ -1,0 +1,50 @@
+.footer {
+  box-shadow: 0px -8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+.ft1 {
+  height: 70px;
+  text-align:left;
+  font-size:0.9rem;
+}
+
+.ft2 {
+  height: 70px;
+  background-color: #0E112C;
+}
+
+.ft1 .item{
+    /* width:80px; */
+    margin-right:35px;
+}
+
+.ft1 .name{
+    font-weight: bold;
+}
+
+.ft1 .value{
+    color: #22B573;
+}
+
+.ft1 .desc{
+    color: #929292;
+}
+
+.ft1 .resister-button{
+    color: #006536;
+    font-weight: bold;
+}
+
+.ft2 .item{
+  margin: 0 30px;
+}
+.ft2 .item img{
+  width:25px;
+}
+
+.ft2 .name{
+  color:white;
+  font-size:1.2rem;
+  font-weight: bold;
+  margin:0 100px;
+}

@@ -21,7 +21,16 @@ import ResetConfirm from "./auth/ResetConfirm";
 import AddressForm from "./auth/AddressForm";
 import PersonalForm from "./auth/PersonalForm";
 import Trading from "./trade/Trading";
-import Company from "./company/company";
+import ServiceInfo from "./trade/ServiceInfo";
+import CalendarsDetail from "./trade/CalendarsDetail";
+import Company from "./company/companyMain";
+import AboutGlovice from './company/aboutGlovice'
+import PrivacyStatement from './company/privacyStatement'
+import AmlPolicy from './company/amlPolicy'
+import Terms from './company/terms'
+import IntroducerBroker from './company/introducerBroker'
+import WhiteLabel from './company/whiteLabel'
+import Affiliate from './company/affiliate'
 
 
 class App extends Component {
@@ -35,8 +44,6 @@ class App extends Component {
       <Provider store={store}>
         <Router history={history}>
           <Header/>
-          {/* 로그인 관련 작업 진행 예정 */}
-          {/* url 구분 / Header 구분 예정 */}
           <Switch>
             <PrivateRoute exact path="/" />
             <Route exact path="/login" component={LoginForm} />
@@ -46,7 +53,16 @@ class App extends Component {
             <Route exact path="/register/address" component={AddressForm} />
             <Route exact path="/register/personal" component={PersonalForm} />
             <Route exact path="/trading" component={Trading} />
+            <Route exact path="/trading/info" component={ServiceInfo} />
+            <Route exact path="/trading/calendar" component={CalendarsDetail} />
             <Route exact path="/company" component={Company} />
+            <Route exact path="/company/about" component={AboutGlovice} />
+            <Route exact path="/company/privacy" component={PrivacyStatement} />
+            <Route exact path="/company/aml" component={AmlPolicy} />
+            <Route exact path="/company/terms" component={Terms} />
+            <Route exact path="/company/ib" component={IntroducerBroker} />
+            <Route exact path="/company/white" component={WhiteLabel} />
+            <Route exact path="/company/affiliate" component={Affiliate} />
           </Switch>
           <Footer />
         </Router>

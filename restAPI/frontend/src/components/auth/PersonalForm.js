@@ -132,7 +132,7 @@ const minLength = min => value =>
 
 const date = value =>
   value && !/^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/.test(value)
-    ? "Invalid date format"
+    ? "Invalid date format (YYYY-MM-DD)"
     : undefined;
 
 const minLength3 = minLength(3);

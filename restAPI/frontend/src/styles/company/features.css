@@ -1,0 +1,28 @@
+.features{
+    max-width:960px;
+}
+.title{
+    font-size:1.7rem;
+}
+
+.icon img{
+    width:35px;
+    margin-right: 10px;
+}
+
+.content{
+    height: 140px;
+}
+
+.content-b{
+    height: 90px;
+}
+
+.learn-more a{
+    font-size: 1.2rem;
+    color: #006536;
+}
+
+.department{
+    font-size:1.2rem;
+}
