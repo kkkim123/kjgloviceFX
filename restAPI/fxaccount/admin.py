@@ -5,7 +5,7 @@ from django.urls import path
 from django.template.response import TemplateResponse
 
 from .models import FxAccount, DepositTransaction ,WithdrawTransaction ,IBListCommission,FxAccountTransaction
-
+from user.models import FxUser
 class FxAccountAdmin(admin.ModelAdmin):
     list_display = (
         'user', 'mt4_account', 'referral_code','ib_commission','status','updated_at',
@@ -25,6 +25,19 @@ class FxAccountAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_editable = ('mt4_account','ib_commission','status',)
     search_fields = ('user','mt4_account','referral_code',)
+    def save_model(self, request, obj, form, change):
+        fxuser = FxUser.objects.get(id = obj.user_id)
+        print(len(obj.mt4_account))
+        if(len(obj.mt4_account) > 4 and 8 > int(fxuser.user_status)):
+            fxuser.user_status = '8'     
+            fxuser.save()    
+        # else if(len(obj.mt4_account) > 0) :
+        #     fxuser.user_status = '7'     
+        #     fxuser.save()       
+        
+        super().save_model(request, obj, form, change)    
+
+
 
 admin.site.register(FxAccount, FxAccountAdmin)
 
