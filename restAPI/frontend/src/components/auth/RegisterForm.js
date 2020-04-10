@@ -18,7 +18,7 @@ class RegisterForm extends Component {
     });
   };
 
-  renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
+  renderField = ({ input, placeholder, type, is_required, meta: { touched, error } }) => {
     return (
       <div
         className={`form-label-group
@@ -29,6 +29,7 @@ class RegisterForm extends Component {
           type={type}
           className="form-control"
           placeholder={placeholder}
+          required={is_required}
         />
         {touched && error && <span className="">{error}</span>}
       </div>
@@ -58,7 +59,10 @@ class RegisterForm extends Component {
             <div className="card card-signin my-5">
               <div className="card-body text-center">
                 <h5 className="card-title">Register</h5>
-                <form className="form-signin text-left" onSubmit={this.props.handleSubmit(this.onSubmit)}>
+                <form
+                  className="form-signin text-left"
+                  onSubmit={this.props.handleSubmit(this.onSubmit)}
+                >
                   <div className="form-label-group">
                     <CountryDropdown
                       value={country}
@@ -72,47 +76,53 @@ class RegisterForm extends Component {
                     type="text"
                     component={this.renderField}
                     placeholder="First Name*"
-                    validate={required}
+                    is_required={true}
+                    // validate={required}
                   />
                   <Field
                     name="last_name"
                     type="text"
                     component={this.renderField}
                     placeholder="Last Name*"
-                    validate={required}
+                    is_required={true}
+                    // validate={required}
                   />
                   <Field
                     name="email"
                     type="email"
                     component={this.renderField}
                     placeholder="Enter e-mail*"
-                    validate={required}
+                    is_required={true}
+                    // validate={required}
                   />
                   <Field
                     name="referral_code"
                     type="text"
                     component={this.renderField}
                     placeholder="Referral code"
-                  />                  
+                  />
                   <Field
                     name="password"
                     type="password"
                     component={this.renderField}
                     placeholder="Enter your password*"
-                    validate={required}
+                    is_required={true}
+                    // validate={required}
                   />
                   <Field
                     name="password2"
                     type="password"
                     component={this.renderField}
                     placeholder="Confirm your password*"
-                    validate={[required, passwordsMatch]}
-                  />                                                                        
+                    is_required={true}
+                    validate={[passwordsMatch]}
+                  />
                   <div className="form-label-group text-center p-2 p-gray">
                     <p className="">
-                      By registering you agree to our 
+                      By registering you agree to our
                       <Link to="#" className="link">
-                        {" "}privacy policy
+                        {" "}
+                        privacy policy
                       </Link>
                     </p>
                   </div>

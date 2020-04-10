@@ -1,0 +1,50 @@
+.hc-usual a{
+    color:black;
+}
+
+.hc-usual a:hover{
+    color:black !important;
+    text-decoration: none !important;
+}
+
+.hc-submit a{
+    color:white;
+}
+.hc-submit a:hover{
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.check-img{
+    width:20px;
+}
+
+.qna-item p{
+    margin: 0;
+    padding: 0;
+    text-align:left;
+}
+
+.hc-category{
+    font-size:0.8rem;
+}
+
+.hc-question{
+    font-size:1.0rem;
+}
+
+.cant-find-text{
+    color:#959595;
+    font-size:1.5rem;
+}
+
+.live-chat-button{
+    color:white;
+    background-color: #006536;
+    height:50px;
+}
+
+.request-button{
+    color:white;
+    background-color:#959595;
+}
