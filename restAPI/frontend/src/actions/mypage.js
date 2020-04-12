@@ -31,8 +31,7 @@ import {
 
 // Get option
 export const loadOption = () => async (dispatch, getState) => {
-  const user_id = getState().auth.user.id;
-  const res = await axios.options(`/user/${user_id}`, tokenConfig(getState));
+  const res = await axios.get(`/user/choices`, tokenConfig(getState));
   dispatch({
     type: OPTION_LOADED,
     payload: res.data

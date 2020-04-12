@@ -1,19 +1,35 @@
 from .models import FxUser, FxUserDocument,IntroducingBroker
+from .models import EMPLOYMENT_STATUS_CHOICES, EMPLOYMENT_POSITION_CHOICES
+from .models import EDUCATION_LEVEL_CHOICES,EST_ANNUAL_INCOME,INCOME_OF_SOURCE,TRADING_PERIOD
+
 from .serializers import UserSerializer, DocumentSerializer,IntroducingBrokerSerializer , ClientSerializer
-#from rest_framework_jwt.settings import api_settings
-#from rest_framework import status, generics
-from .permissions import IsOwnerProfileOrReadOnly,IsOwnerOnly,IsFKOwnerOnly
+from .permissions import IsOwnerOnly,IsFKOwnerOnly
+
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import (CreateAPIView,ListCreateAPIView,ListAPIView,RetrieveUpdateDestroyAPIView,)
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import viewsets
-import requests
+from django.views import View
 from django.core.serializers.json import DjangoJSONEncoder
-import json
 from django.shortcuts import get_list_or_404, get_object_or_404
+import requests
+import json
+from django.http import HttpResponse,JsonResponse
+
+class ChoicesView(View):
+    def get(self, request):
+        dummy_data = {
+            'employment_status' : json.dumps(EMPLOYMENT_STATUS_CHOICES),
+            'employment_position' : json.dumps(EMPLOYMENT_POSITION_CHOICES),
+            'education_level' : json.dumps(EDUCATION_LEVEL_CHOICES),
+
+            'annual_income' : json.dumps(EST_ANNUAL_INCOME),
+            'income_source' : json.dumps(INCOME_OF_SOURCE),
+            'trading_period' : json.dumps(TRADING_PERIOD),
+        }
+        print(dummy_data)
+        return JsonResponse(dummy_data)
 
 #조회 수정 
 class UserProfileViewSet(viewsets.ModelViewSet):
@@ -34,10 +50,9 @@ class IntroducingBrokerViewSet(viewsets.ModelViewSet):
     serializer_class=IntroducingBrokerSerializer
     permission_classes=[IsFKOwnerOnly,IsAuthenticated]
     lookup_field = 'fxuser'
-    #print('create')
+
     def create(self, request):
         permission_classes=[IsFKOwnerOnly,IsAuthenticated]
-        print(request.data['fxuser'])
         serializer = self.get_serializer(data=request.data )
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -52,22 +67,20 @@ AlterIntroducingBroker = IntroducingBrokerViewSet.as_view({
     'put': 'update',
     'patch': 'partial_update'
 })
-#작업 IB 해지 신청 및 신청 취소 
+#작업 IB 해지 신청은 오프라인으로  
 
+#리스트 조회
 class ClientViewSet(viewsets.ModelViewSet):
     permission_classes=[IsAuthenticated]
     queryset = FxUser.objects.all()
     serializer_class = ClientSerializer
     lookup_field = 'referral_code'
-    # def list(self, request, pk=None):
-    #     queryset = FxUser.objects.filter(referral_code = request.GET.get('referral_code'))
-    #     print(queryset)
-    #     serializer = ClientSerializer(queryset, many=True)
-    #     return Response(serializer.data)
+
     def list(self, request, *args, **kwargs):
         clients = get_list_or_404(self.queryset, referral_code=kwargs['referral_code'])
         serialized = ClientSerializer(clients, many=True)
         return Response(serialized.data)
+
 Client_list = ClientViewSet.as_view({
 'get': 'list',
 })
@@ -78,15 +91,28 @@ class DocUploadViewSet(viewsets.ModelViewSet):
     queryset = FxUserDocument.objects.all()
     serializer_class = DocumentSerializer
     parser_class = (FileUploadParser,)
+    lookup_field = 'fxuser'
+
+
+    def create(self, request, *args, **kwargs):
+        permission_classes = [IsAuthenticated]
+        queryset = FxUserDocument.objects.all()
+        serializer_class = DocumentSerializer
+        parser_class = (FileUploadParser,)
+
+        fxuser = FxUser.objects.get(id = request.data['fxuser'])
+        if(5 > int(fxuser.user_status)):
+            fxuser.user_status = '5'     
+            fxuser.save()    
+        return Response(status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, *args, **kwargs):
         queryset = FxUserDocument.objects.all()
         doc = get_object_or_404(queryset, fxuser=kwargs['fxuser'])
         serializer = DocumentSerializer(doc)
         return Response(serializer.data)
-        # instance = self.get_object(fxuser=kwargs['fxuser'])
-        # serializer = self.get_serializer(instance)
-        # return Response(serializer.data)
+
+
 
 DocUpload = DocUploadViewSet.as_view({
     'post': 'create'
@@ -97,122 +123,3 @@ AlterDocUpload = DocUploadViewSet.as_view({
     'patch': 'partial_update',
     'delete' : 'destroy',
 })
-
-
-
-class DocUploadView(APIView):
-    parser_class = (FileUploadParser,)
-    permission_classes=[IsAuthenticated]
-    def post(self, request, *args, **kwargs):
-
-      file_serializer = DocumentSerializer(data=request.data)
-
-      if file_serializer.is_valid():
-          file_serializer.save()
-          return Response(file_serializer.data, status=status.HTTP_201_CREATED)
-      else:
-          return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-# class DocUploadViewSet(viewsets.ModelViewSet):
-#     serializer_class = DocumentSerializer
-#     parser_classes = (MultiPartParser, FormParser,)
-#     queryset=FxUserDocument.objects.all()  
-# class UploadDocumentCreate(CreateView):
-#     queryset=FxUserDocument.objects.all()
-#     serializer_class=DocumentSerializer
-
-#     #@method_decorator(verified_email_required)
-#     def dispatch(self, *args, **kwargs):
-#         return super(UploadDocumentCreate, self).dispatch(*args, **kwargs)
-
-#     def get_context_data(self, **kwargs):
-#         ctx = super(UploadDocumentCreate, self).get_context_data(**kwargs)
-
-#         # document 상황을 가져오기
-#         doc_model_qs = FxUserDocument.objects.filter(fxuser=self.request.user)
-#         if len(doc_model_qs) >= 1:
-#             doc_model = doc_model_qs[0]
-#             ctx['doc_photo_id'] = {'file': doc_model.doc_photo_id,
-#                                    'status': doc_model.doc_photo_id_status,
-#                                    'updated_at': doc_model.doc_photo_id_updated_at}
-#             ctx['doc_POA'] = {'file': doc_model.doc_proof_of_residence,
-#                               'status': doc_model.doc_proof_of_residence_status,
-#                               'updated_at': doc_model.doc_proof_of_residence_updated_at}
-
-#             ctx['doc_photo_id_2'] = {'file': doc_model.doc_photo_id_2,
-#                                    'status': doc_model.doc_photo_id_2_status,
-#                                    'updated_at': doc_model.doc_photo_id_2_updated_at}
-#             ctx['doc_POA_2'] = {'file': doc_model.doc_proof_of_residence_2,
-#                               'status': doc_model.doc_proof_of_residence_2_status,
-#                               'updated_at': doc_model.doc_proof_of_residence_2_updated_at}
-
-
-#         return ctx
-
-#     def get_form_kwargs(self, **kwargs):
-#         kwargs = super(UploadDocumentCreate, self).get_form_kwargs(**kwargs)
-
-#         if 'data' in kwargs:
-#             doc_model_qs = FxUserDocument.objects.filter(fxuser=self.request.user)
-#             if len(doc_model_qs) >= 1:
-#                 instance = doc_model_qs[0]
-#                 kwargs.update({'instance': instance})
-
-#         return kwargs
-
-#     def form_valid(self, form):
-
-#         doc_model = form.save(commit=False)
-#         doc_model.fxuser = self.request.user
-
-#         # 1. Handle file upload information (있으면 수정할 수 있도록 instance 을 넘긴다)
-#         existing_model = None
-#         doc_model_qs = FxUserDocument.objects.filter(fxuser=self.request.user)
-#         if len(doc_model_qs) >= 1:
-#             existing_model = doc_model_qs[0]
-
-#         # 1. 각종 파일 처리하기
-#         if 'doc_photo_id' in self.request.FILES:
-#             # if request.FILES['doc_photo_id']:
-#             form.doc_photo_id = self.request.FILES['doc_photo_id']
-#             form.doc_photo_id_status = 'P'
-#         elif existing_model is not None:
-#             form.doc_photo_id = existing_model.doc_photo_id
-#             form.doc_photo_id_status = existing_model.doc_photo_id_status
-
-#         if 'doc_photo_id_2' in self.request.FILES:
-#             # if request.FILES['doc_photo_id']:
-#             form.doc_photo_id_2 = self.request.FILES['doc_photo_id_2']
-#             form.doc_photo_id_2_status = 'P'
-#         elif existing_model is not None:
-#             form.doc_photo_id_2 = existing_model.doc_photo_id_2
-#             form.doc_photo_id_2_status = existing_model.doc_photo_id_2_status
-
-#         if 'doc_proof_of_residence' in self.request.FILES:
-#             # if request.FILES['doc_proof_of_residence']:
-#             form.doc_proof_of_residence = self.request.FILES['doc_proof_of_residence']
-#             form.doc_proof_of_residence_status = 'P'
-#         elif existing_model is not None:
-#             form.doc_proof_of_residence = existing_model.doc_proof_of_residence
-#             form.doc_proof_of_residence_status = existing_model.doc_proof_of_residence_status
-
-#         if 'doc_proof_of_residence_2' in self.request.FILES:
-#             # if request.FILES['doc_proof_of_residence']:
-#             form.doc_proof_of_residence_2 = self.request.FILES['doc_proof_of_residence_2']
-#             form.doc_proof_of_residence_2_status = 'P'
-#         elif existing_model is not None:
-#             form.doc_proof_of_residence_2 = existing_model.doc_proof_of_residence_2
-#             form.doc_proof_of_residence_2_status = existing_model.doc_proof_of_residence_2_status
-
-#         doc_model.save()
-
-#         # # 2. 관리자에게 메일을 보냄
-#         # user_name = get_user_name(user=self.request.user, blank_name="anonymous user")
-#         # send_email_to_admin(
-#         #     template_name='admin_new_document_request',
-#         #     ctx={'user_name': user_name}
-#         # )
-
-#         return super(UploadDocumentCreate, self).form_valid(form)

@@ -1,5 +1,4 @@
 from django.urls import include, path
-
 from rest_framework.urlpatterns import format_suffix_patterns
 from user import views
 from .views import UserProfileViewSet
@@ -7,12 +6,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('myclient/<int:referral_code>', views.Client_list), 
+    path('<int:pk>',views.UserProfile),
     path('document/new', views.DocUpload),
     path('document/<int:fxuser>', views.AlterDocUpload),
+
     path('introducingbroker/new',views.IntroducingBroker),
     path('introducingbroker/<int:fxuser>',views.AlterIntroducingBroker),
-    path('<int:pk>',views.UserProfile),
+    path('myclient/<int:referral_code>', views.Client_list),
+
+    path('choices', views.ChoicesView.as_view()), 
+
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)
 if settings.DEBUG:

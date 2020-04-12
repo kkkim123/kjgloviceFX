@@ -18,7 +18,6 @@ from django.urls import include, path
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-#from user.views import UserActivationView
 #from user import views
 
 #router = DefaultRouter()
@@ -31,28 +30,18 @@ from rest_framework_swagger.views import get_swagger_view
 schema_view = get_swagger_view(title='Pastebin API')
 
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', include("user.urls")),
-    # path('rest-auth/', include('rest_auth.urls')),
-    # path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('fxaccount/', include('fxaccount.urls')),
-    # path('accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
 
-	#path to djoser end points
+    path('user/', include("user.urls")),
+    path('fxaccount/', include('fxaccount.urls')),
+
     path('auth/', include('djoser.urls.base')),
     path('auth/', include('djoser.urls.authtoken')),
-    #http://127.0.0.1:8000/auth/users/
-    #http://127.0.0.1:8000/auth/token/login/
-    path('authjwt/', include('djoser.urls.jwt')),
-	#path('auth/users/activation/<str:uid>/<str:token>/', UserActivationView.as_view()),
-	#path to our account's app endpoints
-    #path("api/user/",include("user.urls"))
-    #path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
-    #path("user/registration/", include("user.registration.urls")),
-    #path('/auth/users/activate/(?P<uid>[\w-]+)/(?P<token>[\w-]+)/$', UserActivationView.as_view()),
-    path('swagger', schema_view)
+
+    #path('authjwt/', include('djoser.urls.jwt')),
+
+    #path('swagger', schema_view)
 ]
 
 urlpatterns += [

@@ -2,10 +2,15 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
-import { registDetail } from "../../../../actions/auth";
+import store from "../../../../store";
+import { loadOption, addFile, getFile } from "../../../../actions/mypage";
 import "../../../../styles/auth/form.css";
 
 class UpdateForm extends Component {
+  componentDidMount() {
+    this.props.loadOption();
+  }
+  
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
       <div
@@ -25,13 +30,12 @@ class UpdateForm extends Component {
 
   onSubmit = formValues => {
     // 토큰, 인덱스
-    formValues.user_id = this.props.user.id;
-    formValues.token = this.props.token;
-    this.props.registDetail(formValues);
-    this.props.history.push("/register/personal");
+    // this.props.registDetail(formValues);
+    // this.props.history.push("/register/personal");
   };
 
   render() {
+    console.log(this.props.option[0])
     // if (!this.props.isAuthenticated) {
     //   return <Redirect to="/login" />;
     // }
@@ -102,12 +106,10 @@ const passwordsMatch = (value, allValues) =>
   value !== allValues.password ? "Passwords do not match" : undefined;
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  user: state.auth.user,
-  token: state.auth.token
+  option: state.mypage
 });
 
-UpdateForm = connect(mapStateToProps, { registDetail })(UpdateForm);
+UpdateForm = connect(mapStateToProps, { loadOption })(UpdateForm);
 
 export default reduxForm({
   form: "updateForm"

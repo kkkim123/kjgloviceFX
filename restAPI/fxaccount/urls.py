@@ -3,7 +3,6 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from fxaccount import views
 
 urlpatterns = [
-    #GET
     path('<int:user>', views.FxAccount),
     path('<int:user>/<int:pk>', views.AlterFxAccount),
 
@@ -20,6 +19,7 @@ urlpatterns = [
     path('clientaccountlist/<int:user>', views.ClientAccountListViews.as_view()),
     path('commissionhistory/<int:user>', views.CommissionHistoryViews.as_view()),
     path('commissionhistory/<int:user>/<int:mt4_login>', views.CommissionHistoryViewsDetail.as_view()),
+    path('choices', views.ChoicesView.as_view()), 
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -8,7 +8,6 @@ class IsOwnerProfileOrReadOnly(BasePermission):
 
 
 class IsOwnerOnly(BasePermission):
-    # user id Permission
     def has_object_permission(self, request, view, obj):
         if request.user.is_authenticated:
             print('[IsOwnerOnly]')

@@ -6,6 +6,8 @@ from django.template.response import TemplateResponse
 
 from .models import FxAccount, DepositTransaction ,WithdrawTransaction ,IBListCommission,FxAccountTransaction
 
+from .models import FxAccount, DepositTransaction ,WithdrawTransaction ,IBListCommission,FxAccountTransaction
+from user.models import FxUser
 class FxAccountAdmin(admin.ModelAdmin):
     list_display = (
         'user', 'mt4_account', 'referral_code','ib_commission','status','updated_at',
@@ -13,14 +15,30 @@ class FxAccountAdmin(admin.ModelAdmin):
     # search_fields = ('mt4_account', 'fxuser')
     # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
 
-    def get_ib_code(self, obj):
-        if obj.ib_status :
-            return obj.fxuser.ib_code
-        else:
-            return "N/A"
+    # def get_ib_code(self, obj):
+    #     if obj.ib_status :
+    #         return obj.fxuser.ib_code
+    #     else:
+    #         return "N/A"
 
-    get_ib_code.short_description = 'IB Code'
-    get_ib_code.admin_order_field = 'fxuser__ib_code'
+    # get_ib_code.short_description = 'IB Code'
+    # get_ib_code.admin_order_field = 'fxuser__ib_code'
+
+    list_per_page = 10
+    list_editable = ('mt4_account','ib_commission','status',)
+    search_fields = ('user','mt4_account','referral_code',)
+    def save_model(self, request, obj, form, change):
+        fxuser = FxUser.objects.get(id = obj.user_id)
+        print(len(obj.mt4_account))
+        if(len(obj.mt4_account) > 4 and 8 > int(fxuser.user_status)):
+            fxuser.user_status = '8'     
+            fxuser.save()    
+        # else if(len(obj.mt4_account) > 0) :
+        #     fxuser.user_status = '7'     
+        #     fxuser.save()       
+        
+        super().save_model(request, obj, form, change)    
+
 
     list_per_page = 10
     list_editable = ('mt4_account','ib_commission','status',)

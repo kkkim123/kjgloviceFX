@@ -27,19 +27,13 @@ import {
   EDIT_IB
 } from "../actions/types";
 
-const initialState = {
-  option: null
-};
-
 export default (state = {}, action) => {
   switch (action.type) {
     case OPTION_LOADED:
-      console.log(action.payload);
-      //   return false;
+      console.log(action.payload)
       return {
         ...state,
-        option: action.payload
-        //   ..._.mapKeys(action.payload, 'id')
+        ..._.values(action.payload)
       };
     case ADD_FILE:
         return true;

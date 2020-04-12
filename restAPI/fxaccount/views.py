@@ -1,4 +1,5 @@
 from .models import FxAccount,DepositTransaction,WithdrawTransaction,FxAccountTransaction
+from .models import LEVERAGE_CHOICES,DEPOSIT_METHOD_CHOICE,WITHDRAW_METHOD_CHOICE
 from user.models import IntroducingBroker
 from .serializers import FxAccountSerializer,DepositSerializer,WithdrawSerializer,WithdrawSerializer,FxAccountTransactionSerializer
 from rest_framework import generics
@@ -7,12 +8,23 @@ from .permissions import IsOwnerOnly,IsFKOwnerOnly
 from django.db import connections
 from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from django.core import serializers
-from rest_framework.generics import (CreateAPIView,ListCreateAPIView,RetrieveUpdateDestroyAPIView,DestroyAPIView,)
 from django.core.serializers.json import DjangoJSONEncoder
-import json
+
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from django.shortcuts import get_list_or_404, get_object_or_404
+import json
+from django.views import View
+
+class ChoicesView(View):
+    def get(self, request):
+        dummy_data = {
+            'leverage' : json.dumps(LEVERAGE_CHOICES),
+            'dp_payment_method' : json.dumps(DEPOSIT_METHOD_CHOICE),
+            'wd_payment_method' : json.dumps(WITHDRAW_METHOD_CHOICE),
+        }
+        print(dummy_data)
+        return JsonResponse(dummy_data)
 
 
 #신규 요청, 요청내역 조회 , 취소
@@ -54,7 +66,7 @@ AlterFxAccount = FxAccountViewSet.as_view({
     #     return FxAccount.objects.get(id=self.request.user
 #Person.filter(name='신사임당').exclude('male')
 #신규 요청, 요청내역 조회 , 취소
-class FxAccountTransactionViews(ListCreateAPIView,DestroyAPIView):
+class FxAccountTransactionViews(generics.ListCreateAPIView,generics.DestroyAPIView):
     permission_classes=[IsAuthenticated]
     queryset = FxAccountTransaction.objects.all()
     serializer_class = FxAccountTransactionSerializer
@@ -79,8 +91,6 @@ class TradingHistoryViews(generics.ListAPIView):
                 historyRows += [list(zip(columns, row)) for row in cursor.fetchall()]
                 #historyRows.update(historyRows2)  SUM ('PROFIT') OVER (ORDER BY 'TICKET' ASC) as TOT_PROFIT
         json_val = json.dumps(historyRows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
-        #json_val = json.dumps(historyRows)
-        
         return HttpResponse(json_val)
 #조회
 class ClientAccountListViews(generics.ListAPIView):
@@ -181,7 +191,7 @@ class DepositViewSet(viewsets.ModelViewSet):
     def destroy(self, request, user, pk):   
         permission_classes=[IsOwnerOnly,IsAuthenticated]
         instance = DepositTransaction.objects.get(user=user,pk = pk)
-        if (instance.status != 'A') :
+        if (instance.status == 'P') :
             instance.delete()
             serializer = DepositSerializer(instance)
             return Response(status=status.HTTP_200_OK)
@@ -213,7 +223,7 @@ class WithdrawViewSet(viewsets.ModelViewSet):
     def destroy(self, request, user, pk):  
         permission_classes=[IsOwnerOnly,IsAuthenticated] 
         instance = WithdrawTransaction.objects.get(user=user,pk = pk)
-        if (instance.status != 'A') :
+        if (instance.status == 'P') :
             instance.delete()
             serializer = WithdrawSerializer(instance)
             return Response(status=status.HTTP_200_OK)
@@ -225,8 +235,6 @@ Withdraw = WithdrawViewSet.as_view({
     'get': 'list',
 })
 AlterWithdraw = WithdrawViewSet.as_view({
-   # 'put': 'update',
-   # 'patch': 'partial_update',
     'delete' : 'destroy'
 })
 
