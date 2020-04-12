@@ -16,6 +16,7 @@ import { loadUser } from "../actions/auth";
 
 import "../styles/App.css";
 
+import Main from "./main/main"
 import ResetForm from "./auth/ResetForm";
 import ResetConfirm from "./auth/ResetConfirm";
 import AddressForm from "./auth/AddressForm";
@@ -40,6 +41,7 @@ import WhiteLabel from './company/whiteLabel'
 import Affiliate from './company/affiliate'
 import MyPage from "./mypage/MyPage";
 import HelpMain from "./helpcenter/helpMain";
+import myDetails from "./mypage/components/myDetails/myDetails";
 
 
 class App extends Component {
@@ -52,9 +54,10 @@ class App extends Component {
       // redux로 생성된 store에 하위 컴포넌트들 접근 가능
       <Provider store={store}>
         <Router history={history}>
-          <Header/>
+          <Header />
           <Switch>
             <PrivateRoute exact path="/" />
+            <Route exact path="/main" component={Main} />
             <Route exact path="/login" component={LoginForm} />
             <Route exact path="/register/user" component={RegisterForm} />
             <Route exact path="/reset" component={ResetForm} />
@@ -81,6 +84,7 @@ class App extends Component {
             <Route exact path="/company/affiliate" component={Affiliate} />
             <Route exact path="/company/helpCenter" component={HelpMain} />
             <Route exact path="/mypage" component={MyPage} />
+            <Route exact path="/mypage/details" component={myDetails} />
           </Switch>
           <Footer />
         </Router>

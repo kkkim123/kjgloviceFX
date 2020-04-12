@@ -195,15 +195,30 @@ export const reset = ({ email }) => async dispatch => {
   }
 };
 
-// helper function
 export const tokenConfig = getState => {
   // Get token
   const token = getState().auth.token;
-
   // Headers
   const config = {
     headers: {
       "Content-Type": "application/json"
+    }
+  };
+
+  if (token) {
+    config.headers["Authorization"] = `Token ${token}`;
+  }
+
+  return config;
+};
+
+export const tokenConfig2 = getState => {
+  // Get token
+  const token = getState().auth.token;
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "multipart/form-data;"
     }
   };
 

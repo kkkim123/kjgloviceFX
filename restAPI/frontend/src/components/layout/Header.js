@@ -53,7 +53,9 @@ class Header extends Component {
         <div className="d-flex justify-content-center align-content-center flex-wrap">
           <div className="item">
             <div className="logo-box mx-auto">
-              <div className="logo-area"></div>
+              <Link to="/main">
+                <div className="logo-area"></div>
+              </Link>
             </div>
           </div>
           <div className="item">

@@ -38,7 +38,7 @@ class LoginForm extends Component {
 
   render() {
     if (this.props.isAuthenticated) {
-      return <Redirect to="/" />;
+      return <Redirect to="/main" />;
     }
     return (
       <div className="container">

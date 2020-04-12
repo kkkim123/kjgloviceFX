@@ -50,7 +50,7 @@ class RegisterForm extends Component {
   render() {
     const { country } = this.state;
     if (this.props.isAuthenticated) {
-      return <Redirect to="/" />;
+      return <Redirect to="/main" />;
     }
     return (
       <div className="container">

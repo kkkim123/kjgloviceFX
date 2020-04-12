@@ -1,0 +1,34 @@
+.mp-header a {
+  color: white;
+}
+
+.mp-header a:hover{
+    text-decoration: none !important;
+    color:white !important;
+}
+
+.mp-header {
+  background-color: #0e112c;
+  height:100px;
+}
+
+.height-full {
+  height: 100%;
+}
+
+.profile-box {
+  width: 70px;
+  height: 70px;
+  border-radius: 70%;
+  background-color: white;
+  overflow: hidden;
+}
+
+.get-out{
+    background-color:white;
+    color:#006536 !important;
+}
+
+.get-out img{
+  width:25px;
+}
