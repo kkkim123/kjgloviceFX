@@ -8,6 +8,21 @@ import getOut from "../../images/myPage/getOut.png";
 
 class MpHeader extends Component {
   render() {
+    const { user } = this.props.auth;
+    const status = user && user.user_status;
+    const detailLink = () => {
+      switch (Number(status)) {
+        case 2:
+        case 3:
+          <Link to="/mypage/employment">My Details</Link>;
+        case 4:
+        case 5:
+          <Link to="/mypage/document">My Details</Link>;
+        default:
+          <Link to="#">My Details</Link>;
+      }
+    };
+
     return (
       <div className="mp-header">
         <div
@@ -18,8 +33,14 @@ class MpHeader extends Component {
             <div className="profile-box"></div>
           </Link>
           <div className="pt-4">
-            <Link to="/mypage/details">My Details</Link>
-            {/* <a href="#">My Details</a> */}
+            {(user &&
+              user.user_status < 4 && (
+                <Link to="/mypage/details/employment">My Details</Link>
+              )) ||
+              (user && 4 < user.user_status < 6 && (
+                <Link to="/mypage/details/document">My Details</Link>
+              ))}
+            {/* {detailLink()} */}
           </div>
           <div className="pt-4">
             <a href="#">Trading</a>

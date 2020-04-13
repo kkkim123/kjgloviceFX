@@ -3,9 +3,9 @@ import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
 import "../../../../styles/auth/form.css";
+import $ from "jquery";
 
 class FinancialForm extends Component {
-
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
       <div
@@ -23,19 +23,29 @@ class FinancialForm extends Component {
     );
   };
 
-  selectField = ({ input, placeholder, index, meta: { touched, error } }) => {
-    const optList = (this.props.options && (JSON.parse(this.props.options[index])).map((opt, i) => {
-      return (
-      <option value={i} key={i}>{opt}</option>
-      )
-    }));
+  selectField = ({
+    input,
+    placeholder,
+    index,
+    disabled,
+    meta: { touched, error }
+  }) => {
+    const optList =
+      this.props.options &&
+      JSON.parse(this.props.options[index]).map((opt, i) => {
+        return (
+          <option value={i + 1} key={i}>
+            {opt}
+          </option>
+        );
+      });
     return (
       <div
         className={`form-label-group
         ${touched && error ? "error" : ""}`}
       >
-        <select {...input} className="form-control">
-        <option>{placeholder}</option>
+        <select {...input} className="form-control" disabled={disabled}>
+          <option>{placeholder}</option>
           {optList}
         </select>
         {touched && error && <span className="">{error}</span>}
@@ -44,10 +54,19 @@ class FinancialForm extends Component {
   };
 
   onChange = isChecked => {
-    console.log(isChecked)
-  }
+    console.log(isChecked.target.value);
+    if (isChecked.target.value === "0") {
+      $("select[name='trading_period']").attr("disabled", false);
+    }
+    if (isChecked.target.value === "1") {
+      $("select[name='trading_period']").attr("disabled", true);
+    }
+  };
 
   onSubmit = formValues => {
+    formValues.user_status = 4;
+    // formValues.user_id = this.props.user.id;
+    // formValues.token = this.props.token;
     // 토큰, 인덱스
     // this.props.registDetail(formValues);
     // this.props.history.push("/register/personal");
@@ -57,6 +76,7 @@ class FinancialForm extends Component {
     // if (!this.props.isAuthenticated) {
     //   return <Redirect to="/login" />;
     // }
+    console.log;
     return (
       <div className="card card-signin my-5">
         <div className="card-body text-center p-gray">
@@ -69,7 +89,7 @@ class FinancialForm extends Component {
               name="annual_income"
               component={this.selectField}
               placeholder="Annual Income*"
-              index='3'
+              index="3"
               options={this.props.options}
               validate={required}
             />
@@ -77,7 +97,7 @@ class FinancialForm extends Component {
               name="income_source"
               component={this.selectField}
               placeholder="Source of Wealth*"
-              index='4'
+              index="4"
               options={this.props.options}
               validate={required}
             />
@@ -88,10 +108,11 @@ class FinancialForm extends Component {
               placeholder="Expected counrty of Origin (and destination of funds)*"
               validate={required}
             />
-                        <Field
-              name="expected_deposit"
+            <Field
+              name="trading_experience"
               component={this.selectField}
-              placeholder="Yes or No*"
+              placeholder="Trading experience Yes or no"
+              index="5"
               validate={required}
               onChange={this.onChange}
             />
@@ -100,10 +121,10 @@ class FinancialForm extends Component {
               type="text"
               component={this.selectField}
               placeholder="Trading period*"
-              index='5'
+              index="6"
               options={this.props.options}
               validate={required}
-              disabled
+              disabled={true}
             />
             <button
               className="btn btn-lg btn-primary btn-block mt-10"

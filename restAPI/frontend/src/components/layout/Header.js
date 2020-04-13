@@ -13,16 +13,19 @@ class Header extends Component {
       <>
         <div className="item">
           <div className="mypage">
-            {user && user.user_status !== null && user.user_status < 4 ? (
+            {/* {user && user.user_status !== null && user.user_status < 4 ? (
               <Link to="/register/address">My Page</Link>
             ) : (
               <Link to="/mypage">My Page</Link>
-            )}
+            )} */}
+            <Link to="/mypage">My Page</Link>
           </div>
         </div>
         <div className="item">
           <div className="mypage">
-            <Link onClick={this.props.logout} to="/login">Logout</Link>
+            <Link onClick={this.props.logout} to="/login">
+              Logout
+            </Link>
             {/* <a onClick={this.props.logout}>Logout</a> */}
           </div>
         </div>
@@ -60,7 +63,7 @@ class Header extends Component {
           <div className="item">
             <div className="dropdown">
               <Link to="/market/forex">
-              <button className="dropbtn">Market</button>
+                <button className="dropbtn">Market</button>
               </Link>
               <div className="dropdown-content">
                 <Link to="/market/forex">Forex</Link>
@@ -84,12 +87,8 @@ class Header extends Component {
                 <button className="dropbtn">Trading</button>
               </Link>
               <div className="dropdown-content">
-                <Link to="/trading/info">
-                  MT4
-                </Link>
-                <Link to="/trading/calendar">
-                  Calendars
-                </Link>
+                <Link to="/trading/info">MT4</Link>
+                <Link to="/trading/calendar">Calendars</Link>
                 {/* <a href="#">MT4</a> */}
                 {/* <a href="#">Commodity</a> */}
                 {/* <a href="#">PAMM/COPY</a> */}
@@ -104,15 +103,9 @@ class Header extends Component {
                 <button className="dropbtn">Company</button>
               </Link>
               <div className="dropdown-content">
-                <Link to="/company/about">
-                  About
-                </Link>
-                <Link to="/company/partnership">
-                  Partnership
-                </Link>
-                <Link to="/company/helpCenter">
-                  Help Center
-                </Link> 
+                <Link to="/company/about">About</Link>
+                <Link to="/company/partnership">Partnership</Link>
+                <Link to="/company/helpCenter">Help Center</Link>
                 {/* <a href="#">About</a> */}
                 {/* <a href="#">Partnership</a> */}
                 {/* <a href="#">Help Center</a> */}
