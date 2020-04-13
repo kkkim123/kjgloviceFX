@@ -70,10 +70,10 @@ LEVERAGE_CHOICES = (
     #('2', '1:400'),
     #('3', '1:300'),
     #('4', '1:200'),
-    ('5', '1:100'),
-    ('6', '1:50'),
-    ('7', '1:25'),
-    ('8', '1:10'),
+    ('0', '1:100'),
+    ('1', '1:50'),
+    ('2', '1:25'),
+    ('3', '1:10'),
 )
 
 ACCOUNT_PAMM_STATUS = (
@@ -95,10 +95,10 @@ DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE = (
 )
 
 DEPOSIT_METHOD_CHOICE = (
-    ('', 'Please Choose'),
-    ('1', 'Bitcoin'),
-    ('2', 'Ethereum'),
-    ('3', 'JKL'),
+    #('', 'Please Choose'),
+    ('0', 'Bitcoin'),
+    ('1', 'Ethereum'),
+    ('2', 'JKL'),
     # ('1', 'Bank Wire'),
     # ('2', 'i-Account'),
     # ('3', 'Paypal'),
@@ -113,13 +113,13 @@ DEPOSIT_METHOD_CHOICE = (
 )
 
 WITHDRAW_METHOD_CHOICE = (
-    ('', 'Please Choose'),
+    #('', 'Please Choose'),
     # ('1', 'Bank Wire'),
     # ('2', 'i-Account'),
     # ('3', 'Paypal'),
-    ('1', 'Bitcoin'),
-    ('2', 'Ethereum'),
-    ('3', 'JKL'),
+    ('0', 'Bitcoin'),
+    ('1', 'Ethereum'),
+    ('2', 'JKL'),
     # ('10', 'GELD Coin'),
     # ('11', 'WTX'),
 )
