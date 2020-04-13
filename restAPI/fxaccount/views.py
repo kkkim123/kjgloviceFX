@@ -19,9 +19,9 @@ from django.views import View
 class ChoicesView(View):
     def get(self, request):
         dummy_data = {
-            'leverage' : json.dumps(LEVERAGE_CHOICES),
-            'dp_payment_method' : json.dumps(DEPOSIT_METHOD_CHOICE),
-            'wd_payment_method' : json.dumps(WITHDRAW_METHOD_CHOICE),
+            'leverage' : json.dumps([x[1] for x in LEVERAGE_CHOICES]),
+            'dp_payment_method' : json.dumps([x[1] for x in DEPOSIT_METHOD_CHOICE] ),
+            'wd_payment_method' : json.dumps([x[1] for x in WITHDRAW_METHOD_CHOICE] ),
         }
         print(dummy_data)
         return JsonResponse(dummy_data)

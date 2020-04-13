@@ -20,13 +20,13 @@ from django.http import HttpResponse,JsonResponse
 class ChoicesView(View):
     def get(self, request):
         dummy_data = {
-            'employment_status' : json.dumps(EMPLOYMENT_STATUS_CHOICES),
-            'employment_position' : json.dumps(EMPLOYMENT_POSITION_CHOICES),
-            'education_level' : json.dumps(EDUCATION_LEVEL_CHOICES),
+            'employment_status' : json.dumps([x[1] for x in EMPLOYMENT_STATUS_CHOICES]),
+            'employment_position' : json.dumps([x[1] for x in EMPLOYMENT_POSITION_CHOICES]),
+            'education_level' : json.dumps([x[1] for x in EDUCATION_LEVEL_CHOICES]),
 
-            'annual_income' : json.dumps(EST_ANNUAL_INCOME),
-            'income_source' : json.dumps(INCOME_OF_SOURCE),
-            'trading_period' : json.dumps(TRADING_PERIOD),
+            'annual_income' : json.dumps([x[1] for x in EST_ANNUAL_INCOME]),
+            'income_source' : json.dumps([x[1] for x in INCOME_OF_SOURCE]),
+            'trading_period' : json.dumps([x[1] for x in TRADING_PERIOD]),
         }
         print(dummy_data)
         return JsonResponse(dummy_data)

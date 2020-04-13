@@ -17,79 +17,79 @@ import datetime
 #from model_utils import Choices
 #from django_countries.fields import CountryField
 USER_TYPES = (
-    ('', 'Please Choose...'),
+    #('', 'Please Choose...'),
     ('R', 'Retail'),
     ('I', 'IB'),
 )
 
 EST_ANNUAL_INCOME = (
-    ('', 'Please Choose...'),
-    ('1', 'Less Than 10,000'),
-    ('2', '10,000 to 50,000'),
-    ('3', '50,000 to 100,000'),
-    ('4', 'Over 100,000'),
+    #('', 'Please Choose...'),
+    ('0', 'Less Than 10,000'),
+    ('1', '10,000 to 50,000'),
+    ('2', '50,000 to 100,000'),
+    ('3', 'Over 100,000'),
 )
 INCOME_OF_SOURCE = (
-    ('', 'Please Choose...'),
-    ('1', 'salary'),
-    ('2', 'Business/Profession'),
-    ('3', 'capital gain'),
-    ('4', 'House Property'),
-    ('5', 'other sources'),
+    #('', 'Please Choose...'),
+    ('0', 'salary'),
+    ('1', 'Business/Profession'),
+    ('2', 'capital gain'),
+    ('3', 'House Property'),
+    ('4', 'other sources'),
 )
 
 EST_NET_WORTH = (
-    ('', 'Please Choose...'),
-    ('1', 'Less Than 10,000'),
-    ('2', '10,000 to 50,000'),
-    ('3', '50,000 to 100,000'),
-    ('4', 'Over 100,000'),
+    #('', 'Please Choose...'),
+    ('0', 'Less Than 10,000'),
+    ('1', '10,000 to 50,000'),
+    ('2', '50,000 to 100,000'),
+    ('3', 'Over 100,000'),
 )
 
 EMPLOYMENT_STATUS_CHOICES = (
-    ('', 'Please Choose...'),
-    ('1', 'Employed'),
-    ('2', 'Self-Employed'),
-    ('3', 'Unemployed'),
-    ('4', 'Retired'),
-    ('5', 'Student'),
+    #('', 'Please Choose...'),
+    ('0', 'Employed'),
+    ('1', 'Self-Employed'),
+    ('2', 'Unemployed'),
+    ('3', 'Retired'),
+    ('4', 'Student'),
 )
 EMPLOYMENT_POSITION_CHOICES = (
-    ('', 'Please Choose...'),
-    ('1', 'Senior level Management'),
-    ('2', 'Middle Management'),
-    ('3', 'Entry Level'),
+    #('', 'Please Choose...'),
+    ('0', 'Senior level Management'),
+    ('1', 'Middle Management'),
+    ('2', 'Entry Level'),
 )
 
 EDUCATION_LEVEL_CHOICES = (
-    ('', 'Please Choose...'),
-    ('1', 'Bachelors Degree or Equivalent'),
-    ('2', 'Masters Degree or equivalent'),
-    ('3', 'Phd / Research Degree'),
-    ('4', 'Diploma or Equivalent'),
+    #('', 'Please Choose...'),
+    ('0', 'Bachelors Degree or Equivalent'),
+    ('1', 'Masters Degree or equivalent'),
+    ('2', 'Phd / Research Degree'),
+    ('3', 'Diploma or Equivalent'),
 )
 
 INDUSTRY_CHOICES = (
-    ('', 'Please Choose...'),
-    ('1', 'Employed'),
-    ('2', 'Self-Employed'),
-    ('3', 'Unemployed'),
-    ('4', 'Retired'),
-    ('5', 'Student'),
+    #('', 'Please Choose...'),
+    ('0', 'Employed'),
+    ('1', 'Self-Employed'),
+    ('2', 'Unemployed'),
+    ('3', 'Retired'),
+    ('4', 'Student'),
 )
 TRADING_EXPERIENCE = (
-    ('', 'Please Choose...'),
-    ('1', 'Y'),
-    ('2', 'N'),
+    #('', 'Please Choose...'),
+    ('0', 'Y'),
+    ('1', 'N'),
 )
 
 TRADING_PERIOD = (
-    ('', 'Please Choose...'),
-    ('1', 'I have a relevant education/professional qualification'),
-    ('2', 'I regularly monitor the news/markets'),
-    ('3', 'I have read educational material on FX trading'),
-    ('4', 'all of the above'),
-    ('5', 'none of above'),
+    #('', 'Please Choose...'),
+    ('0', 'I have a relevant education/professional qualification'),
+    ('1', 'I regularly monitor the news/markets'),
+    ('2', 'I have read educational material on FX trading'),
+    ('3', 'all of the above'),
+    ('4', 'none of above'),
 )
 
 IS_TRADED_INSTRUMENT_CHOICES = (
