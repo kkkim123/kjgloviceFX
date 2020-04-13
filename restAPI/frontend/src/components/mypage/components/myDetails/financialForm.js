@@ -6,9 +6,9 @@ import store from "../../../../store";
 import { loadOption, addFile, getFile } from "../../../../actions/mypage";
 import "../../../../styles/auth/form.css";
 
-class UpdateForm extends Component {
+class FinancialForm extends Component {
   componentDidMount() {
-    this.props.loadOption();
+    // this.props.loadOption();
   }
   
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
@@ -35,46 +35,52 @@ class UpdateForm extends Component {
   };
 
   render() {
-    console.log(this.props.option[0])
     // if (!this.props.isAuthenticated) {
     //   return <Redirect to="/login" />;
     // }
     return (
       <div className="card card-signin my-5">
         <div className="card-body text-center p-gray">
-          <h5 className="card-title">Employment Information</h5>
+          <h5 className="card-title">Financial Information</h5>
           <form
             className="form-signin text-left"
             onSubmit={this.props.handleSubmit(this.onSubmit)}
           >
             <Field
-              name="employment_status"
+              name="annual_income"
               type="text"
               component={this.renderField}
-              placeholder="Employment Status*"
+              placeholder="Annual Income*"
               validate={required}
             />
             <Field
-              name="industry"
+              name="income_source"
               type="text"
               component={this.renderField}
-              placeholder="Industry*"
+              placeholder="Source of Wealth*"
               validate={required}
             />
             <Field
-              name="employment_position"
+              name="expected_deposit"
               type="text"
               component={this.renderField}
-              placeholder="Employment Status*"
+              placeholder="Expected counrty of Origin (and destination of funds)*"
               validate={required}
             />
             <Field
-              name="education_level"
+              name="trading_experience"
               type="text"
               component={this.renderField}
-              placeholder="What is your level of education?*"
+              placeholder="How much do you except to deposit in the next 12 months?*"
               validate={required}
             />
+            <Field
+              name="trading_period"
+              type="text"
+              component={this.renderField}
+              placeholder="Trading period*"
+              validate={required}
+            />            
             <button
               className="btn btn-lg btn-primary btn-block mt-10"
               type="submit"
@@ -109,8 +115,8 @@ const mapStateToProps = state => ({
   option: state.mypage
 });
 
-UpdateForm = connect(mapStateToProps, { loadOption })(UpdateForm);
+FinancialForm = connect(mapStateToProps, { loadOption })(FinancialForm);
 
 export default reduxForm({
-  form: "updateForm"
-})(UpdateForm);
+  form: "financialForm"
+})(FinancialForm);

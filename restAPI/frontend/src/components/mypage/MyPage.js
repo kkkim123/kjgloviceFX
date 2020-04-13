@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import MpHeader from './mpHeader'
 import Steps from './components/steps'
 import NoticeBox from './components/noticeBox'
@@ -11,10 +11,12 @@ import TradingHistory from './components/tradingHistory'
 import Partners from './components/partners'
 import MyProfile from './components/myProfile'
 
-const MyPage = () => {
+class MyPage extends Component {
+    
+    render() {
     return (
         <div>
-            <MpHeader />
+            {/* <MpHeader /> */}
             <Steps />
             <NoticeBox
                 title="Welcome to MyFXTM"
@@ -65,6 +67,7 @@ const MyPage = () => {
             <MyProfile />
         </div>
     );
+    };
 };
 
 export default MyPage;

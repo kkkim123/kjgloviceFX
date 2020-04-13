@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
 import "../../styles/layout/header.css";
+import MpHeader from "../mypage/mpHeader";
 
 class Header extends Component {
   render() {

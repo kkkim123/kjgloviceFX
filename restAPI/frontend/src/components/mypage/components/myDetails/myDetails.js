@@ -5,7 +5,8 @@ import store from "../../../../store";
 import { loadOption, addFile, getFile } from "../../../../actions/mypage";
 import { Field, reduxForm, formValueSelector } from "redux-form";
 import DropForm from './dropForm'
-import UpdateForm from "./updateForm";
+import EmployForm from "./employForm";
+import FinancialForm from "./financialForm";
 
 class MyPage extends Component {
   componentDidMount() {
@@ -66,7 +67,8 @@ class MyPage extends Component {
             MyPage - Detail 입니다.
             {/* <UploadForm /> */}
             <DropForm/>
-            <UpdateForm/>
+            <EmployForm/>
+            <FinancialForm/>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { Router, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 import history from "../history";
 import Header from "./layout/Header";
@@ -42,6 +42,7 @@ import Affiliate from './company/affiliate'
 import MyPage from "./mypage/MyPage";
 import HelpMain from "./helpcenter/helpMain";
 import myDetails from "./mypage/components/myDetails/myDetails";
+import MpHeader from "./mypage/mpHeader";
 
 
 class App extends Component {
@@ -54,7 +55,14 @@ class App extends Component {
       // redux로 생성된 store에 하위 컴포넌트들 접근 가능
       <Provider store={store}>
         <Router history={history}>
-          <Header />
+          <Route render={(props) => {
+            const path = props.location.pathname;
+            if(path.indexOf("mypage") === -1) {
+              return <Header/>;
+            } else {
+              return <MpHeader/>
+            }
+          }}/>
           <Switch>
             <PrivateRoute exact path="/" />
             <Route exact path="/main" component={Main} />
