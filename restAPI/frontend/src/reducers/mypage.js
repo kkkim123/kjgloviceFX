@@ -30,10 +30,9 @@ import {
 export default (state = {}, action) => {
   switch (action.type) {
     case OPTION_LOADED:
-      console.log(action.payload)
       return {
         ...state,
-        ..._.values(action.payload)
+        option: _.map(action.payload)
       };
     case ADD_FILE:
         return true;

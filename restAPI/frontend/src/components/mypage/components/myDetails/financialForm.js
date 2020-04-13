@@ -2,15 +2,10 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
-import store from "../../../../store";
-import { loadOption, addFile, getFile } from "../../../../actions/mypage";
 import "../../../../styles/auth/form.css";
 
 class FinancialForm extends Component {
-  componentDidMount() {
-    // this.props.loadOption();
-  }
-  
+
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
       <div
@@ -27,6 +22,30 @@ class FinancialForm extends Component {
       </div>
     );
   };
+
+  selectField = ({ input, placeholder, index, meta: { touched, error } }) => {
+    const optList = (this.props.options && (JSON.parse(this.props.options[index])).map((opt, i) => {
+      return (
+      <option value={i} key={i}>{opt}</option>
+      )
+    }));
+    return (
+      <div
+        className={`form-label-group
+        ${touched && error ? "error" : ""}`}
+      >
+        <select {...input} className="form-control">
+        <option>{placeholder}</option>
+          {optList}
+        </select>
+        {touched && error && <span className="">{error}</span>}
+      </div>
+    );
+  };
+
+  onChange = isChecked => {
+    console.log(isChecked)
+  }
 
   onSubmit = formValues => {
     // 토큰, 인덱스
@@ -48,16 +67,18 @@ class FinancialForm extends Component {
           >
             <Field
               name="annual_income"
-              type="text"
-              component={this.renderField}
+              component={this.selectField}
               placeholder="Annual Income*"
+              index='3'
+              options={this.props.options}
               validate={required}
             />
             <Field
               name="income_source"
-              type="text"
-              component={this.renderField}
+              component={this.selectField}
               placeholder="Source of Wealth*"
+              index='4'
+              options={this.props.options}
               validate={required}
             />
             <Field
@@ -67,25 +88,28 @@ class FinancialForm extends Component {
               placeholder="Expected counrty of Origin (and destination of funds)*"
               validate={required}
             />
-            <Field
-              name="trading_experience"
-              type="text"
-              component={this.renderField}
-              placeholder="How much do you except to deposit in the next 12 months?*"
+                        <Field
+              name="expected_deposit"
+              component={this.selectField}
+              placeholder="Yes or No*"
               validate={required}
+              onChange={this.onChange}
             />
             <Field
               name="trading_period"
               type="text"
-              component={this.renderField}
+              component={this.selectField}
               placeholder="Trading period*"
+              index='5'
+              options={this.props.options}
               validate={required}
-            />            
+              disabled
+            />
             <button
               className="btn btn-lg btn-primary btn-block mt-10"
               type="submit"
             >
-              Save And Continue
+              Save And Complete
             </button>
           </form>
         </div>
@@ -96,26 +120,11 @@ class FinancialForm extends Component {
 
 const required = value => (value ? undefined : "Required");
 
-const minLength = min => value =>
-  value && value.length < min
-    ? `Must be at least ${min} characters`
-    : undefined;
-
-const minLength3 = minLength(3);
-
-const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined;
-
-const maxLength15 = maxLength(15);
-
-const passwordsMatch = (value, allValues) =>
-  value !== allValues.password ? "Passwords do not match" : undefined;
-
 const mapStateToProps = state => ({
-  option: state.mypage
+  options: state.mypage.option
 });
 
-FinancialForm = connect(mapStateToProps, { loadOption })(FinancialForm);
+FinancialForm = connect(mapStateToProps)(FinancialForm);
 
 export default reduxForm({
   form: "financialForm"

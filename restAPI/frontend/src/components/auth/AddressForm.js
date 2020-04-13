@@ -89,7 +89,7 @@ class AddressForm extends Component {
                     className="btn btn-lg btn-primary btn-block mt-10"
                     type="submit"
                   >
-                    Next
+                    Save and Next
                   </button>
                 </form>
               </div>

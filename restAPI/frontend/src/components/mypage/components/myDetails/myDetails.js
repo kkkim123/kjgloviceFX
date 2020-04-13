@@ -10,7 +10,7 @@ import FinancialForm from "./financialForm";
 
 class MyPage extends Component {
   componentDidMount() {
-    // store.dispatch(loadOption());
+    store.dispatch(loadOption());
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -65,10 +65,11 @@ class MyPage extends Component {
         <div className="row justify-content-center my-5">
           <div className="col-12 col-sm-6">
             MyPage - Detail 입니다.
-            {/* <UploadForm /> */}
-            <DropForm/>
+            {/* Complete Profile */}
             <EmployForm/>
             <FinancialForm/>
+            {/* Complete KYC(Document Upload) */}
+            {/* <DropForm/> */}
           </div>
         </div>
       </div>
@@ -77,9 +78,6 @@ class MyPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  user: state.auth.user,
-  token: state.auth.token,
   auth: state.auth
 });
 

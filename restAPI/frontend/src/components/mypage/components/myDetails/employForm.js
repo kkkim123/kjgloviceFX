@@ -3,14 +3,10 @@ import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
 import store from "../../../../store";
-import { loadOption, addFile, getFile } from "../../../../actions/mypage";
 import "../../../../styles/auth/form.css";
 
 class EmployForm extends Component {
-  componentDidMount() {
-    this.props.loadOption();
-  }
-  
+
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
       <div
@@ -28,6 +24,26 @@ class EmployForm extends Component {
     );
   };
 
+  selectField = ({ input, placeholder, index, meta: { touched, error } }) => {
+    const optList = (this.props.options && (JSON.parse(this.props.options[index])).map((opt, i) => {
+      return (
+      <option value={i} key={i}>{opt}</option>
+      )
+    }));
+    return (
+      <div
+        className={`form-label-group
+        ${touched && error ? "error" : ""}`}
+      >
+        <select {...input} className="form-control">
+        <option>{placeholder}</option>
+          {optList}
+        </select>
+        {touched && error && <span className="">{error}</span>}
+      </div>
+    );
+  };
+
   onSubmit = formValues => {
     // 토큰, 인덱스
     // this.props.registDetail(formValues);
@@ -35,7 +51,6 @@ class EmployForm extends Component {
   };
 
   render() {
-    console.log(this.props.option)
     // if (!this.props.isAuthenticated) {
     //   return <Redirect to="/login" />;
     // }
@@ -49,11 +64,13 @@ class EmployForm extends Component {
           >
             <Field
               name="employment_status"
-              type="text"
-              component={this.renderField}
+              component={this.selectField}
               placeholder="Employment Status*"
+              index='0'
+              options={this.props.options}
               validate={required}
-            />
+            >
+            </Field>
             <Field
               name="industry"
               type="text"
@@ -63,16 +80,18 @@ class EmployForm extends Component {
             />
             <Field
               name="employment_position"
-              type="text"
-              component={this.renderField}
-              placeholder="Employment Status*"
+              component={this.selectField}
+              placeholder="Employment Positions*"
+              index='1'
+              options={this.props.options}
               validate={required}
             />
             <Field
               name="education_level"
-              type="text"
-              component={this.renderField}
+              component={this.selectField}
               placeholder="What is your level of education?*"
+              index='2'
+              options={this.props.options}
               validate={required}
             />
             <button
@@ -90,26 +109,11 @@ class EmployForm extends Component {
 
 const required = value => (value ? undefined : "Required");
 
-const minLength = min => value =>
-  value && value.length < min
-    ? `Must be at least ${min} characters`
-    : undefined;
-
-const minLength3 = minLength(3);
-
-const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined;
-
-const maxLength15 = maxLength(15);
-
-const passwordsMatch = (value, allValues) =>
-  value !== allValues.password ? "Passwords do not match" : undefined;
-
 const mapStateToProps = state => ({
-  option: state.mypage
+  options: state.mypage.option
 });
 
-EmployForm = connect(mapStateToProps, { loadOption })(EmployForm);
+EmployForm = connect(mapStateToProps)(EmployForm);
 
 export default reduxForm({
   form: "employForm"

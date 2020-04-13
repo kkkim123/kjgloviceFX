@@ -40,7 +40,6 @@ class PersonalForm extends Component {
       formValues.Nationality = this.state.country;
       formValues.user_id = this.props.user.id;
       formValues.token = this.props.token;
-      formValues.user_status = 4;
       this.props.registDetail(formValues);
       this.props.history.push("/");
     } else {

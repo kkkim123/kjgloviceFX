@@ -41,7 +41,7 @@ class RegisterForm extends Component {
       formValues.resident_country = this.state.country;
       formValues.is_admin = false;
       this.props.register(formValues);
-      this.props.history.push("/");
+      this.props.history.push("/register/address");
     } else {
       alert("Select your Counrty");
     }
@@ -96,12 +96,6 @@ class RegisterForm extends Component {
                     // validate={required}
                   />
                   <Field
-                    name="referral_code"
-                    type="text"
-                    component={this.renderField}
-                    placeholder="Referral code"
-                  />
-                  <Field
                     name="password"
                     type="password"
                     component={this.renderField}
@@ -117,6 +111,12 @@ class RegisterForm extends Component {
                     is_required={true}
                     validate={[passwordsMatch]}
                   />
+                  <Field
+                    name="referral_code"
+                    type="text"
+                    component={this.renderField}
+                    placeholder="Referral code"
+                  />                  
                   <div className="form-label-group text-center p-2 p-gray">
                     <p className="">
                       By registering you agree to our
@@ -130,7 +130,7 @@ class RegisterForm extends Component {
                     className="btn btn-lg btn-primary btn-block  mt-10"
                     type="submit"
                   >
-                    Register
+                    Save and Next
                   </button>
                 </form>
               </div>
