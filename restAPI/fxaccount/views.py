@@ -53,7 +53,7 @@ class FxAccountViewSet(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_304_NOT_MODIFIED)
 
-FxAccount = FxAccountViewSet.as_view({
+FxAccountView = FxAccountViewSet.as_view({
     'post' : 'create',
     'get': 'list',
 })
@@ -71,13 +71,49 @@ class FxAccountTransactionViews(generics.ListCreateAPIView,generics.DestroyAPIVi
     queryset = FxAccountTransaction.objects.all()
     serializer_class = FxAccountTransactionSerializer
 
+# class TradingHistoryViewSet(viewsets.ModelViewSet):
+#     #permission_classes=[IsFKOwnerOnly,IsAuthenticated]
+#     def get(self,request,*args, **kwargs):
+#         #permission_classes=[IsFKOwnerOnly,IsAuthenticated]
+#         from_date = request.data['from_date']
+#         to_date = request.data['to_date']
+
+#         queryset = FxAccount.objects.filter(fxuser = kwargs['user'])
+#         #serializer_class = FxAccountSerializerkwargs['user']
+#         #accRows = queryset
+#         #print(queryset[0].mt4_account)
+#         historyRows = []
+#         for acc in queryset : 
+#             with connections['backOffice'].cursor() as cursor:
+#                 cursor.execute("set @CumSum := 0;")
+#                 cursor.execute("select LOGIN as mt4_account, SYMBOL, CMD, VOLUME, OPEN_TIME, OPEN_PRICE, SL, TP, CLOSE_TIME, CLOSE_PRICE, PROFIT,"
+#                 + "(@CumSum := @CumSum + PROFIT) as TOT_PROFIT from MT4_TRADES where LOGIN = " + acc.mt4_account 
+#                 +" AND OPEN_TIME >=" + from_date  
+#                 +" AND OPEN_TIME <=" + to_date  
+#                 +" AND CMD < 5 order by OPEN_TIME;")
+#                 #print(cursor.description)
+#                 columns = [col[0] for col in cursor.description]
+#                 historyRows += [list(zip(columns, row)) for row in cursor.fetchall()]
+#                 #historyRows.update(historyRows2)  SUM ('PROFIT') OVER (ORDER BY 'TICKET' ASC) as TOT_PROFIT
+#         json_val = json.dumps(historyRows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
+
+#         return HttpResponse(json_val)
+
+# TradingHistory = TradingHistoryViewSet.as_view({
+#     'post' : 'create',
+#     'get': 'list',
+# })
 
 #조회
 class TradingHistoryViews(generics.ListAPIView):
-    permission_classes=[IsFKOwnerOnly,IsAuthenticated]
-    def get(self,request,user):
-        queryset = FxAccount.objects.filter(user = user)
-        #serializer_class = FxAccountSerializer
+    #permission_classes=[IsFKOwnerOnly,IsAuthenticated]
+    def get(self,request,*args, **kwargs):
+        #permission_classes=[IsFKOwnerOnly,IsAuthenticated]
+        from_date = request.data['from_date']
+        to_date = request.data['to_date']
+        print(from_date)
+        queryset = FxAccount.objects.filter(fxuser = kwargs['user'])
+        #serializer_class = FxAccountSerializerkwargs['user']
         #accRows = queryset
         #print(queryset[0].mt4_account)
         historyRows = []
@@ -85,7 +121,10 @@ class TradingHistoryViews(generics.ListAPIView):
             with connections['backOffice'].cursor() as cursor:
                 cursor.execute("set @CumSum := 0;")
                 cursor.execute("select LOGIN as mt4_account, SYMBOL, CMD, VOLUME, OPEN_TIME, OPEN_PRICE, SL, TP, CLOSE_TIME, CLOSE_PRICE, PROFIT,"
-                + "(@CumSum := @CumSum + PROFIT) as TOT_PROFIT from MT4_TRADES where LOGIN = " + acc.mt4_account +" AND CMD < 5 order by OPEN_TIME;")
+                + "(@CumSum := @CumSum + PROFIT) as TOT_PROFIT from MT4_TRADES where LOGIN = " + acc.mt4_account 
+                +" AND OPEN_TIME >= '" + from_date + " 0:0:0' "
+                +" AND OPEN_TIME <= '" + to_date  + " 23:59:59' "
+                +" AND CMD < 5 order by OPEN_TIME;")
                 #print(cursor.description)
                 columns = [col[0] for col in cursor.description]
                 historyRows += [list(zip(columns, row)) for row in cursor.fetchall()]
@@ -111,9 +150,10 @@ class ClientAccountListViews(generics.ListAPIView):
         json_val = json.dumps(rows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
         return HttpResponse(json_val)
 #조회
-class CommissionHistoryViews(generics.ListAPIView):
+class CommissionHistoryViews(generics.ListAPIView):   
     permission_classes=[IsAuthenticated]
     def get(self,request,*args, **kwargs ):
+        permission_classes=[IsAuthenticated]
         from_date = request.data['from_date']
         to_date = request.data['to_date']
         queryset = IntroducingBroker.objects.filter(fxuser = kwargs['user'])

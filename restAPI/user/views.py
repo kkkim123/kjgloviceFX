@@ -1,6 +1,6 @@
 from .models import FxUser, FxUserDocument,IntroducingBroker
 from .models import EMPLOYMENT_STATUS_CHOICES, EMPLOYMENT_POSITION_CHOICES
-from .models import EDUCATION_LEVEL_CHOICES,EST_ANNUAL_INCOME,INCOME_OF_SOURCE,TRADING_PERIOD
+from .models import EDUCATION_LEVEL_CHOICES,EST_ANNUAL_INCOME,INCOME_OF_SOURCE,TRADING_EXPERIENCE,TRADING_PERIOD
 
 from .serializers import UserSerializer, DocumentSerializer,IntroducingBrokerSerializer , ClientSerializer
 from .permissions import IsOwnerOnly,IsFKOwnerOnly
@@ -26,6 +26,7 @@ class ChoicesView(View):
 
             'annual_income' : json.dumps([x[1] for x in EST_ANNUAL_INCOME]),
             'income_source' : json.dumps([x[1] for x in INCOME_OF_SOURCE]),
+            'trading_experience' : json.dumps([x[1] for x in TRADING_EXPERIENCE]),
             'trading_period' : json.dumps([x[1] for x in TRADING_PERIOD]),
         }
         print(dummy_data)
