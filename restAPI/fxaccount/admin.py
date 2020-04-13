@@ -6,6 +6,7 @@ from django.template.response import TemplateResponse
 
 from .models import FxAccount, DepositTransaction ,WithdrawTransaction ,IBListCommission,FxAccountTransaction
 from user.models import FxUser
+
 class FxAccountAdmin(admin.ModelAdmin):
     list_display = (
         'user', 'mt4_account', 'referral_code','ib_commission','status','updated_at',

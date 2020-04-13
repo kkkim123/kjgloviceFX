@@ -3,7 +3,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from fxaccount import views
 
 urlpatterns = [
-    path('<int:user>', views.FxAccount),
+    path('<int:user>', views.FxAccountView),
     path('<int:user>/<int:pk>', views.AlterFxAccount),
 
     path('transfer', views.FxAccountTransactionViews.as_view()),
