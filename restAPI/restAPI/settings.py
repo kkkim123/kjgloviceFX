@@ -183,7 +183,8 @@ DJOSER = {
     #"USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
     #'ACTIVATION_URL': 'auth/user/activation?uid={uid}&token={token}',
     'ACTIVATION_URL': 'auth/users/activation/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
+    #'SEND_ACTIVATION_EMAIL': True,
+    'SEND_ACTIVATION_EMAIL': False,
     'SEND_CONFRIMATION_EMAIL':True,
     'SERIALIZERS': {
         "activation": "djoser.serializers.ActivationSerializer",

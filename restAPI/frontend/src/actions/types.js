@@ -12,7 +12,7 @@ export const RESET_SEND_FAIL = 'RESET_SEND_FAIL';
 
 //mypage
 //select box option
-export const OPTION_LOADED = 'OPTION_LOADED';
+export const GET_OPTION = 'GET_OPTION';
 //file upload
 export const ADD_FILE = 'ADD_FILE';
 //file upload 조회, 삭제, 변경

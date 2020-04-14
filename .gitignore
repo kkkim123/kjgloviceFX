@@ -163,3 +163,6 @@ my.cnf
 media
 .config_secret
 config_secret/
+restAPI/common/config/
+restAPI/media/
+

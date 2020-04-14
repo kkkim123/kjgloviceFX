@@ -1,6 +1,6 @@
 import _ from "lodash";
 import {
-  OPTION_LOADED,
+  GET_OPTION,
   ADD_FILE,
   GET_FILE,
   DELETE_FILE,
@@ -29,14 +29,17 @@ import {
 
 export default (state = {}, action) => {
   switch (action.type) {
-    case OPTION_LOADED:
+    case GET_OPTION:
       return {
         ...state,
         option: _.map(action.payload)
       };
     case ADD_FILE:
-        return true;
+      return true;
     case GET_FILE:
+        return {
+          file: action.payload
+        };      
     case DELETE_FILE:
     case EDIT_FILE:
     case ADD_ACCOUNT:

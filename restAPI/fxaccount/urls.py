@@ -6,7 +6,7 @@ urlpatterns = [
     path('<int:user>', views.FxAccountView),
     path('<int:user>/<int:pk>', views.AlterFxAccount),
 
-    path('transfer', views.FxAccountTransactionViews.as_view()),
+    path('transfer', views.FxAccountTransferViews.as_view()),
 
     path('deposit/<int:user>', views.Deposit),
     path('deposit/<int:user>/<int:pk>', views.AlterDeposit),

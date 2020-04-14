@@ -111,14 +111,14 @@ IS_IB_CHOICES = (
 )
 
 
-SECRET_QUESTION_CHOICE = (
-    ('', 'Please Choose...'),
-    ('1', 'What is your mother\'s maiden name ?'),
-    ('2', 'What was your first pet\'s name ?'),
-    ('3', 'What street did you grow up ?'),
-    ('4', 'What is your favourite color ?'),
-    ('5', 'What is your favourite actor, musician, or artist ?'),
-)
+# SECRET_QUESTION_CHOICE = (
+#     ('', 'Please Choose...'),
+#     ('1', 'What is your mother\'s maiden name ?'),
+#     ('2', 'What was your first pet\'s name ?'),
+#     ('3', 'What street did you grow up ?'),
+#     ('4', 'What is your favourite color ?'),
+#     ('5', 'What is your favourite actor, musician, or artist ?'),
+# )
 
 USER_STATUS_CHOICE = (
     ('', 'Please Choose...'),

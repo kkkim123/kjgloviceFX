@@ -3,7 +3,7 @@ import history from "../history";
 import { tokenConfig } from "./auth";
 import {
   REGISTER_DETAIL_SUCCESS,
-  OPTION_LOADED,
+  GET_OPTION,
   ADD_FILE,
   GET_FILE,
   DELETE_FILE,
@@ -31,10 +31,10 @@ import {
 } from "./types";
 
 // Get option
-export const loadOption = () => async (dispatch, getState) => {
+export const getOption = () => async (dispatch, getState) => {
   const res = await axios.get(`/user/choices`, tokenConfig(getState));
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -58,37 +58,34 @@ export const addFile = files => async (dispatch, getState) => {
 };
 
 // Get file
-export const getFile = () => async dispatch => {
-  const res = await axios.get(
-    `/user/document/${fxuser_id}`,
-    tokenConfig(getState)
-  );
+export const getFile = () => async ( dispatch, getState) => {
+  const res = await axios.get(`/user/document/${getState().auth.id}`, tokenConfig(getState));
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_FILE,
     payload: res.data
   });
 };
 
 // Delete file
-export const delFile = () => async dispatch => {
+export const delFile = () => async ( dispatch, getState) => {
   const res = await axios.delete(
     `/user/document/${fxuser_id}`,
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
 
 // Edit file
-export const editFile = () => async dispatch => {
+export const editFile = () => async ( dispatch, getState) => {
   const res = await axios.patch(
     `/user/document/${fxuser_id}`,
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -97,7 +94,7 @@ export const editFile = () => async dispatch => {
 export const addAccount = () => async dispatch => {
   const res = await axios.post(`/fxuser/${user_id}`, tokenConfig(getState));
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -106,7 +103,7 @@ export const addAccount = () => async dispatch => {
 export const getAccount = () => async dispatch => {
   const res = await axios.get(`/fxuser/${user_id}`, tokenConfig(getState));
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -118,7 +115,7 @@ export const delAccount = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -130,7 +127,7 @@ export const getTrading = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -142,7 +139,7 @@ export const partLoad = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -154,7 +151,7 @@ export const partAccount = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -166,7 +163,7 @@ export const partsCommision = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -178,7 +175,7 @@ export const partCommision = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -190,7 +187,7 @@ export const addDeposit = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -202,7 +199,7 @@ export const getDeposit = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -214,7 +211,7 @@ export const delDeposit = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -226,7 +223,7 @@ export const addWithdraw = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -238,7 +235,7 @@ export const getWithdraw = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -250,7 +247,7 @@ export const delWithdraw = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -259,7 +256,7 @@ export const delWithdraw = () => async dispatch => {
 export const getTransfer = () => async dispatch => {
   const res = await axios.get(`/fxaccount/transfer`, tokenConfig(getState));
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -268,7 +265,7 @@ export const getTransfer = () => async dispatch => {
 export const addTransfer = () => async dispatch => {
   const res = await axios.post(`/fxaccount/transfer`, tokenConfig(getState));
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -277,7 +274,7 @@ export const addTransfer = () => async dispatch => {
 export const delTransfer = () => async dispatch => {
   const res = await axios.delete(`/fxaccount/transfer`, tokenConfig(getState));
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -289,7 +286,7 @@ export const addIb = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -301,7 +298,7 @@ export const getIb = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };
@@ -313,7 +310,7 @@ export const editIb = () => async dispatch => {
     tokenConfig(getState)
   );
   dispatch({
-    type: OPTION_LOADED,
+    type: GET_OPTION,
     payload: res.data
   });
 };

@@ -8,7 +8,7 @@ import { addFile } from "../../../../actions/mypage";
 class DropForm extends Component {
   render() {
     const handleChangeStatus = ({ meta }, status) => {
-        console.log(status, meta)
+        // console.log(status, meta)
     };
 
     const handleSubmit = (files, allFiles) => {

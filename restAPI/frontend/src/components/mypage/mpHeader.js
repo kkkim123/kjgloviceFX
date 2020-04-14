@@ -3,12 +3,12 @@ import "../../styles/mypage/mpHeaders.css";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import store from "../../store";
-import { loadOption, addFile, getFile } from "../../actions/mypage";
+import { getOption, addFile, getFile } from "../../actions/mypage";
 import getOut from "../../images/myPage/getOut.png";
 
 class MpHeader extends Component {
   componentDidMount() {
-    store.dispatch(loadOption());
+    store.dispatch(getOption());
   }
   
   render() {
@@ -27,16 +27,12 @@ class MpHeader extends Component {
             <div className="profile-box"></div>
           </Link>
           <div className="pt-4">
-            {(user &&
-              user.user_status < 4 && (
-                <Link to="/mypage/details/employment">My Details</Link>
-              )) ||
-              (user && 4 <= user.user_status < 6 && (
-                <Link to="/mypage/details/document">My Details</Link>
-              )) ||
-              (user && 6 <= user.user_status < 8 && (
-                <Link to="/mypage/details/account">My Details</Link>
-              ))}
+            {(user && (
+              user.user_status < 4 && ( <Link to="/mypage/details/employment">My Details</Link> ) ||
+              (user.user_status == 4 && (<Link to="/mypage/details/document">My Details</Link> )) ||
+              (user.user_status == 5 && (<Link to="/mypage/details/document/edit">My Details</Link>)) ||
+              (user.user_status == 6 && (<Link to="/mypage/details/account">My Details</Link>))
+            ))}
           </div>
           <div className="pt-4">
             <a href="#">Trading</a>
@@ -79,4 +75,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { loadOption })(MpHeader);
+export default connect(mapStateToProps, { getOption })(MpHeader);
