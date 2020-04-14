@@ -66,7 +66,7 @@ AlterFxAccount = FxAccountViewSet.as_view({
     #     return FxAccount.objects.get(id=self.request.user
 #Person.filter(name='신사임당').exclude('male')
 #신규 요청, 요청내역 조회 , 취소
-class FxAccountTransactionViews(generics.ListCreateAPIView,generics.DestroyAPIView):
+class FxAccountTransferViews(generics.ListCreateAPIView,generics.DestroyAPIView):
     permission_classes=[IsAuthenticated]
     queryset = FxAccountTransaction.objects.all()
     serializer_class = FxAccountTransactionSerializer
