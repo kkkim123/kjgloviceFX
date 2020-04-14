@@ -8,14 +8,14 @@ import { addFile } from "../../../../actions/mypage";
 class DropForm extends Component {
   render() {
     const handleChangeStatus = ({ meta }, status) => {
-      //   console.log(status, meta)
+        console.log(status, meta)
     };
 
     const handleSubmit = (files, allFiles) => {
       allFiles.forEach(f => f.remove());
       files.fxuser = this.props.auth.user.id;
       this.props.addFile(files);
-      //   formValues.fxuser = this.props.auth.user.id
+      // this.props.history.push("/mypage");
     };
 
     return (
@@ -24,7 +24,7 @@ class DropForm extends Component {
           onChangeStatus={handleChangeStatus}
           onSubmit={handleSubmit}
           maxFiles={4}
-          inputContent="Drop 4 Files"
+          inputContent="Upload Your Front, Back ID CARD and Passport"
           inputWithFilesContent={files => `${4 - files.length} more`}
           submitButtonDisabled={files => files.length < 4}
         />

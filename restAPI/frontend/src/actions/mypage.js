@@ -1,7 +1,8 @@
 import axios from "axios";
 import history from "../history";
-import { tokenConfig, tokenConfig2 } from "./auth";
+import { tokenConfig } from "./auth";
 import {
+  REGISTER_DETAIL_SUCCESS,
   OPTION_LOADED,
   ADD_FILE,
   GET_FILE,

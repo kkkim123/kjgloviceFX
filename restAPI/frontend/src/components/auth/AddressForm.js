@@ -32,7 +32,7 @@ class AddressForm extends Component {
   };
 
   render() {
-    if (!this.props.isAuthenticated) {
+    if (!this.props.token && !this.props.isAuthenticated) {
       return <Redirect to="/login" />;
     }
     return (

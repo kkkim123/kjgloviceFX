@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
+import { registDetail } from "../../../../actions/auth";
 import "../../../../styles/auth/form.css";
 import $ from "jquery";
 
@@ -34,7 +35,7 @@ class FinancialForm extends Component {
       this.props.options &&
       JSON.parse(this.props.options[index]).map((opt, i) => {
         return (
-          <option value={i + 1} key={i}>
+          <option value={i} key={i}>
             {opt}
           </option>
         );
@@ -54,7 +55,6 @@ class FinancialForm extends Component {
   };
 
   onChange = isChecked => {
-    console.log(isChecked.target.value);
     if (isChecked.target.value === "0") {
       $("select[name='trading_period']").attr("disabled", false);
     }
@@ -65,11 +65,10 @@ class FinancialForm extends Component {
 
   onSubmit = formValues => {
     formValues.user_status = 4;
-    // formValues.user_id = this.props.user.id;
-    // formValues.token = this.props.token;
-    // 토큰, 인덱스
-    // this.props.registDetail(formValues);
-    // this.props.history.push("/register/personal");
+    formValues.user_id = this.props.auth.user.id;
+    formValues.user_id = this.props.auth.user.id;
+    this.props.registDetail(formValues);
+    this.props.history.push("/mypage");
   };
 
   render() {
@@ -99,13 +98,6 @@ class FinancialForm extends Component {
               placeholder="Source of Wealth*"
               index="4"
               options={this.props.options}
-              validate={required}
-            />
-            <Field
-              name="expected_deposit"
-              type="text"
-              component={this.renderField}
-              placeholder="Expected counrty of Origin (and destination of funds)*"
               validate={required}
             />
             <Field
@@ -142,10 +134,11 @@ class FinancialForm extends Component {
 const required = value => (value ? undefined : "Required");
 
 const mapStateToProps = state => ({
-  options: state.mypage.option
+  options: state.mypage.option,
+  auth: state.auth
 });
 
-FinancialForm = connect(mapStateToProps)(FinancialForm);
+FinancialForm = connect(mapStateToProps, { registDetail })(FinancialForm);
 
 export default reduxForm({
   form: "financialForm"

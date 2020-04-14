@@ -13,11 +13,6 @@ class Header extends Component {
       <>
         <div className="item">
           <div className="mypage">
-            {/* {user && user.user_status !== null && user.user_status < 4 ? (
-              <Link to="/register/address">My Page</Link>
-            ) : (
-              <Link to="/mypage">My Page</Link>
-            )} */}
             <Link to="/mypage">My Page</Link>
           </div>
         </div>

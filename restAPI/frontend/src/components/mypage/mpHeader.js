@@ -1,29 +1,23 @@
 import React, { Component } from "react";
 import "../../styles/mypage/mpHeaders.css";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import store from "../../store";
 import { loadOption, addFile, getFile } from "../../actions/mypage";
 import getOut from "../../images/myPage/getOut.png";
 
 class MpHeader extends Component {
+  componentDidMount() {
+    store.dispatch(loadOption());
+  }
+  
   render() {
     const { user } = this.props.auth;
-    const status = user && user.user_status;
-    const detailLink = () => {
-      switch (Number(status)) {
-        case 2:
-        case 3:
-          <Link to="/mypage/employment">My Details</Link>;
-        case 4:
-        case 5:
-          <Link to="/mypage/document">My Details</Link>;
-        default:
-          <Link to="#">My Details</Link>;
-      }
-    };
-
+    if (!this.props.auth.token && !this.props.auth.isAuthenticated) {
+      return <Redirect to="/login" />;
+    }
     return (
+      
       <div className="mp-header">
         <div
           className="d-flex justify-content-around align-content-center flex-wrap h-100"
@@ -37,10 +31,12 @@ class MpHeader extends Component {
               user.user_status < 4 && (
                 <Link to="/mypage/details/employment">My Details</Link>
               )) ||
-              (user && 4 < user.user_status < 6 && (
+              (user && 4 <= user.user_status < 6 && (
                 <Link to="/mypage/details/document">My Details</Link>
+              )) ||
+              (user && 6 <= user.user_status < 8 && (
+                <Link to="/mypage/details/account">My Details</Link>
               ))}
-            {/* {detailLink()} */}
           </div>
           <div className="pt-4">
             <a href="#">Trading</a>

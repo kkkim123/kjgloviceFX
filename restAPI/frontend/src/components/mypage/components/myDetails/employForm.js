@@ -3,14 +3,10 @@ import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
 import store from "../../../../store";
+import { registDetail } from "../../../../actions/auth";
 import "../../../../styles/auth/form.css";
 
 class EmployForm extends Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.user !== this.props.user) {
-    }
-    return true;
-  }
 
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
@@ -34,7 +30,7 @@ class EmployForm extends Component {
       this.props.options &&
       JSON.parse(this.props.options[index]).map((opt, i) => {
         return (
-          <option value={i + 1} key={i}>
+          <option value={i} key={i}>
             {opt}
           </option>
         );
@@ -55,9 +51,9 @@ class EmployForm extends Component {
 
   onSubmit = formValues => {
     // 토큰, 인덱스
-    console.log(formValues);
-    // this.props.registDetail(formValues);
-    // this.props.history.push("/register/personal");
+    formValues.user_id = this.props.auth.user.id;
+    this.props.registDetail(formValues);
+    this.props.history.push("/mypage/details/financial");
   };
 
   render() {
@@ -122,7 +118,7 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-EmployForm = connect(mapStateToProps)(EmployForm);
+EmployForm = connect(mapStateToProps, {registDetail})(EmployForm);
 
 export default reduxForm({
   form: "employForm"

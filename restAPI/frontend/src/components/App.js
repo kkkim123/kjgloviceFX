@@ -41,11 +41,11 @@ import WhiteLabel from './company/whiteLabel'
 import Affiliate from './company/affiliate'
 import MyPage from "./mypage/MyPage";
 import HelpMain from "./helpcenter/helpMain";
-import MyDetails from "./mypage/components/myDetails/myDetails";
 import MpHeader from "./mypage/mpHeader";
 import EmployForm from "./mypage/components/myDetails/employForm";
 import FinancialForm from "./mypage/components/myDetails/financialForm";
 import DropForm from "./mypage/components/myDetails/dropForm";
+import AccountForm from "./mypage/components/myDetails/accountForm";
 
 
 class App extends Component {
@@ -95,10 +95,10 @@ class App extends Component {
             <Route exact path="/company/affiliate" component={Affiliate} />
             <Route exact path="/company/helpCenter" component={HelpMain} />
             <Route exact path="/mypage" component={MyPage} />
-            {/* <Route exact path="/mypage/details" component={MyDetails} /> */}
             <Route exact path="/mypage/details/employment" component={EmployForm} />
             <Route exact path="/mypage/details/financial" component={FinancialForm} />
             <Route exact path="/mypage/details/document" component={DropForm} />
+            <Route exact path="/mypage/details/account" component={AccountForm} />
           </Switch>
           <Footer />
         </Router>

@@ -11,13 +11,19 @@ import TradingHistory from './components/tradingHistory'
 import Partners from './components/partners'
 import MyProfile from './components/myProfile'
 
+import { connect } from "react-redux";
+
 class MyPage extends Component {
     
     render() {
+        const { user } = this.props.auth;
+
     return (
         <div>
             {/* <MpHeader /> */}
-            <Steps />
+            <Steps 
+                status={user && user.user_status}
+            />
             <NoticeBox
                 title="Welcome to MyFXTM"
                 subtitle=" - your personal client area"
@@ -70,4 +76,8 @@ class MyPage extends Component {
     };
 };
 
-export default MyPage;
+const mapStateToProps = state => ({
+    auth: state.auth
+  });
+  
+  export default connect(mapStateToProps)(MyPage);
