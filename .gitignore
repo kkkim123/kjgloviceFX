@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 restAPI/common/config/
+restAPI/media/
 
