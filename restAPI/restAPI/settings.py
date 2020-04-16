@@ -245,7 +245,7 @@ EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = config_secret['sendgrid']['api_key_id']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False   # 프로덕션에서는 True로 설정 필요
+EMAIL_USE_SSL = True   # 프로덕션에서는 True로 설정 필요
 DEFAULT_FROM_EMAIL = 'jhlee@fbpasia.com'
 
 # DEFAULT_FROM_EMAIL = 'korea7030.jhl@gmail.com'
@@ -254,9 +254,6 @@ DEFAULT_FROM_EMAIL = 'jhlee@fbpasia.com'
 # EMAIL_HOST_USER = 'sungchang@fbpasia.com'
 # EMAIL_HOST_PASSWORD=''
 # EMAIL_PORT = 587
-
-MEDIA_URL =  '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # SWAGGER_SETTINGS = {
 #     'SECURITY_DEFINITIONS': {
@@ -278,43 +275,43 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # Local #
 #########
 
-# STATIC_DIR = os.path.join(BASE_DIR, 'static')
-# STATICFILES_DIRS = [
-#     STATIC_DIR,
-# ]
-# STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 
-# MEDIA_URL =  '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL =  '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 ##########
 # AWS S3 #
 ##########
 
-CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
-CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
+# CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
+# CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
 
-AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
-AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
-AWS_SES_REGION_NAME = 'ap-southeast-2'
-AWS_SES_REGION_ENDPOINT = 'email-smtp.ap-southeast-2.amazonaws.com'
+# AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
+# AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
+# AWS_SES_REGION_NAME = 'ap-southeast-2'
+# AWS_SES_REGION_ENDPOINT = 'email-smtp.ap-southeast-2.amazonaws.com'
 
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    STATIC_DIR,
-]
+# STATIC_DIR = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [
+#     STATIC_DIR,
+# ]
 
-MEDIA_URL =  '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# MEDIA_URL =  '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# S3 Storage
-DEFAULT_FILE_STORAGE = 'restAPI.storages.MediaStorage'
-STATICFILES_STORAGE = 'restAPI.storages.StaticStorage'
-MEDIAFILES_LOCATION = 'media'
-STATICFILES_LOCATION = 'static'
+# # S3 Storage
+# DEFAULT_FILE_STORAGE = 'restAPI.storages.MediaStorage'
+# STATICFILES_STORAGE = 'restAPI.storages.StaticStorage'
+# MEDIAFILES_LOCATION = 'media'
+# STATICFILES_LOCATION = 'static'
 
-# AWS Access
-config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
-AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
-AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
-AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
+# # AWS Access
+# config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
+# AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
+# AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
+# AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']

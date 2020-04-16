@@ -9,6 +9,10 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const RESET_SEND_SUCCESS = 'RESET_SEND_SUCCESS';
 export const RESET_SEND_FAIL = 'RESET_SEND_FAIL';
+export const RESET_SUCCESS = 'RESET_SUCCESS';
+export const RESET_FAIL = 'RESET_FAIL';
+export const EMAIL_ACTIVATE = 'EMAIL_ACTIVATE';
+export const EMAIL_ACTIVATE_FAIL = 'EMAIL_ACTIVATE_FAIL';
 
 //mypage
 //select box user option

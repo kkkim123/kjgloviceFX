@@ -39,8 +39,8 @@ urlpatterns = [
 
     path('auth/', include('djoser.urls.base')),
     path('auth/', include('djoser.urls.authtoken')),
-    path('auth/users/activation/<str:uid>/<str:token>', user_views.UserActivationView.as_view()),
-    path('auth/users/password/reset/confirm/<str:uid>/<str:token>', user_views.UserResetPasswordView.as_view())
+    # path('auth/users/activation/<str:uid>/<str:token>', user_views.UserActivationView.as_view()),
+    # path('auth/users/password/reset/confirm/<str:uid>/<str:token>', user_views.UserResetPasswordView.as_view())
 
     #path('authjwt/', include('djoser.urls.jwt')),
 

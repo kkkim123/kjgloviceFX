@@ -12,7 +12,11 @@ import {
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
   RESET_SEND_SUCCESS,
-  RESET_SEND_FAIL
+  RESET_SEND_FAIL,
+  RESET_SUCCESS,
+  RESET_FAIL,
+  EMAIL_ACTIVATE,
+  EMAIL_ACTIVATE_FAIL
 } from "./types";
 
 // LOAD USER
@@ -174,7 +178,7 @@ export const logout = () => async (dispatch, getState) => {
   });
 };
 
-// RESET PASSWORD
+// RESET PASSWORD SEND EMAIL
 export const reset = ({ email }) => async dispatch => {
   // Headers
   const config = {
@@ -197,6 +201,58 @@ export const reset = ({ email }) => async dispatch => {
       type: RESET_SEND_FAIL
     });
     dispatch(stopSubmit("resetForm", err.response.data));
+  }
+};
+
+// RESET PASSWORD
+export const resetPassword = ({ uid, token, new_password, re_new_password }) => async dispatch => {
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  // Request Body
+  const body = JSON.stringify({ uid, token, new_password, re_new_password });
+
+  try {
+    const res = await axios.post("/auth/users/reset_password_confirm/", body, config);
+    dispatch({
+      type: RESET_SUCCESS,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: RESET_FAIL
+    });
+    dispatch(stopSubmit("resetPassForm", err.response.data));
+  }
+};
+
+// RESET PASSWORD
+export const emailActive = ( uid, token ) => async dispatch => {
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  // Request Body
+  const body = JSON.stringify({ uid, token });
+
+  try {
+    const res = await axios.post("/auth/users/activation/", body, config);
+    dispatch({
+      type: EMAIL_ACTIVATE,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: EMAIL_ACTIVATE_FAIL
+    });
+    dispatch(stopSubmit("resetPassForm", err.response.data));
   }
 };
 

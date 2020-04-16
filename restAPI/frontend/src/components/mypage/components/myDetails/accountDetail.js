@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import { getAccount, delAccount } from "../../../../actions/mypage";
-import Moment from 'moment';
+import Moment from "moment";
 
 class accountDetail extends Component {
   componentDidMount() {
@@ -10,23 +10,24 @@ class accountDetail extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if(nextProps.auth.user !== this.props.auth.user) {
+    if (nextProps.auth.user !== this.props.auth.user) {
       this.props.getAccount(this.props.auth.id);
     }
-    return true
+    return true;
   }
-  
 
   render() {
     return (
       <div className="container">
-        {this.props.account ? this.props.account &&
+        {this.props.account ? (
+          this.props.account &&
           this.props.account.map((acc, i) => {
             let account_type = "";
             let status = "";
             let base_currency = "";
             let leverage = "";
             let trading_platform = "";
+
             switch (Number(acc.account_type)) {
               case 0:
                 account_type = "Live MT4 Account";
@@ -113,34 +114,45 @@ class accountDetail extends Component {
             }
 
             return (
-            <div key={i}>
-              <div>No. {i+1} Account</div>
-              <div>Account Type : {account_type}</div>
-              <div>MT4 Account : {acc.mt4_account ? acc.mt4_account : 'None'}</div>
-              <div>Account Name : {acc.account_name}</div>
-              <div>Status : {status}</div>
-              <div>Referral Code : {acc.referral_code}</div>
-              <div>Base Currency : {base_currency}</div>
-              <div>Leverage : {leverage}</div>
-              <div>Trading Platform : {trading_platform}</div>
-              <div>Updated : {Moment(acc.updated_at).format('YYYY-MM-DD HH:mm:ss')}</div>
-              <div>Created : {Moment(acc.created_at).format('YYYY-MM-DD HH:mm:ss')}</div>
-              <button
-                        type="button"
-                        className="btn btn-secondary bg-gray btn-lg"
-                        onClick={()=>{this.props.delAccount(acc.id), history.go(0)}}
-                      >
-                        Delete Account
-                      </button>
-              <br/>
-            </div>
-            )
-          }) :
+              <div key={i}>
+                <div>No. {i + 1} Account</div>
+                <div>Account Type : {account_type}</div>
+                <div>
+                  MT4 Account : {acc.mt4_account ? acc.mt4_account : "None"}
+                </div>
+                <div>Account Name : {acc.account_name}</div>
+                <div>Status : {status}</div>
+                <div>Referral Code : {acc.referral_code}</div>
+                <div>Base Currency : {base_currency}</div>
+                <div>Leverage : {leverage}</div>
+                <div>Trading Platform : {trading_platform}</div>
+                <div>
+                  Updated :{" "}
+                  {Moment(acc.updated_at).format("YYYY-MM-DD HH:mm:ss")}
+                </div>
+                <div>
+                  Created :{" "}
+                  {Moment(acc.created_at).format("YYYY-MM-DD HH:mm:ss")}
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-secondary bg-gray btn-lg"
+                  onClick={() => {
+                    this.props.delAccount(acc.id), history.go(0);
+                  }}
+                >
+                  Delete Account
+                </button>
+                <br />
+              </div>
+            );
+          })
+        ) : (
           <>
-          <div>등록된 계좌가 없습니다.</div>
-          <Link to="/mypage/details/account">Create New Account</Link>
+            <div>등록된 계좌가 없습니다.</div>
+            <Link to="/mypage/details/account">Create New Account</Link>
           </>
-          }
+        )}
       </div>
     );
   }

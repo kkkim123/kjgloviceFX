@@ -6,11 +6,6 @@ class ResetConfirm extends Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="row">
-            <div className="logo-box mx-auto">
-              <div className="logo-area"></div>
-            </div>
-          </div>
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
               <div className="card-body text-left p-gray">
@@ -30,7 +25,7 @@ class ResetConfirm extends Component {
                   do not receive it within a few minutes.
                 </p>
                 <div className="form-signin">
-                  <Link to="/login">
+                  <Link to="/main">
                     <button
                       className="btn btn-lg btn-block btn-primary content-center  mt-10"
                       type="button"

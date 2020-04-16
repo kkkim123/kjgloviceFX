@@ -13,8 +13,8 @@ class MpHeader extends Component {
   componentDidMount() {
     store.dispatch(getUserOption());
     store.dispatch(getAccOption());
-    if(this.props.auth.user) {
-      this.linkChange(this.props.auth.user.user_status)
+    if (this.props.auth.user) {
+      this.linkChange(this.props.auth.user.user_status);
     }
   }
 
@@ -51,6 +51,7 @@ class MpHeader extends Component {
         });
         break;
       case 7:
+      case 8:
         this.setState({
           link: <Link to="/mypage/details/account/detail">My Details</Link>
         });

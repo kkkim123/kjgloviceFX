@@ -17,8 +17,10 @@ import { loadUser } from "../actions/auth";
 import "../styles/App.css";
 
 import Main from "./main/main"
+import EamilActive from "./auth/EmailActive";
 import ResetForm from "./auth/ResetForm";
 import ResetConfirm from "./auth/ResetConfirm";
+import ResetPassForm from "./auth/ResetPassForm";
 import AddressForm from "./auth/AddressForm";
 import PersonalForm from "./auth/PersonalForm";
 import Forex from "./market/forex"
@@ -75,6 +77,8 @@ class App extends Component {
             <Route exact path="/register/user" component={RegisterForm} />
             <Route exact path="/reset" component={ResetForm} />
             <Route exact path="/reset/confirm" component={ResetConfirm} />
+            <Route path="/auth/users/password/reset/confirm" component={ResetPassForm} />
+            <Route path="/auth/users/activation/" component={EamilActive} />
             <Route exact path="/register/address" component={AddressForm} />
             <Route exact path="/register/personal" component={PersonalForm} />
             <Route exact path="/market/forex" component={Forex} />

@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
-import { reset } from "../../actions/auth";
+import { resetPassword } from "../../actions/auth";
 
 import "../../styles/auth/form.css";
 
-class ResetForm extends Component {
+class ResetPassForm extends Component {
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
       <div
@@ -17,7 +16,6 @@ class ResetForm extends Component {
           {...input}
           type={type}
           className="form-control"
-          required
           placeholder={placeholder}
         />
         {touched && error && <span className="">{error}</span>}
@@ -35,8 +33,10 @@ class ResetForm extends Component {
   };
 
   onSubmit = formValues => {
-    this.props.reset(formValues);
-    this.props.history.push("/reset/confirm");
+    formValues.uid = this.props.history.location.pathname.split("/")[6];
+    formValues.token = this.props.history.location.pathname.split("/")[7];
+    this.props.resetPassword(formValues);
+    this.props.history.push("/main");
   };
 
   render() {
@@ -46,27 +46,26 @@ class ResetForm extends Component {
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
               <div className="card-body text-center p-gray">
-                <h5 className="card-title">Reset Password</h5>
+                <h5 className="card-title">New Password</h5>
                 <form
                   className="form-signin text-left"
                   onSubmit={this.props.handleSubmit(this.onSubmit)}
                 >
                   <Field
-                    name="email"
-                    type="email"
+                    name="new_password"
+                    type="password"
                     component={this.renderField}
-                    placeholder="Email *"
+                    placeholder="Enter your password*"
                     validate={required}
                   />
+                  <Field
+                    name="re_new_password"
+                    type="password"
+                    component={this.renderField}
+                    placeholder="Confirm your password*"
+                    validate={[passwordsMatch]}
+                  />
                   <div className="text-center">
-                    <Link to="/login">
-                      <button
-                        type="button"
-                        className="btn btn-secondary mr-4 bg-gray btn-lg"
-                      >
-                        Close
-                      </button>
-                    </Link>
                     <button type="submit" className="btn btn-primary btn-lg">
                       Apply
                     </button>
@@ -83,12 +82,15 @@ class ResetForm extends Component {
 
 const required = value => (value ? undefined : "Required");
 
+const passwordsMatch = (value, allValues) =>
+  value !== allValues.new_password ? "Passwords do not match" : undefined;
+
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated
 });
 
-ResetForm = connect(mapStateToProps, { reset })(ResetForm);
+ResetPassForm = connect(mapStateToProps, { resetPassword })(ResetPassForm);
 
 export default reduxForm({
-  form: "resetForm"
-})(ResetForm);
+  form: "resetPassForm"
+})(ResetPassForm);
