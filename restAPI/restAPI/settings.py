@@ -121,7 +121,7 @@ DATABASES = {
 }
 
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -178,6 +178,11 @@ SITE_ID = 1
 PROTOCOL = "https"
 DOMAIN = "glovicefx.com"
 SITE_NAME = "kjgloiveFX.com"
+
+# PROTOCOL = "http"
+# DOMAIN = "localhost:8000"
+# SITE_NAME = "kjgloiveFX.com"
+
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'auth/users/password/reset/confirm/{uid}/{token}',
     #"USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
@@ -229,15 +234,22 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'sungchang@fbpasia.com'
-EMAIL_HOST_PASSWORD=''
+
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
 EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False   # 프로덕션에서는 True로 설정 필요
+DEFAULT_FROM_EMAIL = 'jhlee@fbpasia.com'
 
-
-
+# DEFAULT_FROM_EMAIL = 'korea7030.jhl@gmail.com'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'sungchang@fbpasia.com'
+# EMAIL_HOST_PASSWORD=''
+# EMAIL_PORT = 587
 
 MEDIA_URL =  '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -262,38 +274,46 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # Local #
 #########
 
-# STATIC_DIR = os.path.join(BASE_DIR, 'static')
-# STATICFILES_DIRS = [
-#     STATIC_DIR,
-# ]
-# STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 
-# MEDIA_URL =  '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL =  '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 ##########
 # AWS S3 #
 ##########
 
-CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
-CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
+# CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
+# CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
 
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    STATIC_DIR,
-]
+# config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
+# EMAIL_BACKEND = 'django_ses.SESBackend'
+# AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
+# AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
+# AWS_SES_REGION_NAME = 'ap-southeast-2'
+# AWS_SES_REGION_ENDPOINT = 'email-smtp.ap-southeast-2.amazonaws.com'
+# EMAIL_PORT = 587
 
-MEDIA_URL =  '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# STATIC_DIR = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [
+#     STATIC_DIR,
+# ]
 
-# S3 Storage
-DEFAULT_FILE_STORAGE = 'restAPI.storages.MediaStorage'
-STATICFILES_STORAGE = 'restAPI.storages.StaticStorage'
-MEDIAFILES_LOCATION = 'media'
-STATICFILES_LOCATION = 'static'
+# MEDIA_URL =  '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# AWS Access
-config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
-AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
-AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
-AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
+# # S3 Storage
+# DEFAULT_FILE_STORAGE = 'restAPI.storages.MediaStorage'
+# STATICFILES_STORAGE = 'restAPI.storages.StaticStorage'
+# MEDIAFILES_LOCATION = 'media'
+# STATICFILES_LOCATION = 'static'
+
+# # AWS Access
+# config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
+# AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
+# AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
+# AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']

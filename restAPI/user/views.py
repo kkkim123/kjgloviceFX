@@ -5,8 +5,9 @@ from .models import EDUCATION_LEVEL_CHOICES,EST_ANNUAL_INCOME,INCOME_OF_SOURCE,T
 from .serializers import UserSerializer, DocumentSerializer,IntroducingBrokerSerializer , ClientSerializer
 from .permissions import IsOwnerOnly,IsFKOwnerOnly
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.parsers import FileUploadParser
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
@@ -124,3 +125,27 @@ AlterDocUpload = DocUploadViewSet.as_view({
     'patch': 'partial_update',
     'delete' : 'destroy',
 })
+
+
+class UserActivationView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, uid, token):
+        protocol = 'https://' if request.is_secure() else 'http://'
+        web_url = protocol + request.get_host()
+        post_url = web_url + '/auth/users/activation/'
+        print(post_url)
+        post_data = {'uid': uid, 'token': token}
+        result = requests.post(post_url, data = post_data)
+        
+        if result.status_code == 204:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserResetPasswordView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, uid, token):
+        print(uid, token)

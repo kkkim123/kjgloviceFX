@@ -38,8 +38,8 @@ class ResetForm extends Component {
     // if(!formValues.email) {
     //     alert('빈 칸')
     // } else {
-    // this.props.reset(formValues);
-    this.props.history.push("/reset/confirm");
+    this.props.reset(formValues);
+    // this.props.history.push("/reset/confirm");
     // }
   };
 

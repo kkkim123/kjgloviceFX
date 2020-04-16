@@ -173,16 +173,8 @@ export const reset = ({ email }) => async dispatch => {
   // Request Body
   const body = JSON.stringify({ email });
 
-  console.log(body);
-  return false;
-
   try {
-    const res = await axios.post("/auth/token/login", body, config);
-    const authConfig = {
-      headers: {
-        Authorization: `Token ${res.data.auth_token}`
-      }
-    };
+    const res = await axios.post("/auth/users/reset_password/", body, config);
     dispatch({
       type: RESET_SEND_SUCCESS,
       payload: res.data
