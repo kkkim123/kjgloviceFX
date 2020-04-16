@@ -114,7 +114,7 @@ class EmployForm extends Component {
 const required = value => (value ? undefined : "Required");
 
 const mapStateToProps = state => ({
-  options: state.mypage.option,
+  options: state.mypage.userOption,
   auth: state.auth
 });
 

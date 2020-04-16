@@ -26,27 +26,27 @@ class AccountForm extends Component {
   };
 
   selectField = ({ input, placeholder, index, meta: { touched, error } }) => {
-    const optList =
-      this.props.options &&
-      JSON.parse(this.props.options[index]).map((opt, i) => {
-        return (
-          <option value={i} key={i}>
-            {opt}
-          </option>
-        );
-      });
-    return (
-      <div
-        className={`form-label-group
-        ${touched && error ? "error" : ""}`}
-      >
-        <select {...input} className="form-control">
-          <option>{placeholder}</option>
-          {optList}
-        </select>
-        {touched && error && <span className="">{error}</span>}
-      </div>
-    );
+    // const optList =
+    //   this.props.options &&
+    //   JSON.parse(this.props.options[index]).map((opt, i) => {
+    //     return (
+    //       <option value={i} key={i}>
+    //         {opt}
+    //       </option>
+    //     );
+    //   });
+    // return (
+    //   <div
+    //     className={`form-label-group
+    //     ${touched && error ? "error" : ""}`}
+    //   >
+    //     <select {...input} className="form-control">
+    //       <option>{placeholder}</option>
+    //       {optList}
+    //     </select>
+    //     {touched && error && <span className="">{error}</span>}
+    //   </div>
+    // );
   };
 
   onSubmit = formValues => {
@@ -57,6 +57,7 @@ class AccountForm extends Component {
   };
 
   render() {
+    console.log(this.props.options)
     return (
       <div className="container">
         <div className="card card-signin my-5">
@@ -66,7 +67,7 @@ class AccountForm extends Component {
               className="form-signin text-left"
               onSubmit={this.props.handleSubmit(this.onSubmit)}
             >
-              <Field
+              {/* <Field
                 name="account_type"
                 component={this.selectField}
                 placeholder="Account Type*"
@@ -97,7 +98,7 @@ class AccountForm extends Component {
                 index="2"
                 options={this.props.options}
                 validate={required}
-              />
+              /> */}
               <Field
                 name="account_name"
                 type="text"
@@ -128,6 +129,7 @@ class AccountForm extends Component {
 const required = value => (value ? undefined : "Required");
 
 const mapStateToProps = state => ({
+  options: state.mypage.accOption,
   auth: state.auth
 });
 

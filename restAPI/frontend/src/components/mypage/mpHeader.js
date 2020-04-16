@@ -3,12 +3,13 @@ import "../../styles/mypage/mpHeaders.css";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import store from "../../store";
-import { getOption, addFile, getFile } from "../../actions/mypage";
+import { getUserOption, addFile, getFile, getAccOption } from "../../actions/mypage";
 import getOut from "../../images/myPage/getOut.png";
 
 class MpHeader extends Component {
   componentDidMount() {
-    store.dispatch(getOption());
+    store.dispatch(getUserOption());
+    store.dispatch(getAccOption());
   }
   
   render() {
@@ -75,4 +76,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { getOption })(MpHeader);
+export default connect(mapStateToProps, { getUserOption,getAccOption })(MpHeader);

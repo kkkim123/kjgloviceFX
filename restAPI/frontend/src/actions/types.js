@@ -11,8 +11,10 @@ export const RESET_SEND_SUCCESS = 'RESET_SEND_SUCCESS';
 export const RESET_SEND_FAIL = 'RESET_SEND_FAIL';
 
 //mypage
-//select box option
-export const GET_OPTION = 'GET_OPTION';
+//select box user option
+export const GET_USER_OPTION = 'GET_USER_OPTION';
+//select box account option
+export const GET_ACCOUNT_OPTION = 'GET_ACCOUNT_OPTION'
 //file upload
 export const ADD_FILE = 'ADD_FILE';
 //file upload 조회, 삭제, 변경

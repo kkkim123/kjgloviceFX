@@ -3,7 +3,8 @@ import history from "../history";
 import { tokenConfig } from "./auth";
 import {
   REGISTER_DETAIL_SUCCESS,
-  GET_OPTION,
+  GET_USER_OPTION,
+  GET_ACCOUNT_OPTION,
   ADD_FILE,
   GET_FILE,
   DELETE_FILE,
@@ -30,11 +31,20 @@ import {
   EDIT_IB
 } from "./types";
 
-// Get option
-export const getOption = () => async (dispatch, getState) => {
+// Get user option
+export const getUserOption = () => async (dispatch, getState) => {
   const res = await axios.get(`/user/choices`, tokenConfig(getState));
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
+    payload: res.data
+  });
+};
+
+//Get Account option
+export const getAccOption = () => async (dispatch, getState) => {
+  const res = await axios.get(`/fxaccount/choices`, tokenConfig(getState));
+  dispatch({
+    type: GET_ACCOUNT_OPTION,
     payload: res.data
   });
 };
@@ -79,7 +89,7 @@ export const delFile = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: DELETE_FILE,
     payload: res.data
   });
 };
@@ -126,7 +136,7 @@ export const addAccount = () => async (dispatch, getState) => {
 export const getAccount = () => async (dispatch, getState) => {
   const res = await axios.get(`/fxuser/${getState().auth.id}`, tokenConfig(getState));
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -138,7 +148,7 @@ export const delAccount = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -150,7 +160,7 @@ export const getTrading = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -162,7 +172,7 @@ export const partLoad = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -174,7 +184,7 @@ export const partAccount = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -186,7 +196,7 @@ export const partsCommision = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -198,7 +208,7 @@ export const partCommision = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -210,7 +220,7 @@ export const addDeposit = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -222,7 +232,7 @@ export const getDeposit = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -234,7 +244,7 @@ export const delDeposit = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -246,7 +256,7 @@ export const addWithdraw = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -258,7 +268,7 @@ export const getWithdraw = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -270,7 +280,7 @@ export const delWithdraw = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -279,7 +289,7 @@ export const delWithdraw = () => async (dispatch, getState) => {
 export const getTransfer = () => async (dispatch, getState) => {
   const res = await axios.get(`/fxaccount/transfer`, tokenConfig(getState));
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -288,7 +298,7 @@ export const getTransfer = () => async (dispatch, getState) => {
 export const addTransfer = () => async (dispatch, getState) => {
   const res = await axios.post(`/fxaccount/transfer`, tokenConfig(getState));
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -297,7 +307,7 @@ export const addTransfer = () => async (dispatch, getState) => {
 export const delTransfer = () => async (dispatch, getState) => {
   const res = await axios.delete(`/fxaccount/transfer`, tokenConfig(getState));
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -309,7 +319,7 @@ export const addIb = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -321,7 +331,7 @@ export const getIb = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
@@ -333,7 +343,7 @@ export const editIb = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_OPTION,
+    type: GET_USER_OPTION,
     payload: res.data
   });
 };
