@@ -31,6 +31,7 @@ INSTALLED_APPS += [
     'allauth.account',
     'user.apps.UserConfig',
     'fxaccount.apps.FxaccountConfig',
+    'wallet.apps.WalletConfig',
     #'debug_toolbar',
 ]
 MIDDLEWARE = [
