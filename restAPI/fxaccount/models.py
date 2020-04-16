@@ -47,7 +47,7 @@ ACCOUNT_STATUS = (
 )
 
 TRADING_PLATFORM_CHOICE = (
-    # ('', 'Please Choose...'),
+    #('', 'Please Choose...'),
     ('0', 'MT4'),
     # ('2', 'PAMM-Master'),
     # ('3', 'CopyTrader-Master'),
@@ -56,7 +56,7 @@ TRADING_PLATFORM_CHOICE = (
 )
 
 ACCOUNT_BASE_CURRENCY_CHOICE = (
-    # ('', 'Please Choose...'),
+    #('', 'Please Choose...'),
     ('0', 'USD'),
     # ('2', 'CNY'),
     # ('3', 'BTC'),
@@ -226,7 +226,7 @@ class FxAccountTransaction(models.Model):
 class FxAccount(models.Model):
     id = models.AutoField(primary_key=True)
 
-    account_type = models.CharField(default='L', max_length=1, blank=False, choices=ACCOUNT_TYPES)
+    account_type = models.CharField(default='0', max_length=1, blank=False, choices=ACCOUNT_TYPES)
     mt4_account = models.CharField(default='', max_length=36, blank=False,null=True)
     balance = models.FloatField(default=0.0, blank=True)
 

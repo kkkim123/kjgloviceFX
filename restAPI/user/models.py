@@ -121,7 +121,7 @@ IS_IB_CHOICES = (
 # )
 
 USER_STATUS_CHOICE = (
-    ('', 'Please Choose...'),
+    ('0', 'Welcome'),
     ('1', 'PENDING EMAIL ADDRESS'),
     ('2', 'CONFIRMED EMAIL ADDRESS'),
     ('3', 'PENDING PROFILE'),
