@@ -35,14 +35,16 @@ export default (state = {}, action) => {
         option: _.map(action.payload)
       };
     case ADD_FILE:
+    case EDIT_FILE:
       return true;
     case GET_FILE:
-        return {
-          file: action.payload
-        };      
+      return {
+        file: action.payload
+      };
     case DELETE_FILE:
-    case EDIT_FILE:
     case ADD_ACCOUNT:
+      console.log(action.payload)
+      return false;
     case GET_ACCOUNT:
     case DELETE_ACCOUNT:
     case GET_TRADING:

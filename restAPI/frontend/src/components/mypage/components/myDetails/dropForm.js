@@ -7,9 +7,6 @@ import { addFile } from "../../../../actions/mypage";
 
 class DropForm extends Component {
   render() {
-    const handleChangeStatus = ({ meta }, status) => {
-        // console.log(status, meta)
-    };
 
     const handleSubmit = (files, allFiles) => {
       allFiles.forEach(f => f.remove());
@@ -21,7 +18,6 @@ class DropForm extends Component {
     return (
       <div className="container my-5">
         <Dropzone
-          onChangeStatus={handleChangeStatus}
           onSubmit={handleSubmit}
           maxFiles={4}
           inputContent="Upload Your Front, Back ID CARD and Passport"

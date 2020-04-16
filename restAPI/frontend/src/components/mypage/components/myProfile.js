@@ -7,7 +7,7 @@ const MyProfile = () => {
         FXTMId: "62249056",
         status: "new",
         contactMethod: "Actions",
-        phone: "+821054295120",
+        phone: "+82113424234",
         email: "fxsample@glovice.com",
         additionalEmail: "testemail@glovice.com",
         partnerId: "dummyId",

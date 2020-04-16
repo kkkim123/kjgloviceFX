@@ -72,10 +72,6 @@ class FinancialForm extends Component {
   };
 
   render() {
-    // if (!this.props.isAuthenticated) {
-    //   return <Redirect to="/login" />;
-    // }
-    console.log;
     return (
       <div className="card card-signin my-5">
         <div className="card-body text-center p-gray">

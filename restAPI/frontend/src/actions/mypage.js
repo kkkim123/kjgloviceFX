@@ -41,16 +41,19 @@ export const getOption = () => async (dispatch, getState) => {
 
 // Add file
 export const addFile = files => async (dispatch, getState) => {
-    console.log(files);
-    const formData = new FormData();
-    formData.append("fxuser", files.fxuser);
-    formData.append("doc_photo_id", files[0].file);
-    formData.append("doc_proof_of_residence", files[1].file);
-    formData.append("doc_photo_id_2", files[2].file);
-    formData.append("doc_proof_of_residence_2", files[3].file);
-    
+  console.log(files);
+  const formData = new FormData();
+  formData.append("fxuser", files.fxuser);
+  formData.append("doc_photo_id", files[0].file);
+  formData.append("doc_proof_of_residence", files[1].file);
+  formData.append("doc_photo_id_2", files[2].file);
+  formData.append("doc_proof_of_residence_2", files[3].file);
 
-  const res = await axios.post("/user/document/new",formData, tokenConfig(getState));
+  const res = await axios.post(
+    "/user/document/new",
+    formData,
+    tokenConfig(getState)
+  );
   dispatch({
     type: ADD_FILE,
     payload: res.data
@@ -58,8 +61,11 @@ export const addFile = files => async (dispatch, getState) => {
 };
 
 // Get file
-export const getFile = () => async ( dispatch, getState) => {
-  const res = await axios.get(`/user/document/${getState().auth.id}`, tokenConfig(getState));
+export const getFile = () => async (dispatch, getState) => {
+  const res = await axios.get(
+    `/user/document/${getState().auth.id}`,
+    tokenConfig(getState)
+  );
   dispatch({
     type: GET_FILE,
     payload: res.data
@@ -67,9 +73,9 @@ export const getFile = () => async ( dispatch, getState) => {
 };
 
 // Delete file
-export const delFile = () => async ( dispatch, getState) => {
+export const delFile = () => async (dispatch, getState) => {
   const res = await axios.delete(
-    `/user/document/${fxuser_id}`,
+    `/user/document/${getState().auth.id}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -79,29 +85,46 @@ export const delFile = () => async ( dispatch, getState) => {
 };
 
 // Edit file
-export const editFile = () => async ( dispatch, getState) => {
-  const res = await axios.patch(
-    `/user/document/${fxuser_id}`,
-    tokenConfig(getState)
-  );
+export const editFile = files => async (dispatch, getState) => {
+  const formData = new FormData();
+  formData.append("fxuser", files.fxuser);
+
+  switch (files.name) {
+    case "id":
+      formData.append("doc_photo_id", files[0].file);
+      break;
+    case "id2":
+      formData.append("doc_photo_id_2", files[0].file);
+      break;
+    case "res":
+      formData.append("doc_proof_of_residence", files[0].file);
+      break;
+    case "res2":
+      formData.append("doc_proof_of_residence_2", files[0].file);
+      break;
+    default:
+      break;
+  }
+
+  const res = await axios.patch(`/user/document/${getState().auth.id}`, formData, tokenConfig(getState));
   dispatch({
-    type: GET_OPTION,
+    type: EDIT_FILE,
     payload: res.data
   });
 };
 
 // Add account
-export const addAccount = () => async dispatch => {
-  const res = await axios.post(`/fxuser/${user_id}`, tokenConfig(getState));
+export const addAccount = () => async (dispatch, getState) => {
+  const res = await axios.post(`/fxuser/${getState().auth.id}`, tokenConfig(getState));
   dispatch({
-    type: GET_OPTION,
+    type: ADD_ACCOUNT,
     payload: res.data
   });
 };
 
 // Get Account
-export const getAccount = () => async dispatch => {
-  const res = await axios.get(`/fxuser/${user_id}`, tokenConfig(getState));
+export const getAccount = () => async (dispatch, getState) => {
+  const res = await axios.get(`/fxuser/${getState().auth.id}`, tokenConfig(getState));
   dispatch({
     type: GET_OPTION,
     payload: res.data
@@ -109,9 +132,9 @@ export const getAccount = () => async dispatch => {
 };
 
 // Delete Account
-export const delAccount = () => async dispatch => {
+export const delAccount = () => async (dispatch, getState) => {
   const res = await axios.delete(
-    `/fxaccount/${user_id}/${account_id}`,
+    `/fxaccount/${getState().auth.id}/${account_id}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -121,9 +144,9 @@ export const delAccount = () => async dispatch => {
 };
 
 // Get Trading history
-export const getTrading = () => async dispatch => {
+export const getTrading = () => async (dispatch, getState) => {
   const res = await axios.get(
-    `/fxaccount/tradinghistory/${user_id}`,
+    `/fxaccount/tradinghistory/${getState().auth.id}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -133,7 +156,7 @@ export const getTrading = () => async dispatch => {
 };
 
 // Get Partner info
-export const partLoad = () => async dispatch => {
+export const partLoad = () => async (dispatch, getState) => {
   const res = await axios.get(
     `/user/myclient/${referral_code}`,
     tokenConfig(getState)
@@ -145,9 +168,9 @@ export const partLoad = () => async dispatch => {
 };
 
 // Get Partner Account
-export const partAccount = () => async dispatch => {
+export const partAccount = () => async (dispatch, getState) => {
   const res = await axios.get(
-    `/fxaccount/clientaccount/${user_id}`,
+    `/fxaccount/clientaccount/${getState().auth.id}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -157,9 +180,9 @@ export const partAccount = () => async dispatch => {
 };
 
 // Get All Partner commision
-export const partsCommision = () => async dispatch => {
+export const partsCommision = () => async (dispatch, getState) => {
   const res = await axios.get(
-    `/fxaccount/commissionhistory/${user_id}`,
+    `/fxaccount/commissionhistory/${getState().auth.id}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -169,9 +192,9 @@ export const partsCommision = () => async dispatch => {
 };
 
 // Get Partner commision
-export const partCommision = () => async dispatch => {
+export const partCommision = () => async (dispatch, getState) => {
   const res = await axios.get(
-    `/fxaccount/commissionhistory/${user_id}/${mt4_login}`,
+    `/fxaccount/commissionhistory/${getState().auth.id}/${mt4_login}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -181,9 +204,9 @@ export const partCommision = () => async dispatch => {
 };
 
 // Add Deposit
-export const addDeposit = () => async dispatch => {
+export const addDeposit = () => async (dispatch, getState) => {
   const res = await axios.post(
-    `/fxaccount/deposit/${user_id}`,
+    `/fxaccount/deposit/${getState().auth.id}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -193,9 +216,9 @@ export const addDeposit = () => async dispatch => {
 };
 
 // Get Deposit
-export const getDeposit = () => async dispatch => {
+export const getDeposit = () => async (dispatch, getState) => {
   const res = await axios.get(
-    `/fxaccount/deposit/${user_id}`,
+    `/fxaccount/deposit/${getState().auth.id}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -205,9 +228,9 @@ export const getDeposit = () => async dispatch => {
 };
 
 // Delete Deposit
-export const delDeposit = () => async dispatch => {
+export const delDeposit = () => async (dispatch, getState) => {
   const res = await axios.delete(
-    `/fxaccount/deposit/${user_id}/${deposit_pk}`,
+    `/fxaccount/deposit/${getState().auth.id}/${deposit_pk}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -217,9 +240,9 @@ export const delDeposit = () => async dispatch => {
 };
 
 // Add withdraw
-export const addWithdraw = () => async dispatch => {
+export const addWithdraw = () => async (dispatch, getState) => {
   const res = await axios.post(
-    `/fxaccount/withdraw/${user_id}`,
+    `/fxaccount/withdraw/${getState().auth.id}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -229,9 +252,9 @@ export const addWithdraw = () => async dispatch => {
 };
 
 // Get Withdraw
-export const getWithdraw = () => async dispatch => {
+export const getWithdraw = () => async (dispatch, getState) => {
   const res = await axios.get(
-    `/fxaccount/withdraw/${user_id}`,
+    `/fxaccount/withdraw/${getState().auth.id}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -241,9 +264,9 @@ export const getWithdraw = () => async dispatch => {
 };
 
 // Delete withdraw
-export const delWithdraw = () => async dispatch => {
+export const delWithdraw = () => async (dispatch, getState) => {
   const res = await axios.get(
-    `/fxaccount/withdraw/${user_id}/${withdraw_pk}`,
+    `/fxaccount/withdraw/${getState().auth.id}/${withdraw_pk}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -253,7 +276,7 @@ export const delWithdraw = () => async dispatch => {
 };
 
 // Get transfer
-export const getTransfer = () => async dispatch => {
+export const getTransfer = () => async (dispatch, getState) => {
   const res = await axios.get(`/fxaccount/transfer`, tokenConfig(getState));
   dispatch({
     type: GET_OPTION,
@@ -262,7 +285,7 @@ export const getTransfer = () => async dispatch => {
 };
 
 // Add Transfer
-export const addTransfer = () => async dispatch => {
+export const addTransfer = () => async (dispatch, getState) => {
   const res = await axios.post(`/fxaccount/transfer`, tokenConfig(getState));
   dispatch({
     type: GET_OPTION,
@@ -271,7 +294,7 @@ export const addTransfer = () => async dispatch => {
 };
 
 // Delete transfer
-export const delTransfer = () => async dispatch => {
+export const delTransfer = () => async (dispatch, getState) => {
   const res = await axios.delete(`/fxaccount/transfer`, tokenConfig(getState));
   dispatch({
     type: GET_OPTION,
@@ -280,7 +303,7 @@ export const delTransfer = () => async dispatch => {
 };
 
 // Add IB
-export const addIb = () => async dispatch => {
+export const addIb = () => async (dispatch, getState) => {
   const res = await axios.get(
     `/user/introducingbroker/new`,
     tokenConfig(getState)
@@ -292,9 +315,9 @@ export const addIb = () => async dispatch => {
 };
 
 // Get IB
-export const getIb = () => async dispatch => {
+export const getIb = () => async (dispatch, getState) => {
   const res = await axios.get(
-    `/user/introducingbroker/${user_id}`,
+    `/user/introducingbroker/${getState().auth.id}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -304,9 +327,9 @@ export const getIb = () => async dispatch => {
 };
 
 // Edit IB
-export const editIb = () => async dispatch => {
+export const editIb = () => async (dispatch, getState) => {
   const res = await axios.patch(
-    `/user/introducingbroker/${user_id}`,
+    `/user/introducingbroker/${getState().auth.id}`,
     tokenConfig(getState)
   );
   dispatch({
