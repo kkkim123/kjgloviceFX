@@ -25,8 +25,6 @@ class AddressForm extends Component {
 
   onSubmit = formValues => {
     // 토큰, 인덱스
-    formValues.user_id = this.props.user.id;
-    formValues.token = this.props.token;
     this.props.registDetail(formValues);
     this.props.history.push("/register/personal");
   };

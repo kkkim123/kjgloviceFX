@@ -30,7 +30,7 @@ ACCOUNT_TRANSACTION_STATUS = (
 
 # TradingTransaction 전용
 ACCOUNT_TYPES = (
-    ('L', 'Live MT4 Account'),
+    ('0', 'Live MT4 Account'),
     #('D', 'Live IB Account'),
     # ('P', 'PAMM-Master'),
     # ('T', 'CopyTrader-Master'),
@@ -47,8 +47,8 @@ ACCOUNT_STATUS = (
 )
 
 TRADING_PLATFORM_CHOICE = (
-    ('', 'Please Choose...'),
-    ('1', 'MT4'),
+    # ('', 'Please Choose...'),
+    ('0', 'MT4'),
     # ('2', 'PAMM-Master'),
     # ('3', 'CopyTrader-Master'),
     # ('4', 'PAMM-Slave'),
@@ -56,8 +56,8 @@ TRADING_PLATFORM_CHOICE = (
 )
 
 ACCOUNT_BASE_CURRENCY_CHOICE = (
-    ('', 'Please Choose...'),
-    ('1', 'USD'),
+    # ('', 'Please Choose...'),
+    ('0', 'USD'),
     # ('2', 'CNY'),
     # ('3', 'BTC'),
     # ('4', 'ETH'),

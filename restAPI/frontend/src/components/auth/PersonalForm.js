@@ -7,9 +7,8 @@ import "../../styles/auth/form.css";
 import { CountryDropdown } from "react-country-region-selector";
 
 class PersonalForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { country: "" };
+  state = {
+    country: ""
   }
 
   selectCountry = val => {
@@ -38,10 +37,8 @@ class PersonalForm extends Component {
   onSubmit = formValues => {
     if (this.state.country) {
       formValues.Nationality = this.state.country;
-      formValues.user_id = this.props.user.id;
-      formValues.token = this.props.token;
       this.props.registDetail(formValues);
-      this.props.history.push("/");
+      this.props.history.push("/main");
     } else {
       alert("Select your Nationality");
     }

@@ -11,11 +11,11 @@ from pygments import highlight
 #from django_countries.fields import CountryField
 from uuid import uuid4
 import datetime
-# LEXERS = [item for item in get_all_lexers() if item[1]]
-# LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
-# STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
-#from model_utils import Choices
-#from django_countries.fields import CountryField
+import json, configparser
+
+#config = configparser.ConfigParser()
+#config.read('common/config/config.ini')
+
 USER_TYPES = (
     #('', 'Please Choose...'),
     ('R', 'Retail'),

@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { reduxForm } from "redux-form";
-import { getFile, delFile, editFile } from "../../../../actions/mypage";
+import { getFile, editFile } from "../../../../actions/mypage";
 import "react-dropzone-uploader/dist/styles.css";
 import Dropzone from "react-dropzone-uploader";
 import Moment from 'moment';
 
-class DocEdit extends Component {
+class DocDetail extends Component {
   componentDidMount() {
     this.props.getFile(this.props.auth.id);
   }
@@ -155,6 +155,6 @@ const mapStateToProps = state => ({
   file: state.mypage.file
 });
 
-DocEdit = connect(mapStateToProps, { getFile,editFile })(DocEdit);
+DocDetail = connect(mapStateToProps, { getFile,editFile })(DocDetail);
 
-export default reduxForm({ form: "docEdit" })(DocEdit);
+export default reduxForm({ form: "docDetail" })(DocDetail);

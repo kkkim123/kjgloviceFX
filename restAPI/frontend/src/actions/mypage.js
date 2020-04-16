@@ -51,7 +51,6 @@ export const getAccOption = () => async (dispatch, getState) => {
 
 // Add file
 export const addFile = files => async (dispatch, getState) => {
-  console.log(files);
   const formData = new FormData();
   formData.append("fxuser", files.fxuser);
   formData.append("doc_photo_id", files[0].file);
@@ -124,8 +123,18 @@ export const editFile = files => async (dispatch, getState) => {
 };
 
 // Add account
-export const addAccount = () => async (dispatch, getState) => {
-  const res = await axios.post(`/fxuser/${getState().auth.id}`, tokenConfig(getState));
+export const addAccount = ({account_type, base_currency, trading_platform, leverage, account_name}) => async (dispatch, getState) => {
+  const body = JSON.stringify({
+    account_type,
+    base_currency,
+    trading_platform,
+    leverage,
+    account_name,
+    user: getState().auth.id,
+    referral_code: getState().auth.user.referral_code === null ? 2002 : getState().auth.user.referral_code
+  });
+
+  const res = await axios.post(`/fxaccount/${getState().auth.id}`,body, tokenConfig(getState));
   dispatch({
     type: ADD_ACCOUNT,
     payload: res.data
@@ -134,23 +143,24 @@ export const addAccount = () => async (dispatch, getState) => {
 
 // Get Account
 export const getAccount = () => async (dispatch, getState) => {
-  const res = await axios.get(`/fxuser/${getState().auth.id}`, tokenConfig(getState));
+  const res = await axios.get(`/fxaccount/${getState().auth.id}`, tokenConfig(getState));
   dispatch({
-    type: GET_USER_OPTION,
+    type: GET_ACCOUNT,
     payload: res.data
   });
 };
 
 // Delete Account
-export const delAccount = () => async (dispatch, getState) => {
-  const res = await axios.delete(
-    `/fxaccount/${getState().auth.id}/${account_id}`,
+export const delAccount = id => async (dispatch, getState) => {
+  await axios.delete(
+    `/fxaccount/${getState().auth.id}/${id}`,
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_USER_OPTION,
-    payload: res.data
+    type: DELETE_ACCOUNT,
+    payload: id
   });
+  history.push('/mypage/details/account/detail')
 };
 
 // Get Trading history

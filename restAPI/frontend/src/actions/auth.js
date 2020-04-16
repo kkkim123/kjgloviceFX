@@ -84,9 +84,6 @@ export const registDetail = ({
   Nationality,
   birthday,
   mobile,
-  user_id,
-  token,
-  user_status,
   //    mypage/employForm
   employment_status,
   industry,
@@ -96,15 +93,10 @@ export const registDetail = ({
   annual_income,
   income_source,
   trading_experience,
-  trading_period
+  trading_period,
+
+  user_status
 }) => async (dispatch, getState) => {
-  // // Headers
-  // const config = {
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     Authorization: `Token ${token}`
-  //   }
-  // };
 
   // Request Body
   const body = JSON.stringify({
@@ -114,7 +106,6 @@ export const registDetail = ({
     Nationality,
     birthday,
     mobile,
-    user_status,
     employment_status,
     industry,
     employment_position,
@@ -122,11 +113,13 @@ export const registDetail = ({
     annual_income,
     income_source,
     trading_experience,
-    trading_period
+    trading_period,
+
+    user_status,
   });
   
   try {
-    const res = await axios.patch(`/user/${user_id}`, body, tokenConfig(getState));
+    const res = await axios.patch(`/user/${getState().auth.id}`, body, tokenConfig(getState));
     dispatch({
       type: REGISTER_DETAIL_SUCCESS,
       payload: res.data

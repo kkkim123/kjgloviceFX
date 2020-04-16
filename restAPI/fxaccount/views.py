@@ -1,5 +1,5 @@
 from .models import FxAccount,DepositTransaction,WithdrawTransaction,FxAccountTransaction
-from .models import LEVERAGE_CHOICES,DEPOSIT_METHOD_CHOICE,WITHDRAW_METHOD_CHOICE
+from .models import ACCOUNT_TYPES,ACCOUNT_BASE_CURRENCY_CHOICE,TRADING_PLATFORM_CHOICE,LEVERAGE_CHOICES,DEPOSIT_METHOD_CHOICE,WITHDRAW_METHOD_CHOICE
 from user.models import IntroducingBroker
 from .serializers import FxAccountSerializer,DepositSerializer,WithdrawSerializer,WithdrawSerializer,FxAccountTransactionSerializer
 from rest_framework import generics
@@ -19,6 +19,10 @@ from django.views import View
 class ChoicesView(View):
     def get(self, request):
         dummy_data = {
+            'account_type' : json.dumps([x[1] for x in ACCOUNT_TYPES]),
+            'base_currency' : json.dumps([x[1] for x in ACCOUNT_BASE_CURRENCY_CHOICE]),
+            'trading_platform' : json.dumps([x[1] for x in TRADING_PLATFORM_CHOICE]),
+
             'leverage' : json.dumps([x[1] for x in LEVERAGE_CHOICES]),
             'dp_payment_method' : json.dumps([x[1] for x in DEPOSIT_METHOD_CHOICE] ),
             'wd_payment_method' : json.dumps([x[1] for x in WITHDRAW_METHOD_CHOICE] ),

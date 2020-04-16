@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
-import store from "../../../../store";
-import { addAccount } from "../../../../actions/auth";
+import { registDetail } from "../../../../actions/auth";
+import { addAccount } from "../../../../actions/mypage";
 import "../../../../styles/auth/form.css";
 
 class AccountForm extends Component {
-  renderField = ({ input, placeholder, type, disabled, meta: { touched, error } }) => {
+  renderField = ({ input, placeholder, type, disabled,value, meta: { touched, error } }) => {
     return (
       <div
         className={`form-label-group
@@ -19,6 +18,7 @@ class AccountForm extends Component {
           className="form-control"
           placeholder={placeholder}
           readOnly={disabled}
+          value={value}
         />
         {touched && error && <span className="">{error}</span>}
       </div>
@@ -26,38 +26,37 @@ class AccountForm extends Component {
   };
 
   selectField = ({ input, placeholder, index, meta: { touched, error } }) => {
-    // const optList =
-    //   this.props.options &&
-    //   JSON.parse(this.props.options[index]).map((opt, i) => {
-    //     return (
-    //       <option value={i} key={i}>
-    //         {opt}
-    //       </option>
-    //     );
-    //   });
-    // return (
-    //   <div
-    //     className={`form-label-group
-    //     ${touched && error ? "error" : ""}`}
-    //   >
-    //     <select {...input} className="form-control">
-    //       <option>{placeholder}</option>
-    //       {optList}
-    //     </select>
-    //     {touched && error && <span className="">{error}</span>}
-    //   </div>
-    // );
+    const optList =
+      this.props.options &&
+      JSON.parse(this.props.options[index]).map((opt, i) => {
+        return (
+          <option value={i} key={i}>
+            {opt}
+          </option>
+        );
+      });
+    return (
+      <div
+        className={`form-label-group
+        ${touched && error ? "error" : ""}`}
+      >
+        <select {...input} className="form-control">
+          <option>{placeholder}</option>
+          {optList}
+        </select>
+        {touched && error && <span className="">{error}</span>}
+      </div>
+    );
   };
 
   onSubmit = formValues => {
-      console.log(formValues);
-      return false;
+    formValues.user_status = 7;
     this.props.addAccount(formValues);
-    // this.props.history.push("/mypage/details/financial");
+    this.props.registDetail(formValues);
+    this.props.history.push("/mypage/details/account/detail");
   };
 
   render() {
-    console.log(this.props.options)
     return (
       <div className="container">
         <div className="card card-signin my-5">
@@ -67,7 +66,7 @@ class AccountForm extends Component {
               className="form-signin text-left"
               onSubmit={this.props.handleSubmit(this.onSubmit)}
             >
-              {/* <Field
+              <Field
                 name="account_type"
                 component={this.selectField}
                 placeholder="Account Type*"
@@ -84,21 +83,21 @@ class AccountForm extends Component {
                 validate={required}
               />
               <Field
+                name="trading_platform"
+                component={this.selectField}
+                placeholder="Trading Platform*"
+                index="2"
+                options={this.props.options}
+                validate={required}
+              />              
+              <Field
                 name="leverage"
                 component={this.selectField}
                 placeholder="Leverage*"
-                index="2"
+                index="3"
                 options={this.props.options}
                 validate={required}
               />
-              <Field
-                name="trading_platform"
-                component={this.selectField}
-                placeholder="Trading Platform?*"
-                index="2"
-                options={this.props.options}
-                validate={required}
-              /> */}
               <Field
                 name="account_name"
                 type="text"
@@ -109,14 +108,14 @@ class AccountForm extends Component {
                 name="referral_code"
                 type="text"
                 component={this.renderField}
-                placeholder="Referral Code"
+                placeholder={this.props.auth && this.props.auth.user && this.props.auth.user.referral_code ? this.props.auth.user.referral_code : 'Referral Code'}
                 disabled={true}
               />
               <button
                 className="btn btn-lg btn-primary btn-block mt-10"
                 type="submit"
               >
-                Create Account
+                Create New Account
               </button>
             </form>
           </div>
@@ -133,7 +132,7 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-AccountForm = connect(mapStateToProps, { addAccount })(AccountForm);
+AccountForm = connect(mapStateToProps, { registDetail, addAccount })(AccountForm);
 
 export default reduxForm({
   form: "accountForm"

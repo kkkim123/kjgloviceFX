@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
 import { registDetail } from "../../../../actions/auth";
@@ -65,8 +64,6 @@ class FinancialForm extends Component {
 
   onSubmit = formValues => {
     formValues.user_status = 4;
-    formValues.user_id = this.props.auth.user.id;
-    formValues.user_id = this.props.auth.user.id;
     this.props.registDetail(formValues);
     this.props.history.push("/mypage");
   };

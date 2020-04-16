@@ -46,7 +46,8 @@ import EmployForm from "./mypage/components/myDetails/employForm";
 import FinancialForm from "./mypage/components/myDetails/financialForm";
 import DropForm from "./mypage/components/myDetails/dropForm";
 import AccountForm from "./mypage/components/myDetails/accountForm";
-import DocEdit from "./mypage/components/myDetails/docEdit";
+import DocDetail from "./mypage/components/myDetails/docDetail";
+import AccountDetail from "./mypage/components/myDetails/accountDetail";
 
 
 class App extends Component {
@@ -99,8 +100,9 @@ class App extends Component {
             <Route exact path="/mypage/details/employment" component={EmployForm} />
             <Route exact path="/mypage/details/financial" component={FinancialForm} />
             <Route exact path="/mypage/details/document" component={DropForm} />
-            <Route exact path="/mypage/details/document/edit" component={DocEdit} />
+            <Route exact path="/mypage/details/document/detail" component={DocDetail} />
             <Route exact path="/mypage/details/account" component={AccountForm} />
+            <Route exact path="/mypage/details/account/detail" component={AccountDetail} />
           </Switch>
           <Footer />
         </Router>
