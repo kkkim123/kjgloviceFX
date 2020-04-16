@@ -174,8 +174,8 @@ DJOSER = {
     #"USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
     #'ACTIVATION_URL': 'auth/user/activation?uid={uid}&token={token}',
     'ACTIVATION_URL': 'auth/users/activation/{uid}/{token}',
-    #'SEND_ACTIVATION_EMAIL': True,
-    'SEND_ACTIVATION_EMAIL': False,
+    'SEND_ACTIVATION_EMAIL': True,
+    #'SEND_ACTIVATION_EMAIL': False,
     'SEND_CONFRIMATION_EMAIL':True,
     'SERIALIZERS': {
         "activation": "djoser.serializers.ActivationSerializer",
@@ -225,7 +225,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'sungchang@fbpasia.com'
-EMAIL_HOST_PASSWORD=''
+EMAIL_HOST_PASSWORD='Z&7DU@xq+F#G#gNS'
 EMAIL_PORT = 587
 
 
