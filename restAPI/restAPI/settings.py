@@ -235,10 +235,13 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
+CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
+CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
+config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
 
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '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'
+EMAIL_HOST_PASSWORD = config_secret['sendgrid']['api_key_id']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False   # 프로덕션에서는 True로 설정 필요
