@@ -110,17 +110,28 @@ class FxAccountTransferViews(generics.ListCreateAPIView,generics.DestroyAPIView)
 
 #조회
 class TradingHistoryViews(generics.ListAPIView):
-    #permission_classes=[IsFKOwnerOnly,IsAuthenticated]
+    permission_classes=[IsFKOwnerOnly,IsAuthenticated]
     def get(self,request,*args, **kwargs):
-        #permission_classes=[IsFKOwnerOnly,IsAuthenticated]
-        from_date = request.data['from_date']
-        to_date = request.data['to_date']
-        print(from_date)
-        queryset = FxAccount.objects.filter(fxuser = kwargs['user'])
+        permission_classes=[IsFKOwnerOnly,IsAuthenticated]
+        # from_date = request.data['from_date']
+        # to_date = request.data['to_date']
+        from_date = request.GET['from_date']
+        to_date = request.GET['to_date']
+        page = int(request.GET['page'])
+
+
+        if page == 1:
+            page = (page - 1) * 5
+        else:
+            page = 5
+        
+        queryset = FxAccount.objects.filter(user = kwargs['user'])
         #serializer_class = FxAccountSerializerkwargs['user']
         #accRows = queryset
         #print(queryset[0].mt4_account)
         historyRows = []
+        historyRows2 = 0
+
         for acc in queryset : 
             with connections['backOffice'].cursor() as cursor:
                 cursor.execute("set @CumSum := 0;")
@@ -128,12 +139,32 @@ class TradingHistoryViews(generics.ListAPIView):
                 + "(@CumSum := @CumSum + PROFIT) as TOT_PROFIT from MT4_TRADES where LOGIN = " + acc.mt4_account 
                 +" AND OPEN_TIME >= '" + from_date + " 0:0:0' "
                 +" AND OPEN_TIME <= '" + to_date  + " 23:59:59' "
-                +" AND CMD < 5 order by OPEN_TIME;")
+                +" AND CMD < 5 order by OPEN_TIME LIMIT " + str(page) + ",5;")
                 #print(cursor.description)
                 columns = [col[0] for col in cursor.description]
                 historyRows += [list(zip(columns, row)) for row in cursor.fetchall()]
                 #historyRows.update(historyRows2)  SUM ('PROFIT') OVER (ORDER BY 'TICKET' ASC) as TOT_PROFIT
+        
+
+        for acc in queryset : 
+            with connections['backOffice'].cursor() as cursor:
+                cursor.execute("select COUNT(*)"
+                + "from MT4_TRADES where LOGIN = " + acc.mt4_account 
+                +" AND OPEN_TIME >= '" + from_date + " 0:0:0' "
+                +" AND OPEN_TIME <= '" + to_date  + " 23:59:59' "
+                +" AND CMD < 5 order by OPEN_TIME;")      
+                #print(cursor.description)
+                columns = [col[0] for col in cursor.description]
+                # print(cursor.fetchall())
+                for q in cursor.fetchall():
+                    historyRows2 += q[0]
+                #historyRows.update(historyRows2)  SUM ('PROFIT') OVER (ORDER BY 'TICKET' ASC) as TOT_PROFIT
+        
+        cnt_dict = {'cnt': historyRows2}
+        # json_val2 = json.dumps(historyRows2,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
+        historyRows += [historyRows2]
         json_val = json.dumps(historyRows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
+        # json_val.cnt = json_val2
         return HttpResponse(json_val)
 #조회
 class ClientAccountListViews(generics.ListAPIView):
@@ -158,8 +189,10 @@ class CommissionHistoryViews(generics.ListAPIView):
     permission_classes=[IsAuthenticated]
     def get(self,request,*args, **kwargs ):
         permission_classes=[IsAuthenticated]
-        from_date = request.data['from_date']
-        to_date = request.data['to_date']
+        # from_date = request.data['from_date']
+        # to_date = request.data['to_date']
+        from_date = request.GET['from_date']
+        to_date = request.GET['to_date']
         queryset = IntroducingBroker.objects.filter(fxuser = kwargs['user'])
         rows = []
         for ib in queryset : 

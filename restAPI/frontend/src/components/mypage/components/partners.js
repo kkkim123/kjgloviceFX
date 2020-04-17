@@ -66,8 +66,8 @@ const Partners = () => {
 
     const RowList = (Props) => {
         const dummy = Props.dummy;
-        const rowList = dummy.map((rowData) =>
-            <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize: "1.0rem", padding: "0.8rem" }}>
+        const rowList = dummy.map((rowData,i) => {
+            <div className="d-flex justify-content-between" key={i} style={{ borderTop: "1px solid #000000", color: "#929292", fontSize: "1.0rem", padding: "0.8rem" }}>
                 <div className="ml-2" style={{ width: "19%" }}><span>{rowData.magicCummunity}</span></div>
                 <div className="ml-2" style={{ width: "9%" }}><span>{rowData.trades}</span></div>
                 <div className="ml-2" style={{ width: "9%" }}><span>{rowData.grossProfit}</span></div>
@@ -79,7 +79,7 @@ const Partners = () => {
                 <div className="ml-2" style={{ width: "9%" }}><span>{rowData.losers}</span></div>
                 <div className="ml-2" style={{ width: "9%" }}><span>{rowData.losersPercentage}</span></div>
             </div>
-        )
+        })
 
         return (
             rowList

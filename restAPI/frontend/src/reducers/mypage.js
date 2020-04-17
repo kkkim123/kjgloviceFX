@@ -46,19 +46,23 @@ export default (state = {}, action) => {
       return true;
     case GET_FILE:
       return {
+        ...state,
         file: action.payload
       };
     case DELETE_FILE:
     
     case GET_ACCOUNT:
       return { 
+        ...state,
         account: _.map(action.payload)
       }
     case DELETE_ACCOUNT:
         return _.omit(state, action.payload);
     case GET_TRADING:
-      console.log(action.payload);
-      return false;
+        return { 
+          ...state,
+          history: _.map(action.payload)
+        }
     case PART_LOADED:
     case PART_ACCOUNT:
     case PARTS_COMMISION:

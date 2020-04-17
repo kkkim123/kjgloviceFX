@@ -71,7 +71,7 @@ class account extends Component {
           </div>
         </div>
         {this.props.account &&
-          this.props.account.map(rowData => {
+          this.props.account.map((rowData,i) => {
             let account_type = "";
             let base_currency = "";
             switch (Number(rowData.account_type)) {
@@ -114,6 +114,7 @@ class account extends Component {
                   fontSize: "1.2rem",
                   padding: "0.8rem"
                 }}
+                key={i}
               >
                 <div className="ml-2" style={{ width: "15%" }}>
                   {account_type}
