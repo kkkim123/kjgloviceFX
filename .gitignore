@@ -145,6 +145,7 @@ thumb
 sketch
 
 ### VisualStudioCode ###
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -166,4 +167,5 @@ config_secret/
 restAPI/common/config/
 restAPI/media/
 .config/
-
+.config
+.config/*
