@@ -24,16 +24,11 @@ class IBAdmin(admin.ModelAdmin):
             return
         cursor =  connections['backOffice'].cursor()
 
-<<<<<<< Updated upstream
-        ibs = queryset.values_list('company_idx', 'parent_idx','ib_code','ib_name','point', 'live_yn', 'email', 'send_report')
-
-=======
-        ibs = queryset.values_list('company_idx', 'parent_idx', 'ib_code','ib_name'
-                                           ,'point', 'live_yn', 'email', 'password','send_report','back_index')
+        ibs = queryset.values_list('company_idx', 'parent_idx', 'ib_code','ib_name','point', 'live_yn', 'email', 'password','send_report')
         if(ibs.count < 1) :
             self.message_user(request, 'not found')
             return
->>>>>>> Stashed changes
+
         for ib in ibs:
             print(ib[2])
             cursor.callproc("SP_IB_CHECKING_ID", (ib[2],))
@@ -108,16 +103,12 @@ class IBAdmin(admin.ModelAdmin):
         old_parent_idx = 0
         for row in cursor.fetchall():
             old_parent_idx = row[2]
-<<<<<<< Updated upstream
-        ibs = queryset.values_list('back_index', 'parent_idx','ib_code')
-
-=======
-        
+      
         ibs = queryset.values_list('back_index', 'parent_idx')
         # if(ibs.count < 1) :
         #     self.message_user(request, 'back_index is not found')
         #     return
->>>>>>> Stashed changes
+
         for ib in ibs:
             cursor.nextset()
             cursor.callproc("SP_IB_STRUCTURE_MOVE", (ib[0],ib[1],old_parent_idx))    
