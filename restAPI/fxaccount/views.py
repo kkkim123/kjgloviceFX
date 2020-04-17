@@ -112,11 +112,11 @@ class FxAccountTransferViews(generics.ListCreateAPIView,generics.DestroyAPIView)
 class TradingHistoryViews(generics.ListAPIView):
     #permission_classes=[IsFKOwnerOnly,IsAuthenticated]
     def get(self,request,*args, **kwargs):
-        #permission_classes=[IsFKOwnerOnly,IsAuthenticated]
+        permission_classes=[IsFKOwnerOnly,IsAuthenticated]
         from_date = request.data['from_date']
         to_date = request.data['to_date']
         print(from_date)
-        queryset = FxAccount.objects.filter(fxuser = kwargs['user'])
+        queryset = FxAccount.objects.filter(user = kwargs['user'])
         #serializer_class = FxAccountSerializerkwargs['user']
         #accRows = queryset
         #print(queryset[0].mt4_account)

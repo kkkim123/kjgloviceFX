@@ -262,19 +262,19 @@ def user_residence_directory_path(instance, filename):
 class FxUserDocument(models.Model):
     fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
 
-    doc_photo_id = models.FileField(upload_to=user_id_directory_path, blank=True, null=True)
+    doc_photo_id = models.FileField(upload_to=user_id_directory_path, blank=True, null=True,verbose_name="photo id 1")
     doc_photo_id_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
     doc_photo_id_updated_at = models.DateTimeField(auto_now=True)
 
-    doc_proof_of_residence = models.FileField(upload_to=user_residence_directory_path, blank=True, null=True)
+    doc_proof_of_residence = models.FileField(upload_to=user_residence_directory_path, blank=True, null=True,verbose_name="residence 1")
     doc_proof_of_residence_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
     doc_proof_of_residence_updated_at = models.DateTimeField(auto_now=True)
 
-    doc_photo_id_2 = models.FileField(upload_to=user_id_directory_path, blank=True, null=True)
+    doc_photo_id_2 = models.FileField(upload_to=user_id_directory_path, blank=True, null=True,verbose_name="photo id 1")
     doc_photo_id_2_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
     doc_photo_id_2_updated_at = models.DateTimeField(auto_now=True)
 
-    doc_proof_of_residence_2 = models.FileField(upload_to=user_residence_directory_path, blank=True, null=True)
+    doc_proof_of_residence_2 = models.FileField(upload_to=user_residence_directory_path, blank=True, null=True,verbose_name="residence 2")
     doc_proof_of_residence_2_status = models.CharField(default='P', max_length=1, blank=True, choices=DOC_STATUS)
     doc_proof_of_residence_2_updated_at = models.DateTimeField(auto_now=True)
 

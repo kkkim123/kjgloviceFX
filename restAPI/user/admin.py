@@ -24,8 +24,16 @@ class IBAdmin(admin.ModelAdmin):
             return
         cursor =  connections['backOffice'].cursor()
 
+<<<<<<< Updated upstream
         ibs = queryset.values_list('company_idx', 'parent_idx','ib_code','ib_name','point', 'live_yn', 'email', 'send_report')
 
+=======
+        ibs = queryset.values_list('company_idx', 'parent_idx', 'ib_code','ib_name'
+                                           ,'point', 'live_yn', 'email', 'password','send_report','back_index')
+        if(ibs.count < 1) :
+            self.message_user(request, 'not found')
+            return
+>>>>>>> Stashed changes
         for ib in ibs:
             print(ib[2])
             cursor.callproc("SP_IB_CHECKING_ID", (ib[2],))
@@ -75,7 +83,9 @@ class IBAdmin(admin.ModelAdmin):
 
         ibs = queryset.values_list('back_index', 'parent_idx', 'ib_code','ib_name'
                                     ,'point', 'email', 'send_report','password')
-
+        if(ibs.count < 1) :
+            self.message_user(request, 'not found')
+            return
         for ib in ibs:
             cursor.callproc("SP_IB_STRUCTURE_EDIT", (ib[0],ib[1],ib[2],ib[3],ib[4],ib[5],1 if ib[6] == 'Y' else 0,ib[7]))           
             self.message_user(request, 'SP_IB_STRUCTURE_EDIT {}'.format(cursor.fetchall()))
@@ -90,13 +100,24 @@ class IBAdmin(admin.ModelAdmin):
         cursor =  connections['backOffice'].cursor()
 
         ibs = queryset.values_list('back_index')
+        if(ibs.count < 1) :
+            self.message_user(request, 'back_index is not found')
+            return
         cursor.callproc("SP_IB_STRUCTURE_GET_ITEM", (ibs[0]))
         #print(cursor.fetchall())
         old_parent_idx = 0
         for row in cursor.fetchall():
             old_parent_idx = row[2]
+<<<<<<< Updated upstream
         ibs = queryset.values_list('back_index', 'parent_idx','ib_code')
 
+=======
+        
+        ibs = queryset.values_list('back_index', 'parent_idx')
+        # if(ibs.count < 1) :
+        #     self.message_user(request, 'back_index is not found')
+        #     return
+>>>>>>> Stashed changes
         for ib in ibs:
             cursor.nextset()
             cursor.callproc("SP_IB_STRUCTURE_MOVE", (ib[0],ib[1],old_parent_idx))    
@@ -128,7 +149,7 @@ class DocumentAdmin( admin.ModelAdmin):
 
     list_editable = ('doc_photo_id_status','doc_proof_of_residence_status','doc_photo_id_2_status','doc_proof_of_residence_2_status')
     list_filter = ['created_at']
-    actions = ['levelUpUser']
+    #actions = ['levelUpUser']
     def save_model(self, request, obj, form, change):
         fxuser = FxUser.objects.get(id = obj.fxuser_id)
         if(obj.doc_photo_id_status =='A'
