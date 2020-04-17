@@ -307,7 +307,7 @@ class IntroducingBroker(models.Model):
     point = models.IntegerField(blank=True)
     live_yn = models.CharField(blank=True, max_length=1, null=True)
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=240, null=True)
+    #password = models.CharField(max_length=240, null=True)
     send_report = models.CharField(blank=True, max_length=1, null=True)
     back_index = models.IntegerField(blank=True, null=True)
     referralurl = models.URLField(blank=True, null=True)
