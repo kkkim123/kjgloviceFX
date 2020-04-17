@@ -24,12 +24,12 @@ const MyProfile = () => {
                 <div className="d-flex justify-content-center my-5">
                     <div className="mx-4" style={{ borderRadius: "20px", backgroundColor: "#ffffff", color: "#0E112C", width: "40%", padding: "4rem" }}>
                         <h3 style={{ color: "#006536" }}>{dummy.lastName} {dummy.firstName}</h3>
-                        <h3 style={{ color: "#000000" }}>MyFXTM ID: {dummy.FXTMId}</h3>
+                        <h3 style={{ color: "#000000" }}>gloviceFX ID: {dummy.FXTMId}</h3>
                     </div>
                     <div className="mx-4" style={{ borderRadius: "20px", backgroundColor: "#ffffff", color: "#0E112C", width: "40%", padding: "4rem" }}>
                         <h3>Satus: <span style={{ color: "#006536" }}>{dummy.status}</span></h3>
                         <span style={{ color: "#929292", fontSize: "0.8rem" }}>
-                            <p style={{ margin: "0" }}>To gain access to all the features within MyFXTM,</p>
+                            <p style={{ margin: "0" }}>To gain access to all the features within gloviceFX,</p>
                             <p>
                                 please
                                 <a style={{ color: "#006536", textDecoration: "none !important", cursor: "pointer" }} href="#">

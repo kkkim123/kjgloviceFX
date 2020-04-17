@@ -57,6 +57,8 @@ export default (state = {}, action) => {
     case DELETE_ACCOUNT:
         return _.omit(state, action.payload);
     case GET_TRADING:
+      console.log(action.payload);
+      return false;
     case PART_LOADED:
     case PART_ACCOUNT:
     case PARTS_COMMISION:

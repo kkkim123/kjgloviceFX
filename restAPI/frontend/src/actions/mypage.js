@@ -170,7 +170,7 @@ export const getTrading = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_USER_OPTION,
+    type: GET_TRADING,
     payload: res.data
   });
 };

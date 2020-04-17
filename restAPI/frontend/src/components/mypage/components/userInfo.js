@@ -2,17 +2,17 @@ import React from 'react';
 
 const UserInfo = (Props) => {
     return (
-        <div className="d-flex shadow py-3 px-4" style={{width:"66%", borderRadius: "20px", backgroundColor: "#006536", color: "#ffffff" }}>
+        <div className="d-flex shadow py-3 px-4" style={{width:"100%", borderRadius: "20px", backgroundColor: "#006536", color: "#ffffff" }}>
             <div className="justify-content-center align-items-center rounded-circle mr-4" style={{ border: "5px solid #ffffff", backgroundColor: "#aaaaaa", width: "150px", height: "150px" }}></div>
             <div className="d-flex flex-column justify-content-around text-left mr-4" style={{ color: "#ffffff" }}>
-                <p>First Name : {Props.firstName}</p>
-                <p>Last Name : {Props.lastName}</p>
-                <p>Email : {Props.email}</p>
+                <p>First Name : {Props.data && Props.data.first_name}</p>
+                <p>Last Name : {Props.data && Props.data.last_name}</p>
+                <p>Email : {Props.data && Props.data.email}</p>
             </div>
             <div className="d-flex flex-column justify-content-around text-left" style={{ color: "#ffffff" }}>
-                <p>CIS Number : {Props.CISNumber}</p>
-                <p>Old Customer ID : {Props.oldCustomerId}</p>
-                <p>Mother branch name : {Props.motherBranchName}</p>
+                <p>User Type : {Props.data && Props.data.user_type === "R" ? "Retail" : "IB"}</p>
+                <p>Referral Code : {Props.data && Props.data.referral_code ? Props.data.referral_code : 'none' }</p>
+                <p>Referral WebSite : {Props.data && Props.data.referral_website ? Props.data.referral_website : 'none'}</p>
             </div>
         </div>
     );

@@ -80,7 +80,7 @@ class MpHeader extends Component {
             <a href="#">Trading</a>
           </div>
           <div className="pt-4">
-            <a href="#">FXTM Invest</a>
+            <a href="#">gloviceFX Invest</a>
           </div>
           <div className="pt-4">
             <a href="#">Promotions</a>

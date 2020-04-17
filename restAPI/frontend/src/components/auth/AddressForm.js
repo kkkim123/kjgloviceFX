@@ -30,9 +30,6 @@ class AddressForm extends Component {
   };
 
   render() {
-    if (!this.props.token && !this.props.isAuthenticated) {
-      return <Redirect to="/login" />;
-    }
     return (
       <div className="container">
         <div className="row">

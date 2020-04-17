@@ -17,7 +17,6 @@ class MyPage extends Component {
     
     render() {
         const { user } = this.props.auth;
-
     return (
         <div>
             {/* <MpHeader /> */}
@@ -25,32 +24,27 @@ class MyPage extends Component {
                 status={user && user.user_status}
             />
             <NoticeBox
-                title="Welcome to MyFXTM"
+                title="Welcome to gloviceFX"
                 subtitle=" - your personal client area"
-                content1="Your MyFXTM User ID: "
+                content1="Your gloviceFX User ID: "
                 id="62249056"
                 content2="We have sent your login information to your email."
             />
             <NoticeBox
                 title="Success!"
                 subtitle=""
-                content1="There’s never been a better time to trade with FXTM!"
+                content1="There’s never been a better time to trade with gloviceFX!"
                 id=""
                 content2=" Get 30% back on every deposit you make for 30days all the way up to The Big $5000! T&Cs apply"
             />
             <div className="container d-flex justify-content-between my-5">
                 <UserInfo
-                    firstName="James"
-                    lastName="Allen"
-                    CISNumber="C0000513"
-                    oldCustomerId="12345"
-                    email="user@email.com"
-                    motherBranchName="Branch01 - Head Office"
+                    data={user}
                 />
-                <InBox
+                {/* <InBox
                     messagesNum="1"
                     unreedNum="2"
-                />
+                /> */}
             </div>
 
             <div className="container d-flex justify-content-between my-5">
@@ -70,7 +64,7 @@ class MyPage extends Component {
             <Account />
             <TradingHistory />
             <Partners />
-            <MyProfile />
+            {/* <MyProfile /> */}
         </div>
     );
     };

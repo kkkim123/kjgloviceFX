@@ -45,9 +45,6 @@ class PersonalForm extends Component {
   };
 
   render() {
-    if (!this.props.token && !this.props.isAuthenticated) {
-      return <Redirect to="/login" />;
-    }
     const { country } = this.state;
     return (
       <div className="container">
