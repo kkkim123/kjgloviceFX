@@ -13,6 +13,7 @@ export const RESET_SUCCESS = 'RESET_SUCCESS';
 export const RESET_FAIL = 'RESET_FAIL';
 export const EMAIL_ACTIVATE = 'EMAIL_ACTIVATE';
 export const EMAIL_ACTIVATE_FAIL = 'EMAIL_ACTIVATE_FAIL';
+export const FOOTER_LOADING = 'FOOTER_LOADING';
 
 //mypage
 //select box user option

@@ -9,55 +9,29 @@ import iconInstagram from "../../images/icon_instagram.png";
 import iconYoutube from "../../images/icon_youtube.png";
 import iconGoogle from "../../images/icon_google.png";
 
+import { getMetaQuotes } from "../../actions/footer"; 
+
 class Footer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      GOLD: 1477.53,
-      EURUSD: 1.11377,
-      GBPUSD: 1.31024,
-      USOIL: 60.493,
-      AAPL: 280.75,
-      SP500: 2798.5
-    };
+  }
+  componentDidMount() {
+    this.props.getMetaQuotes();
   }
 
   render() {
-    const { isAuthenticated } = this.props.auth;
+    const { isAuthenticated, data } = this.props;
 
     return (
       <div className="footer">
         <div className="d-flex justify-content-center align-content-center flex-wrap ft1">
-          <div className="item">
-            <span className="name">GOLD</span>
+          {this.props.data && this.props.data.map((item, i) => (
+          <div className="item" key={i}>
+            <span className="name">{item.key}</span>
             <br></br>
-            <span className="value">{this.state.GOLD}</span>
+            <span className="value">{item.value}</span>
           </div>
-          <div className="item">
-            <span className="name">EURUSD</span>
-            <br></br>
-            <span className="value">{this.state.EURUSD}</span>
-          </div>
-          <div className="item">
-            <span className="name">GBPUSD</span>
-            <br></br>
-            <span className="value">{this.state.GBPUSD}</span>
-          </div>
-          <div className="item">
-            <span className="name">USOIL</span>
-            <br></br>
-            <span className="value">{this.state.USOIL}</span>
-          </div>
-          <div className="item">
-            <span className="name">AAPL</span>
-            <br></br>
-            <span className="value">{this.state.AAPL}</span>
-          </div>
-          <div className="item">
-            <span className="name">SP500</span>
-            <br></br>
-            <span className="value">{this.state.SP500}</span>
-          </div>
+          ))}
           <div className="item">
             <span className="name">Invest Responsibly:</span>
             <br></br>
@@ -125,8 +99,9 @@ class Footer extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  data: state.footer.quotes
 });
 
-export default connect(mapStateToProps, { logout })(Footer);
+export default connect(mapStateToProps, { getMetaQuotes })(Footer);
 // export default Footer;
