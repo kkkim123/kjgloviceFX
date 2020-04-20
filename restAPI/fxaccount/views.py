@@ -1,5 +1,5 @@
 from .models import FxAccount,DepositTransaction,WithdrawTransaction,FxAccountTransaction
-from .models import ACCOUNT_TYPES,ACCOUNT_BASE_CURRENCY_CHOICE,TRADING_PLATFORM_CHOICE,LEVERAGE_CHOICES,DEPOSIT_METHOD_CHOICE,WITHDRAW_METHOD_CHOICE
+from .models import ACCOUNT_TYPES,ACCOUNT_BASE_CURRENCY_CHOICE,TRADING_PLATFORM_CHOICE,LEVERAGE_CHOICES,DEPOSIT_CRYPTO_CHOICE,WITHDRAW_CRYPTO_CHOICE
 from user.models import IntroducingBroker
 from .serializers import FxAccountSerializer,DepositSerializer,WithdrawSerializer,WithdrawSerializer,FxAccountTransactionSerializer
 from rest_framework import generics
