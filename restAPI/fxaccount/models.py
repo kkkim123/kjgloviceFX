@@ -94,34 +94,16 @@ DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE = (
     ('W', 'Withdraw'),
 )
 
-DEPOSIT_METHOD_CHOICE = (
-    #('', 'Please Choose'),
+DEPOSIT_CRYPTO_CHOICE = (
     ('0', 'Bitcoin'),
     ('1', 'Ethereum'),
     ('2', 'JKL'),
-    # ('1', 'Bank Wire'),
-    # ('2', 'i-Account'),
-    # ('3', 'Paypal'),
-    # ('4', 'EzPay'),
-    # ('5', 'i-Pay'),
-    # ('6', 'ZotaPay'),
-    # ('7', 'ConceptPay'),
-    # ('8', 'Bitcoin'),
-    # ('9', 'Ethereum'),
-    # ('10', 'GELD Coin'),
-    # ('11', 'WTX'),
 )
 
-WITHDRAW_METHOD_CHOICE = (
-    #('', 'Please Choose'),
-    # ('1', 'Bank Wire'),
-    # ('2', 'i-Account'),
-    # ('3', 'Paypal'),
+WITHDRAW_CRYPTO_CHOICE = (
     ('0', 'Bitcoin'),
     ('1', 'Ethereum'),
     ('2', 'JKL'),
-    # ('10', 'GELD Coin'),
-    # ('11', 'WTX'),
 )
 
 WITHDRAW_METHOD_DICT = dict()
@@ -264,27 +246,22 @@ class BaseTransaction(models.Model):
         return "{}{}".format(self.transaction_type, self.id)
 
 class DepositTransaction(BaseTransaction):
-    #user = models.ManyToManyField(FxUser)
-    #transaction_type = models.CharField(default='D', max_length=1, choices=DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE)
     user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
-    status = models.CharField( default='P', max_length=20, blank=True, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
-    approval_no = models.CharField(default='', max_length=40, blank=True)
-    customer_id = models.CharField(default='', max_length=20, blank=True)
-    order_id = models.CharField(default='', max_length=40, blank=True)
-    transaction_no = models.CharField(default='', max_length=40, blank=True)
-    amount = models.FloatField( default=0.0, blank=True)
+
     mt4_account = models.CharField( default='', max_length=36, blank=True)
-    payment_method = models.CharField( default='', max_length=2, blank=True, choices=DEPOSIT_METHOD_CHOICE)
     currency = models.CharField( default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)
-    crypto_sender_address = models.CharField(default='', max_length=64, blank=True, null=True)
-    sender_memo = models.CharField(default='', max_length=128, blank=True)  
+    amount = models.FloatField( default=0.0, blank=True)
+
+    deposit_crypto = models.CharField( default='', max_length=2, blank=True, choices=DEPOSIT_CRYPTO_CHOICE)
+    crypto_address = models.CharField(default='', max_length=64, blank=True, null=True)
+    crypto_amount = models.CharField(default='', max_length=64, blank=True, null=True)
     cellphone_number = models.CharField(default='', max_length=30, blank=True)  
-    #description = models.TextField( default='', blank=True)
-    #gateway_status = models.CharField(default='', max_length=20, blank=True)
-    status_remark = models.TextField( default='', blank=True)
-    
+
+    status = models.CharField( default='P', max_length=20, blank=True, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
+
     created_at = models.DateTimeField( auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
+    #REQUIRED_FIELDS = ['user','mt4_account','currency','crypto_sender_address','crypto_amount','']
 
     class Meta:
         verbose_name = "Request Deposit"
