@@ -24,8 +24,8 @@ class ChoicesView(View):
             'trading_platform' : json.dumps([x[1] for x in TRADING_PLATFORM_CHOICE]),
 
             'leverage' : json.dumps([x[1] for x in LEVERAGE_CHOICES]),
-            'dp_payment_method' : json.dumps([x[1] for x in DEPOSIT_METHOD_CHOICE] ),
-            'wd_payment_method' : json.dumps([x[1] for x in WITHDRAW_METHOD_CHOICE] ),
+            'deposit_crypto_method' : json.dumps([x[1] for x in DEPOSIT_CRYPTO_CHOICE] ),
+            'withdraw_crypto_method' : json.dumps([x[1] for x in WITHDRAW_CRYPTO_CHOICE] ),
         }
         print(dummy_data)
         return JsonResponse(dummy_data)
