@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Moment from "moment";
 import Pagination from "react-js-pagination";
-// import "bootstrap/less/bootstrap.less";
+import { Field, reduxForm } from "redux-form";
 
 class tradingHistory extends Component {
   constructor(props) {
@@ -22,7 +22,11 @@ class tradingHistory extends Component {
       //초기 전체페이지 수 설정 후 렌더링 방지
       isCnt: true,
       //Trading History 대상 계좌
-      acc: "",
+      acc: 1,
+      //Symbol Search
+      symbol: "",
+      //Type(CMD) Search
+      type: "",
     };
   }
 
@@ -31,7 +35,9 @@ class tradingHistory extends Component {
       to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
       from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
       page: this.state.activePage,
-      acc: this.state.acc
+      acc: this.state.acc,
+      symbol: this.state.symbol,
+      type: this.state.type,
     });
   }
 
@@ -88,19 +94,49 @@ class tradingHistory extends Component {
     );
   };
 
+  renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
+    return (
+      <div
+        className={`
+        ${touched && error ? "error" : ""}`}
+      >
+        <input
+          {...input}
+          type={type}
+          placeholder={placeholder}
+        />
+        {touched && error && <span className="">{error}</span>}
+      </div>
+    );
+  };
+
+  onSubmit = formValues => {
+    this.setState(
+      {
+        symbol: formValues.symbol,
+        type: formValues.type,
+      },
+      () => {
+        this.props.getTrading({
+          to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+          from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+          page: this.state.activePage,
+          acc: this.state.acc,
+          symbol: this.state.symbol,
+          type: this.state.type,
+        });
+      }
+    );
+  };  
+
   componentDidUpdate(prevProps, prevState) {
-    if (
-      (this.state.isCnt && this.props.history && this.props.account) ||
-      (prevProps.history &&
-        this.props.history &&
-        prevProps.history[prevProps.history.length - 1] !==
-          this.props.history[this.props.history.length - 1])
-    ) {
+    if ( (this.state.isCnt && this.props.history && this.props.account) || 
+          (prevProps.history && this.props.history && prevProps.history[prevProps.history.length - 1] !== this.props.history[this.props.history.length - 1]) ) {
       this.setState(
         {
           totalCnt: this.props.history[this.props.history.length - 1],
           isCnt: false,
-          acc: this.props.account[0].mt4_account
+          acc: this.props.accNum ? this.props.accNum : this.props.account[0].mt4_account
         },
         () => {
           this.props.getTrading({
@@ -109,6 +145,7 @@ class tradingHistory extends Component {
             page: this.state.activePage,
             acc: this.state.acc
           });
+          console.log(this.props.account)
         }
       );
     }
@@ -149,6 +186,29 @@ class tradingHistory extends Component {
             selected={this.state.to_date}
             onChange={this.handleToChange}
           />
+          <div>
+          <form
+              onSubmit={this.props.handleSubmit(this.onSubmit)}
+            >
+              <Field
+                name="symbol"
+                type="text"
+                component={this.renderField}
+                placeholder="Symbol"
+              />
+              <Field
+                name="type"
+                type="text"
+                component={this.renderField}
+                placeholder="Type"
+              />              
+              <button
+                type="submit"
+              >
+                Search
+              </button>              
+            </form>
+          </div>
         </div>
         <div
           className="d-flex justify-content-between"
@@ -166,7 +226,7 @@ class tradingHistory extends Component {
             <span>Symbol</span>
           </div>
           <div className="ml-2" style={{ width: "10%" }}>
-            <span>CMD</span>
+            <span>Type</span>
           </div>
           <div className="ml-2" style={{ width: "5%" }}>
             <span>Volume</span>
@@ -188,8 +248,7 @@ class tradingHistory extends Component {
           </div>
         </div>
 
-        {!this.state.isCnt &&
-          this.props.history &&
+        {!this.state.isCnt && this.props.history && this.props.history[0] !== 0 ?
           this.props.history.slice(0, -1).map((historyRow, j) => {
             let data = [];
             let CMD = "";
@@ -231,7 +290,6 @@ class tradingHistory extends Component {
               default:
                 break;
             }
-
             
             return (
               <div
@@ -273,7 +331,7 @@ class tradingHistory extends Component {
                 </div>
               </div>
             );
-          })}
+          }) : <div>No Data</div>}
         <div className="text-center">
           <Pagination
             activePage={this.state.activePage}
@@ -295,6 +353,8 @@ const mapStateToProps = state => ({
   accNum: state.mypage.accNum
 });
 
-export default connect(mapStateToProps, { getTrading, getAccount })(
-  tradingHistory
-);
+tradingHistory = connect(mapStateToProps, { getTrading, getAccount })(tradingHistory);
+
+export default reduxForm({
+  form: "tradingHistory"
+})(tradingHistory);

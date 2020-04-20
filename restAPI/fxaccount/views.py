@@ -119,13 +119,22 @@ class TradingHistoryViews(generics.ListAPIView):
         to_date = request.GET['to_date']
         page = int(request.GET['page'])
         acc = request.GET['acc']
-        # symbol = request.GET['symbol']
+        symbol = request.GET['symbol']
+        cmd = request.GET['type']
+
+        searchQuery = "";
 
         if page:
             page = (page - 1) * 10
         else:
             page = 10
-        
+
+        if symbol != "":
+            searchQuery = "AND SYMBOL = '" + request.GET['symbol'] + " '"
+
+        if cmd != "":
+            searchQuery = "AND CMD = '" + request.GET['type'] + " '"
+
         queryset = FxAccount.objects.filter(user = kwargs['user'],mt4_account = acc)
         #serializer_class = FxAccountSerializerkwargs['user']
         #accRows = queryset
@@ -140,8 +149,9 @@ class TradingHistoryViews(generics.ListAPIView):
                 + "(@CumSum := @CumSum + PROFIT) as TOT_PROFIT from MT4_TRADES where LOGIN = " + acc.mt4_account 
                 +" AND OPEN_TIME >= '" + from_date + " 0:0:0' "
                 +" AND OPEN_TIME <= '" + to_date  + " 23:59:59' "
+                + searchQuery
                 +" AND CMD < 5 order by OPEN_TIME LIMIT " + str(page) + ",10;")
-                print(page)
+
                 #print(cursor.description)
                 columns = [col[0] for col in cursor.description]
                 historyRows += [list(zip(columns, row)) for row in cursor.fetchall()]
@@ -154,6 +164,7 @@ class TradingHistoryViews(generics.ListAPIView):
                 + "from MT4_TRADES where LOGIN = " + acc.mt4_account 
                 +" AND OPEN_TIME >= '" + from_date + " 0:0:0' "
                 +" AND OPEN_TIME <= '" + to_date  + " 23:59:59' "
+                + searchQuery
                 +" AND CMD < 5 order by OPEN_TIME;")      
                 #print(cursor.description)
                 columns = [col[0] for col in cursor.description]
@@ -162,11 +173,8 @@ class TradingHistoryViews(generics.ListAPIView):
                     historyRows2 += q[0]
                 #historyRows.update(historyRows2)  SUM ('PROFIT') OVER (ORDER BY 'TICKET' ASC) as TOT_PROFIT
         
-        cnt_dict = {'cnt': historyRows2}
-        # json_val2 = json.dumps(historyRows2,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
         historyRows += [historyRows2]
         json_val = json.dumps(historyRows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
-        # json_val.cnt = json_val2
         return HttpResponse(json_val)
 #조회
 class ClientAccountListViews(generics.ListAPIView):
@@ -353,3 +361,4 @@ AlterWithdraw = WithdrawViewSet.as_view({
     #         columns = [col[0] for col in cursor.description]
     #         rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
     #         return HttpResponse(rows)
+
