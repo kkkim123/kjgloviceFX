@@ -165,9 +165,19 @@ export const delAccount = id => async (dispatch, getState) => {
 };
 
 // Get Trading history
-export const getTrading = ({from_date, to_date, page, acc}) => async (dispatch, getState) => {
-  
-  const res = await axios.get(`/fxaccount/tradinghistory/${getState().auth.id}?from_date=${from_date}&to_date=${to_date}&page=${page}&acc=${acc}`, tokenConfig(getState));
+export const getTrading = ({from_date, to_date, page, acc, symbol, type}) => async (dispatch, getState) => {
+
+  if(!symbol) {
+    symbol = ""
+  } else {
+    symbol = symbol.toUpperCase()
+  }
+
+  if(!type) {
+    type = ""
+  }
+
+  const res = await axios.get(`/fxaccount/tradinghistory/${getState().auth.id}?from_date=${from_date}&to_date=${to_date}&page=${page}&acc=${acc}&symbol=${symbol}&type=${type}`, tokenConfig(getState));
   dispatch({
     type: GET_TRADING,
     payload: res.data
