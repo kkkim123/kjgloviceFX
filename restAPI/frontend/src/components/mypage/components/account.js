@@ -1,17 +1,22 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAccount } from "../../../actions/mypage";
+import { getAccount, changeAcc } from "../../../actions/mypage";
 
 class account extends Component {
   componentDidMount() {
     this.props.getAccount(this.props.auth.id);
   }
+
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.auth.user !== this.props.auth.user) {
       this.props.getAccount(this.props.auth.id);
     }
     return true;
+  }
+
+  handleClick = (data) => {
+    this.props.changeAcc(data)
   }
 
   render() {
@@ -119,7 +124,7 @@ class account extends Component {
                 <div className="ml-2" style={{ width: "15%" }}>
                   {account_type}
                 </div>
-                <div className="ml-2" style={{ width: "15%" }}>
+                <div className="ml-2" style={{ width: "15%" }} onClick={()=>this.handleClick(rowData.mt4_account)}>
                   <span>{rowData.mt4_account}</span>
                 </div>
                 <div className="ml-2" style={{ width: "10%" }}>
@@ -171,4 +176,4 @@ const mapStateToProps = state => ({
   account: state.mypage.account
 });
 
-export default connect(mapStateToProps, { getAccount })(account);
+export default connect(mapStateToProps, { getAccount, changeAcc })(account);

@@ -29,6 +29,7 @@ export const EDIT_FILE = 'EDIT_FILE';
 //계좌 신청, 조회
 export const ADD_ACCOUNT = 'ADD_ACCOUNT';
 export const GET_ACCOUNT = 'GET_ACCOUNT';
+export const CHANGE_ACCOUNT = 'CHANGE_ACCOUNT';
 //계좌 취소
 export const DELETE_ACCOUNT = 'DELETE_ACCOUNT';
 //거래내역 조회

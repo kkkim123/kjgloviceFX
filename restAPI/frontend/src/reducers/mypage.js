@@ -9,6 +9,7 @@ import {
   ADD_ACCOUNT,
   GET_ACCOUNT,
   DELETE_ACCOUNT,
+  CHANGE_ACCOUNT,
   GET_TRADING,
   PART_LOADED,
   PART_ACCOUNT,
@@ -58,6 +59,11 @@ export default (state = {}, action) => {
       }
     case DELETE_ACCOUNT:
         return _.omit(state, action.payload);
+    case CHANGE_ACCOUNT:
+        return {
+          ...state,
+          accNum: action.payload
+        }
     case GET_TRADING:
         return { 
           ...state,

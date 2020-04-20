@@ -11,14 +11,18 @@ class tradingHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      from_date: Moment(new Date())
-        .subtract(7, "days")
-        .toDate(),
+      //시작일
+      from_date: Moment(new Date()).subtract(7, "days").toDate(),
+      //종료일
       to_date: new Date(),
+      //현재페이지
       activePage: 1,
+      //전체 Trading History 수
       totalCnt: 1,
+      //초기 전체페이지 수 설정 후 렌더링 방지
       isCnt: true,
-      acc: 1,
+      //Trading History 대상 계좌
+      acc: "",
     };
   }
 
@@ -26,8 +30,8 @@ class tradingHistory extends Component {
     this.props.getTrading({
       to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
       from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-      page: this.state.activePage
-      // from_date: Moment(this.state.to_date).subtract(7,"days").format('YYYY-MM-DD')
+      page: this.state.activePage,
+      acc: this.state.acc
     });
   }
 
@@ -42,7 +46,8 @@ class tradingHistory extends Component {
         this.props.getTrading({
           to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
           from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-          page: this.state.activePage
+          page: this.state.activePage,
+          acc: this.state.acc
         });
       }
     );
@@ -59,7 +64,8 @@ class tradingHistory extends Component {
         this.props.getTrading({
           to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
           from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-          page: this.state.activePage
+          page: this.state.activePage,
+          acc: this.state.acc
         });
       }
     );
@@ -75,26 +81,49 @@ class tradingHistory extends Component {
         this.props.getTrading({
           to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
           from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-          page: this.state.activePage
+          page: this.state.activePage,
+          acc: this.state.acc
         });
       }
     );
-    console.log(pageNumber)
-    console.log(this.state.activePage)
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (
       (this.state.isCnt && this.props.history && this.props.account) ||
-      (prevProps.history && this.props.history &&
+      (prevProps.history &&
+        this.props.history &&
         prevProps.history[prevProps.history.length - 1] !==
           this.props.history[this.props.history.length - 1])
     ) {
+      this.setState(
+        {
+          totalCnt: this.props.history[this.props.history.length - 1],
+          isCnt: false,
+          acc: this.props.account[0].mt4_account
+        },
+        () => {
+          this.props.getTrading({
+            to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+            from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+            page: this.state.activePage,
+            acc: this.state.acc
+          });
+        }
+      );
+    }
+    if(this.props.accNum && (prevProps.accNum !== this.props.accNum)) {
       this.setState({
-        totalCnt: this.props.history[this.props.history.length - 1],
-        isCnt: false,
-        acc: this.props.account.length
-      });
+        acc: this.props.accNum
+      },
+      () => {
+        this.props.getTrading({
+          to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+          from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+          page: this.state.activePage,
+          acc: this.state.acc
+        });
+      })
     }
   }
 
@@ -130,40 +159,51 @@ class tradingHistory extends Component {
             padding: "0.8rem"
           }}
         >
-          <div className="ml-2" style={{ width: "*" }}>
+          <div className="ml-2" style={{ width: "15%" }}>
             <span>Account</span>
           </div>
-          <div className="ml-2" style={{ width: "*" }}>
+          <div className="ml-2" style={{ width: "10%" }}>
             <span>Symbol</span>
           </div>
-          <div className="ml-2" style={{ width: "*" }}>
+          <div className="ml-2" style={{ width: "10%" }}>
             <span>CMD</span>
           </div>
-          <div className="ml-2" style={{ width: "*" }}>
+          <div className="ml-2" style={{ width: "5%" }}>
             <span>Volume</span>
           </div>
-          <div className="ml-2" style={{ width: "*" }}>
+          <div className="ml-2" style={{ width: "12%" }}>
             <span>Open Time</span>
           </div>
-          <div className="ml-2" style={{ width: "*" }}>
+          <div className="ml-2" style={{ width: "12%" }}>
             <span>Open Price</span>
           </div>
-          <div className="ml-2" style={{ width: "*" }}>
+          <div className="ml-2" style={{ width: "12%" }}>
             <span>Close Time</span>
           </div>
-          <div className="ml-2" style={{ width: "*" }}>
+          <div className="ml-2" style={{ width: "12%" }}>
             <span>Close Price</span>
           </div>
-          <div className="ml-2" style={{ width: "*" }}>
+          <div className="ml-2" style={{ width: "12%" }}>
             <span>Profit</span>
           </div>
         </div>
+
         {!this.state.isCnt &&
           this.props.history &&
-          this.props.history.slice(0, -1).map((rowData, i) => {
-            // console.log(rowData)
+          this.props.history.slice(0, -1).map((historyRow, j) => {
+            let data = [];
             let CMD = "";
-            switch (Number(rowData[2][1])) {
+            data.account = historyRow[0][1];
+            data.symbol = historyRow[1][1];
+            data.cmd = historyRow[2][1];
+            data.volume = historyRow[3][1];
+            data.open_time = Moment(historyRow[4][1]).format("MM/DD/YY HH:mm");
+            data.open_price = historyRow[5][1];
+            data.close_time = Moment(historyRow[8][1]).format("MM/DD/YY HH:mm");
+            data.close_price = historyRow[9][1];
+            data.profit = historyRow[10][1];
+
+            switch (data.cmd) {
               case 0:
                 CMD = "BUY";
                 break;
@@ -188,10 +228,11 @@ class tradingHistory extends Component {
               case 7:
                 CMD = "CREDIT";
                 break;
-
               default:
                 break;
             }
+
+            
             return (
               <div
                 className="d-flex justify-content-between"
@@ -201,34 +242,34 @@ class tradingHistory extends Component {
                   fontSize: "1.0rem",
                   padding: "0.8rem"
                 }}
-                key={i}
+                key={j}
               >
-                <div className="ml-2" style={{ width: "*" }}>
-                  <span>{rowData[0][1]}</span>
+                <div className="ml-2" style={{ width: "15%" }}>
+                  <span>{data.account}</span>
                 </div>
-                <div className="ml-2" style={{ width: "*" }}>
-                  <span>{rowData[1][1]}</span>
+                <div className="ml-2" style={{ width: "10%" }}>
+                  <span>{data.symbol}</span>
                 </div>
-                <div className="ml-2" style={{ width: "*" }}>
+                <div className="ml-2" style={{ width: "10%" }}>
                   <span>{CMD}</span>
                 </div>
-                <div className="ml-2" style={{ width: "*" }}>
-                  <span>{rowData[3][1]}</span>
+                <div className="ml-2" style={{ width: "5%" }}>
+                  <span>{data.volume}</span>
                 </div>
-                <div className="ml-2" style={{ width: "*" }}>
-                  <span>{Moment(rowData[4][1]).format("MM/DD/YY HH:mm")}</span>
+                <div className="ml-2" style={{ width: "12%" }}>
+                  <span>{data.open_time}</span>
                 </div>
-                <div className="ml-2" style={{ width: "*" }}>
-                  <span>{rowData[5][1]}</span>
+                <div className="ml-2" style={{ width: "12%" }}>
+                  <span>{data.open_price}</span>
                 </div>
-                <div className="ml-2" style={{ width: "*" }}>
-                  <span>{Moment(rowData[8][1]).format("MM/DD/YY HH:mm")}</span>
+                <div className="ml-2" style={{ width: "12%" }}>
+                  <span>{data.close_time}</span>
                 </div>
-                <div className="ml-2" style={{ width: "*" }}>
-                  <span>{rowData[9][1]}</span>
+                <div className="ml-2" style={{ width: "12%" }}>
+                  <span>{data.close_price}</span>
                 </div>
-                <div className="ml-2" style={{ width: "*" }}>
-                  <span>{rowData[10][1]}</span>
+                <div className="ml-2" style={{ width: "12%" }}>
+                  <span>{data.profit}</span>
                 </div>
               </div>
             );
@@ -237,7 +278,7 @@ class tradingHistory extends Component {
           <Pagination
             activePage={this.state.activePage}
             itemsCountPerPage={10}
-            totalItemsCount={this.state.totalCnt/this.state.acc}
+            totalItemsCount={this.state.totalCnt}
             pageRangeDisplayed={5}
             onChange={this.handlePageChange}
           />
@@ -250,7 +291,10 @@ class tradingHistory extends Component {
 const mapStateToProps = state => ({
   auth: state.auth,
   history: state.mypage.history,
-  account: state.mypage.account
+  account: state.mypage.account,
+  accNum: state.mypage.accNum
 });
 
-export default connect(mapStateToProps, { getTrading, getAccount })(tradingHistory);
+export default connect(mapStateToProps, { getTrading, getAccount })(
+  tradingHistory
+);
