@@ -107,7 +107,7 @@ WITHDRAW_CRYPTO_CHOICE = (
 )
 
 WITHDRAW_METHOD_DICT = dict()
-for wc in WITHDRAW_METHOD_CHOICE:
+for wc in WITHDRAW_CRYPTO_CHOICE:
     WITHDRAW_METHOD_DICT[wc[0]] = wc[1]
 
 
@@ -250,12 +250,15 @@ class DepositTransaction(BaseTransaction):
 
     mt4_account = models.CharField( default='', max_length=36, blank=True)
     currency = models.CharField( default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)
-    amount = models.FloatField( default=0.0, blank=True)
+    #전환된 법정화폐 수량 
+    amount = models.FloatField( default=0.0, blank=True, null=True)
+
+    exchange_rate = models.FloatField( default=0.0, blank=True, null=True)
 
     deposit_crypto = models.CharField( default='', max_length=2, blank=True, choices=DEPOSIT_CRYPTO_CHOICE)
-    crypto_address = models.CharField(default='', max_length=64, blank=True, null=True)
-    crypto_amount = models.CharField(default='', max_length=64, blank=True, null=True)
-    cellphone_number = models.CharField(default='', max_length=30, blank=True)  
+    crypto_address = models.CharField(default='', max_length=64, blank=True)
+    crypto_amount = models.CharField(default='', max_length=64, blank=True)
+    cellphone_number = models.CharField(default='', max_length=30, blank=True, null=True)  
 
     status = models.CharField( default='P', max_length=20, blank=True, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
 
@@ -273,9 +276,12 @@ class WithdrawTransaction(BaseTransaction):
     mt4_account = models.CharField( default='', max_length=36, blank=True)
     currency = models.CharField( default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)
     amount = models.FloatField( default=0.0, blank=True)
-    
+
+    exchange_rate = models.FloatField( default=0.0, blank=True, null=True)
+
     withdraw_crypto = models.CharField(default='', max_length=2, blank=True, choices=WITHDRAW_CRYPTO_CHOICE)
-    crypto_address = models.CharField(default='', max_length=64, blank=True, null=True)
+    crypto_address = models.CharField(default='', max_length=64, blank=True)
+    #출금된 암호화폐 수량
     crypto_amount = models.CharField(default='', max_length=64, blank=True, null=True)
     cellphone_number = models.CharField(default='', max_length=30, blank=True)  
 

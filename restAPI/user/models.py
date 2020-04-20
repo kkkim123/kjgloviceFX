@@ -289,15 +289,6 @@ class FxUserDocument(models.Model):
     class Meta:
         ordering = ['created_at']
 
-# IN i_company_idx	int ,
-#  IN i_parent_idx   int,
-#  IN i_login int,
-#  IN i_name varchar(33),
-# IN i_point int,
-# IN i_live_yn  char(1),
-# IN i_email varchar(33),
-# IN i_password varchar(33),
-# IN i_send_report char(1)
 class IntroducingBroker(models.Model):
     fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
     company_idx = models.IntegerField(default = 1, blank=True, null=True)
@@ -309,7 +300,7 @@ class IntroducingBroker(models.Model):
     point = models.IntegerField(blank=True)
     live_yn = models.CharField(blank=True, max_length=1, null=True)
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=240, null=True)
+    #password = models.CharField(max_length=240, null=True)
     send_report = models.CharField(blank=True, max_length=1, null=True)
     back_index = models.IntegerField(blank=True, null=True)
     referralurl = models.URLField(blank=True, null=True)
