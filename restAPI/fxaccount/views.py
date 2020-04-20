@@ -120,10 +120,10 @@ class TradingHistoryViews(generics.ListAPIView):
         page = int(request.GET['page'])
 
 
-        if page == 1:
-            page = (page - 1) * 5
+        if page:
+            page = (page - 1) * 10
         else:
-            page = 5
+            page = 10
         
         queryset = FxAccount.objects.filter(user = kwargs['user'])
         #serializer_class = FxAccountSerializerkwargs['user']
@@ -139,7 +139,9 @@ class TradingHistoryViews(generics.ListAPIView):
                 + "(@CumSum := @CumSum + PROFIT) as TOT_PROFIT from MT4_TRADES where LOGIN = " + acc.mt4_account 
                 +" AND OPEN_TIME >= '" + from_date + " 0:0:0' "
                 +" AND OPEN_TIME <= '" + to_date  + " 23:59:59' "
-                +" AND CMD < 5 order by OPEN_TIME LIMIT " + str(page) + ",5;")
+                # +" AND CMD < 5 order by OPEN_TIME;")
+                +" AND CMD < 5 order by OPEN_TIME LIMIT " + str(page) + ",10;")
+                print(page)
                 #print(cursor.description)
                 columns = [col[0] for col in cursor.description]
                 historyRows += [list(zip(columns, row)) for row in cursor.fetchall()]

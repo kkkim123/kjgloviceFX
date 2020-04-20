@@ -114,7 +114,7 @@ class MpHeader extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { getUserOption, getAccOption })(

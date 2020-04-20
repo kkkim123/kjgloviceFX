@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getTrading } from "../../../actions/mypage";
+import { getTrading, getAccount } from "../../../actions/mypage";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Moment from "moment";
@@ -8,16 +8,19 @@ import Pagination from "react-js-pagination";
 // import "bootstrap/less/bootstrap.less";
 
 class tradingHistory extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            from_date: Moment(new Date()).subtract(7, "days").toDate(),
-            to_date: new Date(),
-            activePage: 1,
-            totalCnt: 1,
-            isCnt: true
-          };
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      from_date: Moment(new Date())
+        .subtract(7, "days")
+        .toDate(),
+      to_date: new Date(),
+      activePage: 1,
+      totalCnt: 1,
+      isCnt: true,
+      acc: 1,
+    };
+  }
 
   componentDidMount() {
     this.props.getTrading({
@@ -26,33 +29,76 @@ class tradingHistory extends Component {
       page: this.state.activePage
       // from_date: Moment(this.state.to_date).subtract(7,"days").format('YYYY-MM-DD')
     });
-    // this.setState({ totalCnt: this.props.history.pop() });
   }
 
-  handlePageChange(pageNumber) {
-    // this.setState({ activePage: pageNumber });
-    alert('준비 중 입니다.')
-  }
+  handleFromChange = date => {
+    this.setState(
+      {
+        from_date: date,
+        isCnt: true,
+        totalCnt: 1
+      },
+      () => {
+        this.props.getTrading({
+          to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+          from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+          page: this.state.activePage
+        });
+      }
+    );
+  };
 
+  handleToChange = date => {
+    this.setState(
+      {
+        to_date: date,
+        isCnt: true,
+        totalCnt: 1
+      },
+      () => {
+        this.props.getTrading({
+          to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+          from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+          page: this.state.activePage
+        });
+      }
+    );
+  };
+
+  handlePageChange = pageNumber => {
+    this.setState(
+      {
+        activePage: pageNumber,
+        isCnt: true
+      },
+      () => {
+        this.props.getTrading({
+          to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+          from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+          page: this.state.activePage
+        });
+      }
+    );
+    console.log(pageNumber)
+    console.log(this.state.activePage)
+  };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.totalCnt === 1 && this.state.isCnt && this.props.history) {
-      this.setState({ totalCnt: this.props.history.pop(), isCnt: false });
-      console.log(1)
+    if (
+      (this.state.isCnt && this.props.history && this.props.account) ||
+      (prevProps.history && this.props.history &&
+        prevProps.history[prevProps.history.length - 1] !==
+          this.props.history[this.props.history.length - 1])
+    ) {
+      this.setState({
+        totalCnt: this.props.history[this.props.history.length - 1],
+        isCnt: false,
+        acc: this.props.account.length
+      });
     }
-    if(prevState.activePage !== this.state.activePage) {
-        this.props.getTrading({
-            to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
-            from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-            page: this.state.activePage
-        })
-        // this.setState({totalCnt: this.props.history.pop(), isCnt: true})
-        console.log(2)
-      }
   }
 
   render() {
-      console.log(this.props.history)
     return (
       <div
         className="shadow my-5 py-5 px-4 text-center mx-auto"
@@ -65,9 +111,15 @@ class tradingHistory extends Component {
       >
         <div className="text-left mb-5">
           <h3>Trading History</h3>
-          <DatePicker selected={this.state.from_date} />
+          <DatePicker
+            selected={this.state.from_date}
+            onChange={this.handleFromChange}
+          />
           ~
-          <DatePicker selected={this.state.to_date} />
+          <DatePicker
+            selected={this.state.to_date}
+            onChange={this.handleToChange}
+          />
         </div>
         <div
           className="d-flex justify-content-between"
@@ -106,8 +158,10 @@ class tradingHistory extends Component {
             <span>Profit</span>
           </div>
         </div>
-        {!this.state.isCnt && this.props.history &&
-          this.props.history.map((rowData, i) => {
+        {!this.state.isCnt &&
+          this.props.history &&
+          this.props.history.slice(0, -1).map((rowData, i) => {
+            // console.log(rowData)
             let CMD = "";
             switch (Number(rowData[2][1])) {
               case 0:
@@ -162,17 +216,13 @@ class tradingHistory extends Component {
                   <span>{rowData[3][1]}</span>
                 </div>
                 <div className="ml-2" style={{ width: "*" }}>
-                  <span>
-                    {Moment(rowData[4][1]).format("YYYY-MM-DD HH:mm")}
-                  </span>
+                  <span>{Moment(rowData[4][1]).format("MM/DD/YY HH:mm")}</span>
                 </div>
                 <div className="ml-2" style={{ width: "*" }}>
                   <span>{rowData[5][1]}</span>
                 </div>
                 <div className="ml-2" style={{ width: "*" }}>
-                  <span>
-                    {Moment(rowData[8][1]).format("YYYY-MM-DD HH:mm")}
-                  </span>
+                  <span>{Moment(rowData[8][1]).format("MM/DD/YY HH:mm")}</span>
                 </div>
                 <div className="ml-2" style={{ width: "*" }}>
                   <span>{rowData[9][1]}</span>
@@ -184,13 +234,13 @@ class tradingHistory extends Component {
             );
           })}
         <div className="text-center">
-            <Pagination
-                activePage={this.state.activePage}
-                itemsCountPerPage={5}
-                totalItemsCount={this.state.totalCnt}
-                pageRangeDisplayed={5}
-                onChange={this.handlePageChange.bind(this)}
-            />
+          <Pagination
+            activePage={this.state.activePage}
+            itemsCountPerPage={10}
+            totalItemsCount={this.state.totalCnt/this.state.acc}
+            pageRangeDisplayed={5}
+            onChange={this.handlePageChange}
+          />
         </div>
       </div>
     );
@@ -199,7 +249,8 @@ class tradingHistory extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  history: state.mypage.history
+  history: state.mypage.history,
+  account: state.mypage.account
 });
 
-export default connect(mapStateToProps, { getTrading })(tradingHistory);
+export default connect(mapStateToProps, { getTrading, getAccount })(tradingHistory);
