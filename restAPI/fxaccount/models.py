@@ -291,29 +291,21 @@ class DepositTransaction(BaseTransaction):
         verbose_name_plural = "Request Deposit"
 
 class WithdrawTransaction(BaseTransaction):
-    #transaction_type = models.CharField(default='W', max_length=1, choices=DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE)
     user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
-    status = models.CharField(default='P', max_length=1, blank=False, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
-    payment_method = models.CharField(default='', max_length=2, blank=True, choices=WITHDRAW_METHOD_CHOICE)
-    amount = models.FloatField( default=0.0, blank=True)
+
     mt4_account = models.CharField( default='', max_length=36, blank=True)
-    #bank_name = models.CharField(default='', max_length=48, blank=True)
-    #bank_account = models.CharField(default='', max_length=48, blank=True)
-    #bank_address = models.CharField(default='', max_length=128, blank=True)
-    #bank_swift = models.CharField(default='', max_length=16, blank=True)
-    #bank_iban = models.CharField(default='', max_length=48, blank=True)
-    #bank_branch_name = models.CharField(default='', max_length=48, blank=True)
-    #bank_branch_code = models.CharField(default='', max_length=48, blank=True)
-    #intermediary_bank_name = models.CharField(default='', max_length=48, blank=True)
-    #intermediary_bank_swift = models.CharField(default='', max_length=16, blank=True)
     currency = models.CharField( default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)
-    #beneficiary_full_name = models.CharField(default='', max_length=48, blank=True)
-    #beneficiary_address = models.CharField(default='', max_length=128, blank=True)
-    #description = models.TextField(default='', blank=True)
-    #paypal_email = models.EmailField(default='', blank=True)
-    crypto_receiver_address = models.CharField(default='', max_length=64, blank=True, null=True)
-    i_account_no = models.CharField(default='', max_length=48, blank=True, null=True)
-    status_remark = models.TextField( default='', blank=True)
+    amount = models.FloatField( default=0.0, blank=True)
+    
+    withdraw_crypto = models.CharField(default='', max_length=2, blank=True, choices=WITHDRAW_CRYPTO_CHOICE)
+    crypto_address = models.CharField(default='', max_length=64, blank=True, null=True)
+    crypto_amount = models.CharField(default='', max_length=64, blank=True, null=True)
+    cellphone_number = models.CharField(default='', max_length=30, blank=True)  
+
+    status = models.CharField(default='P', max_length=1, blank=False, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
+
+    # i_account_no = models.CharField(default='', max_length=48, blank=True, null=True)
+    # status_remark = models.TextField( default='', blank=True)
 
     created_at = models.DateTimeField( auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
