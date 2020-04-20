@@ -194,7 +194,10 @@ class QueryQuotesView(APIView):
                     if data.startswith(quote.lower()):
                         split_data = data.split(' ')
                         tmp['key'] = quote
-                        tmp['value'] = split_data[1]
+                        # 기존에 뒤에값이 3자리로 들어오는 만큼 앞의값과 치환해서 자리수 맞춰 출력
+                        quotes_value = split_data[1].split('/')
+                        tmp['value'] = '{}/{}'.format(
+                            quotes_value[0], quotes_value[0][0:-len(quotes_value[1])] + quotes_value[1])
                         result_data.append(tmp)
 
             return Response(status=status.HTTP_200_OK, data=result_data)

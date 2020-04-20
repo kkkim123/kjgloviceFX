@@ -5,11 +5,12 @@ import { Field, reduxForm } from "redux-form";
 import { register } from "../../actions/auth";
 import { CountryDropdown } from "react-country-region-selector";
 import "../../styles/auth/form.css";
+import queryString from 'query-string';
 
 class RegisterForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { country: "" };
+    this.state = { country: "", refcode: "" };
   }
 
   selectCountry = val => {
@@ -17,6 +18,7 @@ class RegisterForm extends Component {
       country: val
     });
   };
+
 
   renderField = ({ input, placeholder, type, is_required, meta: { touched, error } }) => {
     return (
@@ -65,7 +67,7 @@ class RegisterForm extends Component {
                 >
                   <div className="form-label-group">
                     <CountryDropdown
-                      value={country}
+                      value={this.state.country}
                       onChange={val => this.selectCountry(val)}
                       defaultOptionLabel="Country of residence*"
                       classes="form-control"
@@ -166,5 +168,9 @@ const mapStateToProps = state => ({
 RegisterForm = connect(mapStateToProps, { register })(RegisterForm);
 
 export default reduxForm({
-  form: "registerForm"
+  form: "registerForm",
+  initialValues: {
+    referral_code: queryString.parse(window.location.search)['refcode']
+  },
+  enableReinitialize : true
 })(RegisterForm);
