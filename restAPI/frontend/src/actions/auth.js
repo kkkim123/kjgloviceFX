@@ -44,7 +44,15 @@ export const register = ({
   email,
   password,
   is_admin,
-  referral_code
+  referral_code,
+  //    auth/AddressForm
+  address,
+  postal_code,
+  city,
+  //    auth/PersonalForm
+  Nationality,
+  birthday,
+  mobile,
 }) => async dispatch => {
   // Headers
   const config = {
@@ -61,9 +69,18 @@ export const register = ({
     email,
     password,
     is_admin,
-    referral_code
+    referral_code,
+    //    auth/AddressForm
+    address,
+    postal_code,
+    city,
+    //    auth/PersonalForm
+    Nationality,
+    birthday,
+    mobile,
   });
 
+  console.log(body);
   try {
     const res = await axios.post("/auth/users/", body, config);
     dispatch({
@@ -80,14 +97,6 @@ export const register = ({
 
 // REGISTER ADDRESS
 export const registDetail = ({
-  //    auth/AddressForm
-  address,
-  postal_code,
-  city,
-  //    auth/PersonalForm
-  Nationality,
-  birthday,
-  mobile,
   //    mypage/employForm
   employment_status,
   industry,
@@ -104,12 +113,6 @@ export const registDetail = ({
 
   // Request Body
   const body = JSON.stringify({
-    address,
-    postal_code,
-    city,
-    Nationality,
-    birthday,
-    mobile,
     employment_status,
     industry,
     employment_position,

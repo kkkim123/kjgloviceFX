@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
-import { registDetail } from "../../actions/auth";
 import "../../styles/auth/form.css";
 
 class AddressForm extends Component {
@@ -24,8 +23,9 @@ class AddressForm extends Component {
   };
 
   onSubmit = formValues => {
-    // 토큰, 인덱스
-    this.props.registDetail(formValues);
+    const oriData = JSON.parse(localStorage.getItem('register'));
+    formValues = Object.assign(formValues,oriData)
+    localStorage.setItem('register', JSON.stringify(formValues))
     this.props.history.push("/register/personal");
   };
 
@@ -119,7 +119,7 @@ const mapStateToProps = state => ({
   token: state.auth.token
 });
 
-AddressForm = connect(mapStateToProps, { registDetail })(AddressForm);
+AddressForm = connect(mapStateToProps)(AddressForm);
 
 export default reduxForm({
   form: "detailForm"

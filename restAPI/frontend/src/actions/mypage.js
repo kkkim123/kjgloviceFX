@@ -175,6 +175,36 @@ export const getTrading = ({from_date, to_date, page, acc, symbol, type}) => asy
 
   if(!type) {
     type = ""
+  } else {
+    switch (type.toUpperCase()) {
+      case "BUY":
+        type = 0;
+        break;
+      case "SELL":
+        type = 1;
+        break;
+      case "BUY LIMIT":
+        type = 2;
+        break;
+      case "SELL LIMIT":
+        type = 3;
+        break;
+      case "BUY STOP":
+        type = 4;
+        break;
+      case "SELL STOP":
+        type = 5;
+        break;
+      case "BALANCE":
+        type = 6;
+        break;
+      case "CREDIT":
+        type = 7;
+        break;
+      default:
+        type = "";
+        break;
+    }
   }
 
   const res = await axios.get(`/fxaccount/tradinghistory/${getState().auth.id}?from_date=${from_date}&to_date=${to_date}&page=${page}&acc=${acc}&symbol=${symbol}&type=${type}`, tokenConfig(getState));
@@ -193,13 +223,13 @@ export const changeAcc = acc => async dispatch => {
 };
 
 // Get Partner info
-export const partLoad = () => async (dispatch, getState) => {
+export const partLoad = ib_code => async (dispatch, getState) => {
   const res = await axios.get(
-    `/user/myclient/${referral_code}`,
+    `/user/myclient/${ib_code}`,
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_USER_OPTION,
+    type: PART_LOADED,
     payload: res.data
   });
 };
@@ -207,35 +237,35 @@ export const partLoad = () => async (dispatch, getState) => {
 // Get Partner Account
 export const partAccount = () => async (dispatch, getState) => {
   const res = await axios.get(
-    `/fxaccount/clientaccount/${getState().auth.id}`,
+    `/fxaccount/clientaccountlist/${getState().auth.id}`,
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_USER_OPTION,
+    type: PART_ACCOUNT,
     payload: res.data
   });
 };
 
 // Get All Partner commision
-export const partsCommision = () => async (dispatch, getState) => {
+export const partsCommision = ({from_date, to_date}) => async (dispatch, getState) => {
   const res = await axios.get(
-    `/fxaccount/commissionhistory/${getState().auth.id}`,
+    `/fxaccount/commissionhistory/${getState().auth.id}?from_date=${from_date}&to_date=${to_date}`,
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_USER_OPTION,
+    type: PARTS_COMMISION,
     payload: res.data
   });
 };
 
 // Get Partner commision
-export const partCommision = () => async (dispatch, getState) => {
+export const partCommision = ({from_date, to_date, mt4_account}) => async (dispatch, getState) => {
   const res = await axios.get(
-    `/fxaccount/commissionhistory/${getState().auth.id}/${mt4_login}`,
+    `/fxaccount/commissionhistory/${getState().auth.id}/${mt4_account}?from_date=${from_date}&to_date=${to_date}`,
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_USER_OPTION,
+    type: PART_COMMISION,
     payload: res.data
   });
 };
@@ -340,13 +370,19 @@ export const delTransfer = () => async (dispatch, getState) => {
 };
 
 // Add IB
-export const addIb = () => async (dispatch, getState) => {
-  const res = await axios.get(
-    `/user/introducingbroker/new`,
-    tokenConfig(getState)
-  );
+export const addIb = ({ib_name, point, email, send_report, ib_website }) => async (dispatch, getState) => {
+  const body = JSON.stringify({
+    ib_name,
+    point,
+    email,
+    send_report,
+    ib_website,
+    fxuser: getState().auth.id,
+  });
+  const res = await axios.post(
+    `/user/introducingbroker/new`, body, tokenConfig(getState));
   dispatch({
-    type: GET_USER_OPTION,
+    type: ADD_IB,
     payload: res.data
   });
 };
@@ -358,19 +394,25 @@ export const getIb = () => async (dispatch, getState) => {
     tokenConfig(getState)
   );
   dispatch({
-    type: GET_USER_OPTION,
+    type: GET_IB,
     payload: res.data
   });
 };
 
 // Edit IB
-export const editIb = () => async (dispatch, getState) => {
+export const editIb = ({ib_name, point, email, send_report, ib_website }) => async (dispatch, getState) => {
+  const body = JSON.stringify({
+    ib_name,
+    point,
+    email,
+    send_report,
+    ib_website,
+    status:'P'
+  });
   const res = await axios.patch(
-    `/user/introducingbroker/${getState().auth.id}`,
-    tokenConfig(getState)
-  );
+    `/user/introducingbroker/${getState().auth.id}`, body, tokenConfig(getState));
   dispatch({
-    type: GET_USER_OPTION,
+    type: EDIT_IB,
     payload: res.data
   });
 };

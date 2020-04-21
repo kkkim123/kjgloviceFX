@@ -85,7 +85,7 @@ Markdown==3.2.1
 MarkupSafe==1.1.1
 mnemonic==0.19
 multiaddr==0.0.9
-mysqlclient==1.4.6
+# mysqlclient==1.4.6
 netaddr==0.7.19
 numpy==1.17.4
 oauthlib==3.1.0
@@ -107,14 +107,14 @@ Pygments==2.6.1
 PyJWT==1.7.1
 pyotp==2.3.0
 pyparsing==2.4.6
-pypiwin32==223
+#pypiwin32==223
 pyRFC3339==1.1
 pyrsistent==0.16.0
 python-dateutil==2.8.1
 python-json-logger==0.1.11
 python3-openid==3.1.0
 pytz==2019.3
-pywin32==227
+#pywin32==227
 PyYAML==5.2
 raven==6.10.0
 redis==3.3.11

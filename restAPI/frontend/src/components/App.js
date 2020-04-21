@@ -50,6 +50,8 @@ import DropForm from "./mypage/components/myDetails/dropForm";
 import AccountForm from "./mypage/components/myDetails/accountForm";
 import DocDetail from "./mypage/components/myDetails/docDetail";
 import AccountDetail from "./mypage/components/myDetails/accountDetail";
+import CreateIB from "./company/ib/IBForm";
+import EditIB from "./company/ib/IBEditForm";
 
 
 class App extends Component {
@@ -97,6 +99,8 @@ class App extends Component {
             <Route exact path="/company/aml" component={AmlPolicy} />
             <Route exact path="/company/terms" component={Terms} />
             <Route exact path="/company/ib" component={IntroducerBroker} />
+            <Route exact path="/company/ib/create" component={CreateIB} />
+            <Route exact path="/company/ib/edit" component={EditIB} />
             <Route exact path="/company/white" component={WhiteLabel} />
             <Route exact path="/company/affiliate" component={Affiliate} />
             <Route exact path="/company/helpCenter" component={HelpMain} />

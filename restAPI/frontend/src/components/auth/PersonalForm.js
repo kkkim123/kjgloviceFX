@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
-import { registDetail } from "../../actions/auth";
+import { register } from "../../actions/auth";
 import "../../styles/auth/form.css";
 import { CountryDropdown } from "react-country-region-selector";
 
@@ -37,7 +37,10 @@ class PersonalForm extends Component {
   onSubmit = formValues => {
     if (this.state.country) {
       formValues.Nationality = this.state.country;
-      this.props.registDetail(formValues);
+      const oriData = JSON.parse(localStorage.getItem('register'));
+      formValues = Object.assign(formValues,oriData)
+      this.props.register(formValues)
+      localStorage.removeItem('register');
       this.props.history.push("/main");
     } else {
       alert("Select your Nationality");
@@ -144,7 +147,7 @@ const mapStateToProps = state => ({
   token: state.auth.token
 });
 
-PersonalForm = connect(mapStateToProps, { registDetail })(PersonalForm);
+PersonalForm = connect(mapStateToProps, { register })(PersonalForm);
 
 export default reduxForm({
   form: "detailForm"

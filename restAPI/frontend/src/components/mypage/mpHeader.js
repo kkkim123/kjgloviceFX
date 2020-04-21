@@ -3,7 +3,7 @@ import "../../styles/mypage/mpHeaders.css";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import store from "../../store";
-import { getUserOption, getAccOption } from "../../actions/mypage";
+import { getUserOption, getAccOption, getIb } from "../../actions/mypage";
 import getOut from "../../images/myPage/getOut.png";
 
 class MpHeader extends Component {
@@ -13,6 +13,7 @@ class MpHeader extends Component {
   componentDidMount() {
     store.dispatch(getUserOption());
     store.dispatch(getAccOption());
+    store.dispatch(getIb());
     if (this.props.auth.user) {
       this.linkChange(this.props.auth.user.user_status);
     }
@@ -70,11 +71,12 @@ class MpHeader extends Component {
       <div className="mp-header">
         <div
           className="d-flex justify-content-around align-content-center flex-wrap h-100"
-          style={{ color: "#ffffff" }}
         >
-          <Link to="/mypage">
-            <div className="profile-box"></div>
-          </Link>
+          <div className="mplogo-box">
+            <Link to="/mypage">
+              <div className="mplogo-area"></div>
+            </Link>
+          </div>
           <div className="pt-4">{link}</div>
           <div className="pt-4">
             <a href="#">Trading</a>
@@ -117,6 +119,6 @@ const mapStateToProps = state => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getUserOption, getAccOption })(
+export default connect(mapStateToProps)(
   MpHeader
 );

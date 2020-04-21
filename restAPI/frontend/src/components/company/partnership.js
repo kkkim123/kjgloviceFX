@@ -50,15 +50,6 @@ const Partnership = () => {
             </div>
             <div className="row justify-content-center mb-5 pb-5">
                 <Card
-                    icon={icon_introducer}
-                    name="Introducer"
-                    subtitle="Customised rebate schemes and flexible payout options"
-                    detailFirst="FX Minors and Exotics: Receive up to $50 per million US$ traded*"
-                    detailSecond="FX Majors: Receive up to $35 per million"
-                    submitText="Become Introducer"
-                    link="/company/ib"
-                />
-                <Card
                     icon={icon_broker}
                     name="White Label Broker"
                     subtitle="Customised rebate schemes and flexible payout options"
@@ -67,6 +58,15 @@ const Partnership = () => {
                     submitText="Become White Label Broker"
                     link="/company/white"
                 />
+                <Card
+                    icon={icon_introducer}
+                    name="Introducer"
+                    subtitle="Customised rebate schemes and flexible payout options"
+                    detailFirst="FX Minors and Exotics: Receive up to $50 per million US$ traded*"
+                    detailSecond="FX Majors: Receive up to $35 per million"
+                    submitText="Become Introducer"
+                    link="/company/ib"
+                />                
                 <Card
                     icon={icon_affiliate}
                     name="Affiliate"

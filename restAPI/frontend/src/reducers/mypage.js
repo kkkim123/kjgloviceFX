@@ -44,6 +44,8 @@ export default (state = {}, action) => {
     case ADD_FILE:
     case EDIT_FILE:
     case ADD_ACCOUNT:
+    case ADD_IB:
+    case EDIT_IB:
       return true;
     case GET_FILE:
       return {
@@ -70,9 +72,25 @@ export default (state = {}, action) => {
           history: _.map(action.payload)
         }
     case PART_LOADED:
+      return {
+        ...state,
+        partner: action.payload
+      }
     case PART_ACCOUNT:
+        return {
+          ...state,
+          partAcc: action.payload
+        }      
     case PARTS_COMMISION:
+        return {
+          ...state,
+          allCommision: action.payload
+        }       
     case PART_COMMISION:
+        return {
+          ...state,
+          commision: action.payload
+        }           
     case ADD_DEPOSIT:
     case GET_DEPOSIT:
     case DELETE_DEPOSIT:
@@ -82,9 +100,11 @@ export default (state = {}, action) => {
     case GET_TRANSFER:
     case ADD_TRANSFER:
     case DELETE_TRANSFER:
-    case ADD_IB:
     case GET_IB:
-    case EDIT_IB:
+        return {
+          ...state,
+          ib: action.payload
+        };      
     default:
       return state;
   }

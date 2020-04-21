@@ -34,12 +34,12 @@ a{
   overflow: hidden;
 }
 
-.logo-area {
+/* .logo-area {
   width: 100%;
   height: 100%;
   background-color: #006536;
   object-fit: cover;
-}
+} */
 
 .profile {
   width: 100%;

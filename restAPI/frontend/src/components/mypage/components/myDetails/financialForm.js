@@ -63,6 +63,9 @@ class FinancialForm extends Component {
   };
 
   onSubmit = formValues => {
+    if (formValues.trading_experience === "1") {
+      formValues.trading_period = null
+    }
     formValues.user_status = 4;
     this.props.registDetail(formValues);
     this.props.history.push("/mypage");
@@ -108,7 +111,6 @@ class FinancialForm extends Component {
               placeholder="Trading period*"
               index="6"
               options={this.props.options}
-              validate={required}
               disabled={true}
             />
             <button

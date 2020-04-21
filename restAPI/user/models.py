@@ -16,27 +16,6 @@ import json, configparser
 
 from mptt.models import TreeForeignKey, MPTTModel
 
-
-class Country(MPTTModel):
-    class Meta:
-        verbose_name_plural = 'countries'
-        #app_label = 'django_mptt_example'
-
-    code = models.CharField(max_length=2, blank=True, null=True)
-    name = models.CharField(max_length=50, blank=True, null=True)
-    parent = TreeForeignKey(
-        'self',
-        null=True,
-        blank=True,
-        related_name='children',
-        on_delete=models.CASCADE
-    )
-
-    def __str__(self):
-        return self.name or self.code or ''
-
-
-
 USER_TYPES = (
     ('R', 'Retail'),
     ('I', 'IB'),
@@ -166,7 +145,6 @@ class FxUserManager(BaseUserManager):
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
-        print(user)
         return user
     def create_superuser(self, *args, **kwargs):
         """
@@ -227,7 +205,7 @@ class FxUser(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
 
     USER_CREATE_PASSWORD_RETYPE = True
-    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin','referral_code','user_status', 'user_type', 'referral_website']
+    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin','referral_code','user_status', 'user_type', 'referral_website', 'address', 'postal_code', 'city',  'Nationality', 'birthday', 'mobile']
 
     objects = FxUserManager()
 
@@ -297,7 +275,6 @@ class FxUserDocument(models.Model):
     class Meta:
         ordering = ['created_at']
 
-
 class IntroducingBroker(MPTTModel):
     fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
     company_idx = models.IntegerField(default = 1, blank=True, null=True)
@@ -314,7 +291,7 @@ class IntroducingBroker(MPTTModel):
     back_index = models.IntegerField(blank=True, null=True)
     referralurl = models.URLField(blank=True, null=True)
     ib_website = models.URLField(max_length=128, blank=True, null=True, default='')
-
+    
     status = models.CharField(default='P', max_length=1, blank=True, choices=IB_STATUS,null=True)
     parent = TreeForeignKey(
         'self',
@@ -324,7 +301,7 @@ class IntroducingBroker(MPTTModel):
         related_name='children',
         on_delete=models.CASCADE
     )
-
+    
     def __str__(self):
         return self.fxuser.email or self.ib_name or ''
 

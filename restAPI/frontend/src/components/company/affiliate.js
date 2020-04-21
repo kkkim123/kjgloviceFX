@@ -2,6 +2,7 @@ import React from 'react';
 import '../../styles/company/introducerBroker.css'
 import icon_affiliate from '../../images/icon_affiliate.png'
 import check from '../../images/check.png'
+import { Link } from 'react-router-dom'
 
 const Affiliate = () => {
     return (
@@ -46,9 +47,9 @@ const Affiliate = () => {
             </div>
             <div className="row justify-content-center pb-5 mb-5">
                 <div className="col-xs-6 col-sm-3">
-                    <a className="partner-submit rounded-pill" href="#">
+                    <Link className="partner-submit rounded-pill" onClick={()=>alert('Coming Soon')}>
                         <span className="px-3">Become Affiliate</span>
-                    </a>
+                    </Link>
                 </div>
                 <div className="col-xs-6 col-sm-3">
                     <a className="partner-submit color-gray rounded-pill" href="#">

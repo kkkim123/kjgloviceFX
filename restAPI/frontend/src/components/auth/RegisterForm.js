@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
-import { register } from "../../actions/auth";
 import { CountryDropdown } from "react-country-region-selector";
 import "../../styles/auth/form.css";
 import queryString from 'query-string';
@@ -42,7 +41,8 @@ class RegisterForm extends Component {
     if (this.state.country) {
       formValues.resident_country = this.state.country;
       formValues.is_admin = false;
-      this.props.register(formValues);
+      localStorage.setItem('register', JSON.stringify(formValues))
+      // this.props.register(formValues);
       this.props.history.push("/register/address");
     } else {
       alert("Select your Counrty");
@@ -165,7 +165,7 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated
 });
 
-RegisterForm = connect(mapStateToProps, { register })(RegisterForm);
+RegisterForm = connect(mapStateToProps)(RegisterForm);
 
 export default reduxForm({
   form: "registerForm",

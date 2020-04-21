@@ -1,77 +1,87 @@
-import React, { Component } from 'react';
-import MpHeader from './mpHeader'
-import Steps from './components/steps'
-import NoticeBox from './components/noticeBox'
-import UserInfo from './components/userInfo'
-import InBox from './components/inBox'
-import Profit from './components/profit'
-import Overview from './components/overview'
-import Account from './components/account'
-import TradingHistory from './components/tradingHistory'
-import Partners from './components/partners'
-import MyProfile from './components/myProfile'
-
+import React, { Component } from "react";
+import MpHeader from "./mpHeader";
+import Steps from "./components/steps";
+import NoticeBox from "./components/noticeBox";
+import UserInfo from "./components/userInfo";
+import InBox from "./components/inBox";
+import Profit from "./components/profit";
+import Overview from "./components/overview";
+import Account from "./components/account";
+import TradingHistory from "./components/tradingHistory";
+import Partners from "./components/partners";
+import MyProfile from "./components/myProfile";
+import IBInfo from "./components/IBInfo";
+import PartAccount from "./components/partnersAccount";
+import AllCommissionHistory from "./components/allCommissionHistory";
+import CommissionHistory from "./components/commissionHistory";
 import { connect } from "react-redux";
 
+
 class MyPage extends Component {
-    
-    render() {
-        const { user } = this.props.auth;
+  render() {
+    const { user } = this.props.auth;
     return (
-        <div>
-            {/* <MpHeader /> */}
-            <Steps 
-                status={user && user.user_status}
-            />
-            <NoticeBox
-                title="Welcome to gloviceFX"
-                subtitle=" - your personal client area"
-                content1="Your gloviceFX User ID: "
-                id="62249056"
-                content2="We have sent your login information to your email."
-            />
-            <NoticeBox
-                title="Success!"
-                subtitle=""
-                content1="There’s never been a better time to trade with gloviceFX!"
-                id=""
-                content2=" Get 30% back on every deposit you make for 30days all the way up to The Big $5000! T&Cs apply"
-            />
-            <div className="container d-flex justify-content-between my-5">
-                <UserInfo
-                    data={user}
-                />
-                {/* <InBox
+      <div>
+        {/* <MpHeader /> */}
+        <Steps status={user && user.user_status} />
+        <NoticeBox
+          title="Welcome to gloviceFX"
+          subtitle=" - your personal client area"
+          content1="Your gloviceFX User ID: "
+          id="62249056"
+          content2="We have sent your login information to your email."
+        />
+        <NoticeBox
+          title="Success!"
+          subtitle=""
+          content1="There’s never been a better time to trade with gloviceFX!"
+          id=""
+          content2=" Get 30% back on every deposit you make for 30days all the way up to The Big $5000! T&Cs apply"
+        />
+        <div className="container d-flex justify-content-between my-5">
+          <UserInfo data={user} />
+          {/* <InBox
                     messagesNum="1"
                     unreedNum="2"
                 /> */}
-            </div>
-
-            <div className="container d-flex justify-content-between my-5">
-                <Profit />
-                <Overview
-                    balance="4526.24"
-                    equity="4552.52"
-                    floatingPL="-"
-                    closedProfit="-"
-                    freeMargin="-474.35"
-                    marginInUse="0.00"
-                    marginLevel="-"
-                    accountType="-"
-                    lastUpdate="20/11/22"
-                />
-            </div>
-            <Account />
-            <TradingHistory />
-            <Partners />
-            {/* <MyProfile /> */}
         </div>
+
+        <div className="container d-flex justify-content-between my-5">
+          <Profit />
+          <Overview
+            balance="4526.24"
+            equity="4552.52"
+            floatingPL="-"
+            closedProfit="-"
+            freeMargin="-474.35"
+            marginInUse="0.00"
+            marginLevel="-"
+            accountType="-"
+            lastUpdate="20/11/22"
+          />
+        </div>
+        <Account />
+        <TradingHistory />
+        {user && user.user_type === "I" && (
+          <>
+            <div className="container d-flex justify-content-between my-5">
+              <IBInfo data={this.props.ib} />
+            </div>
+            <Partners data={this.props.ib} />
+            <PartAccount data={this.props.ib} />
+            <AllCommissionHistory data={this.props.ib} />
+            <CommissionHistory data={this.props.ib} />
+          </>
+        )}
+        {/* <MyProfile /> */}
+      </div>
     );
-    };
-};
+  }
+}
 
 const mapStateToProps = state => ({
-    auth: state.auth
-  });
-  
-  export default connect(mapStateToProps)(MyPage);
+  auth: state.auth,
+  ib: state.mypage.ib
+});
+
+export default connect(mapStateToProps)(MyPage);

@@ -12,7 +12,7 @@ class DropForm extends Component {
       allFiles.forEach(f => f.remove());
       files.fxuser = this.props.auth.user.id;
       this.props.addFile(files);
-      this.props.history.push("/mypage/details/document/detail");
+      this.props.history.push("/mypage");
     };
 
     return (

@@ -73,7 +73,7 @@ class EmployForm extends Component {
                 index="0"
                 options={this.props.options}
                 validate={required}
-              ></Field>
+              />
               <Field
                 name="industry"
                 type="text"

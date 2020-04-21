@@ -71,7 +71,9 @@ class tradingHistory extends Component {
           to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
           from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
           page: this.state.activePage,
-          acc: this.state.acc
+          acc: this.state.acc,
+          symbol: this.state.symbol,
+          type: this.state.type,
         });
       }
     );
@@ -88,7 +90,9 @@ class tradingHistory extends Component {
           to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
           from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
           page: this.state.activePage,
-          acc: this.state.acc
+          acc: this.state.acc,
+          symbol: this.state.symbol,
+          type: this.state.type,
         });
       }
     );
@@ -143,9 +147,10 @@ class tradingHistory extends Component {
             to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
             from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
             page: this.state.activePage,
-            acc: this.state.acc
+            acc: this.state.acc,
+            symbol: this.state.symbol,
+            type: this.state.type,
           });
-          console.log(this.props.account)
         }
       );
     }
@@ -158,7 +163,9 @@ class tradingHistory extends Component {
           to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
           from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
           page: this.state.activePage,
-          acc: this.state.acc
+          acc: this.state.acc,
+          symbol: this.state.symbol,
+          type: this.state.type,
         });
       })
     }

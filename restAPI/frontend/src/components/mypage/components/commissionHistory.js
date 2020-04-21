@@ -3,13 +3,58 @@ import { connect } from "react-redux";
 import Moment from "moment";
 
 class partners extends Component {
-    componentDidMount() {
-        if (this.props.data) {
-            this.props.partLoad(this.props.data.ib_code);
-        }
+  state = {
+    //시작일
+    from_date: Moment(new Date()).subtract(7, "days").toDate(),
+    //종료일
+    to_date: new Date(),
+    //현재페이지
+    activePage: 1,
+    //전체 Trading History 수
+    totalCnt: 1,
+    //초기 전체페이지 수 설정 후 렌더링 방지
+    isCnt: true,
+    //Trading History 대상 계좌
+    acc: 1,
+    //Symbol Search
+    symbol: "",
+    //Type(CMD) Search
+    type: "",
+  };
+  
+  componentDidMount() {
+    if (this.props.data) {
+        this.props.partCommision({
+          to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+          from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+        });
     }
+}
 
+handleFromChange = date => {
+  this.setState(
+    {
+      from_date: date,
+    }
+  )
+      this.props.partCommision({
+        to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+        from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+      });
+};
+
+handleToChange = date => {
+  this.setState(
+    {
+      to_date: date,
+    })
+      this.props.partCommision({
+        to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+        from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+      });
+};
   render() {
+    console.log(this.props.comHistory)
     return (
       <div
         className="shadow my-5 py-5 px-4 text-center mx-auto"
@@ -21,7 +66,7 @@ class partners extends Component {
         }}
       >
         <div className="text-left mb-5">
-          <h3>Partners List</h3>
+        <h3>Commission History - Account</h3>
         </div>
         <div
           className="d-flex justify-content-between"
@@ -128,14 +173,14 @@ class partners extends Component {
                 </div>
               </div>
             );
-          }) : <div>No Partners</div>}
+          }) : <div>No Commission History</div>}
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  partners: state.mypage.partner
+  comHistory: state.mypage.commision
 });
 
 export default connect(mapStateToProps)(partners);
