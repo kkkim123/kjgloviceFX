@@ -52,7 +52,7 @@ class IBAdmin(admin.ModelAdmin):
             return
         cursor =  connections['backOffice'].cursor()
 
-        ibs = queryset.values_list('company_idx', 'parent_idx', 'ib_code','ib_name','point', 'live_yn', 'email', '','send_report')
+        ibs = queryset.values_list('company_idx', 'parent_idx', 'ib_code','ib_name','point', 'live_yn', 'email','send_report')
         if(ibs.count < 1) :
             self.message_user(request, 'not found')
             return
@@ -65,7 +65,7 @@ class IBAdmin(admin.ModelAdmin):
                 print(row[0])
                 if row[0] == 'SUCCESS':
                     cursor.nextset()
-                    cursor.callproc("SP_IB_STRUCTURE_ADD", (ib[0],ib[1],ib[2],ib[3],ib[4],ib[5],ib[6],"",ib[7]))
+                    cursor.callproc("SP_IB_STRUCTURE_ADD", (ib[0],ib[1],ib[2],ib[3],ib[4],ib[5],ib[6],'',ib[7]))
                     cursor.nextset()
                     cursor.execute("select IDX from IB_STRUCTURE where IB_LOGIN = '" + str(ib[2]) +"';")
                     #print(cursor.description)
@@ -93,12 +93,13 @@ class IBAdmin(admin.ModelAdmin):
         cursor =  connections['backOffice'].cursor()
 
         ibs = queryset.values_list('back_index', 'parent_idx', 'ib_code','ib_name'
-                                    ,'point', 'email', 'send_report','password')
+                                    ,'point', 'email', 'send_report')
         if(ibs.count < 1) :
             self.message_user(request, 'not found')
             return
         for ib in ibs:
-            cursor.callproc("SP_IB_STRUCTURE_EDIT", (ib[0],ib[1],ib[2],ib[3],ib[4],ib[5],1 if ib[6] == 'Y' else 0,ib[7]))           
+        #i_idx	int ,i_parent_idx int, i_login int,i_name varchar(33),i_point int,i_email varchar(50),i_send_report int,i_new_pass varchar(50)
+            cursor.callproc("SP_IB_STRUCTURE_EDIT", (ib[0],ib[1],ib[2],ib[3],ib[4],ib[5],1 if ib[6] == 'Y' else 0,''))           
             self.message_user(request, 'SP_IB_STRUCTURE_EDIT {}'.format(cursor.fetchall()))     
     updateIBtoBackoffice.short_description = "update IB to Backoffice"
 
