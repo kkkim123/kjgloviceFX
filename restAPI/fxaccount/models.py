@@ -2,12 +2,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from user.models import FxUser
 from datetime import datetime, timedelta
-# from pytz import timezone
-
-#from django.db.models.signals import post_save
-#from django.core.mail import EmailMessage
-#from treebeard.mp_tree import MP_Node
-
 
 # TradingAccountTransaction 전용
 ACCOUNT_TRANSACTION_TYPES_CHOICE = (
@@ -31,7 +25,7 @@ ACCOUNT_TRANSACTION_STATUS = (
 # TradingTransaction 전용
 ACCOUNT_TYPES = (
     ('0', 'Live MT4 Account'),
-    #('D', 'Live IB Account'),
+    # ('D', 'Live IB Account'),
     # ('P', 'PAMM-Master'),
     # ('T', 'CopyTrader-Master'),
     # ('Q', 'PAMM-Slave'),
@@ -47,7 +41,6 @@ ACCOUNT_STATUS = (
 )
 
 TRADING_PLATFORM_CHOICE = (
-    #('', 'Please Choose...'),
     ('0', 'MT4'),
     # ('2', 'PAMM-Master'),
     # ('3', 'CopyTrader-Master'),
@@ -56,7 +49,6 @@ TRADING_PLATFORM_CHOICE = (
 )
 
 ACCOUNT_BASE_CURRENCY_CHOICE = (
-    #('', 'Please Choose...'),
     ('0', 'USD'),
     # ('2', 'CNY'),
     # ('3', 'BTC'),
@@ -216,22 +208,17 @@ class FxAccount(models.Model):
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
 
     user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
-    #user = models.ForeignKey(FxUser, db_column='a_id', related_name='b_objects',on_delete=models.CASCADE)
     status = models.CharField(default='P', max_length=1, blank=False, choices=ACCOUNT_STATUS)
     ib_status = models.BooleanField(default=False, blank=True, choices=IB_STATUS_CHOICES)
-    #account_type_status = models.CharField(default='N', max_length=1, blank=True, choices=ACCOUNT_PAMM_STATUS)
     referral_code = models.CharField(default='2002', max_length=6, blank=True)
     ib_commission = models.FloatField(default=0.0, blank=True)
-
-    
+  
     base_currency = models.CharField(default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)
     leverage = models.CharField(default='1', max_length=1, blank=False, choices=LEVERAGE_CHOICES)
 
     trading_platform = models.CharField(default='1', max_length=1, blank=True, choices=TRADING_PLATFORM_CHOICE)
     account_description = models.TextField(default='', blank=True)
     account_name = models.CharField(default='', max_length=32, blank=True)
-    #account_trader_code = models.CharField(default='', max_length=32, blank=True)  # investor 로 신청할 경우 trader 의 pamm code 가 들어감
-
 
     class Meta:
         verbose_name = "Trading Account"
@@ -286,9 +273,6 @@ class WithdrawTransaction(BaseTransaction):
     cellphone_number = models.CharField(default='', max_length=30, blank=True)  
 
     status = models.CharField(default='P', max_length=1, blank=False, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
-
-    # i_account_no = models.CharField(default='', max_length=48, blank=True, null=True)
-    # status_remark = models.TextField( default='', blank=True)
 
     created_at = models.DateTimeField( auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)

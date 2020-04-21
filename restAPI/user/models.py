@@ -7,8 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters.html import HtmlFormatter
 from pygments import highlight
-#from simple_email_confirmation.models import SimpleEmailConfirmationUserMixin
-#from django_countries.fields import CountryField
 from uuid import uuid4
 import datetime
 import json, configparser
@@ -17,20 +15,17 @@ import json, configparser
 #config.read('common/config/config.ini')
 
 USER_TYPES = (
-    #('', 'Please Choose...'),
     ('R', 'Retail'),
     ('I', 'IB'),
 )
 
 EST_ANNUAL_INCOME = (
-    #('', 'Please Choose...'),
     ('0', 'Less Than 10,000'),
     ('1', '10,000 to 50,000'),
     ('2', '50,000 to 100,000'),
     ('3', 'Over 100,000'),
 )
 INCOME_OF_SOURCE = (
-    #('', 'Please Choose...'),
     ('0', 'salary'),
     ('1', 'Business/Profession'),
     ('2', 'capital gain'),
@@ -39,7 +34,6 @@ INCOME_OF_SOURCE = (
 )
 
 EST_NET_WORTH = (
-    #('', 'Please Choose...'),
     ('0', 'Less Than 10,000'),
     ('1', '10,000 to 50,000'),
     ('2', '50,000 to 100,000'),
@@ -47,7 +41,6 @@ EST_NET_WORTH = (
 )
 
 EMPLOYMENT_STATUS_CHOICES = (
-    #('', 'Please Choose...'),
     ('0', 'Employed'),
     ('1', 'Self-Employed'),
     ('2', 'Unemployed'),
@@ -55,14 +48,12 @@ EMPLOYMENT_STATUS_CHOICES = (
     ('4', 'Student'),
 )
 EMPLOYMENT_POSITION_CHOICES = (
-    #('', 'Please Choose...'),
     ('0', 'Senior level Management'),
     ('1', 'Middle Management'),
     ('2', 'Entry Level'),
 )
 
 EDUCATION_LEVEL_CHOICES = (
-    #('', 'Please Choose...'),
     ('0', 'Bachelors Degree or Equivalent'),
     ('1', 'Masters Degree or equivalent'),
     ('2', 'Phd / Research Degree'),
@@ -70,7 +61,6 @@ EDUCATION_LEVEL_CHOICES = (
 )
 
 INDUSTRY_CHOICES = (
-    #('', 'Please Choose...'),
     ('0', 'Employed'),
     ('1', 'Self-Employed'),
     ('2', 'Unemployed'),
@@ -78,13 +68,11 @@ INDUSTRY_CHOICES = (
     ('4', 'Student'),
 )
 TRADING_EXPERIENCE = (
-    #('', 'Please Choose...'),
     ('0', 'Y'),
     ('1', 'N'),
 )
 
 TRADING_PERIOD = (
-    #('', 'Please Choose...'),
     ('0', 'I have a relevant education/professional qualification'),
     ('1', 'I regularly monitor the news/markets'),
     ('2', 'I have read educational material on FX trading'),
@@ -134,7 +122,6 @@ USER_STATUS_CHOICE = (
     ('10', 'CONFIRMED MAKE DEPOSIT'),
     # ('11', 'PENDING ALL COMPLETE'),
     # ('12', 'CONFIRMED ALL COMPLETE'),
-
 )
 
 
@@ -173,8 +160,8 @@ class FxUserManager(BaseUserManager):
 class FxUser(AbstractBaseUser):
     username_validator = None
     username = None
+
     id = models.AutoField(primary_key=True)
-    #resident_country = CountryField(blank_label='(select country)')
     resident_country = models.CharField(max_length=128)
     first_name  = models.CharField(max_length=240)
     last_name  = models.CharField(max_length=240)
@@ -207,9 +194,6 @@ class FxUser(AbstractBaseUser):
     expected_deposit = models.CharField(default='1', max_length=1, blank=True, choices=EMPLOYMENT_STATUS_CHOICES,null=True)
     trading_experience = models.CharField(default='1', max_length=1, blank=True, choices=TRADING_EXPERIENCE,null=True)
     trading_period = models.CharField(default='1', max_length=1, blank=True, choices=TRADING_PERIOD,null=True)
-
-    referral_code = models.CharField(max_length=36, blank=True,null=True)
-    referral_website = models.URLField(max_length=128, blank=True, null=True, default='')
 
     referral_code = models.CharField(max_length=36, blank=True,null=True)
     referral_website = models.URLField(max_length=128, blank=True, null=True, default='')
@@ -305,3 +289,6 @@ class IntroducingBroker(models.Model):
     back_index = models.IntegerField(blank=True, null=True)
     referralurl = models.URLField(blank=True, null=True)
     status = models.CharField(default='P', max_length=1, blank=True, choices=IB_STATUS,null=True)
+    
+    def __str__(self):
+        return self.fxuser.email

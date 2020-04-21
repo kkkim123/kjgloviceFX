@@ -1,30 +1,58 @@
 from django.contrib import admin
-#from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from datetime import timezone, datetime
-#from .forms import UserChangeForm
 from .models import FxUser,FxUserDocument,IntroducingBroker
 from django.db import connections
-# from django.http import HttpResponse,HttpResponseRedirect
-# from django.urls import path
-# from django.template.response import TemplateResponse
+from django.utils.html import format_html
 class IBAdmin(admin.ModelAdmin):
     actions = ['addIBtoBackoffice','updateIBtoBackoffice','moveIBtoBackoffice']
     list_display = ('fxuser', 'company_idx', 'parent_idx', 'back_index','ib_code','ib_name',
     'point', 'live_yn', 'email', 'send_report','referralurl','status')
-    # list_filter = ('is_admin',)
+    list_filter = ('status',)
     list_editable = ('company_idx','parent_idx','ib_code','ib_name','point','live_yn','send_report','back_index','status')
-    search_fields = ('ib_code',)
+    search_fields = ('fxuser','ib_code',)
     # ordering = ('email',)
     # filter_horizontal = ()
 
+
+
+    # def fxuser_colored(self, obj):
+    #     if obj.status == 'P':
+    #         color_code = '00FF00'
+    #     else:
+    #         color_code = 'FF0000'
+    #     html = '<span style="color: #{};">{}</span>'.format(color_code, obj.fxuser)
+    #     return format_html(html)
+    # fxuser_colored.admin_order_field = 'fxuser'
+    # fxuser_colored.short_description = 'fxuser'
+
+    # def custom_referralurl(self, obj):
+    #     return format_html('<a  href="{0}" >{0}</a>&nbsp;',
+    #         obj.referralurl
+    #     )
+    # #custom_referralurl.short_description = 'Github Profile'
+    # custom_referralurl.allow_tags = True
+    # def get_form(self, request, obj=None, **kwargs):
+    #     form = super(IBAdmin, self).get_form(request, obj, **kwargs)
+    #     form.base_fields['live_yn'].widget.attrs['style'] = 'width: 10em;'
+    #     return form
+
+
+
+
+    # def delete(self, obj):
+    #     view_name = "admin:{}_{}_delete".format(obj._meta.app_label, obj._meta.model_name)
+    #     link = reverse(view_name, args=[IntroducingBroker.pk])
+    #     html = '<input type="button" onclick="location.href=\'{}\'" value="Delete" />'.format(link)
+    #     return format_html(html)
+    
     def addIBtoBackoffice(self, request, queryset):
         if queryset.count() != 1:
             self.message_user(request, 'Let\'s do it slowly one by one')
             return
         cursor =  connections['backOffice'].cursor()
 
-        ibs = queryset.values_list('company_idx', 'parent_idx', 'ib_code','ib_name','point', 'live_yn', 'email', 'password','send_report')
+        ibs = queryset.values_list('company_idx', 'parent_idx', 'ib_code','ib_name','point', 'live_yn', 'email', '','send_report')
         if(ibs.count < 1) :
             self.message_user(request, 'not found')
             return
@@ -71,8 +99,7 @@ class IBAdmin(admin.ModelAdmin):
             return
         for ib in ibs:
             cursor.callproc("SP_IB_STRUCTURE_EDIT", (ib[0],ib[1],ib[2],ib[3],ib[4],ib[5],1 if ib[6] == 'Y' else 0,ib[7]))           
-            self.message_user(request, 'SP_IB_STRUCTURE_EDIT {}'.format(cursor.fetchall()))
-       
+            self.message_user(request, 'SP_IB_STRUCTURE_EDIT {}'.format(cursor.fetchall()))     
     updateIBtoBackoffice.short_description = "update IB to Backoffice"
 
     def moveIBtoBackoffice(self, request, queryset):
@@ -106,7 +133,6 @@ class IBAdmin(admin.ModelAdmin):
                 queryset.update(back_index=row[0])
 
             self.message_user(request, 'SP_IB_STRUCTURE_MOVE {}'.format(cursor.fetchall()))
-
     moveIBtoBackoffice.short_description = "move IB to Backoffice"
 
 admin.site.register(IntroducingBroker, IBAdmin)
