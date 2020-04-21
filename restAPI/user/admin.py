@@ -110,7 +110,8 @@ class IBAdmin(DjangoMpttAdmin):
                     
                     for row in cursor.fetchall():
                         queryset.update(back_index=row[0])
-                        queryset.update(referralurl="127.0.0.1:8000/user?refcode = "+ str(ib[2]))
+                        queryset.update(referralurl="glovicefx.com/user?refcode = "+ str(ib[2]))
+                        # queryset.update(referralurl="127.0.0.1:8000/user?refcode = "+ str(ib[2]))
                         #IB Code가 정상적으로 생성되면 유저정보의 계
                     self.message_user(request, 'SP_IB_STRUCTURE_ADD {}'.format(cursor.fetchall()))
                 else :
