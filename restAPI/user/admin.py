@@ -1,9 +1,17 @@
+
+import json
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from datetime import timezone, datetime
 from .models import FxUser,FxUserDocument,IntroducingBroker
 from django.db import connections
 from django.utils.html import format_html
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Count
+from django.db.models.functions import TruncDay
+
+
+
 class IBAdmin(admin.ModelAdmin):
     actions = ['addIBtoBackoffice','updateIBtoBackoffice','moveIBtoBackoffice']
     list_display = ('fxuser', 'company_idx', 'parent_idx', 'back_index','ib_code','ib_name',
@@ -156,7 +164,21 @@ class UserAdmin( admin.ModelAdmin):
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()	
+    def changelist_view(self, request, extra_context=None):
+        # Aggregate new subscribers per day
+        chart_data = (
+            FxUser.objects.annotate(date=TruncDay("created_at"))
+            .values("date")
+            .annotate(y=Count("id"))
+            .order_by("-date")
+        )
 
+        # Serialize and attach the chart data to the template context
+        as_json = json.dumps(list(chart_data), cls=DjangoJSONEncoder)
+        extra_context = extra_context or {"chart_data": as_json}
+
+        # Call the superclass changelist_view to render the page
+        return super().changelist_view(request, extra_context=extra_context)
 admin.site.register(FxUser, UserAdmin)
 
 class DocumentAdmin( admin.ModelAdmin):

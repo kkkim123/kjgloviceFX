@@ -196,7 +196,7 @@ class FxUser(AbstractBaseUser):
     trading_experience = models.CharField(default='1', max_length=1, blank=True, choices=TRADING_EXPERIENCE,null=True)
     trading_period = models.CharField(default='1', max_length=1, blank=True, choices=TRADING_PERIOD,null=True)
 
-    referral_code = models.CharField(max_length=36, blank=True,null=True)
+    referral_code = models.CharField(default='2002',max_length=36, blank=True,null=True)
     referral_website = models.URLField(default='' , max_length=128, blank=True, null=True)
 
     user_status = models.CharField(default='1', max_length=2, blank=True, choices=USER_STATUS_CHOICE)
