@@ -42,7 +42,20 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = FxUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsOwnerOnly, IsAuthenticated]
+    def retrieve(self, request, *args, **kwargs):
+        permission_classes = [IsOwnerOnly, IsAuthenticated]
 
+        fxuser = FxUser.objects.get(id=request.data['fxuser'])
+        print(fxuser.referral_website)
+        if(fxuser.referral_website == None or fxuser.referral_website == ""):
+            ib = IntroducingBroker.objects.get(ib_code = fxuser.referral_code)
+            fxuser.referral_website  = ib.ib_website
+            fxuser.save()
+
+        queryset = FxUser.objects.all()
+        user = get_object_or_404(queryset, id=request.data['fxuser'])
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
 UserProfile = UserProfileViewSet.as_view({
     'get': 'retrieve',
@@ -73,7 +86,7 @@ class IntroducingBrokerViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-IntroducingBroker = IntroducingBrokerViewSet.as_view({
+NewIntroducingBroker = IntroducingBrokerViewSet.as_view({
     'post': 'create',
 })
 AlterIntroducingBroker = IntroducingBrokerViewSet.as_view({

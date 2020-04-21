@@ -9,12 +9,21 @@ class IBAdmin(admin.ModelAdmin):
     list_display = ('fxuser', 'company_idx', 'parent_idx', 'back_index','ib_code','ib_name',
     'point', 'live_yn', 'email', 'send_report','referralurl','status')
     list_filter = ('status',)
-    list_editable = ('company_idx','parent_idx','ib_code','ib_name','point','live_yn','send_report','back_index','status')
+    list_editable = ('company_idx','parent_idx','ib_code','ib_name','point','live_yn','send_report','status')
     search_fields = ('fxuser','ib_code',)
     # ordering = ('email',)
     # filter_horizontal = ()
 
-
+    def save_model(self, request, obj, form, change):
+        fxuser = FxUser.objects.get(id = obj.fxuser_id)
+        if(obj.status =='A'):
+            fxuser.user_type = 'I'     
+            fxuser.save()    
+        else :
+            fxuser.user_type = 'R'     
+            fxuser.save()       
+        
+        super().save_model(request, obj, form, change)
 
     # def fxuser_colored(self, obj):
     #     if obj.status == 'P':
@@ -53,9 +62,9 @@ class IBAdmin(admin.ModelAdmin):
         cursor =  connections['backOffice'].cursor()
 
         ibs = queryset.values_list('company_idx', 'parent_idx', 'ib_code','ib_name','point', 'live_yn', 'email','send_report')
-        if(ibs.count < 1) :
-            self.message_user(request, 'not found')
-            return
+        # if(ibs.count < 1) :
+        #     self.message_user(request, 'not found')
+        #     return
 
         for ib in ibs:
             print(ib[2])
@@ -94,9 +103,9 @@ class IBAdmin(admin.ModelAdmin):
 
         ibs = queryset.values_list('back_index', 'parent_idx', 'ib_code','ib_name'
                                     ,'point', 'email', 'send_report')
-        if(ibs.count < 1) :
-            self.message_user(request, 'not found')
-            return
+        # if(ibs.count < 1) :
+        #     self.message_user(request, 'not found')
+        #     return
         for ib in ibs:
         #i_idx	int ,i_parent_idx int, i_login int,i_name varchar(33),i_point int,i_email varchar(50),i_send_report int,i_new_pass varchar(50)
             cursor.callproc("SP_IB_STRUCTURE_EDIT", (ib[0],ib[1],ib[2],ib[3],ib[4],ib[5],1 if ib[6] == 'Y' else 0,''))           
@@ -110,16 +119,18 @@ class IBAdmin(admin.ModelAdmin):
         cursor =  connections['backOffice'].cursor()
 
         ibs = queryset.values_list('back_index')
-        if(ibs.count < 1) :
-            self.message_user(request, 'back_index is not found')
-            return
+        # if(ibs.count < 1) :
+        #     self.message_user(request, 'back_index is not found')
+        #     return
         cursor.callproc("SP_IB_STRUCTURE_GET_ITEM", (ibs[0]))
         #print(cursor.fetchall())
         old_parent_idx = 0
         for row in cursor.fetchall():
             old_parent_idx = row[2]
       
-        ibs = queryset.values_list('back_index', 'parent_idx')
+        if(old_parent_idx == 0):
+            return
+        ibs = queryset.values_list('back_index', 'parent_idx','ib_code')
         # if(ibs.count < 1) :
         #     self.message_user(request, 'back_index is not found')
         #     return

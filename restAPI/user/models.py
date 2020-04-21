@@ -143,6 +143,7 @@ class FxUserManager(BaseUserManager):
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
+        print(user)
         return user
     def create_superuser(self, *args, **kwargs):
         """
@@ -196,7 +197,7 @@ class FxUser(AbstractBaseUser):
     trading_period = models.CharField(default='1', max_length=1, blank=True, choices=TRADING_PERIOD,null=True)
 
     referral_code = models.CharField(max_length=36, blank=True,null=True)
-    referral_website = models.URLField(max_length=128, blank=True, null=True, default='')
+    referral_website = models.URLField(default='' , max_length=128, blank=True, null=True)
 
     user_status = models.CharField(default='1', max_length=2, blank=True, choices=USER_STATUS_CHOICE)
     is_active = models.BooleanField(default=True)
@@ -281,13 +282,15 @@ class IntroducingBroker(models.Model):
     parent_idx = models.IntegerField(default = 69, blank=True, null=True)
     ib_code = models.IntegerField(blank=True, null=True)
     ib_name = models.CharField(blank=True, max_length=36)
-    point = models.IntegerField(blank=True)
+    point = models.IntegerField(blank=True, null=True)
     live_yn = models.CharField(blank=True, max_length=1, null=True)
     email = models.EmailField(unique=True)
     #password = models.CharField(max_length=240, null=True)
     send_report = models.CharField(blank=True, max_length=1, null=True)
     back_index = models.IntegerField(blank=True, null=True)
     referralurl = models.URLField(blank=True, null=True)
+    ib_website = models.URLField(max_length=128, blank=True, null=True, default='')
+
     status = models.CharField(default='P', max_length=1, blank=True, choices=IB_STATUS,null=True)
     
     def __str__(self):

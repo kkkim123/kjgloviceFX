@@ -10,7 +10,7 @@ urlpatterns = [
     path('document/new', views.DocUpload),
     path('document/<int:fxuser>', views.AlterDocUpload),
 
-    path('introducingbroker/new',views.IntroducingBroker),
+    path('introducingbroker/new',views.NewIntroducingBroker),
     path('introducingbroker/<int:fxuser>',views.AlterIntroducingBroker),
     path('myclient/<int:referral_code>', views.Client_list),
 
