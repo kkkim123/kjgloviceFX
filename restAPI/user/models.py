@@ -14,6 +14,29 @@ import json, configparser
 #config = configparser.ConfigParser()
 #config.read('common/config/config.ini')
 
+from mptt.models import TreeForeignKey, MPTTModel
+
+
+class Country(MPTTModel):
+    class Meta:
+        verbose_name_plural = 'countries'
+        #app_label = 'django_mptt_example'
+
+    code = models.CharField(max_length=2, blank=True, null=True)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    parent = TreeForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        related_name='children',
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return self.name or self.code or ''
+
+
+
 USER_TYPES = (
     ('R', 'Retail'),
     ('I', 'IB'),
@@ -274,7 +297,8 @@ class FxUserDocument(models.Model):
     class Meta:
         ordering = ['created_at']
 
-class IntroducingBroker(models.Model):
+
+class IntroducingBroker(MPTTModel):
     fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
     company_idx = models.IntegerField(default = 1, blank=True, null=True)
     #자신의 referral code 가져오기 
@@ -292,6 +316,37 @@ class IntroducingBroker(models.Model):
     ib_website = models.URLField(max_length=128, blank=True, null=True, default='')
 
     status = models.CharField(default='P', max_length=1, blank=True, choices=IB_STATUS,null=True)
-    
+    parent = TreeForeignKey(
+        'self',
+        default = 69,
+        null=True,
+        blank=True,
+        related_name='children',
+        on_delete=models.CASCADE
+    )
+
     def __str__(self):
-        return self.fxuser.email
+        return self.fxuser.email or self.ib_name or ''
+
+
+# class IntroducingBroker(models.Model):
+#     fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
+#     company_idx = models.IntegerField(default = 1, blank=True, null=True)
+#     #자신의 referral code 가져오기 
+#     #FBP Main backoffice inx 69
+#     parent_idx = models.IntegerField(default = 69, blank=True, null=True)
+#     ib_code = models.IntegerField(blank=True, null=True)
+#     ib_name = models.CharField(blank=True, max_length=36)
+#     point = models.IntegerField(blank=True, null=True)
+#     live_yn = models.CharField(blank=True, max_length=1, null=True)
+#     email = models.EmailField(unique=True)
+#     #password = models.CharField(max_length=240, null=True)
+#     send_report = models.CharField(blank=True, max_length=1, null=True)
+#     back_index = models.IntegerField(blank=True, null=True)
+#     referralurl = models.URLField(blank=True, null=True)
+#     ib_website = models.URLField(max_length=128, blank=True, null=True, default='')
+
+#     status = models.CharField(default='P', max_length=1, blank=True, choices=IB_STATUS,null=True)
+    
+#     def __str__(self):
+#         return self.fxuser.email

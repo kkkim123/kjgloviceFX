@@ -10,13 +10,65 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Count
 from django.db.models.functions import TruncDay
 
+from django_mptt_admin.admin import DjangoMpttAdmin
+from .models import Country
+
+class ContinentFilter(admin.SimpleListFilter):
+    title = 'continent'
+    parameter_name = 'continent'
+
+    def lookups(self, request, model_admin):
+        continents = Country.objects.filter(level=1).order_by('name')
+
+        return [(c.name, c.name) for c in continents]
+
+    def queryset(self, request, queryset):
+        value = self.value()
+
+        if not value:
+            return queryset
+        else:
+            continent = Country.objects.get(name=value, level=1)
+
+            return continent.get_descendants(include_self=True)
 
 
-class IBAdmin(admin.ModelAdmin):
+class CountryAdmin(DjangoMpttAdmin):
+    tree_auto_open = 0
+    list_display = ('code', 'name')
+    ordering = ('name',)
+    list_filter = (ContinentFilter,)
+
+
+
+admin.site.register(Country, CountryAdmin)
+
+class IBFilter(admin.SimpleListFilter):
+    title = 'ib_code'
+    parameter_name = 'IntroducingBroker'
+    def lookups(self, request, model_admin):
+        continents = IntroducingBroker.objects.filter(level=1).order_by('ib_code')
+
+        return [(c.ib_code, c.ib_code) for c in continents]
+
+    def queryset(self, request, queryset):
+        value = self.value()
+
+        if not value:
+            return queryset
+        else:
+            continent = IntroducingBroker.objects.get(name=value, level=1)
+
+            return continent.get_descendants(include_self=True)
+
+
+class IBAdmin(DjangoMpttAdmin):
+    tree_auto_open = 0
     actions = ['addIBtoBackoffice','updateIBtoBackoffice','moveIBtoBackoffice']
     list_display = ('fxuser', 'company_idx', 'parent_idx', 'back_index','ib_code','ib_name',
     'point', 'live_yn', 'email', 'send_report','referralurl','status')
-    list_filter = ('status',)
+    #list_filter = ('status',)
+    list_filter = (IBFilter,)
     list_editable = ('company_idx','parent_idx','ib_code','ib_name','point','live_yn','send_report','status')
     search_fields = ('fxuser','ib_code',)
     # ordering = ('email',)
