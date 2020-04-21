@@ -50,6 +50,8 @@ import DropForm from "./mypage/components/myDetails/dropForm";
 import AccountForm from "./mypage/components/myDetails/accountForm";
 import DocDetail from "./mypage/components/myDetails/docDetail";
 import AccountDetail from "./mypage/components/myDetails/accountDetail";
+import DepositForm from "./mypage/components/myDetails/DepositForm";
+import WithdrawForm from "./mypage/components/myDetails/WithdrawForm";
 
 
 class App extends Component {
@@ -100,6 +102,8 @@ class App extends Component {
             <Route exact path="/company/white" component={WhiteLabel} />
             <Route exact path="/company/affiliate" component={Affiliate} />
             <Route exact path="/company/helpCenter" component={HelpMain} />
+            <Route exact path="/mypage/deposit" component={DepositForm} />
+            <Route exact path="/mypage/withdraw" component={WithdrawForm} />
             <Route exact path="/mypage" component={MyPage} />
             <Route exact path="/mypage/details/employment" component={EmployForm} />
             <Route exact path="/mypage/details/financial" component={FinancialForm} />

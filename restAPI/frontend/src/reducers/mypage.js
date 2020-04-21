@@ -74,10 +74,33 @@ export default (state = {}, action) => {
     case PARTS_COMMISION:
     case PART_COMMISION:
     case ADD_DEPOSIT:
+      return {
+        ...state,
+        isLoading: false,
+        isAuthenticated: true,
+        user: action.payload,
+        id: action.payload.id
+      }
     case GET_DEPOSIT:
+      return {
+        ...state,
+        deposit: action.payload
+      }
     case DELETE_DEPOSIT:
+      return _.omit(state, action.payload);
     case ADD_WITHDRAW:
+      return {
+        ...state,
+        isLoading: false,
+        isAuthenticated: true,
+        user: action.payload,
+        id: action.payload.id
+      }
     case GET_WITHDRAW:
+      return {
+        ...state,
+        withdraw: action.payload
+      }
     case DELETE_WITHDRAW:
     case GET_TRANSFER:
     case ADD_TRANSFER:

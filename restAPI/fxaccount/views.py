@@ -272,8 +272,12 @@ class DepositViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         history = get_list_or_404(self.queryset, user=kwargs['user'])
-        serialized = FxAccountSerializer(history, many=True)
-        return Response(serialized.data)
+        print(history)
+        if (history):
+            serialized = DepositSerializer(history, many=True)
+            return Response(serialized.data)
+        else:
+            return Response({})
 
     def destroy(self, request, user, pk):   
         permission_classes=[IsOwnerOnly,IsAuthenticated]
@@ -304,7 +308,7 @@ class WithdrawViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         history = get_list_or_404(self.queryset, user=kwargs['user'])
-        serialized = FxAccountSerializer(history, many=True)
+        serialized = WithdrawSerializer(history, many=True)
         return Response(serialized.data)
 
     def destroy(self, request, user, pk):  

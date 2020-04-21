@@ -13,4 +13,5 @@ urlpatterns = [
     re_path('trading/', views.index),
     re_path('company/', views.index),
     re_path('mypage/', views.index),
+    re_path('deposit/', views.index),
 ]
