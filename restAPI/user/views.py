@@ -64,7 +64,7 @@ UserProfile = UserProfileViewSet.as_view({
 })
 
 
-class IntroducingBrokerViewSet(viewsets.ModelViewSet):
+class ApplyIntroducingBrokerViewSet(viewsets.ModelViewSet):
     queryset = IntroducingBroker.objects.all()
     serializer_class = IntroducingBrokerSerializer
     permission_classes = [IsFKOwnerOnly, IsAuthenticated]
@@ -75,29 +75,19 @@ class IntroducingBrokerViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
-        # queryset = IntroducingBroker.objects.filter(ib_code = request.data[''])
-        # rows = []
-        # for acc in queryset : 
-
-
-
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-NewIntroducingBroker = IntroducingBrokerViewSet.as_view({
+NewIntroducingBroker = ApplyIntroducingBrokerViewSet.as_view({
     'post': 'create',
 })
-AlterIntroducingBroker = IntroducingBrokerViewSet.as_view({
+AlterIntroducingBroker = ApplyIntroducingBrokerViewSet.as_view({
     'get': 'retrieve',
     'put': 'update',
     'patch': 'partial_update'
 })
 # 작업 IB 해지 신청은 오프라인으로
-
-# 리스트 조회
-
 
 class ClientViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]

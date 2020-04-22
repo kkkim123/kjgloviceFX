@@ -158,7 +158,8 @@ sketch
 
 ### Database ###
 my.cnf
-
+aws.cnf
+backoffice.cnf
 ### AWS ###
 .static_root/
 media

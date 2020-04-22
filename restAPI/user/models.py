@@ -275,20 +275,36 @@ class FxUserDocument(models.Model):
     class Meta:
         ordering = ['created_at']
 
-class IntroducingBroker(MPTTModel):
+
+class ApplyIntroducingBroker(models.Model):
     fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
     company_idx = models.IntegerField(default = 1, blank=True, null=True)
-    #자신의 referral code 가져오기 
-    #FBP Main backoffice inx 69
     parent_idx = models.IntegerField(default = 69, blank=True, null=True)
     ib_code = models.IntegerField(blank=True, null=True)
     ib_name = models.CharField(blank=True, max_length=36)
     point = models.IntegerField(blank=True, null=True)
     live_yn = models.CharField(blank=True, max_length=1, null=True)
     email = models.EmailField(unique=True)
-    #password = models.CharField(max_length=240, null=True)
     send_report = models.CharField(blank=True, max_length=1, null=True)
     back_index = models.IntegerField(blank=True, null=True)
+    referralurl = models.URLField(blank=True, null=True)
+    ib_website = models.URLField(max_length=128, blank=True, null=True, default='')
+    
+    status = models.CharField(default='P', max_length=1, blank=True, choices=IB_STATUS,null=True)
+    def __str__(self):
+        return self.fxuser.email or self.ib_name or ''
+
+
+class IntroducingBroker(MPTTModel):
+    id = models.IntegerField(primary_key=True)
+    fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
+    company_idx = models.IntegerField(default = 1, blank=True, null=True)
+    ib_code = models.IntegerField(blank=True, null=True)
+    ib_name = models.CharField(blank=True, max_length=36)
+    point = models.IntegerField(blank=True, null=True)
+    live_yn = models.CharField(blank=True, max_length=1, null=True)
+    email = models.EmailField(unique=True)
+    send_report = models.CharField(blank=True, max_length=1, null=True)
     referralurl = models.URLField(blank=True, null=True)
     ib_website = models.URLField(max_length=128, blank=True, null=True, default='')
     

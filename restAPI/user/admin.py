@@ -3,7 +3,7 @@ import json
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from datetime import timezone, datetime
-from .models import FxUser,FxUserDocument,IntroducingBroker
+from .models import FxUser,FxUserDocument,IntroducingBroker,ApplyIntroducingBroker
 from django.db import connections
 from django.utils.html import format_html
 from django.core.serializers.json import DjangoJSONEncoder
@@ -33,12 +33,12 @@ class IBFilter(admin.SimpleListFilter):
 
 class IBAdmin(DjangoMpttAdmin):
     tree_auto_open = 0
-    actions = ['addIBtoBackoffice','updateIBtoBackoffice','moveIBtoBackoffice']
-    list_display = ('fxuser', 'company_idx', 'parent_idx', 'back_index','ib_code','ib_name',
-    'point', 'live_yn', 'email', 'send_report','referralurl','status')
+    actions = ['updateIBtoBackoffice','moveIBtoBackoffice',]
+    list_display = ('id', 'fxuser', 'company_idx', 'ib_code','ib_name','point',
+    'live_yn', 'email', 'send_report', 'referralurl','ib_website','status')
     #list_filter = ('status',)
     list_filter = (IBFilter,)
-    list_editable = ('company_idx','parent_idx','ib_code','ib_name','point','live_yn','send_report','status')
+    list_editable = ('company_idx','ib_code','ib_name','point','live_yn','send_report','status')
     search_fields = ('fxuser','ib_code',)
     # ordering = ('email',)
     # filter_horizontal = ()
@@ -84,47 +84,6 @@ class IBAdmin(DjangoMpttAdmin):
     #     html = '<input type="button" onclick="location.href=\'{}\'" value="Delete" />'.format(link)
     #     return format_html(html)
     
-    def addIBtoBackoffice(self, request, queryset):
-        if queryset.count() != 1:
-            self.message_user(request, 'Let\'s do it slowly one by one')
-            return
-        cursor =  connections['backOffice'].cursor()
-
-        ibs = queryset.values_list('company_idx', 'parent_idx', 'ib_code','ib_name','point', 'live_yn', 'email','send_report')
-        # if(ibs.count < 1) :
-        #     self.message_user(request, 'not found')
-        #     return
-
-        for ib in ibs:
-            print(ib[2])
-            cursor.callproc("SP_IB_CHECKING_ID", (ib[2],))
-            #columns = [col[0] for col in cursor.description]
-            for row in cursor.fetchall():
-                print(row[0])
-                if row[0] == 'SUCCESS':
-                    cursor.nextset()
-                    cursor.callproc("SP_IB_STRUCTURE_ADD", (ib[0],ib[1],ib[2],ib[3],ib[4],ib[5],ib[6],'',ib[7]))
-                    cursor.nextset()
-                    cursor.execute("select IDX from IB_STRUCTURE where IB_LOGIN = '" + str(ib[2]) +"';")
-                    #print(cursor.description)
-                    
-                    for row in cursor.fetchall():
-                        queryset.update(back_index=row[0])
-                        queryset.update(referralurl="glovicefx.com/user?refcode = "+ str(ib[2]))
-                        # queryset.update(referralurl="127.0.0.1:8000/user?refcode = "+ str(ib[2]))
-                        #IB Code가 정상적으로 생성되면 유저정보의 계
-                    self.message_user(request, 'SP_IB_STRUCTURE_ADD {}'.format(cursor.fetchall()))
-                else :
-                    cursor.nextset()
-                    cursor.execute("select MAX(IB_LOGIN) from IB_STRUCTURE where COMPANY_IDX = '" + str(ib[0]) +"';")
-
-                    for row in cursor.fetchall():
-                        self.message_user(request, '[{}] recommended'.format(int(row[0]) + 1))
-                        return
-                    self.message_user(request, '{}'.format(row))
-        #
-    addIBtoBackoffice.short_description = "add IB to Backoffice"
-
     def updateIBtoBackoffice(self, request, queryset):
         if queryset.count() != 1:
             self.message_user(request, 'Let\'s do it slowly one by one')
@@ -179,7 +138,97 @@ class IBAdmin(DjangoMpttAdmin):
 
 admin.site.register(IntroducingBroker, IBAdmin)
 
-class UserAdmin( admin.ModelAdmin):
+
+class ApplyIBAdmin(admin.ModelAdmin):
+    actions = ['addIBtoBackoffice',]
+    list_display = ('fxuser', 'company_idx', 'parent_idx', 'back_index','ib_code','ib_name',
+    'point', 'live_yn', 'email', 'send_report','referralurl','status')
+    list_filter = ('status',)
+    list_editable = ('company_idx','parent_idx','ib_code','ib_name','point','live_yn','send_report','status')
+    search_fields = ('fxuser','ib_code',)
+    # ordering = ('email',)
+    # filter_horizontal = ()
+
+    def save_model(self, request, obj, form, change):
+        fxuser = FxUser.objects.get(id = obj.fxuser_id)
+        if(obj.status =='A'):
+            fxuser.user_type = 'I'     
+            fxuser.save()   
+            ib = IntroducingBroker.objects.create(
+                id = obj.back_index, 
+                fxuser = obj.fxuser, 
+                company_idx = obj.company_idx, 
+                ib_code = obj.ib_code, 
+                ib_name = obj.ib_name, 
+                point = obj.point, 
+                live_yn = obj.live_yn, 
+                email = obj.email, 
+                send_report = obj.send_report, 
+                referralurl = obj.referralurl,
+                ib_website = obj.ib_website,
+                status = obj.status,
+                parent_id = obj.parent_idx
+            )
+            #ib.save()
+
+
+
+
+        else :
+            fxuser.user_type = 'R'     
+            fxuser.save()       
+        
+        super().save_model(request, obj, form, change)
+
+    def addIBtoBackoffice(self, request, queryset):
+        if queryset.count() != 1:
+            self.message_user(request, 'Let\'s do it slowly one by one')
+            return
+        cursor =  connections['backOffice'].cursor()
+
+        ibs = queryset.values_list('company_idx', 'parent_idx', 'ib_code','ib_name','point', 'live_yn', 'email','send_report')
+        # if(ibs.count < 1) :
+        #     self.message_user(request, 'not found')
+        #     return
+
+        for ib in ibs:
+            print(ib[2])
+            cursor.callproc("SP_IB_CHECKING_ID", (ib[2],))
+            #columns = [col[0] for col in cursor.description]
+            for row in cursor.fetchall():
+                print(row[0])
+                if row[0] == 'SUCCESS':
+                    cursor.nextset()
+                    cursor.callproc("SP_IB_STRUCTURE_ADD", (ib[0],ib[1],ib[2],ib[3],ib[4],ib[5],ib[6],'',ib[7]))
+                    cursor.nextset()
+                    cursor.execute("select IDX from IB_STRUCTURE where IB_LOGIN = '" + str(ib[2]) +"';")
+                    #print(cursor.description)
+                    
+                    for row in cursor.fetchall():
+                        queryset.update(back_index=row[0])
+                        queryset.update(referralurl="glovicefx.com/user?refcode = "+ str(ib[2]))
+                        # queryset.update(referralurl="127.0.0.1:8000/user?refcode = "+ str(ib[2]))
+                        #IB Code가 정상적으로 생성되면 유저정보의 계
+                    self.message_user(request, 'SP_IB_STRUCTURE_ADD {}'.format(cursor.fetchall()))
+                else :
+                    cursor.nextset()
+                    cursor.execute("select MAX(IB_LOGIN) from IB_STRUCTURE where COMPANY_IDX = '" + str(ib[0]) +"';")
+
+                    for row in cursor.fetchall():
+                        self.message_user(request, '[{}] recommended'.format(int(row[0]) + 1))
+                        return
+                    self.message_user(request, '{}'.format(row))
+        
+    addIBtoBackoffice.short_description = "add IB to Backoffice"
+
+admin.site.register(ApplyIntroducingBroker, ApplyIBAdmin)
+
+
+
+
+
+
+class UserAdmin(admin.ModelAdmin):
     list_display = ('id','email', 'first_name', 'last_name', 'user_type','user_status','referral_code')
     list_filter = ('is_admin',)
     list_editable = ('user_status','referral_code')
