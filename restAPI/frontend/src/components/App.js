@@ -50,13 +50,10 @@ import DropForm from "./mypage/components/myDetails/dropForm";
 import AccountForm from "./mypage/components/myDetails/accountForm";
 import DocDetail from "./mypage/components/myDetails/docDetail";
 import AccountDetail from "./mypage/components/myDetails/accountDetail";
-<<<<<<< HEAD
 import CreateIB from "./company/ib/IBForm";
 import EditIB from "./company/ib/IBEditForm";
-=======
 import DepositForm from "./mypage/components/myDetails/DepositForm";
 import WithdrawForm from "./mypage/components/myDetails/WithdrawForm";
->>>>>>> jhlee
 
 
 class App extends Component {

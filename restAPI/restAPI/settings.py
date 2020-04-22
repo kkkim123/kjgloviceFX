@@ -219,7 +219,7 @@ JWT_AUTH = {'JWT_AUTH_HEADER_PREFIX': 'Token',}
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema', 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20,
+    'PAGE_SIZE': 10,
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",
                                     "fxaccount.permissions.IsOwnerOnly",
                                     "user.permissions.IsOwnerOnly",),
@@ -273,43 +273,43 @@ DEFAULT_FROM_EMAIL = 'jhlee@fbpasia.com'
 # Local #
 #########
 
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    STATIC_DIR,
-]
-STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
+# STATIC_DIR = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [
+#     STATIC_DIR,
+# ]
+# STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 
-MEDIA_URL =  '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# MEDIA_URL =  '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 ##########
 # AWS S3 #
 ##########
 
-# CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
-# CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
+CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
+CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
 
-# AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
-# AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
-# AWS_SES_REGION_NAME = 'ap-southeast-2'
-# AWS_SES_REGION_ENDPOINT = 'email-smtp.ap-southeast-2.amazonaws.com'
+AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
+AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
+AWS_SES_REGION_NAME = 'ap-southeast-2'
+AWS_SES_REGION_ENDPOINT = 'email-smtp.ap-southeast-2.amazonaws.com'
 
-# STATIC_DIR = os.path.join(BASE_DIR, 'static')
-# STATICFILES_DIRS = [
-#     STATIC_DIR,
-# ]
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
 
-# MEDIA_URL =  '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL =  '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# # S3 Storage
-# DEFAULT_FILE_STORAGE = 'restAPI.storages.MediaStorage'
-# STATICFILES_STORAGE = 'restAPI.storages.StaticStorage'
-# MEDIAFILES_LOCATION = 'media'
-# STATICFILES_LOCATION = 'static'
+# S3 Storage
+DEFAULT_FILE_STORAGE = 'restAPI.storages.MediaStorage'
+STATICFILES_STORAGE = 'restAPI.storages.StaticStorage'
+MEDIAFILES_LOCATION = 'media'
+STATICFILES_LOCATION = 'static'
 
-# # AWS Access
-# config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
-# AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
-# AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
-# AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
+# AWS Access
+config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
+AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
+AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
+AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
