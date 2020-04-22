@@ -1,6 +1,8 @@
 import axios from "axios";
+import { stopSubmit } from "redux-form";
 import history from "../history";
 import { tokenConfig } from "./auth";
+
 import {
   REGISTER_DETAIL_SUCCESS,
   GET_USER_OPTION,
@@ -415,4 +417,115 @@ export const editIb = ({ib_name, point, email, send_report, ib_website }) => asy
     type: EDIT_IB,
     payload: res.data
   });
+};
+
+ // Depoist List
+ export const DepoistList = () => async (dispatch, getState) => {
+   try {
+    const res = await axios.get(`/fxaccount/deposit/${getState().auth.id}`, tokenConfig(getState));
+    dispatch({
+      type: GET_DEPOSIT,
+      payload: res.data
+    });
+   } catch (err) {
+    dispatch(stopSubmit("DepositForm", err.response.data))
+   }
+};
+
+// Deposit Register
+export const DepositRegist = ({
+  mt4_account,
+  currency,
+  deposit_crypto,
+  crypto_address,
+  crypto_amount,
+  cellphone_number
+}) => async (dispatch, getState) => {
+  const body = JSON.stringify({
+    mt4_account,
+    currency,
+    deposit_crypto,
+    crypto_address,
+    crypto_amount,
+    cellphone_number,
+    user: getState().auth.id
+  });
+
+  try {
+    const res = await axios.post(`/fxaccount/deposit/${getState().auth.id}`, body, tokenConfig(getState));
+    dispatch({
+      type: ADD_DEPOSIT,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch(stopSubmit("DepositForm", err.response.data))
+  }
+}
+
+// Delete Deposit
+export const deleteDeposit = id => async (dispatch, getState) => {
+  await axios.delete(
+    `/fxaccount/deposit/${getState().auth.id}/${id}`,
+    tokenConfig(getState)
+  );
+  dispatch({
+    type: DELETE_DEPOSIT,
+    payload: id
+  });
+  history.push('/mypage/details/account/detail')
+};
+
+// Withdraw List
+export const WithdrawList = () => async (dispatch, getState) => {
+  try {
+   const res = await axios.get(`/fxaccount/withdraw/${getState().auth.id}`, tokenConfig(getState));
+   dispatch({
+     type: GET_WITHDRAW,
+     payload: res.data
+   });
+  } catch (err) {
+   dispatch(stopSubmit("WithdrawForm", err.response.data))
+  }
+};
+
+// Withdraw Register
+export const WithdrawRegist = ({
+  mt4_account,
+  currency,
+  withdraw_crypto,
+  crypto_address,
+  amount,
+  cellphone_number
+}) => async (dispatch, getState) => {
+  const body = JSON.stringify({
+    mt4_account,
+    currency,
+    withdraw_crypto,
+    crypto_address,
+    crypto_amount: amount,
+    cellphone_number,
+    user: getState().auth.id
+  });
+
+  try {
+    const res = await axios.post(`/fxaccount/withdraw/${getState().auth.id}`, body, tokenConfig(getState));
+    dispatch({
+      type: ADD_WITHDRAW,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch(stopSubmit("WithdrawForm", err.response.data))
+  }
+}
+// Delete Withdraw
+export const deleteWithdraw = id => async (dispatch, getState) => {
+  await axios.delete(
+    `/fxaccount/withdraw/${getState().auth.id}/${id}`,
+    tokenConfig(getState)
+  );
+  dispatch({
+    type: DELETE_WITHDRAW,
+    payload: id
+  });
+  history.push('/mypage/details/account/detail')
 };
