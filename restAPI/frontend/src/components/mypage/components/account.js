@@ -135,7 +135,7 @@ class account extends Component {
                 </div>
                 <div className="ml-2" style={{ width: "20%" }}>
                   <Link
-                    to="#"
+                    to="/mypage/deposit"
                     className="px-3 py-2 rounded-pill"
                     style={{
                       color: "#ffffff",
@@ -143,6 +143,7 @@ class account extends Component {
                       fontWeight: "bold",
                       textDecoration: "none"
                     }}
+                    onClick={()=>this.handleClick(rowData.mt4_account)}
                   >
                     Deposit
                   </Link>
@@ -150,7 +151,7 @@ class account extends Component {
                 <div className="ml-2" style={{ width: "15%" }}>
                   {rowData.balance > 0 ? (
                     <Link
-                      to="#"
+                      to="/mypage/withdraw"
                       className="px-3 py-2 rounded-pill"
                       style={{
                         color: "#ffffff",
@@ -158,6 +159,7 @@ class account extends Component {
                         fontWeight: "bold",
                         textDecoration: "none"
                       }}
+                      onClick={()=>this.handleClick(rowData.mt4_account)}
                     >
                       Withdraw
                     </Link>
