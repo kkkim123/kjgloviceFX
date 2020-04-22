@@ -142,14 +142,14 @@ class TradingHistoryViews(generics.ListAPIView):
         for acc in queryset : 
             with connections['backOffice'].cursor() as cursor:
                 cursor.execute("set @CumSum := 0;")
-                cursor.execute("select LOGIN as mt4_account, SYMBOL, CMD, VOLUME, OPEN_TIME, OPEN_PRICE, SL, TP, CLOSE_TIME, CLOSE_PRICE, PROFIT,"
-                + "(@CumSum := @CumSum + PROFIT) as TOT_PROFIT from MT4_TRADES where LOGIN = " + acc.mt4_account 
+                cursor.execute("select LOGIN as mt4_account, SYMBOL, CMD, VOLUME, OPEN_TIME, OPEN_PRICE, SL, TP, CLOSE_TIME, CLOSE_PRICE, PROFIT"
+                +" from MT4_TRADES where LOGIN = " + acc.mt4_account 
                 +" AND OPEN_TIME >= '" + from_date + " 0:0:0' "
                 +" AND OPEN_TIME <= '" + to_date  + " 23:59:59' "
                 + searchQuery
                 +" AND CMD < 5 order by OPEN_TIME LIMIT " + str(page) + ",10;")
 
-                #print(cursor.description)
+                #print(cursor.description)(@CumSum := @CumSum + PROFIT) as TOT_PROFIT
                 columns = [col[0] for col in cursor.description]
                 historyRows += [list(zip(columns, row)) for row in cursor.fetchall()]
                 #historyRows.update(historyRows2)  SUM ('PROFIT') OVER (ORDER BY 'TICKET' ASC) as TOT_PROFIT

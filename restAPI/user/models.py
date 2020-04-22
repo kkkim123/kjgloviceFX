@@ -201,6 +201,8 @@ class FxUser(AbstractBaseUser):
     referral_website = models.URLField(default='' , max_length=128, blank=True, null=True)
 
     user_status = models.CharField(default='1', max_length=2, blank=True, choices=USER_STATUS_CHOICE)
+    kj_address  = models.CharField(default='', max_length=50, blank=True)
+
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
