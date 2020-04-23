@@ -183,6 +183,7 @@ class ApplyIBAdmin(admin.ModelAdmin):
     # filter_horizontal = ()
 
     def save_model(self, request, obj, form, change):
+        print('ApplyIB save_model')
         fxuser = FxUser.objects.get(id = obj.fxuser_id)
         if(obj.status =='A'):
             fxuser.user_type = 'I'     

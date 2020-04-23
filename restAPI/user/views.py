@@ -1,8 +1,8 @@
-from .models import FxUser, FxUserDocument, IntroducingBroker
+from .models import FxUser, FxUserDocument, IntroducingBroker,ApplyIntroducingBroker
 from .models import EMPLOYMENT_STATUS_CHOICES, EMPLOYMENT_POSITION_CHOICES
 from .models import EDUCATION_LEVEL_CHOICES, EST_ANNUAL_INCOME, INCOME_OF_SOURCE, TRADING_EXPERIENCE, TRADING_PERIOD
 
-from .serializers import UserSerializer, DocumentSerializer, IntroducingBrokerSerializer, ClientSerializer
+from .serializers import UserSerializer, DocumentSerializer, IntroducingBrokerSerializer, ClientSerializer, ApplyIntroducingBrokerSerializer
 from .permissions import IsOwnerOnly, IsFKOwnerOnly
 
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -65,18 +65,18 @@ UserProfile = UserProfileViewSet.as_view({
 
 
 class ApplyIntroducingBrokerViewSet(viewsets.ModelViewSet):
-    queryset = IntroducingBroker.objects.all()
-    serializer_class = IntroducingBrokerSerializer
+    queryset = ApplyIntroducingBroker.objects.all()
+    serializer_class = ApplyIntroducingBrokerSerializer
     permission_classes = [IsFKOwnerOnly, IsAuthenticated]
     lookup_field = 'fxuser'
 
-    def create(self, request):
-        permission_classes = [IsFKOwnerOnly, IsAuthenticated]
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    # def create(self, request):
+    #     permission_classes = [IsFKOwnerOnly, IsAuthenticated]
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()
+    #     headers = self.get_success_headers(serializer.data)
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 NewIntroducingBroker = ApplyIntroducingBrokerViewSet.as_view({

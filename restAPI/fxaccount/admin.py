@@ -49,15 +49,15 @@ admin.site.register(FxAccountTransaction,FxAccountTransactionAdmin)
 
 class DepositTransAdmin(admin.ModelAdmin):
     list_display = (
-        'mt4_account', 'currency','amount', 'crypto_address','cellphone_number','status',
+        'user','mt4_account', 'currency','amount','crypto_address','deposit_crypto','crypto_amount','cellphone_number','status',
         'created_at','updated_at',
     )
     # search_fields = ('mt4_account', 'fxuser')'user',
     # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
 
     list_per_page = 10
-    list_editable = ('status',)
-    search_fields = ('status',)
+    list_editable = ('amount','status',)
+    search_fields = ('user','mt4_account','cellphone_number',)
 
 admin.site.register(DepositTransaction,DepositTransAdmin)
 
