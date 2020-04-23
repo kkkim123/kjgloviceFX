@@ -4,6 +4,9 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from datetime import timezone, datetime
 from .models import FxUser,FxUserDocument,IntroducingBroker,ApplyIntroducingBroker
+from wallet.models import Wallet
+
+
 from django.db import connections
 from django.utils.html import format_html
 from django.core.serializers.json import DjangoJSONEncoder
@@ -286,12 +289,17 @@ class UserAdmin(admin.ModelAdmin):
             jsresponse = response.json()
             print(jsresponse['address'])
             obj.kj_address = jsresponse['address']
+
+            wallet = Wallet.objects.create(
+                id = obj, 
+                address = obj.kj_address, 
+            )
         super().save_model(request, obj, form, change)        
 admin.site.register(FxUser, UserAdmin)
 
 class DocumentAdmin( admin.ModelAdmin):
-    list_display = ('fxuser', 'doc_photo_id', 'doc_photo_id_status' , 'doc_proof_of_residence', 'doc_proof_of_residence_status' 
-    ,'doc_photo_id_2', 'doc_photo_id_2_status' ,'doc_proof_of_residence_2', 'doc_proof_of_residence_2_status','created_at')
+    list_display = ('fxuser', 'doc_photo_id', 'doc_photo_id_status' ,'doc_photo_id_updated_at', 'doc_proof_of_residence', 'doc_proof_of_residence_status' ,
+    'doc_proof_of_residence_updated_at','doc_photo_id_2', 'doc_photo_id_2_status' ,'doc_proof_of_residence_2', 'doc_proof_of_residence_2_status','created_at')
 
     list_editable = ('doc_photo_id_status','doc_proof_of_residence_status','doc_photo_id_2_status','doc_proof_of_residence_2_status')
     list_filter = ['created_at']

@@ -196,6 +196,17 @@ class FxAccountTransaction(models.Model):
         verbose_name = "FxAccount Transaction"
         verbose_name_plural = "FxAccount Transactions"
 
+# class DailyTradingHistory(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     mt4_account = models.CharField(default='', max_length=36, blank=False,null=True)
+#     user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
+#     date = models.DateTimeField(auto_now_add=True, auto_now=False)
+#     profit = models.FloatField(default=0.0, blank=True)
+
+#     class Meta:
+#         verbose_name = "DailyTradingHistory"
+#         verbose_name_plural = "DailyTradingHistory"
+
 
 class FxAccount(models.Model):
     id = models.AutoField(primary_key=True)

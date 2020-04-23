@@ -15,7 +15,8 @@ urlpatterns = [
     path('withdraw/<int:user>/<int:pk>', views.AlterWithdraw),
 
     path('tradinghistory/<int:user>', views.TradingHistoryViews.as_view()),
-
+    path('dailytrading/<int:user>/<int:mt4_account>', views.DailyTradingView),
+    
     path('clientaccountlist/<int:user>', views.ClientAccountListViews.as_view()),
     path('commissionhistory/<int:user>', views.CommissionHistoryViews.as_view()),
     path('commissionhistory/<int:user>/<int:mt4_login>', views.CommissionHistoryViewsDetail.as_view()),

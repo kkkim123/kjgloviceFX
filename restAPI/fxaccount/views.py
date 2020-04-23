@@ -1,7 +1,9 @@
 from .models import FxAccount,DepositTransaction,WithdrawTransaction,FxAccountTransaction
+#,DailyTradingHistory
 from .models import ACCOUNT_TYPES,ACCOUNT_BASE_CURRENCY_CHOICE,TRADING_PLATFORM_CHOICE,LEVERAGE_CHOICES,DEPOSIT_CRYPTO_CHOICE,WITHDRAW_CRYPTO_CHOICE
 from user.models import IntroducingBroker
 from .serializers import FxAccountSerializer,DepositSerializer,WithdrawSerializer,WithdrawSerializer,FxAccountTransactionSerializer
+#,DailyTradingSerializer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwnerOnly,IsFKOwnerOnly
@@ -15,6 +17,9 @@ from rest_framework import status, viewsets
 from django.shortcuts import get_list_or_404, get_object_or_404
 import json
 from django.views import View
+from django.db.models import Sum
+
+import pandas as pd
 
 class ChoicesView(View):
     def get(self, request):
@@ -28,6 +33,35 @@ class ChoicesView(View):
             'withdraw_crypto_method' : json.dumps([x[1] for x in WITHDRAW_CRYPTO_CHOICE] ),
         }
         return JsonResponse(dummy_data)
+
+class DailyTradingViewSet(viewsets.ModelViewSet):
+    permission_classes=[IsFKOwnerOnly,IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        permission_classes=[IsFKOwnerOnly,IsAuthenticated]
+        with connections['backOffice'].cursor() as cursor:
+            cursor.execute("select CLOSE_TIME as date, PROFIT as profit"
+            + " from MT4_TRADES where LOGIN = '" + str(kwargs['mt4_account']) + "';")
+
+            df = pd.DataFrame(cursor.fetchall())
+            df.columns=[col[0] for col in cursor.description] 
+            df = df.set_index(['date'])
+            df.index = pd.to_datetime(df.index, unit='s')
+
+        daily_df = df.resample('D').sum()
+        daily_df.index = daily_df.index.strftime('%Y-%m-%d')
+
+        result  = daily_df.to_json(orient="table")
+        parsed = json.loads(result)
+        json_val = json.dumps(parsed,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
+        return HttpResponse(json_val)
+
+
+DailyTradingView = DailyTradingViewSet.as_view({
+    'get': 'list',
+})
+
+
 
 
 #신규 요청, 요청내역 조회 , 취소
