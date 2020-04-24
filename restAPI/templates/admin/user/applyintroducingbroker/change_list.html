@@ -1,0 +1,63 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+
+{% block extrahead %}
+{{ block.super }}
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    $("#login").submit(function(event) {
+        conssoel.log("!");
+    });
+});
+</script>
+
+<script type="text/javascript">
+(function($) {
+    // < start of closure
+    // within this block, $ = django.jQuery
+    document.addEventListener('DOMContentLoaded', () => {
+    // submit the form into iframe for login into remote site
+        $.ajax({
+            url: "https://backoffice.fbpasia.com/manager/POST_MANAGER_LOGIN",
+            data: $("#login").data,
+            method: "POST",
+            headers: {  'Access-Control-Allow-Origin': '*' },
+            dataType: "json"
+        })
+        .done(function(json) {
+            console.log("1");
+        })
+
+        // once you're logged in, change the source url (if needed)
+        var iframe = document.getElementById('backoffice_frame');
+        iframe.onload = function() {
+            if (iframe.src != "http://backoffice.fbpasia.com/ib/ib_view#read/i_company_id=1&perPage=10&page=1") {
+                iframe.src = "https://backoffice.fbpasia.com/ib/ib_view#read/i_company_id=1&perPage=10&page=1";
+            }
+        }
+    });
+})(django.jQuery);
+
+
+    
+</script>
+{% endblock %}
+
+{% block content %}
+
+{{ block.super }}
+
+
+<form id="login" target="frame" method="post" action="https://backoffice.fbpasia.com/manager/POST_MANAGER_LOGIN">
+    <input type="hidden" name="i_id" value="admin" />
+    <input type="hidden" name="i_pwd" value="admin123" />
+</form>
+
+<iframe id="backoffice_frame" name="backoffice_frame"></iframe>
+
+
+{% endblock %}

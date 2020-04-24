@@ -212,5 +212,5 @@ class QueryQuotesView(APIView):
 
             return Response(status=status.HTTP_200_OK, data=result_data)
 
-        except socket.error:
+        except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST, data=None)

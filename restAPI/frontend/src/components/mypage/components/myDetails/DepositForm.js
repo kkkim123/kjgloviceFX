@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
+import Pagination from "react-js-pagination";
 import { Field, reduxForm } from "redux-form";
 import { DepoistList, DepositRegist, deleteDeposit } from "../../../../actions/mypage";
 import "../../../../styles/auth/form.css";
@@ -10,19 +11,23 @@ class DepositForm extends Component {
         super(props);
         this.state =  {
             isEdit: true,
-            account: this.props.accNum? this.props.accNum: localStorage.getItem("account")
+            account: this.props.accNum? this.props.accNum: localStorage.getItem("mt4_account"),
+            page: 1
         }
     }
 
     componentDidMount() {
         localStorage.setItem("mt4_account", this.state.account);
-        this.props.DepoistList(this.props.auth.id);        
+        this.props.DepoistList(this.state.page);
     }
+    
 
     componentDidUpdate() {
+        console.log(this.props.auth);
         if((this.props.accNum || localStorage.getItem("mt4_account")) && this.state.isEdit ) {
           this.props.initialize({ 
-            mt4_account: this.props.accNum? this.props.accNum: localStorage.getItem("account")
+            mt4_account: this.props.accNum? this.props.accNum: localStorage.getItem("mt4_account"),
+            crypto_address:  this.props.auth.kj_address
           });
           this.setState({
             isEdit: false
@@ -30,6 +35,18 @@ class DepositForm extends Component {
         }
         
     }
+
+    handlePageChange = pageNumber => {
+        this.setState(
+          {
+            page: pageNumber,
+            isCnt: true
+          },
+          () => {
+            this.props.DepoistList(this.state.page);
+          }
+        );
+      };
 
     renderField = ({ input, writeOnce , placeholder, type, meta: { touched, error } }) => {
         return (
@@ -109,7 +126,7 @@ class DepositForm extends Component {
                                     <Field
                                     name="currency"
                                     component={this.selectField}
-                                    placeholder="Source of Wealth*"
+                                    placeholder="Currency*"
                                     index="1"
                                     />
                                     <Field
@@ -159,7 +176,7 @@ class DepositForm extends Component {
                         color: "#000000"
                         }}>
                         <div className="text-left">
-                            <h3>Account</h3>
+                            <h3>Deposit History</h3>
                         </div>
                         <div
                         className="d-flex justify-content-between"
@@ -194,7 +211,7 @@ class DepositForm extends Component {
                                 <span>Amount</span>
                             </div>
                         </div>
-                        {this.props.deposit && this.props.deposit.map((data, i) => {
+                        {this.props.deposit && this.props.deposit.results ? this.props.deposit.results.map((data, i) => {
                             let deposit_status = "";
                             let deposit_crypto = "";
 
@@ -279,10 +296,23 @@ class DepositForm extends Component {
                                     </div>
                                 </div>
                              );
-                        })}
+                        }) : <div>No Data</div>}
+                        {this.props.deposit && this.props.deposit.results && this.props.deposit.links && 
+                        <div className="text-center">
+                        <Pagination
+                            activePage={this.props.deposit.links.cur_page}
+                            itemsCountPerPage={10}
+                            totalItemsCount={this.props.deposit.links.count}
+                            pageRangeDisplayed={5}
+                            onChange={this.handlePageChange}
+                        />
+                        </div>
+                        }
                     </div>
+                    
                 </div>
             </div>
+            
             </div>
         );
     }

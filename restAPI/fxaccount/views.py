@@ -303,13 +303,14 @@ class DepositViewSet(viewsets.ModelViewSet):
     lookup_field = 'user'
 
     def list(self, request, *args, **kwargs):
-        history = get_list_or_404(self.queryset, user=kwargs['user'])
-        print(history)
-        if (history):
-            serialized = DepositSerializer(history, many=True)
-            return Response(serialized.data)
-        else:
-            return Response({})
+        deposit = get_list_or_404(self.queryset, user=kwargs['user'])
+        page = self.paginate_queryset(deposit)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(deposit, many=True)
+        return Response(serializer.data)
 
     def destroy(self, request, user, pk):   
         permission_classes=[IsOwnerOnly,IsAuthenticated]
@@ -339,9 +340,14 @@ class WithdrawViewSet(viewsets.ModelViewSet):
     lookup_field = 'user'
 
     def list(self, request, *args, **kwargs):
-        history = get_list_or_404(self.queryset, user=kwargs['user'])
-        serialized = WithdrawSerializer(history, many=True)
-        return Response(serialized.data)
+        withdraw = get_list_or_404(self.queryset, user=kwargs['user'])
+        page = self.paginate_queryset(withdraw)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(withdraw, many=True)
+        return Response(serializer.data)
 
     def destroy(self, request, user, pk):  
         permission_classes=[IsOwnerOnly,IsAuthenticated] 
