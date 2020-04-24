@@ -25,13 +25,19 @@ class Footer extends Component {
     return (
       <div className="footer">
         <div className="d-flex justify-content-center align-content-center flex-wrap ft1">
-          {this.props.data && this.props.data.map((item, i) => (
+          {this.props.data ? (this.props.data && this.props.data.map((item, i) => (
           <div className="item" key={i}>
             <span className="name">{item.key}</span>
             <br></br>
             <span className="value">{item.value}</span>
           </div>
-          ))}
+          ))): <div className="item">
+              <span className="name">No Data</span>
+              <br></br>
+              <span className="desc">
+                No Quotes Information
+              </span>
+            </div>}
           <div className="item">
             <span className="name">Invest Responsibly:</span>
             <br></br>
