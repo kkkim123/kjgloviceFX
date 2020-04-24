@@ -219,7 +219,8 @@ JWT_AUTH = {'JWT_AUTH_HEADER_PREFIX': 'Token',}
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema', 
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # djang rest framework pagniation 변경
+    'DEFAULT_PAGINATION_CLASS': 'common.utils.paginationUtil.CustomPagination', 
     'PAGE_SIZE': 10,
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",
                                     "fxaccount.permissions.IsOwnerOnly",

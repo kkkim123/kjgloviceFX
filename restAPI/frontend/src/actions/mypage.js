@@ -415,14 +415,16 @@ export const editIb = ({ib_name, point, email, send_report, ib_website }) => asy
     `/user/introducingbroker/${getState().auth.id}`, body, tokenConfig(getState));
   dispatch({
     type: EDIT_IB,
-    payload: res.data
+    payload: res.data.results
   });
 };
 
  // Depoist List
- export const DepoistList = () => async (dispatch, getState) => {
+ export const DepoistList = (page = 1) => async (dispatch, getState) => {
+   
    try {
-    const res = await axios.get(`/fxaccount/deposit/${getState().auth.id}`, tokenConfig(getState));
+    const res = await axios.get(`/fxaccount/deposit/${getState().auth.id}?page=${page}`, tokenConfig(getState));
+    
     dispatch({
       type: GET_DEPOSIT,
       payload: res.data
@@ -476,9 +478,9 @@ export const deleteDeposit = id => async (dispatch, getState) => {
 };
 
 // Withdraw List
-export const WithdrawList = () => async (dispatch, getState) => {
+export const WithdrawList = (page = 1) => async (dispatch, getState) => {
   try {
-   const res = await axios.get(`/fxaccount/withdraw/${getState().auth.id}`, tokenConfig(getState));
+   const res = await axios.get(`/fxaccount/withdraw/${getState().auth.id}?page=${page}`, tokenConfig(getState));
    dispatch({
      type: GET_WITHDRAW,
      payload: res.data

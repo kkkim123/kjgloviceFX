@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
+import Pagination from "react-js-pagination";
 import { WithdrawList, WithdrawRegist, deleteWithdraw } from "../../../../actions/mypage";
 import "../../../../styles/auth/form.css";
 
@@ -9,26 +10,41 @@ class WithdrawForm extends Component {
         super(props);
         this.state = {
             isEdit: true,
-            account: this.props.accNum? this.props.accNum: localStorage.getItem("mt4_account")
+            account: this.props.accNum? this.props.accNum: localStorage.getItem("mt4_account"),
+            page: 1
         }
     }
 
     componentDidMount() {
+        // refresh 시 사라지는거 방지
         localStorage.setItem("mt4_account", this.state.account);
         // Withdraw list 조회
-        this.props.WithdrawList(this.props.auth.id);
+        this.props.WithdrawList(this.state.page);
     }
 
     componentDidUpdate() {
         if ((this.props.accNum || localStorage.getItem("mt4_account")) && this.state.isEdit ) {
             this.props.initialize({
-                mt4_account: this.props.accNum? this.props.accNum: localStorage.getItem("account")
+                mt4_account: this.props.accNum? this.props.accNum: localStorage.getItem("mt4_account"),
+                crypto_address:  this.props.auth.kj_address
             });
             this.setState({
                 isEdit: false
             })
         }
     }
+
+    handlePageChange = pageNumber => {
+        this.setState(
+          {
+            page: pageNumber,
+            isCnt: true
+          },
+          () => {
+            this.props.WithdrawList(this.state.page);
+          }
+        );
+      };
 
     renderField = ({ input, writeOnce , placeholder, type, meta: { touched, error } }) => {
         return (
@@ -108,7 +124,7 @@ class WithdrawForm extends Component {
                                     <Field
                                     name="currency"
                                     component={this.selectField}
-                                    placeholder="Source of Wealth*"
+                                    placeholder="Currency*"
                                     index="1"
                                     />
                                     <Field
@@ -158,7 +174,7 @@ class WithdrawForm extends Component {
                         color: "#000000"
                         }}>
                         <div className="text-left">
-                            <h3>Account</h3>
+                            <h3>Withdraw History</h3>
                         </div>
                         <div
                         className="d-flex justify-content-between"
@@ -187,7 +203,7 @@ class WithdrawForm extends Component {
                                 <span>Currency</span>
                             </div>
                         </div>
-                        {this.props.withdraw && this.props.withdraw.map((data, i) => {
+                        {this.props.withdraw && this.props.withdraw.results ? this.props.withdraw.results.map((data, i) => {
                             let withdraw_status = "";
                             let withdraw_crypto = "";
                             let currency = "";
@@ -272,10 +288,22 @@ class WithdrawForm extends Component {
                                         </button>
                                         
                                     ) : null}
+                                    
                                     </div>
                                 </div>
                              );
-                        })}
+                        }): <div>No Data</div>}
+                        {this.props.withdraw && this.props.withdraw.results && this.props.withdraw.links && 
+                        <div className="text-center">
+                        <Pagination
+                            activePage={this.props.withdraw.links.cur_page}
+                            itemsCountPerPage={10}
+                            totalItemsCount={this.props.withdraw.links.count}
+                            pageRangeDisplayed={5}
+                            onChange={this.handlePageChange}
+                        />
+                        </div>
+                        }
                     </div>
                 </div>
             </div>
