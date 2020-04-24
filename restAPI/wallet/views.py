@@ -1,7 +1,7 @@
 from .models import Wallet
 from .serializers import WalletSerializer
 from .permissions import IsOwnerOnly
-
+from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
@@ -19,6 +19,6 @@ class WalletViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
-UserProfile = WalletViewSet.as_view({
+WalletView = WalletViewSet.as_view({
     'get': 'retrieve',
 })

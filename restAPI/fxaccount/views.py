@@ -239,7 +239,8 @@ class CommissionHistoryViews(generics.ListAPIView):
         for ib in queryset : 
             print(ib.ib_code)
             with connections['backOffice'].cursor() as cursor:
-                cursor.callproc("SP_IB_COMMISSION_HISTORY_LIST", (ib.company_idx,ib.back_index,'Y',from_date,to_date,0,'','','',))
+                print(ib.id)
+                cursor.callproc("SP_IB_COMMISSION_HISTORY_LIST", (ib.company_idx,ib.id,'Y',from_date,to_date,0,'','','',))
                 columns = [col[0] for col in cursor.description]
                 rows += [list(zip(columns, row)) for row in cursor.fetchall()]
 
@@ -263,7 +264,7 @@ class CommissionHistoryViewsDetail(generics.ListAPIView):
         for ib in queryset : 
             print(ib.ib_code)
             with connections['backOffice'].cursor() as cursor:
-                cursor.callproc("SP_IB_COMMISSION_HISTORY_LIST", (ib.company_idx,ib.back_index,'Y',from_date,to_date,kwargs['mt4_login'],'','','',))
+                cursor.callproc("SP_IB_COMMISSION_HISTORY_LIST", (ib.company_idx,ib.id,'Y',from_date,to_date,kwargs['mt4_login'],'','','',))
                 columns = [col[0] for col in cursor.description]
                 rows += [list(zip(columns, row)) for row in cursor.fetchall()]
 
