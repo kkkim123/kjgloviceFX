@@ -166,7 +166,8 @@ class IBAdmin(DjangoMpttAdmin):
         for ib in ibs:
         #i_idx	int ,i_parent_idx int, i_login int,i_name varchar(33),i_point int,i_email varchar(50),i_send_report int,i_new_pass varchar(50)
             cursor.callproc("SP_IB_STRUCTURE_EDIT", (ib[0],ib[1],ib[2],ib[3],ib[4],ib[5],1 if ib[6] == 'Y' else 0,''))           
-            self.message_user(request, 'SP_IB_STRUCTURE_EDIT {}'.format(cursor.fetchall()))     
+            self.message_user(request, 'SP_IB_STRUCTURE_EDIT {}'.format(cursor.fetchall())) 
+                
     updateIBtoBackoffice.short_description = "update IB to Backoffice"
 
 admin.site.register(IntroducingBroker, IBAdmin)

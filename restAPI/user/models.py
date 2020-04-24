@@ -207,8 +207,8 @@ class FxUser(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
 
     USER_CREATE_PASSWORD_RETYPE = True
-    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin','referral_code','user_status', 'user_type', 'referral_website', 'address', 'postal_code', 'city',  'Nationality', 'birthday', 'mobile']
-
+    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin','referral_code','user_status', 
+    'user_type', 'referral_website', 'address', 'postal_code', 'city',  'Nationality', 'birthday', 'mobile','kj_address',]
     objects = FxUserManager()
 
     EMAIL_FIELD = "email"
