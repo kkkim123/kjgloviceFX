@@ -3,7 +3,7 @@ import React from 'react';
 const Overview = (Props) => {
     return (
         <div className="shadow py-4 px-4 text-left" style={{ width: "47%", borderRadius: "20px", backgroundColor: "#ffffff", color: "#000000" }}>
-            <span style={{ fontSize: "2.2rem" }}><strong>Overview</strong></span>
+            <h3>Overview</h3>
             <br></br>
             <br></br>
             <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>

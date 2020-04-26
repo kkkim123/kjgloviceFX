@@ -16,19 +16,18 @@ import AllCommissionHistory from "./components/allCommissionHistory";
 import CommissionHistory from "./components/commissionHistory";
 import { connect } from "react-redux";
 
-
 class MyPage extends Component {
   render() {
     const { user } = this.props.auth;
     return (
-      <div>
+      <section className="container">
         {/* <MpHeader /> */}
         <Steps status={user && user.user_status} />
         <NoticeBox
           title="Welcome to gloviceFX"
           subtitle=" - your personal client area"
           content1="Your gloviceFX User ID: "
-          id="62249056"
+          id={user ? user.email : "Loading..."}
           content2="We have sent your login information to your email."
         />
         <NoticeBox
@@ -38,15 +37,9 @@ class MyPage extends Component {
           id=""
           content2=" Get 30% back on every deposit you make for 30days all the way up to The Big $5000! T&Cs apply"
         />
-        <div className="container d-flex justify-content-between my-5">
-          <UserInfo data={user} />
-          {/* <InBox
-                    messagesNum="1"
-                    unreedNum="2"
-                /> */}
-        </div>
-
-        <div className="container d-flex justify-content-between my-5">
+        <UserInfo data={user} />
+        <Account data={user} />
+        <div className="d-flex justify-content-between my-5">
           <Profit />
           <Overview
             balance="4526.24"
@@ -60,21 +53,18 @@ class MyPage extends Component {
             lastUpdate="20/11/22"
           />
         </div>
-        <Account />
-        <TradingHistory />
-        {user && user.user_type === "I" && (
+        <TradingHistory data={user} />
+        {user && user.user_type === "I" && 
           <>
-            <div className="container d-flex justify-content-between my-5">
-              <IBInfo data={this.props.ib} />
-            </div>
+            <IBInfo data={this.props.ib} />
             <Partners data={this.props.ib} />
             <PartAccount data={this.props.ib} />
             <AllCommissionHistory data={this.props.ib} />
             <CommissionHistory data={this.props.ib} />
           </>
-        )}
+        }
         {/* <MyProfile /> */}
-      </div>
+      </section>
     );
   }
 }

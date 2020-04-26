@@ -1,27 +1,49 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Moment from "moment";
+import store from "../../../store";
+import { partAccount, changePartAcc } from "../../../actions/mypage";
 
 class partners extends Component {
+  state = {
+    isLoad: false
+  }
+
     componentDidMount() {
         if (this.props.data) {
-            this.props.partAccount(this.props.data.ib_code);
+          store.dispatch(partAccount(this.props.data.ib_code))
         }
     }
 
+    componentDidUpdate() {
+      if (this.props.data && !this.state.isLoad) {
+        store.dispatch(partAccount(this.props.data.ib_code))
+        this.setState({
+          isLoad: true
+        })
+      }
+    }
+
+    handleClick = (data) => {
+      this.props.changePartAcc(data)
+    }
+    
+
   render() {
+    // console.log(this.props.partAcc)
     return (
       <div
         className="shadow my-5 py-5 px-4 text-center mx-auto"
         style={{
-          width: "90%",
           borderRadius: "20px",
           backgroundColor: "#ffffff",
           color: "#000000"
         }}
       >
         <div className="text-left mb-5">
-          <h3>Partners Account</h3>
+          <h3>Partners Account
+          <span style={{fontSize: '1.2rem', fontWeight: '300'}}> Clcik Partners Account Number!</span>
+          </h3>
         </div>
         <div
           className="d-flex justify-content-between"
@@ -45,7 +67,7 @@ class partners extends Component {
             <span>Created At</span>
           </div>
         </div>
-        {this.props.partAcc ?
+        {this.props.partAcc && this.props.partAcc.length > 0 ?
           this.props.partAcc.map((partner, i) => {
             return (
               <div
@@ -58,7 +80,7 @@ class partners extends Component {
                   padding: "0.8rem"
                 }}
               >
-                <div className="ml-2" style={{ width: "25%" }}>
+                <div className="ml-2" style={{ width: "25%" }}  onClick={()=>this.handleClick(partner[2][1])}>
                   <span>{partner[2][1]}</span>
                 </div>                  
                 <div className="ml-2" style={{ width: "20%" }}>
@@ -69,7 +91,7 @@ class partners extends Component {
                 </div>
                 <div className="ml-2" style={{ width: "25%" }}>
                   <span>
-                    {Moment(partner[8][1]).format("YYYY-MM-DD HH:mm")}
+                    {Moment(partner[7][1]).format("YYYY-MM-DD HH:mm")}
                   </span>
                 </div>
               </div>
@@ -84,4 +106,4 @@ const mapStateToProps = state => ({
   partAcc: state.mypage.partAcc
 });
 
-export default connect(mapStateToProps)(partners);
+export default connect(mapStateToProps, {changePartAcc})(partners);

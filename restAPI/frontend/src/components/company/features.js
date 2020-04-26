@@ -12,7 +12,7 @@ const cx = classNames.bind(styles);
 class Features extends Component {
     render() {
         return (
-            <div className={cx("container", "features", "my-5")}>
+            <section className={cx("container", "features")}>
                 <div className="row justify-content-center">
                     <div className="col-md-5 col-xs-12 mt-5 mb-3">
                         <div className={cx("title", "text-left")}>
@@ -92,7 +92,7 @@ class Features extends Component {
                         <p>General Inquiries : general@pearlblackfs.com</p>
                     </div>
                 </div>
-            </div>
+            </section>
         );
     }
 }

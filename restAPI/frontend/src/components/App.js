@@ -46,15 +46,22 @@ import HelpMain from "./helpcenter/helpMain";
 import MpHeader from "./mypage/mpHeader";
 import EmployForm from "./mypage/components/myDetails/employForm";
 import FinancialForm from "./mypage/components/myDetails/financialForm";
-import DropForm from "./mypage/components/myDetails/dropForm";
+import DocForm from "./mypage/components/myDetails/docForm";
 import AccountForm from "./mypage/components/myDetails/accountForm";
 import DocDetail from "./mypage/components/myDetails/docDetail";
 import AccountDetail from "./mypage/components/myDetails/accountDetail";
 import CreateIB from "./company/ib/IBForm";
-import EditIB from "./company/ib/IBEditForm";
+import EditIB from "./mypage/components/myDetails/IBEditForm";
 import DepositForm from "./mypage/components/myDetails/DepositForm";
 import WithdrawForm from "./mypage/components/myDetails/WithdrawForm";
-
+import UserRegEdit from "./mypage/components/myDetails/userRegEdit";
+import UserPwdEdit from "./mypage/components/myDetails/userPwdEdit";
+import UserRegEdit2 from "./mypage/components/myDetails/userRegEdit2";
+import TransferForm from "./mypage/components/myDetails/transferForm";
+import TransferDetail from "./mypage/components/myDetails/transferDetail";
+import DepositDetail from "./mypage/components/myDetails/depositDetail";
+import WithdrawDetail from "./mypage/components/myDetails/withdrawDetail";
+import ScrollToTop from "./common/ScrollToTop";
 
 class App extends Component {
   componentDidMount() {
@@ -66,6 +73,7 @@ class App extends Component {
       // redux로 생성된 store에 하위 컴포넌트들 접근 가능
       <Provider store={store}>
         <Router history={history}>
+          <ScrollToTop>
           <Route render={(props) => {
             const path = props.location.pathname;
             if(path.indexOf("mypage") === -1) {
@@ -102,21 +110,29 @@ class App extends Component {
             <Route exact path="/company/terms" component={Terms} />
             <Route exact path="/company/ib" component={IntroducerBroker} />
             <Route exact path="/company/ib/create" component={CreateIB} />
-            <Route exact path="/company/ib/edit" component={EditIB} />
+            <Route exact path="/mypage/ib/edit" component={EditIB} />
             <Route exact path="/company/white" component={WhiteLabel} />
             <Route exact path="/company/affiliate" component={Affiliate} />
             <Route exact path="/company/helpCenter" component={HelpMain} />
             <Route exact path="/mypage/deposit" component={DepositForm} />
+            <Route exact path="/mypage/deposit/detail" component={DepositDetail} />
             <Route exact path="/mypage/withdraw" component={WithdrawForm} />
+            <Route exact path="/mypage/withdraw/detail" component={WithdrawDetail} />
             <Route exact path="/mypage" component={MyPage} />
+            <Route exact path="/mypage/user/edit/1" component={UserRegEdit} />
+            <Route exact path="/mypage/user/edit/2" component={UserRegEdit2} />
+            <Route exact path="/mypage/user/edit/3" component={UserPwdEdit} />
+            <Route exact path="/mypage/transfer" component={TransferForm} />
+            <Route exact path="/mypage/transfer/detail" component={TransferDetail} />
             <Route exact path="/mypage/details/employment" component={EmployForm} />
             <Route exact path="/mypage/details/financial" component={FinancialForm} />
-            <Route exact path="/mypage/details/document" component={DropForm} />
+            <Route exact path="/mypage/details/document" component={DocForm} />
             <Route exact path="/mypage/details/document/detail" component={DocDetail} />
             <Route exact path="/mypage/details/account" component={AccountForm} />
             <Route exact path="/mypage/details/account/detail" component={AccountDetail} />
           </Switch>
           <Footer />
+          </ScrollToTop>
         </Router>
       </Provider>
     );

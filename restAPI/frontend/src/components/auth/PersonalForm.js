@@ -50,7 +50,7 @@ class PersonalForm extends Component {
   render() {
     const { country } = this.state;
     return (
-      <div className="container">
+      <section className="container">
         <div className="row">
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
@@ -82,10 +82,10 @@ class PersonalForm extends Component {
                   </div>
                   <Field
                     name="birthday"
-                    type="text"
+                    type="date"
                     component={this.renderField}
                     placeholder="Date of Birth*"
-                    validate={[required, date]}
+                    validate={required}
                   />
                   <Field
                     name="mobile"
@@ -114,7 +114,7 @@ class PersonalForm extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 }

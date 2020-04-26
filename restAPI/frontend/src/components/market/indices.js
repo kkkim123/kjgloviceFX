@@ -10,7 +10,7 @@ const Indices = () => {
         pageDesc: "Indices are the most popular form of CFDs. GloviceFX has a large range of Indices from around the world to choose from, including the Australian S&P 200 Index, UK FTSE 100 Index, US E-mini S&P 500 and US DJIA Index.",
     }
     return (
-        <div className="container my-5">
+        <section className="container">
             <Title
                 pageTitle={titleProps.pageTitle}
                 pageDesc={titleProps.pageDesc}
@@ -44,7 +44,7 @@ const Indices = () => {
                 </div>
             </div>
             <LookingFor />
-        </div>
+        </section>
     );
 };
 

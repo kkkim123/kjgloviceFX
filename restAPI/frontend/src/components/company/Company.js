@@ -25,7 +25,7 @@ const Card = (props) => {
 
 const Company = () => {
     return (
-        <div className="container-fluid">
+        <>
             <div className="row justify-content-center mt-5">
                 <Card
                     name='About GloviceFX'
@@ -56,7 +56,7 @@ believe this is the only right way of doing a business.'
                     link="/company/terms"
                 />
             </div>
-            <div className="my-5 py-3">
+            <div className="mt-5 py-3">
                 <p className="title">Departments Email</p>
                 <div className="content">
                     <p>Sales Department : sales@pearlblackfs.com</p>
@@ -65,7 +65,7 @@ believe this is the only right way of doing a business.'
                 </div>
             </div>
             {/* <div className="row" */}
-        </div>
+            </>
     );
 };
 

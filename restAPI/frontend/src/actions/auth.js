@@ -16,7 +16,8 @@ import {
   RESET_SUCCESS,
   RESET_FAIL,
   EMAIL_ACTIVATE,
-  EMAIL_ACTIVATE_FAIL
+  EMAIL_ACTIVATE_FAIL,
+  GET_USER
 } from "./types";
 
 // LOAD USER
@@ -70,17 +71,14 @@ export const register = ({
     password,
     is_admin,
     referral_code,
-    //    auth/AddressForm
     address,
     postal_code,
     city,
-    //    auth/PersonalForm
     Nationality,
     birthday,
     mobile,
   });
 
-  console.log(body);
   try {
     const res = await axios.post("/auth/users/", body, config);
     dispatch({
@@ -95,24 +93,55 @@ export const register = ({
   }
 };
 
+// GET USER
+export const getUser = () => async (dispatch, getState) => {
+
+  try {
+    const res = await axios.get(`/user/${getState().auth.id}`, tokenConfig(getState));
+    dispatch({
+      type: GET_USER,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: AUTH_ERROR
+    });
+  }
+};
+
 // REGISTER ADDRESS
 export const registDetail = ({
-  //    mypage/employForm
+  resident_country,
+  first_name,
+  last_name,
+  address,
+  postal_code,
+  city,
+  Nationality,
+  birthday,
+  mobile,
   employment_status,
   industry,
   employment_position,
   education_level,
-  //    mypage/financialForm
   annual_income,
   income_source,
   trading_experience,
   trading_period,
-
   user_status
 }) => async (dispatch, getState) => {
 
   // Request Body
   const body = JSON.stringify({
+    resident_country,
+    first_name,
+    last_name,
+    address,
+    postal_code,
+    city,
+    Nationality,
+    birthday,
+    mobile,
     employment_status,
     industry,
     employment_position,
@@ -121,7 +150,6 @@ export const registDetail = ({
     income_source,
     trading_experience,
     trading_period,
-
     user_status,
   });
   
@@ -129,13 +157,14 @@ export const registDetail = ({
     const res = await axios.patch(`/user/${getState().auth.id}`, body, tokenConfig(getState));
     dispatch({
       type: REGISTER_DETAIL_SUCCESS,
-      payload: res.data
+      payload: res.data,
+      status: res.status
     });
   } catch (err) {
     dispatch({
       type: REGISTER_FAIL
     });
-    dispatch(stopSubmit("detailForm", err.response.data));
+    dispatch(stopSubmit("userRegEdit","userRegEdit2", err.response.data));
   }
 };
 
@@ -204,6 +233,23 @@ export const reset = ({ email }) => async dispatch => {
       type: RESET_SEND_FAIL
     });
     dispatch(stopSubmit("resetForm", err.response.data));
+  }
+};
+
+// EDIT PASSWORD
+export const editPassword = () => async (dispatch, getState) => {
+
+  try {
+    const res = await axios.get('/auth/users/set_password/',body, tokenConfig(getState));
+    dispatch({
+      type: CHANGE_SUCCESS,
+      payload: res.data,
+      status: res.status
+    });
+  } catch (err) {
+    dispatch({
+      type: AUTH_ERROR
+    });
   }
 };
 

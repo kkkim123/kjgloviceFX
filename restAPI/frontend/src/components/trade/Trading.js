@@ -13,7 +13,9 @@ class Trading extends Component {
       <>
         {/* 구분 예정 */}
         <TradingMain />
-        <DownloadMT4 />
+        <section className="container">
+          <DownloadMT4 />
+        </section>
         <EcnomicCalendars />
         {/* <IndicatorsSummary /> */}
         {/* <ServiceInfo />

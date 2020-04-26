@@ -28,7 +28,7 @@ class IntroducerBroker extends Component {
       );
 
     return (
-      <div className="container">
+      <section className="container text-center">
         <div className="row my-5">
           <div className="col">
             <img
@@ -42,14 +42,14 @@ class IntroducerBroker extends Component {
           </div>
         </div>
         <div>
-          <p className="text-gray text-left">
+          <p className="text-gray">
             Partner with a market leader that you and your clients can trust!
             GloviceFX’s Introducing Broker program is designed to remunerate
             introducers of all sizes with ongoing commissions for the trading
             volume of referred clients.
           </p>
           <br></br>
-          <p className="text-left">
+          <p>
             <strong>
               A low barrier to entry combined with a highly competitive volume
               based rebate structure makes GloviceFX ideal for introducers of
@@ -147,7 +147,7 @@ class IntroducerBroker extends Component {
             </a>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 }

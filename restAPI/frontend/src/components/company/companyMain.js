@@ -4,18 +4,9 @@ import Company from "./company";
 class companyMain extends Component {
   render() {
     return (
-      <>
-        {/* 구분 예정 */}
+      <section className="container">
         <Company />
-        {/* <Partnership />
-        <AboutGlovice />
-        <PrivacyStatement />
-        <AmlPolicy />
-        <Terms />
-        <IntroducerBroker />
-        <WhiteLabel />
-        <Affiliate /> */}
-      </>
+      </section>
     );
   }
 }

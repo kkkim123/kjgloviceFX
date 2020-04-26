@@ -4,8 +4,10 @@ import { Field, reduxForm } from "redux-form";
 import { registDetail } from "../../../../actions/auth";
 import { addAccount } from "../../../../actions/mypage";
 import "../../../../styles/auth/form.css";
+import store from "../../../../store";
 
 class AccountForm extends Component {
+
   renderField = ({ input, placeholder, type, disabled,value, meta: { touched, error } }) => {
     return (
       <div
@@ -58,10 +60,10 @@ class AccountForm extends Component {
 
   render() {
     return (
-      <div className="container">
+      <section className="container">
         <div className="card card-signin my-5">
           <div className="card-body text-center p-gray">
-            <h5 className="card-title">Open New Account</h5>
+            <h5 className="card-title mb-5">Open New Account</h5>
             <form
               className="form-signin text-left"
               onSubmit={this.props.handleSubmit(this.onSubmit)}
@@ -120,7 +122,7 @@ class AccountForm extends Component {
             </form>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 }

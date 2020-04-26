@@ -7,7 +7,7 @@ const cx = classNames.bind(styles);
 class TradingMain extends Component {
   render() {
     return (
-      <div className={cx("container-fluid", "text-center","main")}>
+      <div className={cx("bgImg", "text-center","main")}>
         <div className="row justify-content">
           <div className="col my-5">
             <div className={cx("trade-title")}>
