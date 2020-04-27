@@ -1,3 +1,5 @@
+from celery.schedules import crontab
+
 import os
 import datetime
 import json
@@ -245,7 +247,7 @@ EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = config_secret['sendgrid']['api_key_id']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False   # 프로덕션에서는 True로 설정 필요
+EMAIL_USE_SSL = True   # 프로덕션에서는 True로 설정 필요
 DEFAULT_FROM_EMAIL = 'jhlee@fbpasia.com'
 
 # DEFAULT_FROM_EMAIL = 'korea7030.jhl@gmail.com'
@@ -272,11 +274,20 @@ DEFAULT_FROM_EMAIL = 'jhlee@fbpasia.com'
 # }
 
 # REDIS related settings 
-REDIS_HOST = 'localhost'
-REDIS_PORT = '6379'
-BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
-BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600} 
-CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_BROKER_URL = 'amqp://{}:{}@localhost:5672//'.format(config_secret['rabbitmq']['id'], config_secret['rabbitmq']['pwd'])
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE='UTC'
+
+# beat schedule setting
+CELERY_BEAT_SCHEDULE = {
+    'get_transaction_list': {
+        'task': 'wallet.tasks.get_transaction_list',
+        'schedule': crontab(minute=10) # execute every 10 minutes
+    }
+}
+
 #########
 # Local #
 #########

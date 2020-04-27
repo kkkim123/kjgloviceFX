@@ -27,3 +27,17 @@ class Wallet(models.Model):
     class Meta:
         verbose_name = "Wallet"
         verbose_name_plural = "Wallet"
+
+
+class TransactionHistory(models.Model):
+    id = models.AutoField(primary_key=True)
+    hash = models.CharField(max_length=100, blank=False, null=False)
+    confirmations = models.IntegerField(default=0)
+    from_address = models.CharField(max_length=50 , blank=False, null=False)
+    to_address = models.CharField(max_length=50, blank=False, null=False)
+    value = models.CharField(max_length=2000)
+    created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
+    updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
+
+    class Meta:
+        db_table = "transaction_history"
