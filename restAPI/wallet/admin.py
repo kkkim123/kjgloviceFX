@@ -21,8 +21,8 @@ config.read('common/config/config.ini')
 #         checksum_address = web3.toChecksumAddress(Wallets[0][0])
 #         select_balance= web3.eth.getBalance(checksum_address)
 #         queryset.update(balance = web3.fromWei(select_balance, 'ether'))
-
-
+from .tasks import notify_user
+notify_user(6, repeat=1)
         
 #     getBalance.short_description = "getBalance"
 
