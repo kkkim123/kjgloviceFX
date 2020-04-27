@@ -2,15 +2,16 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
-import { getIb, editIb } from "../../../actions/mypage";
-import "../../../styles/auth/form.css";
+import { getIb, editIb } from "../../../../actions/mypage";
+import "../../../../styles/auth/form.css";
+import store from "../../../../store";
 
 class IBEditForm extends Component {
     state = {
         isEdit: true
     }
     componentDidMount() {
-        this.props.getIb();
+      store.dispatch(getIb());
     }
     
   renderField = ({ input, placeholder, type,label,readOnly, meta: { touched, error } }) => {
@@ -41,7 +42,7 @@ class IBEditForm extends Component {
             send_report: this.props.ib.send_report,
             ib_website: this.props.ib.ib_website,
             ib_code: this.props.ib.ib_code,
-            referralurl: this.props.ib.referralurl,
+            referralurl: this.props.ib.referralurl.replace(/(\s*)/g, ""),
         });
         this.setState({
             isEdit: false
@@ -66,19 +67,18 @@ class IBEditForm extends Component {
       default:
         break;
     }
-    this.props.editIb(formValues);
-    alert('자세한 내용은 My Page에서 확인 가능합니다.')
-    this.props.history.push("/main");
+    store.dispatch(editIb(formValues));
+    this.props.history.push("/mypage");
   };
 
   render() {
     return (
-      <div className="container">
+      <section className="container">
         <div className="row">
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
               <div className="card-body text-center p-gray">
-                <h5 className="card-title">Introducing Broker</h5>
+                <h5 className="card-title">Edit Introducing Broker</h5>
                 <form
                   className="form-signin text-left"
                   onSubmit={this.props.handleSubmit(this.onSubmit)}
@@ -90,13 +90,6 @@ class IBEditForm extends Component {
                     placeholder="IB Name*"
                     label="IB Name"
                   />
-                  <Field
-                    name="point"
-                    type="text"
-                    component={this.renderField}
-                    placeholder="Point*"
-                    label="Point"
-                  />                                    
                   <Field
                     name="email"
                     type="text"
@@ -119,6 +112,14 @@ class IBEditForm extends Component {
                     label="IB WebSite URL"
                   />
                   <Field
+                    name="point"
+                    type="text"
+                    component={this.renderField}
+                    placeholder="Point*"
+                    label="Point"
+                    readOnly={true}
+                  />                   
+                  <Field
                     name="ib_code"
                     type="text"
                     component={this.renderField}
@@ -138,14 +139,14 @@ class IBEditForm extends Component {
                     className="btn btn-lg btn-primary btn-block mt-10"
                     type="submit"
                   >
-                    Become Introducing Broker
+                    Edit Introducing Broker
                   </button>
                 </form>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 }

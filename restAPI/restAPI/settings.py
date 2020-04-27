@@ -219,7 +219,7 @@ JWT_AUTH = {'JWT_AUTH_HEADER_PREFIX': 'Token',}
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema', 
-    # djang rest framework pagniation 변경
+# djang rest framework pagniation 변경
     'DEFAULT_PAGINATION_CLASS': 'common.utils.paginationUtil.CustomPagination', 
     'PAGE_SIZE': 10,
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",
@@ -245,7 +245,7 @@ EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = config_secret['sendgrid']['api_key_id']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_USE_SSL = True   # 프로덕션에서는 True로 설정 필요
+EMAIL_USE_SSL = False   # 프로덕션에서는 True로 설정 필요
 DEFAULT_FROM_EMAIL = 'jhlee@fbpasia.com'
 
 # DEFAULT_FROM_EMAIL = 'korea7030.jhl@gmail.com'
@@ -271,6 +271,12 @@ DEFAULT_FROM_EMAIL = 'jhlee@fbpasia.com'
 #     },
 # }
 
+# REDIS related settings 
+REDIS_HOST = 'localhost'
+REDIS_PORT = '6379'
+BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600} 
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 #########
 # Local #
 #########

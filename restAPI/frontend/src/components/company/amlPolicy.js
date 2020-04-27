@@ -4,7 +4,7 @@ import '../../styles/company/amlPolicy.css'
 
 const AmlPolicy = () => {
     return (
-        <div className="container my-5">
+        <section className="container">
             <div className="text-left my-5">
                 <img className="icon" src={icon_policy} alt=""></img>
                 <span className="ag-title ml-2"><strong>AML Policy</strong></span>
@@ -30,7 +30,7 @@ const AmlPolicy = () => {
                 <br></br>
                 <p><strong>extremely low market spreads, no-requotes, full STP and DMA, absolute transparency and the latest trading technology</strong></p>
             </div>
-        </div>
+        </section>
     );
 };
 

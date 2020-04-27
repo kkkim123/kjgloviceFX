@@ -3,7 +3,7 @@ import icon_terms from '../../images/icon_terms.png'
 
 const Terms = () => {
     return (
-        <div className="container my-5">
+        <section className="container">
             <div className="text-left my-5">
                 <img className="icon" src={icon_terms} alt=""></img>
                 <span className="ag-title ml-2"><strong>Terms And Conditions</strong></span>
@@ -68,7 +68,7 @@ const Terms = () => {
                 <br></br>
                 <p><strong>extremely low market spreads, no-requotes, full STP and DMA, absolute transparency and the latest trading technology</strong></p>
             </div>
-        </div>
+        </section>
     );
 };
 

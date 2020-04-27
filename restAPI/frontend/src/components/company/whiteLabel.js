@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 const WhiteLabel = () => {
     return (
-        <div className="container">
+        <section className="container text-center ">
             <div className="row my-5">
                 <div className="col">
                     <img className="partner-title-img mr-3" src={icon_broker} alt="introducer"></img>
@@ -14,11 +14,11 @@ const WhiteLabel = () => {
                 </div>
             </div>
             <div>
-                <p className="text-gray text-left">GloviceFX’s white label partnership program is a turnkey solution giving your clients access to our market-leading liquidity and technology.</p>
+                <p className="text-gray">GloviceFX’s white label partnership program is a turnkey solution giving your clients access to our market-leading liquidity and technology.</p>
                 <br></br>
-                <p className="text-center color-green"><strong>AFully Branded White Label Solution</strong></p>
+                <p className="color-green"><strong>AFully Branded White Label Solution</strong></p>
                 <br></br>
-                <p className="text-left">Our white label program has been designed for start-up businesses with a detailed business plan and existing brokerages that have an existing client base and monthly foreign exchange volume of greater than $1 billion. As a full white label partner you will have complete control and transparency over the infrastructure through which you manage your clients.</p>
+                <p>Our white label program has been designed for start-up businesses with a detailed business plan and existing brokerages that have an existing client base and monthly foreign exchange volume of greater than $1 billion. As a full white label partner you will have complete control and transparency over the infrastructure through which you manage your clients.</p>
             </div>
             <div className="row feature justify-content-center p-3 my-5 text-left align-bottom">
                 <div className="col-12 col-sm-6">
@@ -58,7 +58,7 @@ const WhiteLabel = () => {
                     </a>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

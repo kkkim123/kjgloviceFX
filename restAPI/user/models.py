@@ -201,12 +201,14 @@ class FxUser(AbstractBaseUser):
     referral_website = models.URLField(default='' , max_length=128, blank=True, null=True)
 
     user_status = models.CharField(default='1', max_length=2, blank=True, choices=USER_STATUS_CHOICE)
+    kj_address  = models.CharField(default='', max_length=50, blank=True)
+
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
     USER_CREATE_PASSWORD_RETYPE = True
-    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin','referral_code','user_status', 'user_type', 'referral_website', 'address', 'postal_code', 'city',  'Nationality', 'birthday', 'mobile']
-
+    REQUIRED_FIELDS = ['resident_country','first_name','last_name','password','is_admin','referral_code','user_status', 
+    'user_type', 'referral_website', 'address', 'postal_code', 'city',  'Nationality', 'birthday', 'mobile','kj_address',]
     objects = FxUserManager()
 
     EMAIL_FIELD = "email"

@@ -10,15 +10,20 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.admin.filters import SimpleListFilter
 from datetime import timezone, datetime
 from .models import FxUser,FxUserDocument,IntroducingBroker,ApplyIntroducingBroker
+from wallet.models import Wallet
+
+
 from django.db import connections
 from django.db.models import Q
 from django.utils.html import format_html
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Count
 from django.db.models.functions import TruncDay
-
-
+from django.contrib.admin.utils import unquote, quote
 from django_mptt_admin.admin import DjangoMpttAdmin
+from django.http import JsonResponse
+from copy import deepcopy
+import requests
 
 from django_object_actions import takes_instance_or_queryset
 
@@ -45,29 +50,91 @@ class IBFilter(admin.SimpleListFilter):
 
             return continent.get_descendants(include_self=True)
 
-
 class IBAdmin(DjangoMpttAdmin):
     tree_auto_open = 0
-    actions = ['updateIBtoBackoffice','moveIBtoBackoffice',]
-    list_display = ('id', 'fxuser', 'ib_code','ib_name','point',
+    # actions = ['updateIBtoBackoffice','moveIBtoBackoffice',]
+    list_display = ('id', 'fxuser', 'company_idx', 'ib_code','ib_name','point',
     'live_yn', 'email', 'send_report', 'referralurl','ib_website','status')
     #list_filter = ('status',)
-    list_filter = (IBFilter,)
-    list_editable = ('ib_code','ib_name','point','live_yn','send_report','status')
+    #list_filter = (IBFilter,)
+    list_editable = ('company_idx','ib_code','ib_name','point','live_yn','send_report','status')
     search_fields = ('fxuser','ib_code',)
     # ordering = ('email',)
     # filter_horizontal = ()
 
-    def save_model(self, request, obj, form, change):
-        fxuser = FxUser.objects.get(id = obj.fxuser_id)
-        if(obj.status =='A'):
-            fxuser.user_type = 'I'     
-            fxuser.save()    
-        else :
-            fxuser.user_type = 'R'     
-            fxuser.save()       
-        
-        super().save_model(request, obj, form, change)
+    def move_view(self, request, object_id):
+        request.current_app = self.admin_site.name
+        instance = self.get_object(request, unquote(object_id))
+
+
+        target_id = request.POST['target_id']
+        position = request.POST['position']
+        target_instance = self.get_object(request, target_id)
+
+        self.do_move(instance, position, target_instance)
+
+        return JsonResponse(
+            dict(success=True)
+        )
+    def do_move(self, instance, position, target_instance):
+        print('do_move')
+        if position == 'before':
+            print('before')
+            instance.move_to(target_instance, 'left')
+        elif position == 'after':
+            print('after')
+            instance.move_to(target_instance, 'right')
+        elif position == 'inside':
+            print('inside')
+            instance.move_to(target_instance)
+        else:
+            raise Exception('Unknown position')
+        #print(str(instance.id))
+        cursor =  connections['backOffice'].cursor()
+        cursor.callproc("SP_IB_STRUCTURE_GET_ITEM", (instance.id,))
+        #print(instance.parent_id)
+
+        old_parent_idx = 0
+        for row in cursor.fetchall():
+            old_parent_idx = row[2]
+      
+        if(old_parent_idx == 0):
+            return
+        # print(old_parent_idx)
+        # print(instance.parent_id)
+        cursor.nextset()
+        cursor.callproc("SP_IB_STRUCTURE_MOVE", (instance.id,instance.parent_id,old_parent_idx))    
+        cursor.nextset()
+        cursor.execute("select IDX from IB_STRUCTURE where IB_LOGIN = '" + str(instance.ib_code) +"';")
+
+        for row in cursor.fetchall():
+            old_ib = deepcopy(instance)
+            instance.delete()
+
+            ib = IntroducingBroker.objects.create(
+                id = row[0], 
+                fxuser = old_ib.fxuser, 
+                company_idx = old_ib.company_idx, 
+                ib_code = old_ib.ib_code, 
+                ib_name = old_ib.ib_name, 
+                point = old_ib.point, 
+                live_yn = old_ib.live_yn, 
+                email = old_ib.email, 
+                send_report = old_ib.send_report, 
+                referralurl = old_ib.referralurl,
+                ib_website = old_ib.ib_website,
+                status = old_ib.status,
+                parent_id = old_ib.parent_id
+            )
+
+        if self.trigger_save_after_move:
+            instance.save()
+
+
+
+
+
+
 
     
 
@@ -115,43 +182,9 @@ class IBAdmin(DjangoMpttAdmin):
         for ib in ibs:
         #i_idx	int ,i_parent_idx int, i_login int,i_name varchar(33),i_point int,i_email varchar(50),i_send_report int,i_new_pass varchar(50)
             cursor.callproc("SP_IB_STRUCTURE_EDIT", (ib[0],ib[1],ib[2],ib[3],ib[4],ib[5],1 if ib[6] == 'Y' else 0,''))           
-            self.message_user(request, 'SP_IB_STRUCTURE_EDIT {}'.format(cursor.fetchall()))     
+            self.message_user(request, 'SP_IB_STRUCTURE_EDIT {}'.format(cursor.fetchall())) 
+                
     updateIBtoBackoffice.short_description = "update IB to Backoffice"
-
-    def moveIBtoBackoffice(self, request, queryset):
-        if queryset.count() != 1:
-            self.message_user(request, 'Let\'s do it slowly one by one')
-            return
-        cursor =  connections['backOffice'].cursor()
-
-        ibs = queryset.values_list('back_index')
-        # if(ibs.count < 1) :
-        #     self.message_user(request, 'back_index is not found')
-        #     return
-        cursor.callproc("SP_IB_STRUCTURE_GET_ITEM", (ibs[0]))
-        #print(cursor.fetchall())
-        old_parent_idx = 0
-        for row in cursor.fetchall():
-            old_parent_idx = row[2]
-      
-        if(old_parent_idx == 0):
-            return
-        ibs = queryset.values_list('back_index', 'parent_idx','ib_code')
-        # if(ibs.count < 1) :
-        #     self.message_user(request, 'back_index is not found')
-        #     return
-
-        for ib in ibs:
-            cursor.nextset()
-            cursor.callproc("SP_IB_STRUCTURE_MOVE", (ib[0],ib[1],old_parent_idx))    
-            cursor.nextset()
-            cursor.execute("select IDX from IB_STRUCTURE where IB_LOGIN = '" + str(ib[2]) +"';")
-
-            for row in cursor.fetchall():
-                queryset.update(back_index=row[0])
-
-            self.message_user(request, 'SP_IB_STRUCTURE_MOVE {}'.format(cursor.fetchall()))
-    moveIBtoBackoffice.short_description = "move IB to Backoffice"
 
 admin.site.register(IntroducingBroker, IBAdmin)
 
@@ -206,6 +239,7 @@ class ApplyIBAdmin(admin.ModelAdmin):
         return super().changelist_view(request, extra_context=extra_context)
 
     def save_model(self, request, obj, form, change):
+        print('ApplyIB save_model')
         fxuser = FxUser.objects.get(id = obj.fxuser_id)
         if(obj.status =='A'):
             fxuser.user_type = 'I'     
@@ -225,7 +259,6 @@ class ApplyIBAdmin(admin.ModelAdmin):
                 status = obj.status,
                 parent_id = obj.parent_idx
             )
-            #ib.save()
         else :
             fxuser.user_type = 'R'     
             fxuser.save()       
@@ -283,13 +316,14 @@ admin.site.register(ApplyIntroducingBroker, ApplyIBAdmin)
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id','email', 'first_name', 'last_name', 'user_type','user_status','referral_code')
+    list_display = ('id','email', 'first_name', 'last_name', 'user_type','kj_address','referral_code','user_status')
     list_filter = ('is_admin',)
     list_editable = ('user_status','referral_code')
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()	
     def changelist_view(self, request, extra_context=None):
+
         # Aggregate new subscribers per day
         chart_data = (
             FxUser.objects.annotate(date=TruncDay("created_at"))
@@ -304,11 +338,27 @@ class UserAdmin(admin.ModelAdmin):
 
         # Call the superclass changelist_view to render the page
         return super().changelist_view(request, extra_context=extra_context)
+
+
+
+    def save_model(self, request, obj, form, change):
+        if(obj.user_status >= '6' and obj.kj_address == ''):
+            URL = 'http://3.0.181.55:3000/kj/fx/getaddress/' + str(obj.id)
+            response = requests.get(URL)
+            jsresponse = response.json()
+            print(jsresponse['address'])
+            obj.kj_address = jsresponse['address']
+
+            wallet = Wallet.objects.create(
+                id = obj, 
+                address = obj.kj_address, 
+            )
+        super().save_model(request, obj, form, change)        
 admin.site.register(FxUser, UserAdmin)
 
 class DocumentAdmin( admin.ModelAdmin):
-    list_display = ('fxuser', 'doc_photo_id', 'doc_photo_id_status' , 'doc_proof_of_residence', 'doc_proof_of_residence_status' 
-    ,'doc_photo_id_2', 'doc_photo_id_2_status' ,'doc_proof_of_residence_2', 'doc_proof_of_residence_2_status','created_at')
+    list_display = ('fxuser', 'doc_photo_id', 'doc_photo_id_status' ,'doc_photo_id_updated_at', 'doc_proof_of_residence', 'doc_proof_of_residence_status' ,
+    'doc_proof_of_residence_updated_at','doc_photo_id_2', 'doc_photo_id_2_status' ,'doc_proof_of_residence_2', 'doc_proof_of_residence_2_status','created_at')
 
     list_editable = ('doc_photo_id_status','doc_proof_of_residence_status','doc_photo_id_2_status','doc_proof_of_residence_2_status')
     list_filter = ['created_at']

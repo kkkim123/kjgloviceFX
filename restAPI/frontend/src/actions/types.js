@@ -15,7 +15,9 @@ export const EMAIL_ACTIVATE = 'EMAIL_ACTIVATE';
 export const EMAIL_ACTIVATE_FAIL = 'EMAIL_ACTIVATE_FAIL';
 export const FOOTER_LOADING = 'FOOTER_LOADING';
 export const FOOTER_LOADING_FAIL = 'FOOTER_LOADING_FAIL';
-
+export const FAIL = 'FAIL';
+export const GET_USER = 'GET_USER';
+export const CHANGE_SUCCESS = 'CHANGE_SUCCESS';
 //mypage
 //select box user option
 export const GET_USER_OPTION = 'GET_USER_OPTION';
@@ -31,6 +33,7 @@ export const EDIT_FILE = 'EDIT_FILE';
 export const ADD_ACCOUNT = 'ADD_ACCOUNT';
 export const GET_ACCOUNT = 'GET_ACCOUNT';
 export const CHANGE_ACCOUNT = 'CHANGE_ACCOUNT';
+export const CHANGE_PART_ACCOUNT = 'CHANGE_PART_ACCOUNT';
 //계좌 취소
 export const DELETE_ACCOUNT = 'DELETE_ACCOUNT';
 //거래내역 조회
@@ -62,3 +65,5 @@ export const ADD_IB = 'ADD_IB';
 //ib 조회, 수정
 export const GET_IB = 'GET_IB';
 export const EDIT_IB = 'EDIT_IB';
+
+export const GET_WALLET = 'GET_WALLET';

@@ -2,17 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { getAccount, changeAcc } from "../../../actions/mypage";
+import store from "../../../store";
 
 class account extends Component {
   componentDidMount() {
-    this.props.getAccount(this.props.auth.id);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.auth.user !== this.props.auth.user) {
-      this.props.getAccount(this.props.auth.id);
-    }
-    return true;
+    store.dispatch(getAccount(this.props.auth.id))
   }
 
   handleClick = (data) => {
@@ -24,29 +18,50 @@ class account extends Component {
       <div
         className="shadow my-5 py-5 px-4 text-center mx-auto"
         style={{
-          width: "90%",
           borderRadius: "20px",
           backgroundColor: "#ffffff",
           color: "#000000"
         }}
       >
         <div className="text-left mb-5">
-          <h3>Account</h3>
+          <h3>
+            <Link to="/mypage/details/account/detail">Account </Link>
+           <span style={{fontSize: '1.2rem', fontWeight: '300'}}>Clcik Your Account Number!</span>
+          </h3>
+          <div className="d-flex justify-content-between text-center my-5">
+            <div>
+             <span className="text-left" style={{fontSize: '1.2rem', fontWeight: '250'}}>
+              {this.props.wallet ? "Your KJ Balance : " + this.props.wallet.kj_balance + " KJ": null }
+             </span>
+            </div>
+            <div>
+              <Link
+                  to="/mypage/details/account"
+                  className="px-3 py-2 rounded-pill"
+                  style={{
+                      color: "#ffffff",
+                      backgroundColor: "#006536",
+                      fontWeight: "bold",
+                      textDecoration: "none"
+                  }}
+              >
+                  Add Account
+              </Link>
+              <Link
+                  to="/mypage/transfer/detail"
+                  className="px-3 py-2 rounded-pill mx-3"
+                  style={{
+                      color: "#ffffff",
+                      backgroundColor: "#006536",
+                      fontWeight: "bold",
+                      textDecoration: "none"
+                  }}
+              >
+                  Transfer
+              </Link>  
+              </div>            
+          </div>
         </div>
-        <div className="text-right mb-2">
-            <Link
-                to="/mypage/details/account"
-                className="px-3 py-2 rounded-pill"
-                style={{
-                    color: "#ffffff",
-                    backgroundColor: "#006536",
-                    fontWeight: "bold",
-                    textDecoration: "none"
-                }}
-            >
-                Add Account
-            </Link>
-        </div>        
         <div
           className="d-flex justify-content-between"
           style={{
@@ -62,96 +77,81 @@ class account extends Component {
           <div className="ml-2" style={{ width: "15%" }}>
             <span>Number</span>
           </div>
-          <div className="ml-2" style={{ width: "10%" }}>
+          <div className="ml-2" style={{ width: "20%" }}>
             <span>Currency</span>
           </div>
-          <div className="ml-2" style={{ width: "25%" }}>
+          <div className="ml-2" style={{ width: "10%" }}>
             <span>Balance</span>
           </div>
           <div className="ml-2" style={{ width: "20%" }}>
             <span>Deposit</span>
           </div>
-          <div className="ml-2" style={{ width: "15%" }}>
+          <div className="ml-2" style={{ width: "20%" }}>
             <span>Withdraw</span>
           </div>
         </div>
-        {this.props.account &&
+        {this.props.account && this.props.wallet ?
           this.props.account.map((rowData,i) => {
-            let account_type = "";
-            let base_currency = "";
-            switch (Number(rowData.account_type)) {
-              case 0:
-                account_type = "Live MT4 Account";
-                break;
-              default:
-                break;
-            }
-
-            switch (Number(rowData.base_currency)) {
-              case 0:
-                base_currency = "USD";
-                break;
-              case 1:
-                base_currency = "CNY";
-                break;
-              case 2:
-                base_currency = "BTC";
-                break;
-              case 3:
-                base_currency = "ETH";
-                break;
-              case 4:
-                base_currency = "GLC";
-                break;
-              case 5:
-                base_currency = "WTX";
-                break;
-              default:
-                break;
-            }
-
-            return (
-              <div
-                className="d-flex justify-content-between"
-                style={{
-                  borderTop: "1px solid #000000",
-                  color: "#929292",
-                  fontSize: "1.2rem",
-                  padding: "0.8rem"
-                }}
-                key={i}
-              >
-                <div className="ml-2" style={{ width: "15%" }}>
-                  {account_type}
-                </div>
-                <div className="ml-2" style={{ width: "15%" }} onClick={()=>this.handleClick(rowData.mt4_account)}>
-                  <span>{rowData.mt4_account}</span>
-                </div>
-                <div className="ml-2" style={{ width: "10%" }}>
-                  <span>{base_currency}</span>
-                </div>
-                <div className="ml-2" style={{ width: "25%" }}>
-                  <span>{rowData.balance}</span>
-                </div>
-                <div className="ml-2" style={{ width: "20%" }}>
-                  <Link
-                    to="/mypage/deposit"
-                    className="px-3 py-2 rounded-pill"
-                    style={{
-                      color: "#ffffff",
-                      backgroundColor: "#006536",
-                      fontWeight: "bold",
-                      textDecoration: "none"
-                    }}
-                    onClick={()=>this.handleClick(rowData.mt4_account)}
-                  >
-                    Deposit
-                  </Link>
-                </div>
-                <div className="ml-2" style={{ width: "15%" }}>
-                  {rowData.balance > 0 ? (
-                    <Link
-                      to="/mypage/withdraw"
+            if(rowData.status === "A" || rowData.status === "S") {
+              let account_type = "";
+              let base_currency = "";
+              switch (Number(rowData.account_type)) {
+                case 0:
+                  account_type = "Live MT4 Account";
+                  break;
+                default:
+                  break;
+              }
+  
+              switch (Number(rowData.base_currency)) {
+                case 0:
+                  base_currency = "USD";
+                  break;
+                case 1:
+                  base_currency = "CNY";
+                  break;
+                case 2:
+                  base_currency = "BTC";
+                  break;
+                case 3:
+                  base_currency = "ETH";
+                  break;
+                case 4:
+                  base_currency = "GLC";
+                  break;
+                case 5:
+                  base_currency = "WTX";
+                  break;
+                default:
+                  break;
+              }
+  
+              return (
+                <div
+                  className="d-flex justify-content-between"
+                  style={{
+                    borderTop: "1px solid #000000",
+                    color: "#929292",
+                    fontSize: "1.2rem",
+                    padding: "0.8rem"
+                  }}
+                  key={i}
+                >
+                  <div className="ml-2" style={{ width: "15%" }}>
+                    {account_type}
+                  </div>
+                  <div className="ml-2" style={{ width: "15%" }} onClick={()=>this.handleClick(rowData.mt4_account)}>
+                    <span>{rowData.mt4_account}</span>
+                  </div>
+                  <div className="ml-2" style={{ width: "20%" }}>
+                    <span>{base_currency}</span>
+                  </div>
+                  <div className="ml-2" style={{ width: "10%" }}>
+                    <span>{rowData.balance}</span>
+                  </div>
+                  <div className="ml-2" style={{ width: "20%" }}>
+                    {this.props.wallet.kj_balance > 0 ? (<Link
+                      to="/mypage/deposit/detail"
                       className="px-3 py-2 rounded-pill"
                       style={{
                         color: "#ffffff",
@@ -161,13 +161,39 @@ class account extends Component {
                       }}
                       onClick={()=>this.handleClick(rowData.mt4_account)}
                     >
-                      Withdraw
-                    </Link>
-                  ) : null}
+                      Deposit
+                    </Link>) : null}
+                  </div>
+                  <div className="ml-2" style={{ width: "20%" }}>
+                    {rowData.balance > 0 ? (
+                      <Link
+                        to="/mypage/withdraw/detail"
+                        className="px-3 py-2 rounded-pill"
+                        style={{
+                          color: "#ffffff",
+                          backgroundColor: "#006536",
+                          fontWeight: "bold",
+                          textDecoration: "none"
+                        }}
+                        onClick={()=>this.handleClick(rowData.mt4_account)}
+                      >
+                        Withdraw
+                      </Link>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            } 
+            if(rowData.status === "P" || rowData.status === "D" ) {
+              return (
+                <div key={i}>
+                  <Link to="/mypage/details/account/detail">Pending or Decline Account</Link>
+                </div>
+              )
+            }
+          }) : (
+            <div>No Account</div>
+          )}
       </div>
     );
   }
@@ -175,7 +201,8 @@ class account extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  account: state.mypage.account
+  account: state.mypage.account,
+  wallet: state.mypage.wallet
 });
 
-export default connect(mapStateToProps, { getAccount, changeAcc })(account);
+export default connect(mapStateToProps, { changeAcc })(account);

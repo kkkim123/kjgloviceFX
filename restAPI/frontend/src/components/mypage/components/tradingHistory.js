@@ -1,46 +1,102 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getTrading, getAccount } from "../../../actions/mypage";
+import { getTrading } from "../../../actions/mypage";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Moment from "moment";
 import Pagination from "react-js-pagination";
 import { Field, reduxForm } from "redux-form";
+import "../../../styles/auth/form.css";
+import store from "../../../store";
 
 class tradingHistory extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      //시작일
-      from_date: Moment(new Date()).subtract(7, "days").toDate(),
-      //종료일
-      to_date: new Date(),
-      //현재페이지
-      activePage: 1,
-      //전체 Trading History 수
-      totalCnt: 1,
-      //초기 전체페이지 수 설정 후 렌더링 방지
-      isCnt: true,
-      //Trading History 대상 계좌
-      acc: 1,
-      //Symbol Search
-      symbol: "",
-      //Type(CMD) Search
-      type: "",
-    };
+  state = {
+    //시작일
+    from_date: Moment(new Date())
+      .subtract(7, "days")
+      .toDate(),
+    //종료일
+    to_date: new Date(),
+    //현재페이지
+    activePage: 1,
+    //전체 Trading History 수
+    totalCnt: 1,
+    //초기 전체페이지 수 설정 후 렌더링 방지
+    isCnt: true,
+    //초기 거래내역 렌더링
+    isLoad: false,
+    //Trading History 대상 계좌
+    acc: "",
+    //Symbol Search
+    symbol: "",
+    //Type(CMD) Search
+    type: ""
+  };
+
+  // 계좌가 변경될때
+  componentDidUpdate(prevProps, prevState) {
+    // 처음 시작 시 계좌리스트의 제일 첫번째 계좌로 거래 내역 조회 -> this.props.history 생성시킴
+    if (this.props.account && !this.state.isLoad) {
+      this.setState(
+        {
+          acc: this.props.account[0].mt4_account,
+          isLoad: true
+        },
+        () => {
+          store.dispatch(
+            getTrading({
+              to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+              from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+              page: this.state.activePage,
+              acc: this.state.acc,
+              symbol: this.state.symbol,
+              type: this.state.type
+            })
+          );
+        }
+      );
+    }
+
+    // 생성된 history로 전체 페이지 카운팅
+    if (this.props.history && this.state.isCnt) {
+      this.setState({
+        totalCnt: this.props.history[this.props.history.length - 1],
+        isCnt: false
+      });
+    }
+
+    // 계좌를 클릭하였을 때
+    if (prevProps.accNum !== this.props.accNum) {
+      this.setState(
+        {
+          acc: this.props.accNum,
+        },
+        () => {
+          store.dispatch(
+            getTrading({
+              to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+              from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+              page: this.state.activePage,
+              acc: this.state.acc,
+              symbol: this.state.symbol,
+              type: this.state.type
+            })
+          );
+        }
+      );
+    }
   }
 
-  componentDidMount() {
-    this.props.getTrading({
-      to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
-      from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-      page: this.state.activePage,
-      acc: this.state.acc,
-      symbol: this.state.symbol,
-      type: this.state.type,
-    });
-  }
+  renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
+    return (
+      <span className="form-span">
+        <input {...input} type={type} placeholder={placeholder} />
+        {touched && error && <span className="">{error}</span>}
+      </span>
+    );
+  };
 
+  // 날짜가 변경될때
   handleFromChange = date => {
     this.setState(
       {
@@ -49,16 +105,21 @@ class tradingHistory extends Component {
         totalCnt: 1
       },
       () => {
-        this.props.getTrading({
-          to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
-          from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-          page: this.state.activePage,
-          acc: this.state.acc
-        });
+        store.dispatch(
+          getTrading({
+            to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+            from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+            page: this.state.activePage,
+            acc: this.state.acc,
+            symbol: this.state.symbol,
+            type: this.state.type
+          })
+        );
       }
     );
   };
 
+  // 날짜가 변경될때
   handleToChange = date => {
     this.setState(
       {
@@ -67,18 +128,21 @@ class tradingHistory extends Component {
         totalCnt: 1
       },
       () => {
-        this.props.getTrading({
-          to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
-          from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-          page: this.state.activePage,
-          acc: this.state.acc,
-          symbol: this.state.symbol,
-          type: this.state.type,
-        });
+        store.dispatch(
+          getTrading({
+            to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+            from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+            page: this.state.activePage,
+            acc: this.state.acc,
+            symbol: this.state.symbol,
+            type: this.state.type
+          })
+        );
       }
     );
   };
 
+  // 페이지가 변경될때
   handlePageChange = pageNumber => {
     this.setState(
       {
@@ -86,97 +150,47 @@ class tradingHistory extends Component {
         isCnt: true
       },
       () => {
-        this.props.getTrading({
-          to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
-          from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-          page: this.state.activePage,
-          acc: this.state.acc,
-          symbol: this.state.symbol,
-          type: this.state.type,
-        });
-      }
-    );
-  };
-
-  renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
-    return (
-      <div
-        className={`
-        ${touched && error ? "error" : ""}`}
-      >
-        <input
-          {...input}
-          type={type}
-          placeholder={placeholder}
-        />
-        {touched && error && <span className="">{error}</span>}
-      </div>
-    );
-  };
-
-  onSubmit = formValues => {
-    this.setState(
-      {
-        symbol: formValues.symbol,
-        type: formValues.type,
-      },
-      () => {
-        this.props.getTrading({
-          to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
-          from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-          page: this.state.activePage,
-          acc: this.state.acc,
-          symbol: this.state.symbol,
-          type: this.state.type,
-        });
-      }
-    );
-  };  
-
-  componentDidUpdate(prevProps, prevState) {
-    if ( (this.state.isCnt && this.props.history && this.props.account) || 
-          (prevProps.history && this.props.history && prevProps.history[prevProps.history.length - 1] !== this.props.history[this.props.history.length - 1]) ) {
-      this.setState(
-        {
-          totalCnt: this.props.history[this.props.history.length - 1],
-          isCnt: false,
-          acc: this.props.accNum ? this.props.accNum : this.props.account[0].mt4_account
-        },
-        () => {
-          this.props.getTrading({
+        store.dispatch(
+          getTrading({
             to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
             from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
             page: this.state.activePage,
             acc: this.state.acc,
             symbol: this.state.symbol,
-            type: this.state.type,
-          });
-        }
-      );
-    }
-    if(this.props.accNum && (prevProps.accNum !== this.props.accNum)) {
-      this.setState({
-        acc: this.props.accNum
+            type: this.state.type
+          })
+        );
+      }
+    );
+  };
+
+  // 필터가 변경될때
+  onSubmit = formValues => {
+    this.setState(
+      {
+        symbol: formValues.symbol,
+        type: formValues.type
       },
       () => {
-        this.props.getTrading({
-          to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
-          from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-          page: this.state.activePage,
-          acc: this.state.acc,
-          symbol: this.state.symbol,
-          type: this.state.type,
-        });
-      })
-    }
-  }
+        store.dispatch(
+          getTrading({
+            to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+            from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+            page: this.state.activePage,
+            acc: this.state.acc,
+            symbol: this.state.symbol,
+            type: this.state.type
+          })
+        );
+      }
+    );
+  };
 
   render() {
     return (
       <div
         className="shadow my-5 py-5 px-4 text-center mx-auto"
         style={{
-          width: "90%",
           borderRadius: "20px",
           backgroundColor: "#ffffff",
           color: "#000000"
@@ -184,37 +198,46 @@ class tradingHistory extends Component {
       >
         <div className="text-left mb-5">
           <h3>Trading History</h3>
-          <DatePicker
-            selected={this.state.from_date}
-            onChange={this.handleFromChange}
-          />
-          ~
-          <DatePicker
-            selected={this.state.to_date}
-            onChange={this.handleToChange}
-          />
-          <div>
-          <form
-              onSubmit={this.props.handleSubmit(this.onSubmit)}
-            >
-              <Field
-                name="symbol"
-                type="text"
-                component={this.renderField}
-                placeholder="Symbol"
+          <div className="d-flex justify-content-between my-5">
+            <div className="form-span date-input">
+              <DatePicker
+                selected={this.state.from_date}
+                onChange={this.handleFromChange}
               />
-              <Field
-                name="type"
-                type="text"
-                component={this.renderField}
-                placeholder="Type"
-              />              
-              <button
-                type="submit"
-              >
-                Search
-              </button>              
-            </form>
+              <label>-</label>
+              <DatePicker
+                selected={this.state.to_date}
+                onChange={this.handleToChange}
+              />
+            </div>
+            <div>
+              <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
+                <Field
+                  name="symbol"
+                  type="text"
+                  component={this.renderField}
+                  placeholder="Symbol"
+                />
+                <Field
+                  name="type"
+                  type="text"
+                  component={this.renderField}
+                  placeholder="Type"
+                />
+                <button
+                  type="submit"
+                  className="px-3 rounded-pill"
+                  style={{
+                    color: "#ffffff",
+                    backgroundColor: "#006536",
+                    fontWeight: "bold",
+                    textDecoration: "none"
+                  }}
+                >
+                  Search
+                </button>
+              </form>
+            </div>
           </div>
         </div>
         <div
@@ -255,7 +278,9 @@ class tradingHistory extends Component {
           </div>
         </div>
 
-        {!this.state.isCnt && this.props.history && this.props.history[0] !== 0 ?
+        {!this.state.isCnt &&
+        this.props.history &&
+        this.props.history[0] !== 0 ? (
           this.props.history.slice(0, -1).map((historyRow, j) => {
             let data = [];
             let CMD = "";
@@ -263,9 +288,9 @@ class tradingHistory extends Component {
             data.symbol = historyRow[1][1];
             data.cmd = historyRow[2][1];
             data.volume = historyRow[3][1];
-            data.open_time = Moment(historyRow[4][1]).format("MM/DD/YY HH:mm");
+            data.open_time = Moment(historyRow[4][1]).format("MM/DD/YYYY HH:mm");
             data.open_price = historyRow[5][1];
-            data.close_time = Moment(historyRow[8][1]).format("MM/DD/YY HH:mm");
+            data.close_time = Moment(historyRow[8][1]).format("MM/DD/YYYY HH:mm");
             data.close_price = historyRow[9][1];
             data.profit = historyRow[10][1];
 
@@ -297,7 +322,7 @@ class tradingHistory extends Component {
               default:
                 break;
             }
-            
+
             return (
               <div
                 className="d-flex justify-content-between"
@@ -338,8 +363,11 @@ class tradingHistory extends Component {
                 </div>
               </div>
             );
-          }) : <div>No Data</div>}
-        <div className="text-center">
+          })
+        ) : (
+          <div>No Trading History</div>
+        )}
+        <div className="row justify-content-center">
           <Pagination
             activePage={this.state.activePage}
             itemsCountPerPage={10}
@@ -360,7 +388,7 @@ const mapStateToProps = state => ({
   accNum: state.mypage.accNum
 });
 
-tradingHistory = connect(mapStateToProps, { getTrading, getAccount })(tradingHistory);
+tradingHistory = connect(mapStateToProps, { getTrading })(tradingHistory);
 
 export default reduxForm({
   form: "tradingHistory"

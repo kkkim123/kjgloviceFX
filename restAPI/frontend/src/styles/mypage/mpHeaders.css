@@ -2,10 +2,10 @@
   color: white;
 }
 
-.mp-header a:hover{
+/* .mp-header a:hover{
     text-decoration: none !important;
     color:white !important;
-}
+} */
 
 .mp-header {
   background-color: #0e112c;
@@ -17,11 +17,13 @@
 }
 
 .mplogo-box {
-  width: 150px;
-  height: 150px;
-  margin-top:-2rem;
+  width: 400px;
+  height: 400px;
+  margin: -167px -68px -166px -68px;
   overflow: hidden;
 }
+
+
 
 .mplogo-area {
   background: url('../../images/mpLogo.png') no-repeat;

@@ -12,7 +12,7 @@ const Forex = () => {
     }
 
     return (
-        <div className="container my-5">
+        <section className="container">
             <Title
                 pageTitle={titleProps.pageTitle}
                 pageDesc={titleProps.pageDesc}
@@ -108,7 +108,7 @@ const Forex = () => {
             </div>
             <LookingFor />
         
-        </div>
+        </section>
     );
 };
 

@@ -10,6 +10,7 @@ import {
   GET_ACCOUNT,
   DELETE_ACCOUNT,
   CHANGE_ACCOUNT,
+  CHANGE_PART_ACCOUNT,
   GET_TRADING,
   PART_LOADED,
   PART_ACCOUNT,
@@ -26,7 +27,9 @@ import {
   DELETE_TRANSFER,
   ADD_IB,
   GET_IB,
-  EDIT_IB
+  EDIT_IB,
+  FAIL,
+  GET_WALLET
 } from "../actions/types";
 
 export default (state = {}, action) => {
@@ -40,11 +43,8 @@ export default (state = {}, action) => {
       return {
         ...state,
         accOption: _.map(action.payload)
-      }
-    case ADD_FILE:
-    case EDIT_FILE:
+      };
     case ADD_ACCOUNT:
-    case ADD_IB:
     case EDIT_IB:
       return true;
     case GET_FILE:
@@ -53,44 +53,49 @@ export default (state = {}, action) => {
         file: action.payload
       };
     case DELETE_FILE:
-    
+
     case GET_ACCOUNT:
-      return { 
+      return {
         ...state,
         account: _.map(action.payload)
-      }
+      };
     case DELETE_ACCOUNT:
-        return _.omit(state, action.payload);
+      return _.omit(state, action.payload);
     case CHANGE_ACCOUNT:
-        return {
-          ...state,
-          accNum: action.payload
-        }
+      return {
+        ...state,
+        accNum: action.payload
+      };
+    case CHANGE_PART_ACCOUNT:
+      return {
+        ...state,
+        partAccNum: action.payload
+      }  
     case GET_TRADING:
-        return { 
-          ...state,
-          history: _.map(action.payload)
-        }
+      return {
+        ...state,
+        history: _.map(action.payload)
+      };
     case PART_LOADED:
       return {
         ...state,
         partner: action.payload
-      }
+      };
     case PART_ACCOUNT:
-        return {
-          ...state,
-          partAcc: action.payload
-        }      
+      return {
+        ...state,
+        partAcc: action.payload
+      };
     case PARTS_COMMISION:
-        return {
-          ...state,
-          allCommision: action.payload
-        }       
+      return {
+        ...state,
+        allCommision: action.payload
+      };
     case PART_COMMISION:
-        return {
-          ...state,
-          commision: action.payload
-        }           
+      return {
+        ...state,
+        commision: action.payload
+      };
     case ADD_DEPOSIT:
       return {
         ...state,
@@ -98,12 +103,12 @@ export default (state = {}, action) => {
         isAuthenticated: true,
         user: action.payload,
         id: action.payload.id
-      }
+      };
     case GET_DEPOSIT:
       return {
         ...state,
         deposit: action.payload
-      }
+      };
     case DELETE_DEPOSIT:
       return _.omit(state, action.payload);
     case ADD_WITHDRAW:
@@ -113,21 +118,37 @@ export default (state = {}, action) => {
         isAuthenticated: true,
         user: action.payload,
         id: action.payload.id
-      }
+      };
     case GET_WITHDRAW:
       return {
         ...state,
         withdraw: action.payload
-      }
+      };
     case DELETE_WITHDRAW:
     case GET_TRANSFER:
-    case ADD_TRANSFER:
+      return {
+        ...state,
+        transfer: action.payload
+      }
     case DELETE_TRANSFER:
     case GET_IB:
-        return {
-          ...state,
-          ib: action.payload
-        };      
+      return {
+        ...state,
+        ib: action.payload
+      };
+    case GET_WALLET:
+      return {
+        ...state,
+        wallet: action.payload
+      };
+    case ADD_FILE:
+    case FAIL:
+    case EDIT_FILE:
+    case ADD_IB:
+    case ADD_TRANSFER:      
+      return {
+        msg: action.payload
+      };
     default:
       return state;
   }

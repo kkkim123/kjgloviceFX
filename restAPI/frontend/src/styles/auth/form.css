@@ -71,6 +71,33 @@
   width: 100%;
 }
 
+.form-span input {
+  border-style:none;
+  border-bottom:solid 1px #cacaca;
+  border-collapse:collapse;
+  border-radius: 0%;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  width:130px;
+}
+
+.form-span input:focus {
+  border-bottom: 1.5px solid #006536;
+}
+
+.form-span input:focus::-webkit-input-placeholder { 
+  color: #006536; 
+}
+.form-span input:focus::-moz-placeholder { 
+  color: #006536; 
+}
+.form-span input:focus:-ms-input-placeholder { 
+  color: #006536;
+}
+.form-span input:focus::-ms-input-placeholder {
+  color: #006536;
+}
+
 *:focus {
   outline:0px !important;
   -webkit-appearance:none;

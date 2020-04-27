@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 class ResetConfirm extends Component {
   render() {
     return (
-      <div className="container">
+      <section className="container">
         <div className="row">
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
@@ -38,7 +38,7 @@ class ResetConfirm extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 }

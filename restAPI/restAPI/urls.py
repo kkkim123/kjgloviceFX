@@ -36,7 +36,7 @@ urlpatterns = [
 
     path('user/', include("user.urls")),
     path('fxaccount/', include('fxaccount.urls')),
-
+    path('wallet/', include('wallet.urls')),
     path('auth/', include('djoser.urls.base')),
     path('auth/', include('djoser.urls.authtoken')),
     # path('auth/users/activation/<str:uid>/<str:token>', user_views.UserActivationView.as_view()),

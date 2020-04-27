@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
 import { addIb } from "../../../actions/mypage";
 import "../../../styles/auth/form.css";
+import store from "../../../store";
 
 class IBForm extends Component {
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
@@ -41,14 +42,19 @@ class IBForm extends Component {
         formValues.send_report = 'Y'
         break;
     }
-    this.props.addIb(formValues);
-    alert('자세한 내용은 My Page에서 확인 가능합니다.')
-    this.props.history.push("/main");
+    store.dispatch(addIb(formValues)).then(()=>{
+      if (this.props.status === 201) {
+        alert('자세한 내용은 My Page에서 확인 가능합니다.')
+        this.props.history.push("/main");
+      } else {
+        alert("확인 후 다시 신청해주세요.");
+      }
+    });
   };
 
   render() {
     return (
-      <div className="container">
+      <section className="container">
         <div className="row">
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
@@ -65,13 +71,6 @@ class IBForm extends Component {
                     placeholder="IB Name*"
                     validate={required}
                   />
-                  <Field
-                    name="point"
-                    type="text"
-                    component={this.renderField}
-                    placeholder="Point*"
-                    validate={required}
-                  />                                    
                   <Field
                     name="email"
                     type="text"
@@ -103,7 +102,7 @@ class IBForm extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 }

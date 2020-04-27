@@ -9,7 +9,7 @@ import '../../styles/company/partnership.css'
 
 const Card = (props) => {
     return (
-        <div className="col-xs-12 col-sm-3 mb-3">
+        <div className="col-xs-12 col-sm-3 mb-3 partnership">
             <div className="box p-4">
                 <div className="summary mb-4">
                     <img className="ps-icon mb-2" src={props.icon} alt={props.name}></img>
@@ -41,7 +41,7 @@ const Card = (props) => {
 
 const Partnership = () => {
     return (
-        <div className="container-fluid">
+        <section className="container">
             <div className="my-5 py-3">
                 <p className="title">Choose Your Partnership Scheme</p>
                 <div className="ps-content">
@@ -77,7 +77,7 @@ const Partnership = () => {
                     link="/company/affiliate"
                 />
             </div>
-        </div>
+        </section>
     );
 };
 
