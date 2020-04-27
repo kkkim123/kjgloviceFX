@@ -82,6 +82,7 @@ ROOT_URLCONF = 'restAPI.urls'
 # 'x-csrftoken',
 # 'x-requested-with',
 # )
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -317,14 +318,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # MEDIA_URL =  '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# # S3 Storage
-# DEFAULT_FILE_STORAGE = 'restAPI.storages.MediaStorage'
-# STATICFILES_STORAGE = 'restAPI.storages.StaticStorage'
-# MEDIAFILES_LOCATION = 'media'
-# STATICFILES_LOCATION = 'static'
+# AWS Access
+config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
+AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
+AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
+AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
 
-# # AWS Access
-# config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
-# AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
-# AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
-# AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
+
+#################################
+# BACKOFFICE ACCOUNT - ADMIN 용 #
+#################################
+BACKOFFICE_ID = config_secret['backoffice']['id']
+BACKOFFICE_PWD = config_secret['backoffice']['pwd']
+

@@ -4,46 +4,14 @@
 
 {% block extrahead %}
 {{ block.super }}
-
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    $("#login").submit(function(event) {
-        conssoel.log("!");
-    });
-});
-</script>
-
-<script type="text/javascript">
-(function($) {
-    // < start of closure
-    // within this block, $ = django.jQuery
-    document.addEventListener('DOMContentLoaded', () => {
-    // submit the form into iframe for login into remote site
-        $.ajax({
-            url: "https://backoffice.fbpasia.com/manager/POST_MANAGER_LOGIN",
-            data: $("#login").data,
-            method: "POST",
-            headers: {  'Access-Control-Allow-Origin': '*' },
-            dataType: "json"
-        })
-        .done(function(json) {
-            console.log("1");
-        })
-
-        // once you're logged in, change the source url (if needed)
-        var iframe = document.getElementById('backoffice_frame');
-        iframe.onload = function() {
-            if (iframe.src != "http://backoffice.fbpasia.com/ib/ib_view#read/i_company_id=1&perPage=10&page=1") {
-                iframe.src = "https://backoffice.fbpasia.com/ib/ib_view#read/i_company_id=1&perPage=10&page=1";
-            }
-        }
-    });
-})(django.jQuery);
-
-
+    const backoffice_form = django.jQuery("#backoffice_login");
+    backoffice_form.submit();
     
+});
 </script>
 {% endblock %}
 
@@ -51,13 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 {{ block.super }}
 
+{% if backoffice_subject %}
+<div>
+<a href="https://backoffice.fbpasia.com/ib/ib_view" target="_blank">{{backoffice_subject}}</a>
+</div>
 
-<form id="login" target="frame" method="post" action="https://backoffice.fbpasia.com/manager/POST_MANAGER_LOGIN">
-    <input type="hidden" name="i_id" value="admin" />
-    <input type="hidden" name="i_pwd" value="admin123" />
-</form>
+{% endif %}
 
-<iframe id="backoffice_frame" name="backoffice_frame"></iframe>
 
 
 {% endblock %}
