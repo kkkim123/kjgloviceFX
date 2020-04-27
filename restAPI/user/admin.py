@@ -1,16 +1,31 @@
 
 import json
+from django.db import models
+from django import forms
+from django.conf import settings
 from django.contrib import admin
+from django.contrib.auth.models import Group
+from rest_framework.authtoken.admin import Token
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.admin.filters import SimpleListFilter
 from datetime import timezone, datetime
 from .models import FxUser,FxUserDocument,IntroducingBroker,ApplyIntroducingBroker
 from django.db import connections
+from django.db.models import Q
 from django.utils.html import format_html
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Count
 from django.db.models.functions import TruncDay
 
+
 from django_mptt_admin.admin import DjangoMpttAdmin
+
+from django_object_actions import takes_instance_or_queryset
+
+# django group , token admin 제거
+admin.site.unregister(Group)
+admin.site.unregister(Token)
+
 
 class IBFilter(admin.SimpleListFilter):
     title = 'ib_code'
@@ -34,11 +49,11 @@ class IBFilter(admin.SimpleListFilter):
 class IBAdmin(DjangoMpttAdmin):
     tree_auto_open = 0
     actions = ['updateIBtoBackoffice','moveIBtoBackoffice',]
-    list_display = ('id', 'fxuser', 'company_idx', 'ib_code','ib_name','point',
+    list_display = ('id', 'fxuser', 'ib_code','ib_name','point',
     'live_yn', 'email', 'send_report', 'referralurl','ib_website','status')
     #list_filter = ('status',)
     list_filter = (IBFilter,)
-    list_editable = ('company_idx','ib_code','ib_name','point','live_yn','send_report','status')
+    list_editable = ('ib_code','ib_name','point','live_yn','send_report','status')
     search_fields = ('fxuser','ib_code',)
     # ordering = ('email',)
     # filter_horizontal = ()
@@ -53,6 +68,8 @@ class IBAdmin(DjangoMpttAdmin):
             fxuser.save()       
         
         super().save_model(request, obj, form, change)
+
+    
 
     # def fxuser_colored(self, obj):
     #     if obj.status == 'P':
@@ -139,15 +156,54 @@ class IBAdmin(DjangoMpttAdmin):
 admin.site.register(IntroducingBroker, IBAdmin)
 
 
+class ApplyIBForm(forms.ModelForm):
+    # fxuser = forms.CharField(label='email address')
+
+    class Meta:
+        model = ApplyIntroducingBroker
+        fields = '__all__'
+
+
 class ApplyIBAdmin(admin.ModelAdmin):
+    form = ApplyIBForm
+    # change_list_template = "admin/user/applyintroducingbroker/change_list.html"
     actions = ['addIBtoBackoffice',]
-    list_display = ('fxuser', 'company_idx', 'parent_idx', 'back_index','ib_code','ib_name',
+    list_display = ('_fxuser', 'ib_code','ib_name',
     'point', 'live_yn', 'email', 'send_report','referralurl','status')
     list_filter = ('status',)
-    list_editable = ('company_idx','parent_idx','ib_code','ib_name','point','live_yn','send_report','status')
+    list_editable = ('ib_code','ib_name','live_yn','send_report','status')
     search_fields = ('fxuser','ib_code',)
-    # ordering = ('email',)
-    # filter_horizontal = ()
+    readonly_fields = ('email',
+    )
+
+    fieldsets = (
+        ('User Information', {
+            "fields": (
+                'fxuser', 'send_report','status'
+            ),
+        }),
+        ('IB Information', {
+            "fields": (
+               'ib_code', 'ib_name', 'point', 'live_yn', 'referralurl'
+            ),
+        }),
+        
+    )
+    
+
+    def _fxuser(self, obj):
+        return obj.fxuser
+
+    def changelist_view(self, request, extra_context=None):
+        backoffice_frame = '<iframe id="backoffice_frame" class="module filtered" style="width:100%;" name="backoffice_frame"></iframe>'
+
+        extra_context = {"backoffice_subject": "BackOffice Commission Structure",
+                        "backoffice_id": settings.BACKOFFICE_ID, 
+                        "backoffice_pwd": settings.BACKOFFICE_PWD,
+                        "backoffice_frame": backoffice_frame}
+
+        
+        return super().changelist_view(request, extra_context=extra_context)
 
     def save_model(self, request, obj, form, change):
         fxuser = FxUser.objects.get(id = obj.fxuser_id)
@@ -170,10 +226,6 @@ class ApplyIBAdmin(admin.ModelAdmin):
                 parent_id = obj.parent_idx
             )
             #ib.save()
-
-
-
-
         else :
             fxuser.user_type = 'R'     
             fxuser.save()       
@@ -206,7 +258,7 @@ class ApplyIBAdmin(admin.ModelAdmin):
                     
                     for row in cursor.fetchall():
                         queryset.update(back_index=row[0])
-                        queryset.update(referralurl="glovicefx.com/user?refcode = "+ str(ib[2]))
+                        queryset.update(referralurl="glovicefx.com/register/user?refcode = "+ str(ib[2]))
                         # queryset.update(referralurl="127.0.0.1:8000/user?refcode = "+ str(ib[2]))
                         #IB Code가 정상적으로 생성되면 유저정보의 계
                     self.message_user(request, 'SP_IB_STRUCTURE_ADD {}'.format(cursor.fetchall()))
@@ -220,6 +272,8 @@ class ApplyIBAdmin(admin.ModelAdmin):
                     self.message_user(request, '{}'.format(row))
         
     addIBtoBackoffice.short_description = "add IB to Backoffice"
+    # get_parent_idx.short_description = "User IB Code"
+    _fxuser.short_description = "User Email"
 
 admin.site.register(ApplyIntroducingBroker, ApplyIBAdmin)
 

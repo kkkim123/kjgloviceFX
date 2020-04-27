@@ -291,6 +291,7 @@ class ApplyIntroducingBroker(models.Model):
     ib_website = models.URLField(max_length=128, blank=True, null=True, default='')
     
     status = models.CharField(default='P', max_length=1, blank=True, choices=IB_STATUS,null=True)
+
     def __str__(self):
         return self.fxuser.email or self.ib_name or ''
 
