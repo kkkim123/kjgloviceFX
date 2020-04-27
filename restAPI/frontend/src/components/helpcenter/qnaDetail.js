@@ -2,7 +2,7 @@ import React from 'react';
 
 const QnaDetail = () => {
     return (
-        <div className="container text-left">
+        <div className="text-left">
             <div className="my-5 text-left font-weight-bold">
                 <h3>How do I open a live trading account?</h3>
                 <p style={{ fontSize: "0.8rem", color: "#006536" }}>Account</p>

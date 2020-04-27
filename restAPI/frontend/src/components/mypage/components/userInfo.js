@@ -1,29 +1,135 @@
-import React from 'react';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
-const UserInfo = (Props) => {
+// const UserInfo = (Props) => {
+class UserInfo extends Component {
+  state = {
+    copied: false
+  };
+
+  onCopy = () => {
+    this.setState({ copied: true });
+  };
+
+  handleClick = () => {
+    alert("수정 페이지로 이동합니다.");
+  };
+
+  render() {
     return (
-        <div className="d-flex shadow py-3 px-4" style={{width:"100%", borderRadius: "20px", backgroundColor: "#006536", color: "#ffffff" }}>
-            <div className="mb-5">
-                <strong style={{ fontSize: "1.5rem" }}><strong>User Info</strong></strong>
-            </div>
-            <div className="justify-content-center align-items-center rounded-circle mr-4" style={{ border: "5px solid #ffffff", backgroundColor: "#aaaaaa", width: "150px", height: "150px" }}></div>
-            <div className="d-flex flex-column justify-content-around text-left mr-4" style={{ color: "#ffffff" }}>
-                <p>First Name : {Props.data && Props.data.first_name}</p>
-                <p>Last Name : {Props.data && Props.data.last_name}</p>
-                <p>Email : {Props.data && Props.data.email}</p>
-            </div>
-            <div className="d-flex flex-column justify-content-around text-left" style={{ color: "#ffffff" }}>
-                <p>User Type : {Props.data && Props.data.user_type === "R" ? "Retail" : "IB"}</p>
-                <p>Referral Code : {Props.data && Props.data.referral_code ? Props.data.referral_code : 'none' }</p>
-                <p>Referral WebSite : 
-                    {
-                        Props.data && Props.data.referral_website ? 
-                        <a href={Props.data.referral_website} target='_blank' style={{color:"#ffffff"}}> {Props.data.referral_website}</a> : 'none'
-                    }
-                </p>
-            </div>
+      <div
+        className="shadow text-left py-3 px-5 my-4"
+        style={{
+          width: "100%",
+          borderRadius: "20px",
+          backgroundColor: "#006536",
+          color: "#ffffff"
+        }}
+      >
+        <p>
+          <span style={{ fontSize: "2.0rem" }}>
+            <strong>User Info</strong>
+          </span>
+          <span style={{ fontSize: "1.2rem", fontWeight: "300" }}>
+            {" "}
+            <Link
+              to="/mypage/user/edit/1"
+              onClick={this.handleClick}
+              style={{ color: "#ffffff" }}
+            >
+              [Info Edit]
+            </Link>
+          </span>
+          <span style={{ fontSize: "1.0rem", fontWeight: "300" }}>
+            {" "}
+            - KJ Address :{" "}
+            {this.props.data && this.props.data.kj_address
+              ? this.props.data.kj_address
+              : "none"}
+          </span>
+          {this.state.copied ? (
+            <span
+              style={{
+                fontSize: "1.0rem",
+                fontWeight: "600",
+                color: "rgb(14, 17, 44)"
+              }}
+            >
+              {" "}
+              Copied!
+            </span>
+          ) : (
+            <CopyToClipboard
+              onCopy={this.onCopy}
+              text={this.props.data && this.props.data.kj_address}
+            >
+              <span style={{ fontSize: "1.0rem", fontWeight: "300", cursor: "pointer" }}>
+                {this.props.data && this.props.data.kj_address ? " Copy" : null}
+              </span>
+            </CopyToClipboard>
+          )}
+          </p>
+        <div
+          className="justify-content-between row"
+          style={{ color: "#ffffff", margin: "0px" }}
+        >
+          <div className="col text-left">
+            <p>
+              <strong>
+                First Name : {this.props.data && this.props.data.first_name}
+              </strong>
+            </p>
+            <p>
+              <strong>
+                Last Name : {this.props.data && this.props.data.last_name}
+              </strong>
+            </p>
+            <p>
+              <strong>
+                Email : {this.props.data && this.props.data.email}
+              </strong>
+            </p>
+          </div>
+          <div className="col text-left">
+            <p>
+              <strong>
+                User Type :{" "}
+                {this.props.data && this.props.data.user_type === "R"
+                  ? "Retail"
+                  : "IB"}
+              </strong>
+            </p>
+            <p>
+              <strong>
+                Referral Code :{" "}
+                {this.props.data && this.props.data.referral_code
+                  ? this.props.data.referral_code
+                  : "none"}
+              </strong>
+            </p>
+            <p>
+              <strong>
+                Referral WebSite :
+                {this.props.data && this.props.data.referral_website ? (
+                  <a
+                    href={this.props.data.referral_website}
+                    target="_blank"
+                    style={{ color: "#ffffff" }}
+                  >
+                    {" "}
+                    {this.props.data.referral_website}
+                  </a>
+                ) : (
+                  " none"
+                )}
+              </strong>
+            </p>
+          </div>
         </div>
+      </div>
     );
-};
+  }
+}
 
 export default UserInfo;

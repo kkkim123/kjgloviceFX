@@ -5,7 +5,7 @@ import '../../styles/company/aboutGlovice.css'
 
 const AboutGlovice = () => {
     return (
-        <div className="container my-5">
+        <section className="container">
             <div className="text-left my-5">
                 <img className="icon" src={icon_about} alt=""></img>
                 <span className="ag-title ml-2"><strong>About GloviceFX</strong></span>
@@ -30,7 +30,7 @@ const AboutGlovice = () => {
                 <p><strong>extremely low market spreads, no-requotes, full STP and DMA, absolute transparency and the latest trading
                 technology</strong></p>
             </div>
-        </div>
+        </section>
     );
 };
 

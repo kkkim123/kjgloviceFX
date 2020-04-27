@@ -7,7 +7,7 @@ const cx = classNames.bind(styles);
 class CalendarsDetail extends Component {
     render() {
         return (
-            <div className="container">
+            <section className="container">
             <div className="row justify-content text-center">
               <div className="col my-5">
                 <div className={cx("title")}>
@@ -16,7 +16,7 @@ class CalendarsDetail extends Component {
                 <iframe src="https://www.mql5.com/en/economic-calendar/widget?mode=2&amp;dateFormat=DMY" width="90%" height="600px" id="widgetPreview"></iframe>
               </div>
             </div>
-          </div>
+          </section>
         );
     }
 }

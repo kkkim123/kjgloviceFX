@@ -41,7 +41,7 @@ class LoginForm extends Component {
       return <Redirect to="/main" />;
     }
     return (
-      <div className="container">
+      <section className="container" style={{paddingTop:"100px"}}>
         <div className="row">
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
@@ -93,7 +93,7 @@ class LoginForm extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 }

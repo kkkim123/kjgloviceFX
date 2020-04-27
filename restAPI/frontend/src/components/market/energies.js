@@ -10,7 +10,7 @@ const Energies = () => {
         pageDesc: "Energies are volatile, unregulated, decentralized and controlled almost exclusively by retail speculators. Trade the world’s newest and most exciting asset class as CFDs with GloviceFX.",
     }
     return (
-        <div className="container my-5">
+        <section className="container">
             <Title
                 pageTitle={titleProps.pageTitle}
                 pageDesc={titleProps.pageDesc}
@@ -29,7 +29,7 @@ const Energies = () => {
                 </div>
             </div>
             <LookingFor />
-        </div>
+        </section>
     );
 };
 

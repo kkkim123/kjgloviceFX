@@ -7,7 +7,6 @@ import { registDetail } from "../../../../actions/auth";
 import "../../../../styles/auth/form.css";
 
 class EmployForm extends Component {
-
   renderField = ({ input, placeholder, type, meta: { touched, error } }) => {
     return (
       <div
@@ -35,6 +34,7 @@ class EmployForm extends Component {
           </option>
         );
       });
+      
     return (
       <div
         className={`form-label-group
@@ -58,55 +58,59 @@ class EmployForm extends Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="card card-signin my-5">
-          <div className="card-body text-center p-gray">
-            <h5 className="card-title">Employment Information</h5>
-            <form
-              className="form-signin text-left"
-              onSubmit={this.props.handleSubmit(this.onSubmit)}
-            >
-              <Field
-                name="employment_status"
-                component={this.selectField}
-                placeholder="Employment Status*"
-                index="0"
-                options={this.props.options}
-                validate={required}
-              />
-              <Field
-                name="industry"
-                type="text"
-                component={this.renderField}
-                placeholder="Industry*"
-                validate={required}
-              />
-              <Field
-                name="employment_position"
-                component={this.selectField}
-                placeholder="Employment Positions*"
-                index="1"
-                options={this.props.options}
-                validate={required}
-              />
-              <Field
-                name="education_level"
-                component={this.selectField}
-                placeholder="What is your level of education?*"
-                index="2"
-                options={this.props.options}
-                validate={required}
-              />
-              <button
-                className="btn btn-lg btn-primary btn-block mt-10"
-                type="submit"
-              >
-                Save And Continue
-              </button>
-            </form>
+      <section className="container">
+        <div className="row">
+          <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div className="card card-signin my-5">
+              <div className="card-body text-center p-gray">
+                <h5 className="card-title mb-5">Employment Information</h5>
+                <form
+                  className="form-signin text-left"
+                  onSubmit={this.props.handleSubmit(this.onSubmit)}
+                >
+                  <Field
+                    name="employment_status"
+                    component={this.selectField}
+                    placeholder="Employment Status*"
+                    index="0"
+                    options={this.props.options}
+                    validate={required}
+                  />
+                  <Field
+                    name="industry"
+                    type="text"
+                    component={this.renderField}
+                    placeholder="Industry*"
+                    validate={required}
+                  />
+                  <Field
+                    name="employment_position"
+                    component={this.selectField}
+                    placeholder="Employment Positions*"
+                    index="1"
+                    options={this.props.options}
+                    validate={required}
+                  />
+                  <Field
+                    name="education_level"
+                    component={this.selectField}
+                    placeholder="What is your level of education?*"
+                    index="2"
+                    options={this.props.options}
+                    validate={required}
+                  />
+                  <button
+                    className="btn btn-lg btn-primary btn-block mt-10"
+                    type="submit"
+                  >
+                    Save And Continue
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 }
@@ -118,7 +122,7 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-EmployForm = connect(mapStateToProps, {registDetail})(EmployForm);
+EmployForm = connect(mapStateToProps, { registDetail })(EmployForm);
 
 export default reduxForm({
   form: "employForm"

@@ -3,27 +3,30 @@ import "../../styles/mypage/mpHeaders.css";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import store from "../../store";
-import { getUserOption, getAccOption, getIb } from "../../actions/mypage";
+import { getUserOption, getAccOption, getIb, getWallet } from "../../actions/mypage";
 import getOut from "../../images/myPage/getOut.png";
 
 class MpHeader extends Component {
   state = {
-    link: <Link to="#">My Details</Link>
+    link: <Link to="#">My Details</Link>,
+    isLoad: false
   };
+
   componentDidMount() {
     store.dispatch(getUserOption());
     store.dispatch(getAccOption());
     store.dispatch(getIb());
+    store.dispatch(getWallet());
     if (this.props.auth.user) {
       this.linkChange(this.props.auth.user.user_status);
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.auth.user !== this.props.auth.user) {
-      this.linkChange(nextProps.auth.user.user_status);
+  componentDidUpdate() {
+    if(this.props.auth.user && !this.state.isLoad) {
+      this.linkChange(this.props.auth.user.user_status);
+      this.setState({isLoad: true})
     }
-    return true;
   }
 
   //mpHeader user_status에 따른 Link 변경
@@ -79,34 +82,29 @@ class MpHeader extends Component {
           </div>
           <div className="pt-4">{link}</div>
           <div className="pt-4">
-            <a href="#">Trading</a>
+            <Link to="#">Trading</Link>
           </div>
           <div className="pt-4">
-            <a href="#">gloviceFX Invest</a>
+            <Link to="#">gloviceFX Invest</Link>
           </div>
           <div className="pt-4">
-            <a href="#">Promotions</a>
+            <Link to="#">Promotions</Link>
           </div>
           <div className="pt-4">
-            <a href="#">Education</a>
+            <Link to="#">Education</Link>
           </div>
           <div className="pt-4">
-            <a href="#">Client Support</a>
+            <Link to="#">Client Support</Link>
           </div>
           <div className="pt-4">
             <Link
               to="/main"
               className="get-out rounded-pill py-3 px-4 text-middle"
             >
-              <a
-                href="#"
-                className="get-out rounded-pill py-3 px-4 text-middle"
-              >
-                <img className="mr-2" src={getOut} alt=""></img>
-                <span>
-                  <strong>Get out</strong>
-                </span>
-              </a>
+              <img className="mr-2" src={getOut} alt=""></img>
+              <span>
+                <strong>Get out</strong>
+              </span>
             </Link>
           </div>
         </div>
@@ -117,6 +115,7 @@ class MpHeader extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
+  wallet: state.mypage.wallet
 });
 
 export default connect(mapStateToProps)(

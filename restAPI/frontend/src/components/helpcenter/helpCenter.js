@@ -1,6 +1,7 @@
 import React from 'react';
 import check from '../../images/check.png';
 import '../../styles/company/helpCenter.css';
+import { Link } from 'react-router-dom'
 
 const HelpCenter = () => {
     return (
@@ -103,8 +104,12 @@ const HelpCenter = () => {
                 <p>Please contact us. We are with you all the time!</p>
             </div>
             <div className="hc-submit my-5 pb-5">
-                <a className="live-chat-button rounded-pill px-5 py-3 mx-3" href="#">LiveChat</a>
-                <a className="request-button rounded-pill px-4 py-3 mx-3" href="#">Request a call back</a>
+                <Link to="#" className="live-chat-button rounded-pill px-5 py-3 mx-3" onClick={()=> alert('준비 중입니다.')} >
+                    LiveChat
+                </Link>
+                <Link className="request-button rounded-pill px-4 py-3 mx-3" to="#" onClick={()=> alert('준비 중입니다.')} >
+                    Request a call back
+                </Link>
             </div>
         </div>
     );

@@ -16,6 +16,7 @@ import {
   DELETE_ACCOUNT,
   GET_TRADING,
   CHANGE_ACCOUNT,
+  CHANGE_PART_ACCOUNT,
   PART_LOADED,
   PART_ACCOUNT,
   PARTS_COMMISION,
@@ -31,7 +32,9 @@ import {
   DELETE_TRANSFER,
   ADD_IB,
   GET_IB,
-  EDIT_IB
+  EDIT_IB,
+  FAIL,
+  GET_WALLET
 } from "./types";
 
 // Get user option
@@ -53,23 +56,27 @@ export const getAccOption = () => async (dispatch, getState) => {
 };
 
 // Add file
-export const addFile = files => async (dispatch, getState) => {
+export const addFile = (files) => async (dispatch, getState) => {
   const formData = new FormData();
-  formData.append("fxuser", files.fxuser);
-  formData.append("doc_photo_id", files[0].file);
-  formData.append("doc_proof_of_residence", files[1].file);
-  formData.append("doc_photo_id_2", files[2].file);
-  formData.append("doc_proof_of_residence_2", files[3].file);
+  formData.append("fxuser", getState().auth.id);
+  formData.append("doc_photo_id", files.doc_photo_id);
+  formData.append("doc_proof_of_residence", files.doc_proof_of_residence);
+  formData.append("doc_photo_id_2", files.doc_photo_id_2);
+  formData.append("doc_proof_of_residence_2", files.doc_proof_of_residence_2);
 
-  const res = await axios.post(
-    "/user/document/new",
-    formData,
-    tokenConfig(getState)
-  );
-  dispatch({
-    type: ADD_FILE,
-    payload: res.data
-  });
+  try {
+    const res = await axios.post("/user/document/new", formData, tokenConfig(getState));
+    dispatch({
+      type: ADD_FILE,
+      // payload: res.data
+      payload: res.status
+    })
+  } catch (err) {
+    dispatch({
+      type: FAIL,
+      payload: err.response.status
+    });
+  }  
 };
 
 // Get file
@@ -99,30 +106,34 @@ export const delFile = () => async (dispatch, getState) => {
 // Edit file
 export const editFile = files => async (dispatch, getState) => {
   const formData = new FormData();
-  formData.append("fxuser", files.fxuser);
+  formData.append("fxuser", getState().auth.id);
 
-  switch (files.name) {
-    case "id":
-      formData.append("doc_photo_id", files[0].file);
-      break;
-    case "id2":
-      formData.append("doc_photo_id_2", files[0].file);
-      break;
-    case "res":
-      formData.append("doc_proof_of_residence", files[0].file);
-      break;
-    case "res2":
-      formData.append("doc_proof_of_residence_2", files[0].file);
-      break;
-    default:
-      break;
+  if(files.doc_photo_id) {
+    formData.append("doc_photo_id", files.doc_photo_id);
   }
-
-  const res = await axios.patch(`/user/document/${getState().auth.id}`, formData, tokenConfig(getState));
-  dispatch({
-    type: EDIT_FILE,
-    payload: res.data
-  });
+  if(files.doc_proof_of_residence) {
+    formData.append("doc_proof_of_residence", files.doc_proof_of_residence);
+  }
+  if(files.doc_photo_id_2) {
+    formData.append("doc_photo_id_2", files.doc_photo_id_2);
+  }
+  if(files.doc_proof_of_residence_2) {
+    formData.append("doc_proof_of_residence_2", files.doc_proof_of_residence_2);
+  }      
+  
+  try {
+    const res = await axios.patch(`/user/document/${getState().auth.id}`, formData, tokenConfig(getState));
+    dispatch({
+      type: EDIT_FILE,
+      // payload: res.data
+      payload: res.status
+    })
+  } catch (err) {
+    dispatch({
+      type: FAIL,
+      payload: err.response.status
+    });
+  }  
 };
 
 // Add account
@@ -216,7 +227,7 @@ export const getTrading = ({from_date, to_date, page, acc, symbol, type}) => asy
   });
 };
 
-// Get Partner info
+// Get Trading Account
 export const changeAcc = acc => async dispatch => {
   dispatch({
     type: CHANGE_ACCOUNT,
@@ -224,12 +235,17 @@ export const changeAcc = acc => async dispatch => {
   });
 };
 
+// Get Partner Account
+export const changePartAcc = partAcc => async dispatch => {
+  dispatch({
+    type: CHANGE_PART_ACCOUNT,
+    payload: partAcc
+  });
+};
+
 // Get Partner info
 export const partLoad = ib_code => async (dispatch, getState) => {
-  const res = await axios.get(
-    `/user/myclient/${ib_code}`,
-    tokenConfig(getState)
-  );
+  const res = await axios.get(`/user/myclient/${ib_code}`, tokenConfig(getState));
   dispatch({
     type: PART_LOADED,
     payload: res.data
@@ -238,10 +254,7 @@ export const partLoad = ib_code => async (dispatch, getState) => {
 
 // Get Partner Account
 export const partAccount = () => async (dispatch, getState) => {
-  const res = await axios.get(
-    `/fxaccount/clientaccountlist/${getState().auth.id}`,
-    tokenConfig(getState)
-  );
+  const res = await axios.get(`/fxaccount/clientaccountlist/${getState().auth.id}`, tokenConfig(getState));
   dispatch({
     type: PART_ACCOUNT,
     payload: res.data
@@ -251,8 +264,7 @@ export const partAccount = () => async (dispatch, getState) => {
 // Get All Partner commision
 export const partsCommision = ({from_date, to_date}) => async (dispatch, getState) => {
   const res = await axios.get(
-    `/fxaccount/commissionhistory/${getState().auth.id}?from_date=${from_date}&to_date=${to_date}`,
-    tokenConfig(getState)
+    `/fxaccount/commissionhistory/${getState().auth.id}?from_date=${from_date}&to_date=${to_date}`, tokenConfig(getState)
   );
   dispatch({
     type: PARTS_COMMISION,
@@ -261,9 +273,9 @@ export const partsCommision = ({from_date, to_date}) => async (dispatch, getStat
 };
 
 // Get Partner commision
-export const partCommision = ({from_date, to_date, mt4_account}) => async (dispatch, getState) => {
+export const partCommision = ({from_date, to_date, acc}) => async (dispatch, getState) => {
   const res = await axios.get(
-    `/fxaccount/commissionhistory/${getState().auth.id}/${mt4_account}?from_date=${from_date}&to_date=${to_date}`,
+    `/fxaccount/commissionhistory/${getState().auth.id}/${acc}?from_date=${from_date}&to_date=${to_date}`,
     tokenConfig(getState)
   );
   dispatch({
@@ -348,44 +360,48 @@ export const delWithdraw = () => async (dispatch, getState) => {
 export const getTransfer = () => async (dispatch, getState) => {
   const res = await axios.get(`/fxaccount/transfer`, tokenConfig(getState));
   dispatch({
-    type: GET_USER_OPTION,
+    type: GET_TRANSFER,
     payload: res.data
   });
 };
 
 // Add Transfer
-export const addTransfer = () => async (dispatch, getState) => {
-  const res = await axios.post(`/fxaccount/transfer`, tokenConfig(getState));
+export const addTransfer = (formValues) => async (dispatch, getState) => {
+  formValues.user = getState().auth.id;
+
+  const res = await axios.post(`/fxaccount/transfer`,formValues, tokenConfig(getState));
   dispatch({
-    type: GET_USER_OPTION,
-    payload: res.data
+    type: ADD_TRANSFER,
+    payload: res.status
   });
 };
 
 // Delete transfer
-export const delTransfer = () => async (dispatch, getState) => {
+export const delTransfer = id => async (dispatch, getState) => {
+  console.log(id);
+  return false;
   const res = await axios.delete(`/fxaccount/transfer`, tokenConfig(getState));
   dispatch({
-    type: GET_USER_OPTION,
+    type: DELETE_TRANSFER,
     payload: res.data
   });
 };
 
 // Add IB
-export const addIb = ({ib_name, point, email, send_report, ib_website }) => async (dispatch, getState) => {
+export const addIb = ({ib_name, email, send_report, ib_website }) => async (dispatch, getState) => {
   const body = JSON.stringify({
     ib_name,
-    point,
     email,
     send_report,
     ib_website,
     fxuser: getState().auth.id,
   });
+
   const res = await axios.post(
     `/user/introducingbroker/new`, body, tokenConfig(getState));
   dispatch({
     type: ADD_IB,
-    payload: res.data
+    payload: res.status
   });
 };
 
@@ -415,23 +431,23 @@ export const editIb = ({ib_name, point, email, send_report, ib_website }) => asy
     `/user/introducingbroker/${getState().auth.id}`, body, tokenConfig(getState));
   dispatch({
     type: EDIT_IB,
-    payload: res.data.results
+    payload: res.data
   });
 };
 
  // Depoist List
  export const DepoistList = (page = 1) => async (dispatch, getState) => {
    
-   try {
-    const res = await axios.get(`/fxaccount/deposit/${getState().auth.id}?page=${page}`, tokenConfig(getState));
-    
-    dispatch({
-      type: GET_DEPOSIT,
-      payload: res.data
-    });
-   } catch (err) {
-    dispatch(stopSubmit("DepositForm", err.response.data))
-   }
+  try {
+   const res = await axios.get(`/fxaccount/deposit/${getState().auth.id}?page=${page}`, tokenConfig(getState));
+   
+   dispatch({
+     type: GET_DEPOSIT,
+     payload: res.data
+   });
+  } catch (err) {
+   dispatch(stopSubmit("DepositForm", err.response.data))
+  }
 };
 
 // Deposit Register
@@ -519,6 +535,7 @@ export const WithdrawRegist = ({
     dispatch(stopSubmit("WithdrawForm", err.response.data))
   }
 }
+
 // Delete Withdraw
 export const deleteWithdraw = id => async (dispatch, getState) => {
   await axios.delete(
@@ -530,4 +547,13 @@ export const deleteWithdraw = id => async (dispatch, getState) => {
     payload: id
   });
   history.push('/mypage/details/account/detail')
+};
+
+// Delete Withdraw
+export const getWallet = () => async (dispatch, getState) => {
+  const res = await axios.get(`/wallet/${getState().auth.id}`, tokenConfig(getState));
+  dispatch({
+    type: GET_WALLET,
+    payload: res.data
+  });
 };

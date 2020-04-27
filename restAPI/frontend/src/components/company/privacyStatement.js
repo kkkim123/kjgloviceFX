@@ -4,7 +4,7 @@ import '../../styles/company/privacyStatement.css'
 
 const PrivacyStatement = () => {
     return (
-        <div className="container my-5">
+        <section className="container">
             <div className="text-left my-5">
                 <img className="icon" src={icon_privacy} alt=""></img>
                 <span className="ag-title ml-2"><strong>Privacy Statement</strong></span>
@@ -46,7 +46,7 @@ const PrivacyStatement = () => {
                 <p><strong>extremely low market spreads, no-requotes, full STP and DMA, absolute transparency and the latest trading
                 technology</strong></p>
             </div>
-        </div>
+        </section>
     );
 };
 

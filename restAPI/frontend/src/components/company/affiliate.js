@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 const Affiliate = () => {
     return (
-        <div className="container">
+        <section className="container text-center ">
             <div className="row my-5">
                 <div className="col">
                     <img className="partner-title-img mr-3" src={icon_affiliate} alt="introducer"></img>
@@ -14,9 +14,9 @@ const Affiliate = () => {
                 </div>
             </div>
             <div>
-                <p className="text-gray text-left">Enjoy attractive rev share commissions and bonuses by referring clients and giving them the performance they demand from a world-class Forex CFD Provider</p>
+                <p className="text-gray">Enjoy attractive rev share commissions and bonuses by referring clients and giving them the performance they demand from a world-class Forex CFD Provider</p>
                 <br></br>
-                <p className="text-left color-green"><strong>Our offering with market leading trading conditions is a first choice for Forex traders all over the world. Our trading conditions make for more profitable traders and induce volume from your referrals. We call this the win/win/win model. Clients win from better trading conditions. Affiliates and GloviceFX win from happier clients producing more trading volume.</strong></p>
+                <p className="color-green"><strong>Our offering with market leading trading conditions is a first choice for Forex traders all over the world. Our trading conditions make for more profitable traders and induce volume from your referrals. We call this the win/win/win model. Clients win from better trading conditions. Affiliates and GloviceFX win from happier clients producing more trading volume.</strong></p>
                 <br></br>
             </div>
             <div className="row feature justify-content-center p-3 my-5 text-left align-bottom">
@@ -57,7 +57,7 @@ const Affiliate = () => {
                     </a>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

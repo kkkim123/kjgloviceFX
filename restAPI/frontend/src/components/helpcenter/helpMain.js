@@ -5,11 +5,10 @@ import QnaDetail from "./qnaDetail";
 class helpMain extends Component {
   render() {
     return (
-      <>
-        {/* 구분 예정 */}
+      <section className="container">
         <HelpCenter />
         <QnaDetail />
-      </>
+      </section>
     );
   }
 }

@@ -11,7 +11,7 @@ const Commodity = () => {
     }
 
     return (
-        <div className="container my-5">
+        <section className="container">
             <Title
                 pageTitle={titleProps.pageTitle}
                 pageDesc={titleProps.pageDesc}
@@ -28,8 +28,7 @@ const Commodity = () => {
                 <p className="text-left">Contract for difference (CFD) on commodity futures allow for trade on the price fluctuations of a wide range of assets: commodities. If investors make a forecast about the quotes increase, they open a Buy position on the trading platform. If they think the chart will move down, they make an online order to Sell.</p>
             </div>
             <LookingFor />
-
-        </div>
+        </section>
     );
 };
 

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
 import "../../styles/layout/header.css";
-import MpHeader from "../mypage/mpHeader";
 
 class Header extends Component {
   render() {
@@ -21,7 +20,6 @@ class Header extends Component {
             <Link onClick={this.props.logout} to="/login">
               Logout
             </Link>
-            {/* <a onClick={this.props.logout}>Logout</a> */}
           </div>
         </div>
       </>
@@ -46,10 +44,10 @@ class Header extends Component {
     );
 
     return (
-      <div className="container-fluid header">
+      <div className="header">
         <div className="d-flex justify-content-center align-content-center flex-wrap">
           <div className="item">
-            <div className="logo-box mx-auto">
+            <div className="logo-box">
               <Link to="/main">
                 <div className="logo-area"></div>
               </Link>
@@ -67,12 +65,6 @@ class Header extends Component {
                 <Link to="/market/metals">Metals</Link>
                 <Link to="/market/energies">Energy</Link>
                 <Link to="/market/crypto">Crypto</Link>
-                {/* <a href="#">Forex</a>
-                <a href="#">Commodity</a>
-                <a href="#">Indices</a>
-                <a href="#">Metals</a>
-                <a href="#">Energy</a>
-                <a href="#">Crypto</a> */}
               </div>
             </div>
           </div>
@@ -84,11 +76,6 @@ class Header extends Component {
               <div className="dropdown-content">
                 <Link to="/trading/info">MT4</Link>
                 <Link to="/trading/calendar">Calendars</Link>
-                {/* <a href="#">MT4</a> */}
-                {/* <a href="#">Commodity</a> */}
-                {/* <a href="#">PAMM/COPY</a> */}
-                {/* <a href="#">Calendars</a> */}
-                {/* <a href="#">Indicators</a> */}
               </div>
             </div>
           </div>
@@ -101,23 +88,11 @@ class Header extends Component {
                 <Link to="/company/about">About</Link>
                 <Link to="/company/partnership">Partnership</Link>
                 <Link to="/company/helpCenter">Help Center</Link>
-                {/* <a href="#">About</a> */}
-                {/* <a href="#">Partnership</a> */}
-                {/* <a href="#">Help Center</a> */}
               </div>
             </div>
           </div>
           <div className="item"></div>
-          <div className="item">
-            {/* <div className="dropdown">
-              <button className="dropbtn">EN</button>
-              <div className="dropdown-content">
-                <a href="#">KR</a>
-                <a href="#">JP</a>
-                <a href="#">CN</a>
-              </div>
-            </div> */}
-          </div>
+          <div className="item"></div>
           {isAuthenticated ? userLinks : guestLinks}
         </div>
       </div>

@@ -13,33 +13,33 @@ const StartSteps = () => {
             <div className="d-flex justify-content-around">
                 <div className="w-25 mx-4 px-4" style={{ color: "#959595"}}>
                     <img className="mb-4" alt="" src={register} style={{ width: "50px" }}></img>
-                    <a className="" href="#" style={{ color: "#006536" }}>
+                    <span style={{ color: "#006536" }}>
                         <h4>Register ▶</h4>
-                    </a>
+                    </span>
                     <br></br>
                     <span style={{ fontSize: "0.9rem" }}>Open your trading account via Glovice FX</span>
                 </div>
                 <div className="w-25 mx-4 px-4" style={{ color: "#959595"}}>
                     <img className="mb-3" alt="" src={verify} style={{ width: "35px" }}></img>
-                    <a className="" href="#" style={{ color: "#006536" }}>
+                    <span style={{ color: "#006536" }}>
                         <h4>Verify ▶</h4>
-                    </a>
+                    </span>
                     <br></br>
                     <span style={{ fontSize: "0.9rem" }}>Upload your documents to verify your account</span>
                 </div>
                 <div className="w-25 mx-4 px-4" style={{ color: "#959595"}}>
                     <img className="mb-3" alt="" src={fund} style={{ width: "50px" }}></img>
-                    <a className="" href="#" style={{ color: "#006536" }}>
+                    <span style={{ color: "#006536" }}>
                         <h4>Fund ▶</h4>
-                    </a>
+                    </span>
                     <br></br>
                     <span style={{ fontSize: "0.9rem" }}>Login to FxPro Direct and fund your account</span>
                 </div>
                 <div className="w-25 mx-4 px-4" style={{ color: "#959595"}}>
                     <img className="mb-4" alt="" src={trade} style={{ width: "50px" }}></img>
-                    <a className="" href="#" style={{ color: "#006536" }}>
+                    <span style={{ color: "#006536" }}>
                         <h4>Trade ▶</h4>
-                    </a>
+                    </span>
                     <br></br>
                     <span style={{ fontSize: "0.9rem" }}>Start trading on more than 250 instruments</span>
                 </div>

@@ -5,23 +5,21 @@ import energy from '../../../images/market/icon_energy.png'
 
 const Classes = () => {
     return (
-        <div className="container-fluid text-left" style={{ backgroundColor: "#0E112C", color: "#ffffff" }}>
+        <div className="text-left" style={{ backgroundColor: "#0E112C", color: "#ffffff"}}>
             <div className="container my-5 p-5" style={{ width: "90%" }}>
                 <div className="my-5">
-                    <h3>8 Asset Classes</h3>
+                    <h3>6 Asset Classes</h3>
                     <br></br>
                     <p style={{ margin: "0" }}>Discover the world’s key markets through</p>
                     <p>RoboForex accounts and platforms.</p>
                     <br></br>
                     <div>
                         <span className="mr-4"><strong>Forex</strong></span>
-                        <span className="mr-4"><strong>Stocks</strong></span>
+                        <span className="mr-4"><strong>Commodity</strong></span>
                         <span className="mr-4"><strong>Indices</strong></span>
-                        <span className="mr-4"><strong>ETFs</strong></span>
-                        <span className="mr-4"><strong>Soft Commodities</strong></span>
-                        <span className="mr-4"><strong>Energies</strong></span>
                         <span className="mr-4"><strong>Metals </strong></span>
-                        <span className="mr-4"><strong>Cryptocurrencies</strong></span>
+                        <span className="mr-4"><strong>Energy </strong></span>
+                        <span className="mr-4"><strong>Crypto</strong></span>
                     </div>
                 </div>
                 <div className="d-flex">

@@ -3,82 +3,127 @@ import { connect } from "react-redux";
 import Moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Pagination from "react-js-pagination";
+import store from "../../../store";
+import { partsCommision } from "../../../actions/mypage";
+import "../../../styles/auth/form.css";
 
 class partners extends Component {
   state = {
     //시작일
-    from_date: Moment(new Date()).subtract(7, "days").toDate(),
+    from_date: Moment(new Date())
+      .subtract(7, "days")
+      .toDate(),
     //종료일
     to_date: new Date(),
     //현재페이지
     activePage: 1,
-    //전체 Trading History 수
+    //전체 Commision History 수
     totalCnt: 1,
     //초기 전체페이지 수 설정 후 렌더링 방지
     isCnt: true,
-    //Trading History 대상 계좌
-    acc: 1,
-    //Symbol Search
-    symbol: "",
-    //Type(CMD) Search
-    type: "",
+    //초기 거래내역 렌더링
+    isLoad: false
   };
-  
-    componentDidMount() {
-        if (this.props.data) {
-            this.props.partsCommision({
-              to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
-              from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-            });
-        }
-    }
 
-    handleFromChange = date => {
-      this.setState(
-        {
-          from_date: date,
-        }
-      )
-          this.props.partsCommision({
-            to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
-            from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-          });
-    };
-  
-    handleToChange = date => {
-      this.setState(
-        {
-          to_date: date,
+  componentDidUpdate() {
+    if (this.props.data && !this.state.isLoad) {
+      store.dispatch(
+        partsCommision({
+          to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+          from_date: Moment(this.state.from_date).format("YYYY-MM-DD")
+          // page: this.state.activePage,
         })
-          this.props.partsCommision({
+      );
+      this.setState({
+        isLoad: true
+      });
+    }
+  }
+
+  handleFromChange = date => {
+    this.setState(
+      {
+        from_date: date,
+        isCnt: true,
+        totalCnt: 1
+      },
+      () => {
+        store.dispatch(
+          partsCommision({
             to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
-            from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
-          });
-    };
+            from_date: Moment(this.state.from_date).format("YYYY-MM-DD")
+            // page: this.state.activePage,
+          })
+        );
+      }
+    );
+  };
+
+  handleToChange = date => {
+    this.setState(
+      {
+        to_date: date,
+        isCnt: true,
+        totalCnt: 1
+      },
+      () => {
+        store.dispatch(
+          partsCommision({
+            to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+            from_date: Moment(this.state.from_date).format("YYYY-MM-DD")
+            // page: this.state.activePage,
+          })
+        );
+      }
+    );
+  };
+
+  // 페이지가 변경될때
+  handlePageChange = pageNumber => {
+    alert("준비 중입니다.");
+    // this.setState(
+    //   {
+    //     activePage: pageNumber,
+    //     isCnt: true
+    //   },
+    //   () => {
+    //     store.dispatch(
+    //       partsCommision({
+    //         to_date: Moment(this.state.to_date).format("YYYY-MM-DD"),
+    //         from_date: Moment(this.state.from_date).format("YYYY-MM-DD"),
+    //         page: this.state.activePage,
+    //       })
+    //     );
+    //   }
+    // );
+  };
 
   render() {
-    console.log(this.props.allHistory)
     return (
       <div
         className="shadow my-5 py-5 px-4 text-center mx-auto"
         style={{
-          width: "90%",
           borderRadius: "20px",
           backgroundColor: "#ffffff",
           color: "#000000"
         }}
       >
         <div className="text-left mb-5">
-          <h3>Commission History - All</h3>
-          <DatePicker
-            selected={this.state.from_date}
-            onChange={this.handleFromChange}
-          />
-          ~
-          <DatePicker
-            selected={this.state.to_date}
-            onChange={this.handleToChange}
-          />
+          <h3>All Partners Commission History</h3>
+          <div className="d-flex justify-content-end my-5">
+            <div className="form-span date-input">
+              <DatePicker
+                selected={this.state.from_date}
+                onChange={this.handleFromChange}
+              />
+              <label>-</label>
+              <DatePicker
+                selected={this.state.to_date}
+                onChange={this.handleToChange}
+              />
+            </div>
+          </div>
         </div>
         <div
           className="d-flex justify-content-between"
@@ -90,71 +135,29 @@ class partners extends Component {
           }}
         >
           <div className="ml-2" style={{ width: "20%" }}>
-            <span>Full Name</span>
-          </div>            
-          <div className="ml-2" style={{ width: "20%" }}>
-            <span>Resident Country</span>
+            <span>MT4 Account</span>
           </div>
           <div className="ml-2" style={{ width: "10%" }}>
-            <span>User Type</span>
+            <span>IB Code</span>
           </div>
-          <div className="ml-2" style={{ width: "30%" }}>
-            <span>User Status</span>
+          <div className="ml-2" style={{ width: "10%" }}>
+            <span>IB Point</span>
           </div>
-          <div className="ml-2" style={{ width: "20%" }}>
-            <span>Created At</span>
+          <div className="ml-2" style={{ width: "10%" }}>
+            <span>Commission</span>
+          </div>
+          <div className="ml-2" style={{ width: "15%" }}>
+            <span>Order Symbol</span>
+          </div>
+          <div className="ml-2" style={{ width: "10%" }}>
+            <span>Order Lots</span>
+          </div>
+          <div className="ml-2" style={{ width: "25%" }}>
+            <span>Order At</span>
           </div>
         </div>
-        {this.props.partners ?
-          this.props.partners.map((partner, i) => {
-            let user_type = "";
-            let user_status = "";
-
-            switch (partner.user_type) {
-              case "R":
-                user_type = "Retail";
-                break;
-              case "I":
-                user_type = "IB";
-                break;
-              default:
-                break;
-            }
-
-            switch (Number(partner.user_status)) {
-              case 1:
-                user_status = "PENDING EMAIL ADDRESS";
-                break;
-              case 2:
-                user_status = "CONFIRMED EMAIL ADDRESS";
-                break;
-              case 3:
-                user_status = "PENDING PROFILE";
-                break;
-              case 4:
-                user_status = "CONFIRMED PROFILE";
-                break;
-              case 5:
-                user_status = "PENDING DOCUMENTS";
-                break;
-              case 6:
-                user_status = "CONFIRMED DOCUMENTS";
-                break;
-              case 7:
-                user_status = "PENDING OPEN ACCOUNT";
-                break;
-              case 8:
-                user_status = "CONFIRMED OPEN ACCOUNT";
-                break;
-              case 9:
-                user_status = "PENDING MAKE DEPOSIT";
-                break;
-              case 10:
-                user_status = "CONFIRMED MAKE DEPOSIT";
-                break;
-              default:
-                break;
-            }
+        {this.props.allHistory && this.props.allHistory.length > 0 ? (
+          this.props.allHistory.map((history, i) => {
             return (
               <div
                 className="d-flex justify-content-between"
@@ -167,25 +170,43 @@ class partners extends Component {
                 }}
               >
                 <div className="ml-2" style={{ width: "20%" }}>
-                  <span>{partner.last_name + " " + partner.first_name}</span>
-                </div>                  
-                <div className="ml-2" style={{ width: "20%" }}>
-                  <span>{partner.resident_country}</span>
+                  <span>{history[3][1]}</span>
                 </div>
                 <div className="ml-2" style={{ width: "10%" }}>
-                  <span>{user_type}</span>
+                  <span>{history[1][1]}</span>
                 </div>
-                <div className="ml-2" style={{ width: "30%" }}>
-                  <span>{user_status}</span>
+                <div className="ml-2" style={{ width: "10%" }}>
+                  <span>{history[8][1]}</span>
                 </div>
-                <div className="ml-2" style={{ width: "20%" }}>
+                <div className="ml-2" style={{ width: "10%" }}>
+                  <span>{history[7][1]}</span>
+                </div>
+                <div className="ml-2" style={{ width: "15%" }}>
+                  <span>{history[5][1]}</span>
+                </div>
+                <div className="ml-2" style={{ width: "10%" }}>
+                  <span>{history[6][1]}</span>
+                </div>
+                <div className="ml-2" style={{ width: "25%" }}>
                   <span>
-                    {Moment(partner.created_at).format("YYYY-MM-DD HH:mm")}
+                    {Moment(history[4][1]).format("YYYY-MM-DD HH:mm")}
                   </span>
                 </div>
               </div>
             );
-          }) : <div>No All Commission History</div>}
+          })
+        ) : (
+          <div>No All Commission History</div>
+        )}
+        <div className="row justify-content-center">
+          <Pagination
+            activePage={this.state.activePage}
+            itemsCountPerPage={10}
+            totalItemsCount={this.state.totalCnt}
+            pageRangeDisplayed={5}
+            onChange={this.handlePageChange}
+          />
+        </div>
       </div>
     );
   }

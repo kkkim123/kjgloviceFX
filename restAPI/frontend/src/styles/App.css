@@ -1,3 +1,10 @@
+html,
+body,
+#root,
+#app {
+  height: 100%;
+}
+
 .App {
   text-align: center;
 }
@@ -32,12 +39,55 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
+.temp {
+  height: 500px;
+}
 
-.temp{
-  height:500px;
+section.container {
+  padding: 120px 80px 80px 80px;
+  min-width: 100%;
+}
+
+.bgImg {
+  padding: 80px 0px 0px 0px
+}
+
+a:hover {
+  text-decoration: none !important;
+}
+
+.pagination {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.pagination ul {
+  display: inline-block;
+}
+
+.pagination li {
+  float: left;
+  margin: 4px;
+}
+
+.pagination li a {
+  display: block;
+  width: 30px;
+  height: 30px;
+  padding: 7px 0;
+  border: 1px solid #61b68e;
+  color: #3f6654;
+  line-height: 1;
+}
+
+.pagination li.active a {
+  border-color: #006536;
+  background-color: #006536;
+  color: #fff
 }

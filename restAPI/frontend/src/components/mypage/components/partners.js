@@ -1,12 +1,26 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Moment from "moment";
+import store from "../../../store";
+import { partLoad } from "../../../actions/mypage";
 
 class partners extends Component {
+  state = {
+    isLoad: false
+  }
     componentDidMount() {
         if (this.props.data) {
-            this.props.partLoad(this.props.data.ib_code);
+          store.dispatch(partLoad(this.props.data.ib_code))
         }
+    }
+
+    componentDidUpdate() {
+      if (this.props.data && !this.state.isLoad) {
+        store.dispatch(partLoad(this.props.data.ib_code))
+        this.setState({
+          isLoad: true
+        })
+      }
     }
 
   render() {
@@ -14,7 +28,6 @@ class partners extends Component {
       <div
         className="shadow my-5 py-5 px-4 text-center mx-auto"
         style={{
-          width: "90%",
           borderRadius: "20px",
           backgroundColor: "#ffffff",
           color: "#000000"

@@ -1,49 +1,131 @@
-import React from 'react';
-import { Link } from 'react-router-dom'
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
-const handleClick = () => {
-    alert('수정 페이지로 이동합니다.')
-}
+class IBInfo extends Component {
+  state = {
+    copied: false
+  };
+  onCopy = () => {
+    this.setState({ copied: true });
+  };
+  handleClick = () => {
+    alert("수정 페이지로 이동합니다.");
+  };
 
-const IBInfo = (Props) => {
+  render() {
     let status = "";
-    if(Props.data) {
-        switch (Props.data.status) {
-            case "P":
-                status = "Pending"
-                break;
-            case "A":
-                status = "Approved"
-                break;
-            case "R":
-                status = "Reject"
-                break;                                
-            default:
-                break;
-        }
+    if (this.props.data) {
+      switch (this.props.data.status) {
+        case "P":
+          status = "Pending";
+          break;
+        case "A":
+          status = "Approved";
+          break;
+        case "R":
+          status = "Reject";
+          break;
+        default:
+          break;
+      }
     }
 
     return (
-        <div className="d-flex shadow py-3 px-4" style={{width:"100%", borderRadius: "20px", backgroundColor: "#006536", color: "#ffffff" }}>
-            <div className="mb-5">
-                <strong style={{ fontSize: "1.5rem" }}><strong>IB Info</strong></strong>
-            </div>            
-            <div className="justify-content-center align-items-center rounded-circle mr-4" style={{ border: "5px solid #ffffff", backgroundColor: "#aaaaaa", width: "150px", height: "150px" }}></div>
-            <div className="d-flex flex-column justify-content-around text-left mr-4" style={{ color: "#ffffff" }}>
-                <p>IB Name : {Props.data && Props.data.ib_name}</p>
-                <p>IB Code : {Props.data && Props.data.ib_code}</p>
-                <p>Email : {Props.data && Props.data.email}</p>
-            </div>
-            <div className="d-flex flex-column justify-content-around text-left" style={{ color: "#ffffff" }}>
-                <p>Status : {status}</p>
-                <p>Send Report : {Props.data && Props.data.send_report === "Y" ? "Yes" : 'No' }</p>
-                <p>Referral Url : {Props.data && Props.data.referralurl ? Props.data.referralurl : 'none'}</p>
-            </div>
-            <div>
-                <Link to="/company/ib/edit" onClick={handleClick} style={{ color: "#ffffff" }}>Edit</Link>
-            </div>
+      <div
+        className="shadow text-left py-3 px-5 my-4"
+        style={{
+          width: "100%",
+          borderRadius: "20px",
+          backgroundColor: "#006536",
+          color: "#ffffff"
+        }}
+      >
+        <p>
+          <span style={{ fontSize: "2.0rem" }}>
+            <strong>IB Info</strong>
+          </span>
+          <span style={{ fontSize: "1.2rem", fontWeight: "300" }}>
+            {" "}
+            <Link
+              to="/mypage/ib/edit"
+              onClick={this.handleClick}
+              style={{ color: "#ffffff" }}
+            >
+              [Info Edit]
+            </Link>
+          </span>
+        </p>
+        <div
+          className="justify-content-between row"
+          style={{ color: "#ffffff", margin: "0px" }}
+        >
+          <div className="col text-left">
+            <p>
+              <strong>
+                IB Name : {this.props.data && this.props.data.ib_name}
+              </strong>
+            </p>
+            <p>
+              <strong>
+                IB Code : {this.props.data && this.props.data.ib_code}
+              </strong>
+            </p>
+            <p>
+              <strong>
+                Email : {this.props.data && this.props.data.email}
+              </strong>
+            </p>
+          </div>
+          <div className="col text-left">
+            <p>
+              <strong>Status : {status}</strong>
+            </p>
+            <p>
+              <strong>
+                Send Report :{" "}
+                {this.props.data && this.props.data.send_report === "Y"
+                  ? "Yes"
+                  : "No"}
+              </strong>
+            </p>
+            <p>
+              <strong>
+                Referral URL :{" "}
+                {this.props.data && this.props.data.referralurl
+                  ? this.props.data.referralurl.replace(/(\s*)/g, "")
+                  : " none"}
+              </strong>
+              {this.state.copied ? (
+                <span
+                  style={{
+                    fontSize: "1.0rem",
+                    fontWeight: "600",
+                    color: "rgb(14, 17, 44)"
+                  }}
+                >
+                  {" "}
+                  Copied!
+                </span>
+              ) : (
+                <CopyToClipboard
+                  onCopy={this.onCopy}
+                  text={
+                    this.props.data &&
+                    this.props.data.referralurl.replace(/(\s*)/g, "")
+                  }
+                >
+                  <span style={{ fontSize: "1.0rem", fontWeight: "300", cursor: "pointer" }}>
+                    {this.props.data && this.props.data.referralurl ? " Copy" : null}
+                  </span>
+                </CopyToClipboard>
+              )}
+            </p>
+          </div>
         </div>
+      </div>
     );
-};
+  }
+}
 
 export default IBInfo;

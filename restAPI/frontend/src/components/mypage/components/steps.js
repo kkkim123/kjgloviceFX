@@ -10,10 +10,6 @@ const emptyCircle = {
   height: "170px"
 };
 
-// const fullCircle =
-// "background-color: #006536;color: #ffffff;border: 2px solid #006536;width: 170px;height: 170px;"
-// ;
-
 const fullCircle = {
   backgroundColor: "#006536",
   color: "#ffffff",
@@ -54,7 +50,7 @@ class steps extends Component {
       case 2:
       case 3:
         this.setState({
-          step1Link: "/mypage/details/employment"
+          step1Link: "/mypage/details/employment",
         });
         break;
       case 4:
@@ -120,7 +116,6 @@ class steps extends Component {
     } = this.state;
 
     return (
-      <div className="container my-5 py-5">
         <div className="shadow px-5 py-5" style={{ borderRadius: "20px" }}>
           <h2 className="mb-4">
             <strong>Start Trading in 4 Steps</strong>
@@ -184,7 +179,6 @@ class steps extends Component {
             </Link>
           </div>
         </div>
-      </div>
     );
   }
 }

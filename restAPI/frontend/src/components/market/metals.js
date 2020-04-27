@@ -10,7 +10,7 @@ const Metals = () => {
         pageDesc: "The global supply and demand of Metals has a significant impact on their value. Thus, with the increase of demand, the prices of Metals rise, and vice versa – when the demand is weak, the value of Precious Metals declines. However, this effect occurs mainly in the longer term, and does not change the short-term prices.",
     }
     return (
-        <div className="container my-5">
+        <section className="container">
             <Title
                 pageTitle={titleProps.pageTitle}
                 pageDesc={titleProps.pageDesc}
@@ -39,7 +39,7 @@ const Metals = () => {
                 </div>
             </div>
             <LookingFor />
-        </div>
+        </section>
     );
 };
 

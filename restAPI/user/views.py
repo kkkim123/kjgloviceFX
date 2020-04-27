@@ -44,14 +44,12 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [IsOwnerOnly, IsAuthenticated]
     def retrieve(self, request, *args, **kwargs):
         permission_classes = [IsOwnerOnly, IsAuthenticated]
-
         fxuser = FxUser.objects.get(id=kwargs['pk'])
         print(fxuser.referral_website)
         if(fxuser.referral_website == None or fxuser.referral_website == ""):
             ib = IntroducingBroker.objects.get(ib_code = fxuser.referral_code)
             fxuser.referral_website  = ib.ib_website
             fxuser.save()
-
         queryset = FxUser.objects.all()
         user = get_object_or_404(queryset, id=kwargs['pk'])
         serializer = UserSerializer(user)

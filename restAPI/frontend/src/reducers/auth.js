@@ -13,7 +13,9 @@ import {
   RESET_SUCCESS,
   RESET_FAIL,
   EMAIL_ACTIVATE_FAIL,
-  EMAIL_ACTIVATE
+  EMAIL_ACTIVATE,
+  GET_USER,
+  CHANGE_SUCCESS
 } from "../actions/types";
 
 const initialState = {
@@ -21,7 +23,8 @@ const initialState = {
   isAuthenticated: null,
   user: null,
   token: localStorage.getItem("token"),
-  id: localStorage.getItem("id")
+  id: localStorage.getItem("id"),
+  msg: null
 };
 
 export default function(state = initialState, action) {
@@ -32,6 +35,7 @@ export default function(state = initialState, action) {
         isLoading: true
       };
     case USER_LOADED:
+    case GET_USER:
       return {
         ...state,
         isLoading: false,
@@ -50,7 +54,8 @@ export default function(state = initialState, action) {
         isLoading: false,
         isAuthenticated: true,
         user: action.payload,
-        id: action.payload.id
+        id: action.payload.id,
+        msg: action.status
       };
     case LOGIN_SUCCESS:
       localStorage.setItem("token", action.payload.token);
@@ -69,6 +74,7 @@ export default function(state = initialState, action) {
     case RESET_FAIL:
     case EMAIL_ACTIVATE:
     case EMAIL_ACTIVATE_FAIL:
+    case CHANGE_SUCCESS:
       return true;
     case AUTH_ERROR:
     case REGISTER_FAIL:
