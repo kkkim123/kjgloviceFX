@@ -335,11 +335,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # MEDIA_URL =  '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# AWS Access
-config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
-AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
-AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
-AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
+# # AWS Access
+# config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
+# AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
+# AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
+# AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
 
 
 #################################

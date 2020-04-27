@@ -21,16 +21,16 @@ class WalletAdmin( admin.ModelAdmin):
         #wallet = Wallet.objects.get(id = wallets.fxuser_id)
 
         for wallet in wallets:
-            print(wallet[0])
+            #print(wallet[0])
             URL = 'http://3.0.181.55:3000/kj/fx/getbalance/' + str(wallet[0])
             response = requests.get(URL)
             jsresponse = response.json()
-            print(jsresponse['balnace'])
+            #print(jsresponse['balnace'])
             queryset.update(kj_balance=jsresponse['balnace'])
             URL = 'http://3.0.181.55:3000/eth/fx/getbalance/' + str(wallet[0])
             response = requests.get(URL)
             jsresponse = response.json()
-            print(jsresponse['balnace'])
+            #print(jsresponse['balnace'])
             queryset.update(eth_balance=jsresponse['balnace'])
            
     getBalance.short_description = "getBalance"

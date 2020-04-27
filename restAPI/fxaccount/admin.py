@@ -6,6 +6,12 @@ from django.template.response import TemplateResponse
 
 from .models import FxAccount, DepositTransaction ,WithdrawTransaction ,IBListCommission,FxAccountTransaction
 from user.models import FxUser
+from wallet.models import Wallet
+import configparser
+import requests
+
+config = configparser.ConfigParser()
+config.read('common/config/config.ini')
 
 class FxAccountAdmin(admin.ModelAdmin):
     list_display = (
@@ -58,6 +64,46 @@ class DepositTransAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_editable = ('amount','status',)
     search_fields = ('user','mt4_account','cellphone_number',)
+
+    def save_model(self, request, obj, form, change):
+
+        if(obj.status == 'A'):
+            wallet = Wallet.objects.get(id = obj.user_id)
+            ETH_BALANCE_URL = 'http://3.0.181.55:3000/eth/fx/getbalance/' + str(obj.user_id)
+            jsresponse = requests.get(ETH_BALANCE_URL).json()
+            if(float(jsresponse['balnace']) < 0.002):
+                ETH_SEND_URL = 'http://3.0.181.55:3000/eth/fx/send'
+                try:
+                    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+                    print(obj.user_id)
+                    data = {'index': 0, 'from': config["ACCOUNT"]["KJ_ADDRESS"],'to': obj.crypto_address, 
+                            'value': 0.002,'gasLimit': config["TOKEN"]["GASLIMIT"], 'gasPrice': config["TOKEN"]["GAS"]}
+                    res = requests.post(ETH_SEND_URL, headers=headers, data=data)
+
+                    if res.status_code == 400:
+                        print("Failed. Bad post data.")
+
+            wallet.eth_balance = jsresponse['balnace']
+
+            KJ_BALANCE_URL = 'http://3.0.181.55:3000/kj/fx/getbalance/' + str(obj.user_id)
+            jsresponse = requests.get(KJ_BALANCE_URL).json()
+            if(float(jsresponse['balnace']) > float(obj.crypto_amount)):
+                KJ_SEND_URL = 'http://3.0.181.55:3000/kj/fx/send'
+                try:
+                    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+                    print(obj.user_id)
+                    data = {'index': obj.user_id, 'from': obj.crypto_address,'to': config["ACCOUNT"]["KJ_ADDRESS"], 
+                            'value': obj.crypto_amount,'gasLimit': config["TOKEN"]["GASLIMIT"], 'gasPrice': config["TOKEN"]["GAS"]}
+                    res = requests.post(KJ_SEND_URL, headers=headers, data=data)
+
+                    if res.status_code == 200:
+                        print("OK")
+
+                KJ_BALANCE_URL = 'http://3.0.181.55:3000/kj/fx/getbalance/' + str(obj.user_id)
+                jsresponse = requests.get(KJ_BALANCE_URL).json()
+                wallet.kj_balance = jsresponse['balnace'] 
+
+        super().save_model(request, obj, form, change)  
 
 admin.site.register(DepositTransaction,DepositTransAdmin)
 

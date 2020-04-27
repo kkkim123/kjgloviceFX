@@ -87,15 +87,11 @@ DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE = (
 )
 
 DEPOSIT_CRYPTO_CHOICE = (
-    ('0', 'Bitcoin'),
-    ('1', 'Ethereum'),
-    ('2', 'JKL'),
+    ('0', 'KJ'),
 )
 
 WITHDRAW_CRYPTO_CHOICE = (
-    ('0', 'Bitcoin'),
-    ('1', 'Ethereum'),
-    ('2', 'JKL'),
+    ('0', 'KJ'),
 )
 
 WITHDRAW_METHOD_DICT = dict()
@@ -107,7 +103,7 @@ DEPOSIT_WITHDRAW_TRANSACTION_STATUS = (
     ('P', 'Pending'),
     ('A', 'Approved'),
     ('D', 'Declined'),
-    ('S', 'Processed'),
+    ('S', 'Completed'),
 )
 
 def send_mt4_details(sender, **kwargs):
