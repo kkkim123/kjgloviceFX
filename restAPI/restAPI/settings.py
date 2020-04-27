@@ -40,10 +40,9 @@ INSTALLED_APPS += [
     'frontend.apps.FrontendConfig',
     'storages',
     'django_mptt_admin',
-<<<<<<< HEAD
     'background_task',
-=======
->>>>>>> af58cd4868dd564c926d282052d65e00c88f2aa0
+    'channels',
+
 ]
 MIDDLEWARE = [
     #'corsheaders.middleware.CorsMiddleware',
@@ -251,6 +250,17 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False   # 프로덕션에서는 True로 설정 필요
 DEFAULT_FROM_EMAIL = 'jhlee@fbpasia.com'
 
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'asgi_redis.RedisChannelLayer',
+        'ROUTING': 'exam.routing.channel_routing',
+    }
+}
+# Channels
+ASGI_APPLICATION = 'restAPI.routing.application'
+
 # DEFAULT_FROM_EMAIL = 'korea7030.jhl@gmail.com'
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_USE_TLS = True
@@ -274,57 +284,47 @@ DEFAULT_FROM_EMAIL = 'jhlee@fbpasia.com'
 #     },
 # }
 
-<<<<<<< HEAD
-
-=======
-# REDIS related settings 
-REDIS_HOST = 'localhost'
-REDIS_PORT = '6379'
-BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
-BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600} 
-CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 #########
 # Local #
 #########
->>>>>>> af58cd4868dd564c926d282052d65e00c88f2aa0
-
-# STATIC_DIR = os.path.join(BASE_DIR, 'static')
-# STATICFILES_DIRS = [
-#     STATIC_DIR,
-# ]
-# STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
-
-# MEDIA_URL =  '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
-##########
-# AWS S3 #
-##########
-
-CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
-CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
-
-AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
-AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
-AWS_SES_REGION_NAME = 'ap-southeast-2'
-AWS_SES_REGION_ENDPOINT = 'email-smtp.ap-southeast-2.amazonaws.com'
 
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     STATIC_DIR,
 ]
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 
 MEDIA_URL =  '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# S3 Storage
-DEFAULT_FILE_STORAGE = 'restAPI.storages.MediaStorage'
-STATICFILES_STORAGE = 'restAPI.storages.StaticStorage'
-MEDIAFILES_LOCATION = 'media'
-STATICFILES_LOCATION = 'static'
+##########
+# AWS S3 #
+##########
 
-# AWS Access
-config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
-AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
-AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
-AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
+# CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
+# CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
+
+# AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
+# AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
+# AWS_SES_REGION_NAME = 'ap-southeast-2'
+# AWS_SES_REGION_ENDPOINT = 'email-smtp.ap-southeast-2.amazonaws.com'
+
+# STATIC_DIR = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [
+#     STATIC_DIR,
+# ]
+
+# MEDIA_URL =  '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# # S3 Storage
+# DEFAULT_FILE_STORAGE = 'restAPI.storages.MediaStorage'
+# STATICFILES_STORAGE = 'restAPI.storages.StaticStorage'
+# MEDIAFILES_LOCATION = 'media'
+# STATICFILES_LOCATION = 'static'
+
+# # AWS Access
+# config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
+# AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
+# AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
+# AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
