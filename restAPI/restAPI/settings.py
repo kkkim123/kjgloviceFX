@@ -311,14 +311,9 @@ CELERY_BEAT_SCHEDULE = {
 # AWS S3 #
 ##########
 
-CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
-CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
-
-AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
-AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
-AWS_SES_REGION_NAME = 'ap-southeast-2'
-AWS_SES_REGION_ENDPOINT = 'email-smtp.ap-southeast-2.amazonaws.com'
-
+# AWS Access
+config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
+AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
 CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
 
@@ -335,16 +330,14 @@ STATICFILES_DIRS = [
 MEDIA_URL =  '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# AWS Access
-config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
-AWS_ACCESS_KEY_ID = config_secret['aws']['access_key_id']
-AWS_SECRET_ACCESS_KEY = config_secret['aws']['secret_access_key']
-AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
-
+# S3 Storage
+DEFAULT_FILE_STORAGE = 'restAPI.storages.MediaStorage'
+STATICFILES_STORAGE = 'restAPI.storages.StaticStorage'
+MEDIAFILES_LOCATION = 'media'
+STATICFILES_LOCATION = 'static'
 
 #################################
 # BACKOFFICE ACCOUNT - ADMIN 용 #
 #################################
 BACKOFFICE_ID = config_secret['backoffice']['id']
 BACKOFFICE_PWD = config_secret['backoffice']['pwd']
-

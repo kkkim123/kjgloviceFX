@@ -36,7 +36,7 @@ class AddressForm extends Component {
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
               <div className="card-body text-center p-gray">
-                <h5 className="card-title">Residential Address</h5>
+                <h5 className="card-title mb-5">Residential Address</h5>
                 <div className="progress card-bar float-right">
                   <div
                     className="progress-bar bg-green"

@@ -83,7 +83,8 @@ export const register = ({
     const res = await axios.post("/auth/users/", body, config);
     dispatch({
       type: REGISTER_SUCCESS,
-      payload: res.data
+      payload: res.data,
+      status: res.status
     });
   } catch (err) {
     dispatch({

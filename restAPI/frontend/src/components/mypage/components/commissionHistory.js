@@ -30,7 +30,7 @@ class partners extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     // 처음 시작 시 계좌리스트의 제일 첫번째 파트너계좌로 거래 내역 조회 -> this.props.comHistory 생성시킴
-    if (this.props.partAcc && !this.state.isLoad) {
+    if (this.props.partAcc && this.props.partAcc.length > 0 && !this.state.isLoad) {
       this.setState(
         {
           acc: this.props.partAcc[0][2][1],

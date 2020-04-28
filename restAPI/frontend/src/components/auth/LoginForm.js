@@ -27,7 +27,7 @@ class LoginForm extends Component {
     return (
       <div className="form-label-group">
         <input type={type} />
-        {error && <div className="">{error}</div>}
+        {error && <div className="alert alert-danger">{error}</div>}
       </div>
     );
   };
@@ -46,7 +46,7 @@ class LoginForm extends Component {
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
               <div className="card-body text-center p-gray">
-                <h5 className="card-title">Log in now</h5>
+                <h5 className="card-title mb-5">Log in now</h5>
                 <p className="mb-4">
                   Do not have an account?
                   <Link to="/register/user" className="link">
