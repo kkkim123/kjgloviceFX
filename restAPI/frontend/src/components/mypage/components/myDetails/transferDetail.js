@@ -92,13 +92,16 @@ class TransferDetail extends Component {
             <div className="ml-2" style={{ width: "20%" }}>
               <span>To Account</span>
             </div>
+            <div className="ml-2" style={{ width: "10%" }}>
+              <span>Amount</span>
+            </div>            
             <div className="ml-2" style={{ width: "15%" }}>
               <span>Status</span>
             </div>
             <div className="ml-2" style={{ width: "25%" }}>
               <span>Transfer At</span>
             </div>
-            <div className="ml-2" style={{ width: "20%" }}>
+            <div className="ml-2" style={{ width: "10%" }}>
               <span>Cancel</span>
             </div>
           </div>
@@ -140,6 +143,9 @@ class TransferDetail extends Component {
                   <div className="ml-2 my-auto" style={{ width: "20%" }}>
                     <span>{data.to_account}</span>
                   </div>
+                  <div className="ml-2 my-auto" style={{ width: "10%" }}>
+                    <span>{data.amount}</span>
+                  </div>                  
                   <div className="ml-2 my-auto" style={{ width: "15%" }}>
                     <span>{status}</span>
                   </div>
@@ -148,7 +154,7 @@ class TransferDetail extends Component {
                       {Moment(data.created_at).format("YYYY-MM-DD HH:mm")}
                     </span>
                   </div>
-                  <div className="ml-2 my-auto" style={{ width: "20%" }}>
+                  <div className="ml-2 my-auto" style={{ width: "10%" }}>
                     <span>
                       {data.status === "P" || data.status === "D" ? (
                         <button

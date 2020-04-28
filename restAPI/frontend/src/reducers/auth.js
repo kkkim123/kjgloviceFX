@@ -46,7 +46,8 @@ export default function(state = initialState, action) {
     case REGISTER_SUCCESS:
       return {
         isLoading: false,
-        ...action.payload
+        ...action.payload,
+        msg: action.status
       };
     case REGISTER_DETAIL_SUCCESS:
       return {
@@ -88,7 +89,7 @@ export default function(state = initialState, action) {
         isAuthenticated: false,
         user: null,
         token: null,
-        id: null
+        id: null,
       };
     default:
       return state;

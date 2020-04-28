@@ -84,3 +84,105 @@ python manage.py migrate~~
 ##### 서버 재부팅
 ```sudo systemctl daemon-reload```
 ```sudo systemctl restart nginx uwsgi```
+
+
+### Celery + RabbitMQ
+
+#### rabbitmq Setting
+```sudo rabbitmq-plugins enable rabbitmq_management ``` (rabbitmq plugin 활성화)
+```sudo service rabbitmq-server restart ``` (rabbitmq server 재시작)
+
+```sudo rabbitmqctl add_user [ID] [PASSWORD] ``` (계정추가)
+```sudo rabbitmqctl set_user_tags [ID] administrator ``` (관리자 권한 설정)
+
+```sudo rabbitmqctl set_permissions -p / [ID] ".*" ".*" ".*" ```
+(celery에서 rabbitmq로 connection 요청 시 connection error가 날 경우 설정 필요))
+
+
+#### Django Setting
+
+##### 1. settings.py
+~~~python
+# Rabbitmq related settings 
+CELERY_BROKER_URL = 'amqp://{}:{}@localhost:5672//'.format(config_secret['rabbitmq']['id'], config_secret['rabbitmq']['pwd'])
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE='UTC'
+
+# beat schedule setting
+CELERY_BEAT_SCHEDULE = {
+    'get_transaction_list': {
+        'task': 'wallet.tasks.get_transaction_list',
+        'schedule': crontab(minute=10) # execute every 10 minutes
+    }
+}
+~~~
+
+##### 2. __init__.py (root project 내에서 ex: restAPI)
+~~~python
+from __future__ import absolute_import
+from .celery import app as restAPI
+~~~
+
+##### 3. celery.py 생성 (root project 폴더 내)
+~~~python
+from __future__ import absolute_import
+from django.conf import settings
+
+import os
+from celery import Celery
+from celery import shared_task
+
+
+# settings environment
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'restAPI.settings')
+
+app = Celery('restAPI')
+app.config_from_object('django.conf:settings', namespace='CELERY')
+
+# load task module from all apps in project
+app.autodiscover_tasks()
+~~~
+
+##### 4. 원하는 app 내에 tasks.py 생성 후 task 생성
+~~~python
+@shared_task
+# 함수 이름과 settings의 CELERY_BEAT_SCHEDULE 에 등록된 이름이 같아야 함
+def get_transaction_list():
+   pass ...
+~~~
+
+##### 5. celery 구동(test 시)
+```celery -A restAPI beat ``` (celery beat 실행)
+```celery -A restAPI worker ``` (celery worker 실행)
+
+##### 6. 서버 배포
+###### 참고자료
+http://docs.celeryproject.org/en/latest/userguide/daemonizing.html#usage-systemd (systemd 방식)
+
+http://jangwon.io/django/study/2018/10/05/(Django)-Celery%EB%A1%9C-Django-%EC%8A%A4%EC%BC%80%EC%A4%84%EB%9F%AC-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-%EB%B0%B0%ED%8F%AC/ (celery + rabbitmq 설치 포함)
+
+https://devlog.jwgo.kr/2019/07/05/celery-daemonization/ (한글내용)
+
+https://jinmay.github.io/2019/11/11/django/django-celery-conf-systemd/ (가상환경에서의 celery 배포)
+
+###### 작성필요 파일 (작성내용은 참고자료에서 확인)
+``` /etc/conf.d/celery  ``` (celery 변수지정 파일)
+```/etc/systemd/system/celerybeat.service  ``` (celery beat service 구동 파일)
+```/etc/systemd/system/celery.service  ``` (celery service 구동 파일)
+```/etc/tmpfiles.d/celery.conf  ``` (service 파일들 상의 pid 파일과 log파일 권한 설정)
+
+###### celery 구동
+```sudo systemctl daemon-reload```
+```sudo systemctl restart celerybeat.service``` (celery beat 구동)
+```sudo systemctl restart celery.service``` (celery 구동)
+
+##### 7. flower
+celery 관리 package
+
+```pip install flower```
+
+###### flower 구동(daemon)
+```sudo systemctl daemon-reload```
+```sudo systemctl start flower```

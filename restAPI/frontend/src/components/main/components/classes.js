@@ -5,25 +5,25 @@ import energy from '../../../images/market/icon_energy.png'
 
 const Classes = () => {
     return (
-        <div className="text-left" style={{ backgroundColor: "#0E112C", color: "#ffffff"}}>
-            <div className="container my-5 p-5" style={{ width: "90%" }}>
+        <section className="container-fluid" style={{ backgroundColor: "#0E112C", color: "#ffffff"}}>
+            <div className="text-left my-5 p-5">
                 <div className="my-5">
                     <h3>6 Asset Classes</h3>
                     <br></br>
                     <p style={{ margin: "0" }}>Discover the world’s key markets through</p>
                     <p>RoboForex accounts and platforms.</p>
                     <br></br>
-                    <div>
-                        <span className="mr-4"><strong>Forex</strong></span>
-                        <span className="mr-4"><strong>Commodity</strong></span>
-                        <span className="mr-4"><strong>Indices</strong></span>
-                        <span className="mr-4"><strong>Metals </strong></span>
-                        <span className="mr-4"><strong>Energy </strong></span>
-                        <span className="mr-4"><strong>Crypto</strong></span>
+                    <div className="row row-cols-xs-3">
+                        <span className="flex-grow-0 col"><strong>Forex</strong></span>
+                        <span className="flex-grow-0 col"><strong>Commodity</strong></span>
+                        <span className="flex-grow-0 col"><strong>Indices</strong></span>
+                        <span className="flex-grow-0 col"><strong>Metals </strong></span>
+                        <span className="flex-grow-0 col"><strong>Energy </strong></span>
+                        <span className="flex-grow-0 col"><strong>Crypto</strong></span>
                     </div>
                 </div>
-                <div className="d-flex">
-                    <div className="w-25">
+                <div className="row">
+                    <div className="px-3 my-3 mx-2 col">
                         <h3>Indices <br></br>Trading Benefits</h3>
                         <br></br>
                         <p>Meta Trader4, Meta Trader5<br></br>R Trader Platforms</p>
@@ -32,32 +32,31 @@ const Classes = () => {
                         <p>Over 10 instruments</p>
                         <br></br>
                         <br></br>
-                        <a className="rounded-pill py-3 px-4" style={{ border: "1px solid #ffffff" }}>
+                        <button type="button" className="btn rounded-pill py-3 px-4" style={{ border: "1px solid #ffffff", color: "inherit" }}>
                             <strong>Learn More</strong>
-                        </a>
+                        </button>
                     </div>
-                    <div className="w-25 text-center px-3 mx-2" style={{ borderRadius: "20px", backgroundColor: "#ffffff", color: "#959595", height:"380px" }}>
-                        <img className="my-5" src={ETFs} alt="" style={{ width: "80px" }}></img>
+                    <div className="text-center px-3 my-3 mx-2 col" style={{ borderRadius: "20px", backgroundColor: "#ffffff", color: "#959595"}}>
+                        <img className="my-5" src={ETFs}/>
                         <h4 style={{ color: "#006536" }}><strong>ETFs</strong></h4>
                         <br></br>
-                        <span style={{ color: "#959595", fontSize: "0.9rem" }}>Trade fast-growing global ETF  industry with over $3 trillion in assets in management</span>
+                        <p style={{ color: "#959595", fontSize: "0.9rem" }}>Trade fast-growing global ETF  industry with over $3 trillion in assets in management</p>
                     </div>
-                    <div className="w-25 text-center px-3 mx-2" style={{ borderRadius: "20px", backgroundColor: "#ffffff", color: "#959595", height:"380px" }}>
-                        <img className="my-5" src={commodity} alt="" style={{ width: "80px" }}></img>
+                    <div className="px-3 my-3 mx-2 text-center col" style={{ borderRadius: "20px", backgroundColor: "#ffffff", color: "#959595"}}>
+                        <img className="my-5" src={commodity}/>
                         <h4 style={{ color: "#006536" }}><strong>Soft Commodities</strong></h4>
                         <br></br>
-                        <span style={{ color: "#959595", fontSize: "0.9rem" }}>Trade ETFs on grown commodities such as coffee, cocoa, sugar, corn, wheat, soybean, fruit</span>
+                        <p style={{ color: "#959595", fontSize: "0.9rem" }}>Trade ETFs on grown commodities such as coffee, cocoa, sugar, corn, wheat, soybean, fruit</p>
                     </div>
-                    <div className="w-25 text-center px-3 mx-2" style={{ borderRadius: "20px", backgroundColor: "#ffffff", color: "#959595", height:"380px" }}>
-                        <img className="my-5" src={energy} alt="" style={{ width: "80px" }}></img>
+                    <div className="px-3 my-3 mx-2 text-center col" style={{ borderRadius: "20px", backgroundColor: "#ffffff", color: "#959595"}}>
+                        <img className="my-5" src={energy}/>
                         <h4 style={{ color: "#006536" }}><strong>Energies</strong></h4>
                         <br></br>
-                        <span style={{ color: "#959595", fontSize: "0.9rem" }}>Trade CFDs and commodity ETFs on energy market including oil, natural gas, heating oil, ethanol and purified terephthalic acid</span>
+                        <p style={{ color: "#959595", fontSize: "0.9rem" }}>Trade CFDs and commodity ETFs on energy market including oil, natural gas, heating oil, ethanol and purified terephthalic acid</p>
                     </div>
                 </div>
             </div>
-
-        </div>
+        </section>
     );
 };
 

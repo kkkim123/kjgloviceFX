@@ -73,7 +73,7 @@ class App extends Component {
       // redux로 생성된 store에 하위 컴포넌트들 접근 가능
       <Provider store={store}>
         <Router history={history}>
-          <ScrollToTop>
+          {/* <ScrollToTop> */}
           <Route render={(props) => {
             const path = props.location.pathname;
             if(path.indexOf("mypage") === -1) {
@@ -132,7 +132,7 @@ class App extends Component {
             <Route exact path="/mypage/details/account/detail" component={AccountDetail} />
           </Switch>
           <Footer />
-          </ScrollToTop>
+          {/* </ScrollToTop> */}
         </Router>
       </Provider>
     );

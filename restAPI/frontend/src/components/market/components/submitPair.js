@@ -13,7 +13,7 @@ const SubmitPair = () => {
                 href="#"
                 className="py-3 px-5 rounded-pill"
                 style={{ color: "white", backgroundColor: "#959595", textDecoration:"none"}}>
-                Resister
+                Register
             </a>
         </div>
     );

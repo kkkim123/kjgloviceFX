@@ -18,7 +18,7 @@ export const getMetaQuotes = () => async (dispatch, getState) => {
         dispatch({
             type: FOOTER_LOADING_FAIL
         });
-        dispatch(stopSubmit("Footer", err.response.data));
+        // dispatch(stopSubmit("Footer", err.response.data));
     }
     
 };

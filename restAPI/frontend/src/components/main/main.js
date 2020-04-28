@@ -14,10 +14,8 @@ const Main = () => {
         <Mission />
       </section>
       <Classes />
-      <section className="container">
-        <DownloadMT4 />
-        <StartSteps />
-      </section>
+      <DownloadMT4 />
+      <StartSteps />
     </>
   );
 };

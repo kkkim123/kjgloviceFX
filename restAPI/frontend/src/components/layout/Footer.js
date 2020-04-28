@@ -47,7 +47,7 @@ class Footer extends Component {
             <br></br>
           </div>
           <div className="item pt-2">
-            <span className="resister-button">
+            <span className="register-button">
               {!isAuthenticated ? (
                 <Link to="/register/user">Register</Link>
               ) : (

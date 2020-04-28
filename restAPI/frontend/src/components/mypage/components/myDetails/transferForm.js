@@ -9,26 +9,18 @@ import { addTransfer, getAccount} from "../../../../actions/mypage";
 class TransferForm extends Component {
   state = {
     isLoad: false,
+    from_balance: "",
+    to_balance: "",
   };
 
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     if (!this.props.account) {
       store.dispatch(getAccount(this.props.auth.id));
     }
-    if (!this.state.isLoad) {
-      this.setState(
-        {
-          isLoad: true
-        },
-        () => {
-          store.dispatch(getTransfer());
-        }
-      );
-    }
   }
 
-  selectField = ({ input, placeholder, meta: { touched, error } }) => {
+  selectField = ({ input, placeholder, label, meta: { touched, error } }) => {
     const optList =
       this.props.account &&
       this.props.account.map((opt, i) => {
@@ -43,7 +35,8 @@ class TransferForm extends Component {
         className={`form-label-group
                 ${touched && error ? "error" : ""}`}
       >
-        <select {...input} className="form-control">
+        <label>{label}</label>
+        <select {...input} className="form-control" >
           <option>{placeholder}</option>
           {optList}
         </select>
@@ -51,6 +44,53 @@ class TransferForm extends Component {
       </div>
     );
   };
+
+  renderField = ({ input, placeholder, type,label,readOnly, meta: { touched, error } }) => {
+    return (
+      <div
+        className={`form-label-group
+        ${touched && error ? "error" : ""}`}
+      >
+        <label>{label}</label>
+        <input
+          {...input}
+          type={type}
+          className="form-control"
+          placeholder={placeholder}
+          readOnly={readOnly}
+        />
+        {touched && error && <span className="">{error}</span>}
+      </div>
+    );
+  };
+    
+  getBalance = e => {
+    this.props.account.filter((c) => {
+      switch (e.target.name) {
+        case "from_account":
+          console.log(c.mt4_account.indexOf(e.target.value))
+          // (c.mt4_account.indexOf(e.target.value) > -1) ?
+          // this.setState({
+          //   from_balance: c.balance
+          // })
+          // :
+          // this.setState({
+          //   from_balance: ""
+          // })
+          break;
+        case "to_account":
+            (c.mt4_account.indexOf(e.target.value) > -1) ?
+            this.setState({
+              to_balance: c.balance
+            })
+            :
+            this.setState({
+              to_balance: ""
+            })          
+          break;        
+      }
+    });
+  }
 
   onSubmit = formValues => {
     store.dispatch(addTransfer(formValues)).then(() => {
@@ -81,11 +121,34 @@ class TransferForm extends Component {
                     name="from_account"
                     component={this.selectField}
                     placeholder="From Account*"
+                    label="From Account"
+                    onChange={this.getBalance}
                   />
+                   <div className="form-label-group">
+                    <label>From Account Balance</label>
+                    <input type="text" className="form-control" placeholder="Plesase Select 'From Account'" readOnly value={this.state.from_balance}/>
+                  </div> 
                   <Field
                     name="to_account"
                     component={this.selectField}
                     placeholder="To Account*"
+                    label="To Account"
+                    onChange={this.getBalance}
+                  />
+                  <Field
+                    name="to_balance"
+                    component={this.renderField}
+                    placeholder="Plesase Select Account"
+                    label="To Account Balance"
+                    type="text"
+                    readOnly={true}                    
+                  />
+                 <Field
+                    name="amount"
+                    component={this.renderField}
+                    placeholder="Transfer Amount"
+                    label="Transfer Amount"
+                    type="text"
                   />
                   <button
                     className="btn btn-lg btn-primary btn-block  mt-10"

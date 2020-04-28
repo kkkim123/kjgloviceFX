@@ -34,14 +34,31 @@ class PersonalForm extends Component {
     );
   };
 
+  hiddenField = (error) => {
+    console.log(error)
+    return true
+    // return (
+    //   <div className="form-label-group">
+    //     {error && <div className="alert alert-danger">{error}</div>}
+    //   </div>
+    // );
+  };
+
   onSubmit = formValues => {
     if (this.state.country) {
       formValues.Nationality = this.state.country;
       const oriData = JSON.parse(localStorage.getItem('register'));
       formValues = Object.assign(formValues,oriData)
-      this.props.register(formValues)
       localStorage.removeItem('register');
-      this.props.history.push("/main");
+      this.props.register(formValues).then(()=>{
+        if(this.props.status === 201) {
+          alert("회원가입이 완료되었습니다.")
+          this.props.history.push("/main");
+        } else {
+          alert("확인 후 다시 시도해주세요.")
+        }
+      })
+
     } else {
       alert("Select your Nationality");
     }
@@ -56,7 +73,7 @@ class PersonalForm extends Component {
             <div className="card card-signin my-5">
               <div className="card-body text-center p-gray">
                 <div>
-                  <h5 className="card-title">Personal Detail</h5>
+                  <h5 className="card-title mb-5">Personal Detail</h5>
                   <div className="progress card-bar float-right">
                     <div
                       className="progress-bar bg-green"
@@ -93,6 +110,11 @@ class PersonalForm extends Component {
                     component={this.renderField}
                     placeholder="Your Mobile Phone*"
                     validate={required}
+                  />
+                  <Field
+                    name="non_field_errors"
+                    type="hidden"
+                    component={this.hiddenField}
                   />
                   <div className="form-label-group text-center p-2 p-gray">
                     <p className="">
@@ -144,11 +166,12 @@ const passwordsMatch = (value, allValues) =>
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   user: state.auth.user,
-  token: state.auth.token
+  token: state.auth.token,
+  status: state.auth.msg
 });
 
 PersonalForm = connect(mapStateToProps, { register })(PersonalForm);
 
 export default reduxForm({
-  form: "detailForm"
+  form: "personalForm"
 })(PersonalForm);

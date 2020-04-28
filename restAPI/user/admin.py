@@ -196,6 +196,10 @@ class ApplyIBForm(forms.ModelForm):
         model = ApplyIntroducingBroker
         fields = '__all__'
 
+        labels = {
+            'fxuser': 'Email',
+        }
+
 
 class ApplyIBAdmin(admin.ModelAdmin):
     form = ApplyIBForm

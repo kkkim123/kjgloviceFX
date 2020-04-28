@@ -46,7 +46,7 @@ class ResetPassForm extends Component {
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div className="card card-signin my-5">
               <div className="card-body text-center p-gray">
-                <h5 className="card-title">New Password</h5>
+                <h5 className="card-title mb-5">New Password</h5>
                 <form
                   className="form-signin text-left"
                   onSubmit={this.props.handleSubmit(this.onSubmit)}

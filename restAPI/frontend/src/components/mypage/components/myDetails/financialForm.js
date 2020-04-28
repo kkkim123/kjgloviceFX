@@ -53,11 +53,11 @@ class FinancialForm extends Component {
     );
   };
 
-  onChange = isChecked => {
-    if (isChecked.target.value === "0") {
+  onChange = e => {
+    if (e.target.value === "0") {
       $("select[name='trading_period']").attr("disabled", false);
     }
-    if (isChecked.target.value === "1") {
+    if (e.target.value === "1") {
       $("select[name='trading_period']").attr("disabled", true);
     }
   };
