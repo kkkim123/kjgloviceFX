@@ -310,6 +310,7 @@ CELERY_BEAT_SCHEDULE = {
 # AWS S3 #
 ##########
 
+
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
 CONFIG_SETTINGS_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
 
