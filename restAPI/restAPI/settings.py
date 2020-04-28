@@ -42,6 +42,7 @@ INSTALLED_APPS += [
     'frontend.apps.FrontendConfig',
     'storages',
     'django_mptt_admin',
+    'django_celery_results', # django celery 결과
 ]
 MIDDLEWARE = [
     #'corsheaders.middleware.CorsMiddleware',
@@ -273,18 +274,22 @@ DEFAULT_FROM_EMAIL = 'jhlee@fbpasia.com'
 #     },
 # }
 
-# REDIS related settings 
+# Rabbitmq related settings 
 CELERY_BROKER_URL = 'amqp://{}:{}@localhost:5672//'.format(config_secret['rabbitmq']['id'], config_secret['rabbitmq']['pwd'])
+# CELERY_BROKER_URL = 'amqp://{}:{}@localhost:5672//'.format('admin', 'admin')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE='UTC'
+CELERY_ENABLE_UTC=True
+CELERY_RESULT_BACKEND = 'django-db'
+
 
 # beat schedule setting
 CELERY_BEAT_SCHEDULE = {
     'get_transaction_list': {
         'task': 'wallet.tasks.get_transaction_list',
-        'schedule': crontab(minute=10) # execute every 10 minutes
+        'schedule': crontab(minute='*/2'), # execute every 2 minutes
     }
 }
 

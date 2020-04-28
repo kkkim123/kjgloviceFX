@@ -1,7 +1,7 @@
 from django.contrib import admin
 from web3 import Web3, HTTPProvider
 #from common.utils import TokenUtil
-from .models import Wallet
+from .models import Wallet, TransactionHistory
 import configparser
 import requests
 config = configparser.ConfigParser()
@@ -55,6 +55,21 @@ class WalletAdmin( admin.ModelAdmin):
     getBalance.short_description = "getBalance"
 
 
+class TransactionAdmin(admin.ModelAdmin):
+    actions = None
+    list_display = ('hash', 'confirmations', 'from_address', 'to_address', 'value')
+    readonly_fields = ('hash', 'confirmations', 'from_address', 'to_address', 'value')
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
+
+    def has_add_permission(self, request):
+        return False
 
 
 admin.site.register(Wallet, WalletAdmin)
+admin.site.register(TransactionHistory, TransactionAdmin)
