@@ -167,6 +167,7 @@ media
 config_secret/
 restAPI/common/config/
 restAPI/media/
+restAPI/celery*
 .config/
 .config
 .config/*
