@@ -62,15 +62,16 @@ class DepositTransAdmin(admin.ModelAdmin):
     # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
 
     list_per_page = 10
-    list_editable = ('amount','status',)
+    list_editable = ('status',)
     search_fields = ('user','mt4_account','cellphone_number',)
 
     def save_model(self, request, obj, form, change):
-
+        print(obj.user_id)
         if(obj.status == 'A'):
             wallet = Wallet.objects.get(id = obj.user_id)
             ETH_BALANCE_URL = 'http://3.0.181.55:3000/eth/fx/getbalance/' + str(obj.user_id)
             jsresponse = requests.get(ETH_BALANCE_URL).json()
+            print(jsresponse)
             if(float(jsresponse['balnace']) < 0.002):
                 ETH_SEND_URL = 'http://3.0.181.55:3000/eth/fx/send'
                 try:
@@ -79,14 +80,16 @@ class DepositTransAdmin(admin.ModelAdmin):
                     data = {'index': 0, 'from': config["ACCOUNT"]["KJ_ADDRESS"],'to': obj.crypto_address, 
                             'value': 0.002,'gasLimit': config["TOKEN"]["GASLIMIT"], 'gasPrice': config["TOKEN"]["GAS"]}
                     res = requests.post(ETH_SEND_URL, headers=headers, data=data)
-
+                    print(res)
                     if res.status_code == 400:
                         print("Failed. Bad post data.")
-
+                except :
+                    print("Failed.FailedFailedFailedFailed")
             wallet.eth_balance = jsresponse['balnace']
-
+            wallet.save()  
             KJ_BALANCE_URL = 'http://3.0.181.55:3000/kj/fx/getbalance/' + str(obj.user_id)
             jsresponse = requests.get(KJ_BALANCE_URL).json()
+            print(jsresponse)
             if(float(jsresponse['balnace']) > float(obj.crypto_amount)):
                 KJ_SEND_URL = 'http://3.0.181.55:3000/kj/fx/send'
                 try:
@@ -98,11 +101,14 @@ class DepositTransAdmin(admin.ModelAdmin):
 
                     if res.status_code == 200:
                         print("OK")
-
+                    else : 
+                        print("400")
+                except :
+                    print("Failed.FailedFailedFailedFailed")
                 KJ_BALANCE_URL = 'http://3.0.181.55:3000/kj/fx/getbalance/' + str(obj.user_id)
                 jsresponse = requests.get(KJ_BALANCE_URL).json()
                 wallet.kj_balance = jsresponse['balnace'] 
-
+                wallet.save()    
         super().save_model(request, obj, form, change)  
 
 admin.site.register(DepositTransaction,DepositTransAdmin)

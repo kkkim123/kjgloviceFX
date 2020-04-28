@@ -60,10 +60,10 @@ def get_transaction_list():
                                 # update balance
                                 KJ_BALANCE_URL = 'http://3.0.181.55:3000/kj/fx/getbalance/' + str(tx['to'])
                                 jsresponse = requests.get(KJ_BALANCE_URL).json()
-                                queryset.update(kj_balance=jsresponse['balnace'])
+                                wallet.kj_balance=jsresponse['balnace']
                                 ETH_BALANCE_URL = 'http://3.0.181.55:3000/eth/fx/getbalance/' + str(tx['to'])
                                 jsresponse = requests.get(ETH_BALANCE_URL).json()
-                                queryset.update(eth_balance=jsresponse['balnace'])
+                                wallet.eth_balance=jsresponse['balnace']
                 except Exception:
                     pass
             else:

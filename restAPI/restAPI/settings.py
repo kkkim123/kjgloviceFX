@@ -42,9 +42,6 @@ INSTALLED_APPS += [
     'frontend.apps.FrontendConfig',
     'storages',
     'django_mptt_admin',
-    'background_task',
-    'channels',
-
 ]
 MIDDLEWARE = [
     #'corsheaders.middleware.CorsMiddleware',
@@ -253,16 +250,6 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = True   # 프로덕션에서는 True로 설정 필요
 DEFAULT_FROM_EMAIL = 'jhlee@fbpasia.com'
 
-
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'asgi_redis.RedisChannelLayer',
-        'ROUTING': 'exam.routing.channel_routing',
-    }
-}
-# Channels
-ASGI_APPLICATION = 'restAPI.routing.application'
 
 # DEFAULT_FROM_EMAIL = 'korea7030.jhl@gmail.com'
 # EMAIL_HOST = 'smtp.gmail.com'
