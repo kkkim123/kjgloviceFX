@@ -20,31 +20,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from user import views as user_views
-
-#router = DefaultRouter()
-#router.register(r'user', views.UserList)
-#router.register(r'userdetail', views.UserDetail)
-
-
 from rest_framework_swagger.views import get_swagger_view
-
-schema_view = get_swagger_view(title='Pastebin API')
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
     path('user/', include("user.urls")),
     path('fxaccount/', include('fxaccount.urls')),
     path('wallet/', include('wallet.urls')),
     path('auth/', include('djoser.urls.base')),
     path('auth/', include('djoser.urls.authtoken')),
-    # path('auth/users/activation/<str:uid>/<str:token>', user_views.UserActivationView.as_view()),
-    # path('auth/users/password/reset/confirm/<str:uid>/<str:token>', user_views.UserResetPasswordView.as_view())
-
-    #path('authjwt/', include('djoser.urls.jwt')),
-
-    #path('swagger', schema_view)
 ]
 
 urlpatterns += [

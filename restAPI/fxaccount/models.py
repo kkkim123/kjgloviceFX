@@ -87,15 +87,11 @@ DEPOSIT_WITHDRAW_TRANSACTION_TYPE_CHOICE = (
 )
 
 DEPOSIT_CRYPTO_CHOICE = (
-    ('0', 'Bitcoin'),
-    ('1', 'Ethereum'),
-    ('2', 'JKL'),
+    ('0', 'KJ'),
 )
 
 WITHDRAW_CRYPTO_CHOICE = (
-    ('0', 'Bitcoin'),
-    ('1', 'Ethereum'),
-    ('2', 'JKL'),
+    ('0', 'KJ'),
 )
 
 WITHDRAW_METHOD_DICT = dict()
@@ -107,7 +103,7 @@ DEPOSIT_WITHDRAW_TRANSACTION_STATUS = (
     ('P', 'Pending'),
     ('A', 'Approved'),
     ('D', 'Declined'),
-    ('S', 'Processed'),
+    ('S', 'Completed'),
 )
 
 def send_mt4_details(sender, **kwargs):
@@ -178,19 +174,18 @@ class IBListStructure(models.Model):
 
 class FxAccountTransaction(models.Model):
     id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
     from_account = models.CharField(default='', max_length=36, blank=False)
     to_account = models.CharField(default='', max_length=36, blank=False)
 
-    new_pending_at = models.DateTimeField(blank=True, null=True)
-    approved_at = models.DateTimeField(blank=True, null=True)
-    rejected_at = models.DateTimeField(blank=True, null=True)
+    currency = models.CharField( default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)
+    amount = models.FloatField( default=0.0, blank=True, null=True)
+
+    status = models.CharField(default='P', max_length=1, blank=False, choices=ACCOUNT_TRANSACTION_STATUS)
+
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
 
-    user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
-
-    status = models.CharField(default='P', max_length=1, blank=False, choices=ACCOUNT_TRANSACTION_STATUS)
-    transaction_type = models.CharField(default='R', max_length=2, blank=False, choices=ACCOUNT_TRANSACTION_TYPES_CHOICE)
 
     class Meta:
         verbose_name = "FxAccount Transaction"
@@ -250,8 +245,6 @@ class DepositTransaction(BaseTransaction):
     currency = models.CharField( default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)
     #전환된 법정화폐 수량 
     amount = models.FloatField( default=0.0, blank=True, null=True)
-
-    exchange_rate = models.FloatField( default=0.0, blank=True, null=True)
 
     deposit_crypto = models.CharField( default='', max_length=2, blank=True, choices=DEPOSIT_CRYPTO_CHOICE)
     crypto_address = models.CharField(default='', max_length=64, blank=True)

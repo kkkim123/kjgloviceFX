@@ -299,12 +299,13 @@ class CommissionHistoryViewsDetail(generics.ListAPIView):
 
 #신규 요청, 요청내역 조회 , 취소
 class DepositViewSet(viewsets.ModelViewSet):
-    permission_classes=[IsFKOwnerOnly,IsAuthenticated]  
+    permission_classes=[IsAuthenticated]  
     queryset = DepositTransaction.objects.all()
     serializer_class = DepositSerializer
     lookup_field = 'user'
 
     def list(self, request, *args, **kwargs):
+        permission_classes=[IsOwnerOnly,IsAuthenticated]
         deposit = get_list_or_404(self.queryset, user=kwargs['user'])
         page = self.paginate_queryset(deposit)
 

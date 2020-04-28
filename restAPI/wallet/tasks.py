@@ -1,10 +1,4 @@
-# import logging
- 
-# from django.urls import reverse
-# from django.core.mail import send_mail
-# from django.contrib.auth import get_user_model
 from restAPI import celery
-
 import json
 import requests
 import ast
@@ -39,7 +33,7 @@ def get_transaction_list():
     for wallet in wallet_queryset:
         try:
             headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-            data = {'addresses': wallet.address, 'range': 20}
+            data = {'addresses': wallet.address, 'range': 200}
             res = requests.post(KJ_TRANSACTION_URL, headers=headers, data=data)
 
             if res.status_code == 200:
@@ -63,9 +57,17 @@ def get_transaction_list():
                                     value = tx['value']
                                 )
                                 transaction.save()
+                                # update balance
+                                KJ_BALANCE_URL = 'http://3.0.181.55:3000/kj/fx/getbalance/' + str(tx['to'])
+                                jsresponse = requests.get(KJ_BALANCE_URL).json()
+                                wallet.kj_balance=jsresponse['balnace']
+                                ETH_BALANCE_URL = 'http://3.0.181.55:3000/eth/fx/getbalance/' + str(tx['to'])
+                                jsresponse = requests.get(ETH_BALANCE_URL).json()
+                                wallet.eth_balance=jsresponse['balnace']
                 except Exception:
                     pass
             else:
                 pass
         except Exception:
             pass
+
