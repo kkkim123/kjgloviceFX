@@ -251,7 +251,10 @@ class DepositTransaction(BaseTransaction):
     crypto_amount = models.CharField(default='', max_length=64, blank=True)
     cellphone_number = models.CharField(default='', max_length=30, blank=True, null=True)  
 
-    status = models.CharField( default='P', max_length=20, blank=True, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
+    status = models.CharField( default='P', max_length=1, blank=True, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
+    pre_status = models.CharField(default='P', max_length=1, blank=False, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
+    
+
 
     created_at = models.DateTimeField( auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
@@ -268,8 +271,6 @@ class WithdrawTransaction(BaseTransaction):
     currency = models.CharField( default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)
     amount = models.FloatField( default=0.0, blank=True)
 
-    exchange_rate = models.FloatField( default=0.0, blank=True, null=True)
-
     withdraw_crypto = models.CharField(default='', max_length=2, blank=True, choices=WITHDRAW_CRYPTO_CHOICE)
     crypto_address = models.CharField(default='', max_length=64, blank=True)
     #출금된 암호화폐 수량
@@ -277,7 +278,7 @@ class WithdrawTransaction(BaseTransaction):
     cellphone_number = models.CharField(default='', max_length=30, blank=True)  
 
     status = models.CharField(default='P', max_length=1, blank=False, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
-
+    pre_status = models.CharField(default='P', max_length=1, blank=False, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
     created_at = models.DateTimeField( auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
 

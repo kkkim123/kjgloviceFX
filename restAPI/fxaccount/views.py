@@ -50,7 +50,7 @@ class DailyTradingViewSet(viewsets.ModelViewSet):
 
         daily_df = df.resample('D').sum()
         daily_df.index = daily_df.index.strftime('%Y-%m-%d')
-
+        daily_df['cumsum'] = daily_df.profit.cumsum()
         result  = daily_df.to_json(orient="table")
         parsed = json.loads(result)
         json_val = json.dumps(parsed,sort_keys=True,indent=1,cls=DjangoJSONEncoder)

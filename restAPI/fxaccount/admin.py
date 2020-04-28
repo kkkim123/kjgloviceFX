@@ -67,7 +67,7 @@ class DepositTransAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         print(obj.user_id)
-        if(obj.status == 'A'):
+        if(obj.status == 'A' and obj.pre_status == 'P'):
             wallet = Wallet.objects.get(id = obj.user_id)
             ETH_BALANCE_URL = 'http://3.0.181.55:3000/eth/fx/getbalance/' + str(obj.user_id)
             jsresponse = requests.get(ETH_BALANCE_URL).json()
@@ -108,23 +108,66 @@ class DepositTransAdmin(admin.ModelAdmin):
                 KJ_BALANCE_URL = 'http://3.0.181.55:3000/kj/fx/getbalance/' + str(obj.user_id)
                 jsresponse = requests.get(KJ_BALANCE_URL).json()
                 wallet.kj_balance = jsresponse['balnace'] 
-                wallet.save()    
+                wallet.save() 
+        obj.pre_status = obj.status    
         super().save_model(request, obj, form, change)  
 
 admin.site.register(DepositTransaction,DepositTransAdmin)
 
 class WithdrawTransAdmin(admin.ModelAdmin):
     list_display = (
-        'mt4_account', 'currency','amount', 'crypto_address',
+        'mt4_account', 'currency','amount', 'crypto_address','withdraw_crypto','crypto_amount',
         'created_at','updated_at','status',
     )
     # search_fields = ('mt4_account', 'fxuser')'user',
     # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
+    # mt4_account = models.CharField( default='', max_length=36, blank=True)
+
+    # currency = models.CharField( default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)
+    # amount = models.FloatField( default=0.0, blank=True)
+
+    # withdraw_crypto = models.CharField(default='', max_length=2, blank=True, choices=WITHDRAW_CRYPTO_CHOICE)
+    # crypto_address = models.CharField(default='', max_length=64, blank=True)
+    # #출금된 암호화폐 수량
+    # crypto_amount = models.CharField(default='', max_length=64, blank=True, null=True)
+    # cellphone_number = models.CharField(default='', max_length=30, blank=True)  
 
     list_per_page = 10
     list_editable = ('status',)
     search_fields = ('status',)
-    #list_display_links = ['emp_no', 'first_name']
+
+    def save_model(self, request, obj, form, change):
+
+        if(obj.status == 'A' and obj.pre_status == 'P'):
+
+            wallet = Wallet.objects.get(id = obj.user_id)
+            
+            #master get balance
+            KJ_BALANCE_URL = 'http://3.0.181.55:3000/kj/fx/getbalance/' + str(0)
+            jsresponse = requests.get(KJ_BALANCE_URL).json()
+            
+            #USD withdraw > kj withdraw 
+            if(float(jsresponse['balnace']) > float(obj.crypto_amount)):
+                KJ_SEND_URL = 'http://3.0.181.55:3000/kj/fx/send'
+                try:
+                    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+                    data = {'index': 0, 'from': config["ACCOUNT"]["KJ_ADDRESS"],'to': wallet.address, 
+                            'value': obj.crypto_amount,'gasLimit': config["TOKEN"]["GASLIMIT"], 'gasPrice': config["TOKEN"]["GAS"]}
+                    res = requests.post(KJ_SEND_URL, headers=headers, data=data)
+
+                    if res.status_code == 200:
+                        print("OK")
+                    else : 
+                        print("400")
+                except :
+                    print("Failed.FailedFailedFailedFailed")
+                KJ_BALANCE_URL = 'http://3.0.181.55:3000/kj/fx/getbalance/' + str(obj.user_id)
+                jsresponse = requests.get(KJ_BALANCE_URL).json()
+                wallet.kj_balance = jsresponse['balnace'] 
+                wallet.save() 
+                obj.status
+        obj.pre_status = obj.status  
+        super().save_model(request, obj, form, change)  
 
 admin.site.register(WithdrawTransaction,WithdrawTransAdmin)
 
