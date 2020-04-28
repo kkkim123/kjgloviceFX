@@ -41,7 +41,7 @@ admin.site.register(FxAccount, FxAccountAdmin)
 
 class FxAccountTransactionAdmin(admin.ModelAdmin):
     list_display = (
-        'user', 'from_account', 'to_account','status','transaction_type','created_at','updated_at',
+      'id', 'user', 'from_account', 'to_account','currency','amount','status','created_at','updated_at',
     )
     # search_fields = ('mt4_account', 'fxuser')
     # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
