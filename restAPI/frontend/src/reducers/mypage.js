@@ -30,7 +30,8 @@ import {
   EDIT_IB,
   FAIL,
   GET_WALLET,
-  GET_CHART
+  GET_CHART,
+  GET_USER_BALANCE
 } from "../actions/types";
 
 export default (state = {}, action) => {
@@ -153,6 +154,11 @@ export default (state = {}, action) => {
     case ADD_TRANSFER:      
       return {
         msg: action.payload
+      };
+    case GET_USER_BALANCE:
+      return {
+        ...state,
+        info: action.payload
       };
     default:
       return state;

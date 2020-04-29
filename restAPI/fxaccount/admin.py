@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.db import connections
 from django.http import HttpResponse,HttpResponseRedirect
@@ -13,7 +14,18 @@ import requests
 config = configparser.ConfigParser()
 config.read('common/config/config.ini')
 
+class FxAccountForm(forms.ModelForm):
+    class Meta:
+        model = FxAccount
+        fields = '__all__'
+
+        labels = {
+            'user': 'Email',
+        }
+
+    
 class FxAccountAdmin(admin.ModelAdmin):
+    form = FxAccountForm
     list_display = (
         'user', 'mt4_account', 'referral_code','ib_commission','status','updated_at',
     )
@@ -21,9 +33,25 @@ class FxAccountAdmin(admin.ModelAdmin):
     # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
 
     list_per_page = 10
-    list_editable = ('mt4_account','ib_commission','status',)
+    list_editable = ('status',)
     search_fields = ('user','mt4_account','referral_code',)
+    readonly_fields = ('mt4_account','ib_commission', 'balance')
 
+    fieldsets = (
+        (None, {
+            "fields": (
+                'mt4_account', 'account_type', 'user', 'status', 'ib_status', 'ib_commission', 'base_currency',
+                'leverage',  'trading_platform', 'account_name'
+            ),
+        }),
+    )
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj: # obj is not None, so this is an edit
+           return ['mt4_account','ib_commission', 'balance'] # Return a list or tuple of readonly fields' names
+        else: # This is an addition
+            return []
+    
     def save_model(self, request, obj, form, change):
         fxuser = FxUser.objects.get(id = obj.user_id)
         #print(len(obj.mt4_account))
@@ -49,13 +77,41 @@ class FxAccountTransactionAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_editable = ('status',)
     search_fields = ('user','from_account','to_account','referral_code',)
+    readonly_fields = ('from_account', 'to_account',)
+
+    fieldsets = (
+        (None, {
+            "fields": (
+                'user', 'from_account', 'to_account','currency','amount','status'
+            ),
+        }),
+    )
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj: # obj is not None, so this is an edit
+           return ['from_account', 'to_account'] # Return a list or tuple of readonly fields' names
+        else: # This is an addition
+            return []
+    
 
 
 admin.site.register(FxAccountTransaction,FxAccountTransactionAdmin)
 
+
+class DepositTransForm(forms.ModelForm):
+    class Meta:
+        model = DepositTransaction
+        fields = '__all__'
+
+        labels = {
+            'user': 'Email',
+        }
+
+
 class DepositTransAdmin(admin.ModelAdmin):
+    form = DepositTransForm
     list_display = (
-        'user','mt4_account', 'currency','amount','crypto_address','deposit_crypto','crypto_amount','cellphone_number','status',
+        'get_email','mt4_account', 'currency','amount','crypto_address','deposit_crypto','crypto_amount','cellphone_number','status',
         'created_at','updated_at',
     )
     # search_fields = ('mt4_account', 'fxuser')'user',
@@ -64,6 +120,25 @@ class DepositTransAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_editable = ('status',)
     search_fields = ('user','mt4_account','cellphone_number',)
+    readonly_fields = ('user','mt4_account', 'currency','amount','crypto_address','deposit_crypto','crypto_amount','cellphone_number',)
+
+    fieldsets = (
+        (None, {
+            "fields": (
+                'user', 'mt4_account', 'currency', 'amount', 'crypto_address', 'deposit_crypto', 'crypto_amount', 'cellphone_number',
+                'status'
+            ),
+        }),
+    )
+    
+    def get_readonly_fields(self, request, obj=None):
+        if obj: # obj is not None, so this is an edit
+           return ['user','mt4_account', 'currency','amount','crypto_address','deposit_crypto','crypto_amount','cellphone_number'] # Return a list or tuple of readonly fields' names
+        else: # This is an addition
+            return []
+
+    def get_email(self, obj):
+        return obj.user.email
 
     def save_model(self, request, obj, form, change):
         print(obj.user_id)
@@ -111,10 +186,24 @@ class DepositTransAdmin(admin.ModelAdmin):
                 wallet.save() 
         obj.pre_status = obj.status    
         super().save_model(request, obj, form, change)  
+    
+    get_email.short_description = "Email"
 
 admin.site.register(DepositTransaction,DepositTransAdmin)
 
+
+class DepositTransForm(forms.ModelForm):
+    class Meta:
+        model = WithdrawTransaction
+        fields = '__all__'
+
+        labels = {
+            'user': 'Email',
+        }
+
+
 class WithdrawTransAdmin(admin.ModelAdmin):
+    form = DepositTransForm
     list_display = (
         'mt4_account', 'currency','amount', 'crypto_address','withdraw_crypto','crypto_amount',
         'created_at','updated_at','status',
@@ -135,7 +224,23 @@ class WithdrawTransAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_editable = ('status',)
     search_fields = ('status',)
+    readonly_fields = ('mt4_account', 'currency','amount', 'crypto_address','withdraw_crypto','crypto_amount',)
 
+
+    fieldsets = (
+        (None, {
+            "fields": (
+                'mt4_account', 'currency','amount', 'crypto_address','withdraw_crypto','crypto_amount', 'status'
+            ),
+        }),
+    )
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj: # obj is not None, so this is an edit
+           return ['mt4_account', 'currency','amount', 'crypto_address','withdraw_crypto','crypto_amount'] # Return a list or tuple of readonly fields' names
+        else: # This is an addition
+            return []
+    
     def save_model(self, request, obj, form, change):
 
         if(obj.status == 'A' and obj.pre_status == 'P'):
