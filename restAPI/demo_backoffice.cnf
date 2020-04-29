@@ -1,0 +1,6 @@
+[client] 
+database = fbp_live
+host = 167.99.76.48
+user = fbplive
+password = 4dnjf28dlf
+port = 3306
