@@ -311,7 +311,7 @@ CELERY_BEAT_SCHEDULE = {
 # AWS S3 #
 ##########
 
-# AWS Access
+# # AWS Access
 config_secret = json.loads(open(CONFIG_SETTINGS_COMMON_FILE).read())
 AWS_STORAGE_BUCKET_NAME = config_secret['aws']['s3_bucket_name']
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
