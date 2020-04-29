@@ -156,10 +156,12 @@ sketch
 # Ignore all local history of files
 .history
 .idea/
+
 ### Database ###
-my.cnf
-aws.cnf
-backoffice.cnf
+/restAPI/my.cnf
+/restAPI/demo_backoffice.cnf
+/restAPI/backoffice.cnf
+
 ### AWS ###
 .static_root/
 media
