@@ -25,12 +25,10 @@ from django.http import JsonResponse
 from copy import deepcopy
 import requests
 
-from django_object_actions import takes_instance_or_queryset
 
 # django group , token admin 제거
 admin.site.unregister(Group)
 admin.site.unregister(Token)
-
 
 class IBFilter(admin.SimpleListFilter):
     title = 'ib_code'
@@ -50,17 +48,53 @@ class IBFilter(admin.SimpleListFilter):
 
             return continent.get_descendants(include_self=True)
 
+class IBForm(forms.ModelForm):
+    # ib_website = forms.TextInput(label='IB website', attrs={'width': '50px'})
+
+    class Meta:
+        model = IntroducingBroker
+        fields = ('fxuser', 'ib_code', 'ib_name', 'live_yn','status',)
+
+        labels = {
+            'fxuser': 'Email',
+        }
+
+
 class IBAdmin(DjangoMpttAdmin):
+    form = IBForm
     tree_auto_open = 0
     # actions = ['updateIBtoBackoffice','moveIBtoBackoffice',]
-    list_display = ('id', 'fxuser', 'company_idx', 'ib_code','ib_name','point',
-    'live_yn', 'email', 'send_report', 'referralurl','ib_website','status')
+    list_display = ('id', 'fxuser', 'ib_code','ib_name','point',
+    'live_yn', 'send_report', 'referralurl','shortcut_ib_website','status')
     #list_filter = ('status',)
     #list_filter = (IBFilter,)
-    list_editable = ('company_idx','ib_code','ib_name','point','live_yn','send_report','status')
+    list_editable = ('ib_code','ib_name','live_yn','send_report','status')
     search_fields = ('fxuser','ib_code',)
+    readonly_fields = ('point', 'referralurl')
+
+    fieldsets = (
+        ('', {
+            "fields": (
+                'fxuser', 'ib_code', 'ib_name', 'live_yn','status'
+            ),
+        }),
+    )
     # ordering = ('email',)
     # filter_horizontal = ()
+
+    def shortcut_ib_website(self, obj):
+        ib_website = None
+
+        if obj.ib_website:
+            ib_website = obj.ib_website[:40]+'...'
+
+        return ib_website
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj: # obj is not None, so this is an edit
+           return ['point', 'referralurl'] # Return a list or tuple of readonly fields' names
+        else: # This is an addition
+            return []
 
     def move_view(self, request, object_id):
         request.current_app = self.admin_site.name
@@ -76,6 +110,7 @@ class IBAdmin(DjangoMpttAdmin):
         return JsonResponse(
             dict(success=True)
         )
+
     def do_move(self, instance, position, target_instance):
         print('do_move')
         if position == 'before':
@@ -185,6 +220,7 @@ class IBAdmin(DjangoMpttAdmin):
             self.message_user(request, 'SP_IB_STRUCTURE_EDIT {}'.format(cursor.fetchall())) 
                 
     updateIBtoBackoffice.short_description = "update IB to Backoffice"
+    shortcut_ib_website.short_description = "IB WEBSITE"
 
 admin.site.register(IntroducingBroker, IBAdmin)
 
@@ -203,15 +239,13 @@ class ApplyIBForm(forms.ModelForm):
 
 class ApplyIBAdmin(admin.ModelAdmin):
     form = ApplyIBForm
-    # change_list_template = "admin/user/applyintroducingbroker/change_list.html"
+    
     actions = ['addIBtoBackoffice',]
     list_display = ('_fxuser', 'ib_code','ib_name',
-    'point', 'live_yn', 'email', 'send_report','referralurl','status')
+    'point', 'live_yn', 'send_report','referralurl','status',)
     list_filter = ('status',)
-    list_editable = ('ib_code','ib_name','live_yn','send_report','status')
+    list_editable = ('ib_code','ib_name','live_yn','send_report','status',)
     search_fields = ('fxuser','ib_code',)
-    readonly_fields = ('email',
-    )
 
     fieldsets = (
         ('User Information', {
@@ -221,7 +255,7 @@ class ApplyIBAdmin(admin.ModelAdmin):
         }),
         ('IB Information', {
             "fields": (
-               'ib_code', 'ib_name', 'point', 'live_yn', 'referralurl'
+               'ib_code', 'ib_name', 'point', 'live_yn'
             ),
         }),
         
@@ -234,9 +268,19 @@ class ApplyIBAdmin(admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         backoffice_frame = '<iframe id="backoffice_frame" class="module filtered" style="width:100%;" name="backoffice_frame"></iframe>'
 
+        backoiffce_login_url = 'https://backoffice.fbpasia.com/manager/POST_MANAGER_LOGIN'
+        
+        backoffice_data = {'i_id': settings.BACKOFFICE_ID, 'i_pwd': settings.BACKOFFICE_PWD, 'i_save_info': 0}
+
+        res = requests.post(backoiffce_login_url, data=backoffice_data)
+        admin_url = None
+        if res.status_code==200:
+            admin_url = 'https://backoffice.fbpasia.com/admin'
+        
         extra_context = {"backoffice_subject": "BackOffice Commission Structure",
                         "backoffice_id": settings.BACKOFFICE_ID, 
                         "backoffice_pwd": settings.BACKOFFICE_PWD,
+                        "admin_url": admin_url,
                         "backoffice_frame": backoffice_frame}
 
         
@@ -315,17 +359,58 @@ class ApplyIBAdmin(admin.ModelAdmin):
 admin.site.register(ApplyIntroducingBroker, ApplyIBAdmin)
 
 
+class UserDocumentAdminInline(admin.TabularInline):
+    model = FxUserDocument
+    max_num = 1
 
 
+class UserForm(forms.ModelForm):
+    
+    class Meta:
+        model = FxUser
+        fields = ('first_name', 'last_name', 'user_type', 'user_status', 'postal_code', 
+        'employment_status', 'industry', 'employment_position', 'education_level', 
+        'mobile', 'annual_income', 'income_source', 'expected_deposit','trading_experience', 'trading_period' 
+        )
 
 
 class UserAdmin(admin.ModelAdmin):
+    form = UserForm
     list_display = ('id','email', 'first_name', 'last_name', 'user_type','kj_address','referral_code','user_status')
     list_filter = ('is_admin',)
     list_editable = ('user_status','referral_code')
     search_fields = ('email',)
     ordering = ('email',)
-    filter_horizontal = ()	
+    filter_horizontal = ()
+    verbose_name = 'User'
+    inlines = [UserDocumentAdminInline,]
+
+    fieldsets = (
+        ('', {
+            "fields": (
+                'first_name', 'last_name', 'user_type', 'user_status', 'is_active'
+            ),
+        }),
+        ('Personal Info', {
+            "fields": (
+               'resident_country', 'birthday', 'mobile', 'address', 'city', 'postal_code'
+            ),
+        }),
+        ('Empoyment Info', {
+            "fields": (
+               'employment_status', 'industry', 'employment_position', 'education_level'
+            ),
+        }),
+        ('Financial Info', {
+            "fields": (
+               'annual_income', 'income_source', 'expected_deposit', 'trading_experience', 'trading_period'
+            ),
+        }),
+        )
+
+    def has_add_permission(self, request):
+        return False
+
     def changelist_view(self, request, extra_context=None):
 
         # Aggregate new subscribers per day
@@ -357,8 +442,10 @@ class UserAdmin(admin.ModelAdmin):
                 id = obj, 
                 address = obj.kj_address, 
             )
-        super().save_model(request, obj, form, change)        
+        super().save_model(request, obj, form, change)
+    
 admin.site.register(FxUser, UserAdmin)
+
 
 class DocumentAdmin( admin.ModelAdmin):
     list_display = ('fxuser', 'doc_photo_id', 'doc_photo_id_status' ,'doc_photo_id_updated_at', 'doc_proof_of_residence', 'doc_proof_of_residence_status' ,

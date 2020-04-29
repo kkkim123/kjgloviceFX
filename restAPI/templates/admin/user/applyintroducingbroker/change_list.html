@@ -4,15 +4,7 @@
 
 {% block extrahead %}
 {{ block.super }}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const backoffice_form = django.jQuery("#backoffice_login");
-    backoffice_form.submit();
-    
-});
-</script>
+
 {% endblock %}
 
 {% block content %}

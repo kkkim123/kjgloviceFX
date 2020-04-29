@@ -15,7 +15,8 @@ Including another URLconf
 """
 from allauth.account.views import confirm_email
 from django.urls import include, path
-from django.contrib import admin
+# from django.contrib import admin
+from restAPI.admin import admin_site
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -23,7 +24,7 @@ from user import views as user_views
 from rest_framework_swagger.views import get_swagger_view
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin_site.urls),
     path('user/', include("user.urls")),
     path('fxaccount/', include('fxaccount.urls')),
     path('wallet/', include('wallet.urls')),

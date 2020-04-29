@@ -35,7 +35,8 @@ import {
   EDIT_IB,
   FAIL,
   GET_WALLET,
-  GET_CHART
+  GET_CHART,
+  GET_USER_BALANCE
 } from "./types";
 
 // Get user option
@@ -566,4 +567,16 @@ export const getWallet = () => async (dispatch, getState) => {
      type: GET_CHART,
      payload: res.data.data
    });
+};
+
+// Get User Balance Info (input: user 계좌번호)
+export const getIb = () => async (dispatch, getState) => {
+  const res = await axios.get(
+    ``,
+    tokenConfig(getState)
+  );
+  dispatch({
+    type: GET_USER_BALANCE,
+    payload: res.data
+  });
 };

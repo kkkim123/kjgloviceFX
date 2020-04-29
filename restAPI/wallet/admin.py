@@ -1,17 +1,40 @@
+from django import forms
 from django.contrib import admin
 from web3 import Web3, HTTPProvider
 #from common.utils import TokenUtil
 from .models import Wallet, TransactionHistory
+from user.models import FxUser
 import configparser
 import requests
 
 config = configparser.ConfigParser()
 config.read('common/config/config.ini')
 
-class WalletAdmin( admin.ModelAdmin):
+
+class WalletForm(forms.ModelForm):
+    class Meta:
+        model = Wallet
+        fields = '__all__'
+
+
+class WalletAdmin(admin.ModelAdmin):
     actions = ['getBalance']
     list_display = ('id', 'address', 'kj_balance' , 'eth_balance' , 'updated_at','created_at')
-
+    readonly_fields = ('id', 'address',)
+    
+    fieldsets = (
+        (None, {
+            "fields": (
+                'id', 'address', 'kj_balance', 'eth_balance'
+            ),
+        }),
+    )
+    
+    def get_readonly_fields(self, request, obj=None):
+        if obj: # obj is not None, so this is an edit
+           return ['id','address'] # Return a list or tuple of readonly fields' names
+        else: # This is an addition
+            return []
 
     def getBalance(self, request, queryset):
         if queryset.count() != 1:
@@ -38,8 +61,15 @@ class WalletAdmin( admin.ModelAdmin):
 
 class TransactionAdmin(admin.ModelAdmin):
     actions = None
-    list_display = ('hash', 'confirmations', 'from_address', 'to_address', 'value')
+    list_display = ('user_email', 'hash', 'confirmations', 'from_address', 'to_address', 'value')
     readonly_fields = ('hash', 'confirmations', 'from_address', 'to_address', 'value')
+
+    def user_email(self, obj):
+        try:
+            user_object = FxUser.objects.get(kj_address=obj.to_address)
+            return user_object
+        except FxUser.DoesNotExist:
+            return ''
 
     def get_actions(self, request):
         actions = super().get_actions(request)
