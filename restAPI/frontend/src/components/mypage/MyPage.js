@@ -22,7 +22,7 @@ class MyPage extends Component {
     return (
       <section className="container">
         {/* <MpHeader /> */}
-        <Steps status={user && user.user_status} />
+        <Steps />
         <NoticeBox
           title="Welcome to gloviceFX"
           subtitle=" - your personal client area"
@@ -38,7 +38,7 @@ class MyPage extends Component {
           content2=" Get 30% back on every deposit you make for 30days all the way up to The Big $5000! T&Cs apply"
         />
         <UserInfo data={user} />
-        <Account data={user} />
+        <Account />
         <div className="d-flex justify-content-between my-5">
           <Profit />
           <Overview
@@ -53,7 +53,7 @@ class MyPage extends Component {
             lastUpdate="20/11/22"
           />
         </div>
-        <TradingHistory data={user} />
+        <TradingHistory/>
         {user && user.user_type === "I" && 
           <>
             <IBInfo data={this.props.ib} />

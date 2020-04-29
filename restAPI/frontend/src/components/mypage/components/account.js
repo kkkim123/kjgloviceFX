@@ -31,7 +31,7 @@ class account extends Component {
           <div className="d-flex justify-content-between text-center my-5">
             <div>
              <span className="text-left" style={{fontSize: '1.2rem', fontWeight: '250'}}>
-              {this.props.wallet ? "Your KJ Balance : " + this.props.wallet.kj_balance + " KJ": null }
+              {this.props.wallet ? "Your KJ Balance : " + (this.props.wallet.kj_balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " KJ": null }
              </span>
             </div>
             <div>
@@ -77,12 +77,15 @@ class account extends Component {
           <div className="ml-2" style={{ width: "15%" }}>
             <span>Number</span>
           </div>
-          <div className="ml-2" style={{ width: "20%" }}>
+          <div className="ml-2" style={{ width: "10%" }}>
             <span>Currency</span>
           </div>
           <div className="ml-2" style={{ width: "10%" }}>
             <span>Balance</span>
           </div>
+          <div className="ml-2" style={{ width: "10%" }}>
+            <span>Available</span>
+          </div>          
           <div className="ml-2" style={{ width: "20%" }}>
             <span>Deposit</span>
           </div>
@@ -143,12 +146,15 @@ class account extends Component {
                   <div className="ml-2" style={{ width: "15%" }} onClick={()=>this.handleClick(rowData.mt4_account)}>
                     <span>{rowData.mt4_account}</span>
                   </div>
-                  <div className="ml-2" style={{ width: "20%" }}>
+                  <div className="ml-2" style={{ width: "10%" }}>
                     <span>{base_currency}</span>
                   </div>
                   <div className="ml-2" style={{ width: "10%" }}>
-                    <span>{rowData.balance}</span>
+                    <span>{(rowData.balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                   </div>
+                  <div className="ml-2" style={{ width: "10%" }}>
+                    <span>{rowData.kj_balance ? (rowData.kj_balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0}</span>
+                  </div>                  
                   <div className="ml-2" style={{ width: "20%" }}>
                     {this.props.wallet.kj_balance > 0 ? (<Link
                       to="/mypage/deposit/detail"
@@ -165,7 +171,7 @@ class account extends Component {
                     </Link>) : null}
                   </div>
                   <div className="ml-2" style={{ width: "20%" }}>
-                    {rowData.balance > 0 ? (
+                    {rowData.kj_balance > 0 ? (
                       <Link
                         to="/mypage/withdraw/detail"
                         className="px-3 py-2 rounded-pill"

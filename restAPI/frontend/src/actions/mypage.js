@@ -34,7 +34,8 @@ import {
   GET_IB,
   EDIT_IB,
   FAIL,
-  GET_WALLET
+  GET_WALLET,
+  GET_CHART
 } from "./types";
 
 // Get user option
@@ -556,4 +557,13 @@ export const getWallet = () => async (dispatch, getState) => {
     type: GET_WALLET,
     payload: res.data
   });
+};
+
+ // Get Chart Data
+ export const getProfit = acc => async (dispatch, getState) => {
+   const res = await axios.get(`/fxaccount/dailytrading/${getState().auth.id}/${acc}`, tokenConfig(getState));
+   dispatch({
+     type: GET_CHART,
+     payload: res.data.data
+   });
 };

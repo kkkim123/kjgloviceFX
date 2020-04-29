@@ -62,11 +62,11 @@ html, body, #root, #app  {
 }
 
 section.container {
-  padding: 76px;
+  padding: 60px;
 }
 
 .bgImg {
-  padding: 76px 0px 0px 0px
+  padding: 60px 0px 0px 0px
 }
 
 a:hover {

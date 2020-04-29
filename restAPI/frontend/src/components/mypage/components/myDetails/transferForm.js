@@ -65,34 +65,29 @@ class TransferForm extends Component {
   };
     
   getBalance = e => {
-    this.props.account.filter((c) => {
-      switch (e.target.name) {
-        case "from_account":
-          console.log(c.mt4_account.indexOf(e.target.value))
-          // (c.mt4_account.indexOf(e.target.value) > -1) ?
-          // this.setState({
-          //   from_balance: c.balance
-          // })
-          // :
-          // this.setState({
-          //   from_balance: ""
-          // })
-          break;
-        case "to_account":
-            (c.mt4_account.indexOf(e.target.value) > -1) ?
-            this.setState({
-              to_balance: c.balance
-            })
-            :
-            this.setState({
-              to_balance: ""
-            })          
-          break;        
-      }
-    });
+    let from = "";
+    let to = "";
+    
+    if(e.target.name === "from_account") {
+      from = this.props.account.filter((c) => {
+        return c.mt4_account.indexOf(e.target.value) > -1;
+      });
+      from.length > 0 ? from.map((c)=>{ this.setState({from_balance: c.balance}) }) : this.setState({from_balance: ""})
+    }
+
+    if(e.target.name === "to_account") {
+      to = this.props.account.filter((c) => {
+        return c.mt4_account.indexOf(e.target.value) > -1;
+      });
+      to.length > 0 ? to.map((c)=>{ this.setState({to_balance: c.balance}) }) : this.setState({to_balance: ""})
+    }    
   }
 
   onSubmit = formValues => {
+    if(formValues.amount > this.state.from_balance) {
+      alert("보내는 계좌의 금액보다 클 수 없습니다.")
+      return false;
+    }
     store.dispatch(addTransfer(formValues)).then(() => {
       if (this.props.status === 201) {
         alert("Tranfer 신청 완료");
@@ -135,14 +130,10 @@ class TransferForm extends Component {
                     label="To Account"
                     onChange={this.getBalance}
                   />
-                  <Field
-                    name="to_balance"
-                    component={this.renderField}
-                    placeholder="Plesase Select Account"
-                    label="To Account Balance"
-                    type="text"
-                    readOnly={true}                    
-                  />
+                   <div className="form-label-group">
+                    <label>To Account Balance</label>
+                    <input type="text" className="form-control" placeholder="Plesase Select 'To Account'" readOnly value={this.state.to_balance}/>
+                  </div>                   
                  <Field
                     name="amount"
                     component={this.renderField}
