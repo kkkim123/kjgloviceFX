@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import store from '../../../store';
 import { getProfit } from '../../../actions/mypage';
 import { Bar } from 'react-chartjs-2';
-import Moment from 'moment';
 
 class Profit extends Component {
     state = {
@@ -20,7 +19,7 @@ class Profit extends Component {
         },
         scales:{
             xAxes: [{
-                display: false //this will remove all the x-axis grid lines
+                display: false
             }]
         }
     };
@@ -39,6 +38,7 @@ class Profit extends Component {
     
         // 계좌를 클릭하였을 때
         if (prevProps.accNum !== this.props.accNum) {
+          console.log(this.props.accNum)
           this.setState(
             {
               acc: this.props.accNum,
@@ -85,12 +85,15 @@ class Profit extends Component {
         }
       }
 
+      datasetKeyProvider(){ return Math.random(); }
+
     
     render() {
         return (
             <div className="shadow py-4 px-4 text-left mr-3" style={{ width: "100%", borderRadius: "20px", backgroundColor: "#ffffff", color: "#000000" }}>
             <h3 className="mb-5">Cumulative Profit</h3>
             <Bar
+                datasetKeyProvider={this.datasetKeyProvider}
                 data={this.state.chartData}
                 options={this.options}
                 // width, height 값
