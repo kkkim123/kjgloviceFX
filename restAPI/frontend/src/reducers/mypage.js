@@ -29,7 +29,8 @@ import {
   GET_IB,
   EDIT_IB,
   FAIL,
-  GET_WALLET
+  GET_WALLET,
+  GET_CHART
 } from "../actions/types";
 
 export default (state = {}, action) => {
@@ -53,7 +54,6 @@ export default (state = {}, action) => {
         file: action.payload
       };
     case DELETE_FILE:
-
     case GET_ACCOUNT:
       return {
         ...state,
@@ -141,6 +141,11 @@ export default (state = {}, action) => {
         ...state,
         wallet: action.payload
       };
+    case GET_CHART:
+        return {
+          ...state,
+          data: action.payload
+        };      
     case ADD_FILE:
     case FAIL:
     case EDIT_FILE:

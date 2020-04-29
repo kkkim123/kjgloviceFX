@@ -382,7 +382,6 @@ class tradingHistory extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth,
   history: state.mypage.history,
   account: state.mypage.account,
   accNum: state.mypage.accNum
