@@ -141,7 +141,7 @@ class partners extends Component {
         }}
       >
         <div className="text-left mb-5">
-          <h3>{this.state.acc}'s Commission History</h3>
+          <h3>{this.state.acc === 1 ? null : this.state.acc} Commission History</h3>
           <div className="d-flex justify-content-end my-5">
             <div className="form-span date-input">
               <DatePicker

@@ -87,9 +87,9 @@ class Features extends Component {
                         <div className={cx("title")}>
                             <p>Departments Email</p>
                         </div>
-                        <p>Sales Department : sales@pearlblackfs.com</p>
-                        <p>Support Department: support@pearlblackfs.com</p>
-                        <p>General Inquiries : general@pearlblackfs.com</p>
+                        <p>Sales Department : sales@fbpasia.com</p>
+                        <p>Support Department: support@fbpasia.com</p>
+                        <p>General Inquiries : general@fbpasia.com</p>
                     </div>
                 </div>
             </section>
