@@ -234,7 +234,7 @@ class accountDetail extends Component {
                   </div>
                   <div className="ml-2 my-auto" style={{ width: "10%" }}>
                     <span>
-                      {rowData.status !== "A" || rowData.status !== "S" ? (
+                      {rowData.status === "P" || rowData.status === "R" ? (
                         <button
                           className="btn rounded-pill"
                           type="button"

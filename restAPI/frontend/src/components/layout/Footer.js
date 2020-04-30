@@ -62,7 +62,7 @@ class Footer extends Component {
           <div></div>
 
           <div className="item">
-            <span className="name">HELP</span>
+            <span className="name" ><Link to="company/helpCenter" style={{color:"white"}}>HELP</Link></span>
           </div>
           <div className="d-flex justify-content-center align-content-center flex-wrap">
             <div className="item">

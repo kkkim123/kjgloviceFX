@@ -21,7 +21,8 @@ class Profit extends Component {
             xAxes: [{
                 display: false
             }]
-        }
+        },
+        maintainAspectRatio: false
     };
 
     componentDidUpdate(prevProps, prevState) {
@@ -96,9 +97,6 @@ class Profit extends Component {
                 datasetKeyProvider={this.datasetKeyProvider}
                 data={this.state.chartData}
                 options={this.options}
-                // width, height 값
-                // width={100}
-                // height={100}
             />
         </div>
         );

@@ -4,6 +4,7 @@
 ###### https://www.valentinog.com/blog/drf/#Django_REST_with_React_Django_and_React_together
 ###### https://medium.com/technest/implement-user-auth-in-a-django-react-app-with-knox-fc56cdc9211c
 ***
+
 ### Django
 
 #### 1. python, nodejs, yarn 공식홈페이지 설치
@@ -43,7 +44,10 @@
 
 ~~4. 마이그레이션 적용
 python manage.py makemigrations
-python manage.py migrate~~
+python manage.py 
+
+#### 4. CollectStatic
+```python manage.py collectstatic```
 
 #### 5. 서버 실행 (로컬환경)
 ```python manage.py runserver```
@@ -54,12 +58,68 @@ python manage.py migrate~~
 #### restAPI/frontend 에서 front단 작업 진행
 ```npm install```
 
-#### 작업 후 빌드
-```npm run build```
+#### 작업 후 빌드 (개발용)
+```npm run dev```
 
 ##### 웹팩으로 빌드: frontend/static/frontend/main.js
 ##### 외부 script 사용시: frontend/templates/frontend/index.html
+##### App.js에 컴포넌트를 url로 연결할때: frontend/urls.py 에 추가
 
+***
+### 로컬
+#### frontend/webpack.config.js
+```
+  output: {
+    publicPath: "/static/frontend/"
+    // publicPath: "publicPath: "https://glovicefx.s3.ap-southeast-1.amazonaws.com/static/frontend/"
+  },
+```
+```npm run dev //Watch로 실시간 빌드```
+#### restAPI/settings.py
+```
+//로컬 사용
+##########
+# Local #
+##########
+.
+.
+.
+//아마존 부분 주석
+##########
+# AWS S3 #
+##########
+```
+```
+python manage.py collectstaic   // 빌드된 main.js 파일 로컬의 .static_root로 collectiong
+python manage.py runserver
+```
+***
+### 서버
+#### frontend/webpack.config.js
+```
+  output: {
+    // publicPath: "/static/frontend/"
+    publicPath: "publicPath: "https://glovicefx.s3.ap-southeast-1.amazonaws.com/static/frontend/"
+  },
+```
+```npm run build```
+#### restAPI/settings.py
+```
+//로컬 부분 주석
+##########
+# Local #
+##########
+.
+.
+.
+//아마존 부분 사용
+##########
+# AWS S3 #
+##########
+```
+```
+python manage.py collectstaic   // 빌드된 main.js 파일 아마존의 S3로 collectiong, 터미널로 서버에 접속해서 해도 상관 없음
+```
 ***
 ### AWS 환경
 
@@ -88,15 +148,25 @@ python manage.py migrate~~
 
 ### Celery + RabbitMQ
 
-#### rabbitmq Setting
-```sudo rabbitmq-plugins enable rabbitmq_management ``` (rabbitmq plugin 활성화)
-```sudo service rabbitmq-server restart ``` (rabbitmq server 재시작)
+#### 환경변수 설정
+```export C_FORCE_ROOT='true' ``` (root 권한으로 celery를 돌리겠다는 의미. 필요함)
 
-```sudo rabbitmqctl add_user [ID] [PASSWORD] ``` (계정추가)
-```sudo rabbitmqctl set_user_tags [ID] administrator ``` (관리자 권한 설정)
+#### tempfiles 설정
+```/etc/tmpfiles.d/celery.conf ``` 파일 생성 필요(/var/log/ 경로는 root만 접근 가능하기 때문에 설정해야함)
+~~~
+d /var/run/celery 0755 root root -
+d /var/log/celery 0755 root root -
+~~~
+
+#### rabbitmq Setting
+```sudo rabbitmq-plugins enable rabbitmq_management ``` (rabbitmq plugin 활성화)  
+```sudo service rabbitmq-server restart ``` (rabbitmq server 재시작)  
+
+```sudo rabbitmqctl add_user [ID] [PASSWORD] ``` (계정추가)  
+```sudo rabbitmqctl set_user_tags [ID] administrator ``` (관리자 권한 설정)  
 
 ```sudo rabbitmqctl set_permissions -p / [ID] ".*" ".*" ".*" ```
-(celery에서 rabbitmq로 connection 요청 시 connection error가 날 경우 설정 필요))
+(celery에서 rabbitmq로 connection 요청 시 connection error가 날 경우 설정 필요)  
 
 
 #### Django Setting
@@ -154,35 +224,33 @@ def get_transaction_list():
 ~~~
 
 ##### 5. celery 구동(test 시)
-```celery -A restAPI beat ``` (celery beat 실행)
-```celery -A restAPI worker ``` (celery worker 실행)
+```celery -A restAPI beat ``` (celery beat 실행)  
+```celery -A restAPI worker ``` (celery worker 실행)  
 
 ##### 6. 서버 배포
 ###### 참고자료
-http://docs.celeryproject.org/en/latest/userguide/daemonizing.html#usage-systemd (systemd 방식)
-
-http://jangwon.io/django/study/2018/10/05/(Django)-Celery%EB%A1%9C-Django-%EC%8A%A4%EC%BC%80%EC%A4%84%EB%9F%AC-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-%EB%B0%B0%ED%8F%AC/ (celery + rabbitmq 설치 포함)
-
-https://devlog.jwgo.kr/2019/07/05/celery-daemonization/ (한글내용)
-
-https://jinmay.github.io/2019/11/11/django/django-celery-conf-systemd/ (가상환경에서의 celery 배포)
+http://docs.celeryproject.org/en/latest/userguide/daemonizing.html#usage-systemd (systemd 방식)  
+http://jangwon.io/django/study/2018/10/05/(Django)-Celery%EB%A1%9C-Django-%EC%8A%A4%EC%BC%80%EC%A4%84%EB%9F%AC-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-%EB%B0%B0%ED%8F%AC/ (celery + rabbitmq 설치 포함)  
+https://devlog.jwgo.kr/2019/07/05/celery-daemonization/ (한글내용)  
+https://jinmay.github.io/2019/11/11/django/django-celery-conf-systemd/ (가상환경에서의 celery 배포)  
+https://wangin9.tistory.com/entry/django-celery (celery task 주기 설정)
 
 ###### 작성필요 파일 (작성내용은 참고자료에서 확인)
-``` /etc/conf.d/celery  ``` (celery 변수지정 파일)
-```/etc/systemd/system/celerybeat.service  ``` (celery beat service 구동 파일)
-```/etc/systemd/system/celery.service  ``` (celery service 구동 파일)
-```/etc/tmpfiles.d/celery.conf  ``` (service 파일들 상의 pid 파일과 log파일 권한 설정)
+``` /etc/conf.d/celery  ``` (celery 변수지정 파일)  
+```/etc/systemd/system/celerybeat.service  ``` (celery beat service 구동 파일)  
+```/etc/systemd/system/celery.service  ``` (celery service 구동 파일)  
+```/etc/tmpfiles.d/celery.conf  ``` (service 파일들 상의 pid 파일과 log파일 권한 설정)  
 
 ###### celery 구동
-```sudo systemctl daemon-reload```
-```sudo systemctl restart celerybeat.service``` (celery beat 구동)
-```sudo systemctl restart celery.service``` (celery 구동)
+```sudo systemctl daemon-reload```  
+```sudo systemctl restart celerybeat.service``` (celery beat 구동)  
+```sudo systemctl restart celery.service``` (celery 구동)  
 
 ##### 7. flower
-celery 관리 package
+celery 관리 package  
 
-```pip install flower```
+```pip install flower```  
 
 ###### flower 구동(daemon)
-```sudo systemctl daemon-reload```
-```sudo systemctl start flower```
+```sudo systemctl daemon-reload```  
+```sudo systemctl start flower```  

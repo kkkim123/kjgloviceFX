@@ -69,3 +69,5 @@ export const EDIT_IB = 'EDIT_IB';
 export const GET_WALLET = 'GET_WALLET';
 //차트 데이터 조회
 export const GET_CHART = 'GET_CHART';
+//USER Balance 데이터 조회
+export const GET_USER_BALANCE = 'GET_USER_BALANCE';
