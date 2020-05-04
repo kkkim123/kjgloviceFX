@@ -198,15 +198,17 @@ class partners extends Component {
         ) : (
           <div>No All Commission History</div>
         )}
-        <div className="row justify-content-center">
-          <Pagination
-            activePage={this.state.activePage}
-            itemsCountPerPage={10}
-            totalItemsCount={this.state.totalCnt}
-            pageRangeDisplayed={5}
-            onChange={this.handlePageChange}
-          />
-        </div>
+        {this.props.allHistory && this.props.allHistory.length > 0 ? (
+          <div className="row justify-content-center">
+            <Pagination
+              activePage={this.state.activePage}
+              itemsCountPerPage={10}
+              totalItemsCount={this.state.totalCnt}
+              pageRangeDisplayed={5}
+              onChange={this.handlePageChange}
+            />
+          </div>
+        ) : null}
       </div>
     );
   }

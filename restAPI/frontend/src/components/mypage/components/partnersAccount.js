@@ -80,7 +80,7 @@ class partners extends Component {
                   padding: "0.8rem"
                 }}
               >
-                <div className="ml-2" style={{ width: "25%" }}  onClick={()=>this.handleClick(partner[2][1])}>
+                <div className="ml-2" style={{ width: "25%", cursor: "pointer" }} onClick={()=>this.handleClick(partner[2][1])}>
                   <span>{partner[2][1]}</span>
                 </div>                  
                 <div className="ml-2" style={{ width: "20%" }}>

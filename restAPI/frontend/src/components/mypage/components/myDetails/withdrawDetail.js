@@ -14,8 +14,8 @@ const buttonStyle = {
 
 class WithdrawDetail extends Component {
   state = {
-    isLoad: false,
-    isCnt: 1
+    isCnt: false,
+    page: 1
   };
 
   componentDidMount() {
@@ -62,18 +62,21 @@ class WithdrawDetail extends Component {
           <div className="text-left mb-5">
             <h3>Withdraw History</h3>
             <div className="text-right my-5">
-              <Link
-                to="/mypage/withdraw"
-                className="px-3 py-2 rounded-pill"
-                style={{
-                  color: "#ffffff",
-                  backgroundColor: "#006536",
-                  fontWeight: "bold",
-                  textDecoration: "none"
-                }}
-              >
-                Withdraw
-              </Link>
+              {//mt4 에서 받아논 허용된 balance
+                this.props.account && this.props.account.available > 0 ? (
+                  <Link
+                    to="/mypage/withdraw"
+                    className="px-3 py-2 rounded-pill"
+                    style={{
+                      color: "#ffffff",
+                      backgroundColor: "#006536",
+                      fontWeight: "bold",
+                      textDecoration: "none"
+                    }}
+                  >
+                    Withdraw
+                  </Link>
+                ) : null}
             </div>
           </div>
           <div
@@ -85,24 +88,24 @@ class WithdrawDetail extends Component {
               padding: "0.8rem"
             }}
           >
-            <div className="ml-2" style={{ width: "15%" }}>
+            <div className="ml-2" style={{ width: "10%" }}>
               <span>Account</span>
             </div>
-            <div className="ml-2" style={{ width: "15%" }}>
-              <span>Status</span>
-            </div>
-            <div className="ml-2" style={{ width: "15%" }}>
-              <span>Withdraw Crypto</span>
-            </div>
-            <div className="ml-2" style={{ width: "15%" }}>
-              <span>Crypto Address</span>
+            <div className="ml-2" style={{ width: "10%" }}>
+              <span>Currency</span>
             </div>
             <div className="ml-2" style={{ width: "10%" }}>
               <span>Amount</span>
             </div>
-            <div className="ml-2" style={{ width: "15%" }}>
-              <span>Currency</span>
+            <div className="ml-2" style={{ width: "10%" }}>
+              <span>Withdraw Crypto</span>
             </div>
+            <div className="ml-2" style={{ width: "35%" }}>
+              <span>Crypto Address</span>
+            </div>
+            <div className="ml-2" style={{ width: "10%" }}>
+              <span>Status</span>
+            </div>            
             <div className="ml-2" style={{ width: "15%" }}>
               <span>Cancel</span>
             </div>
@@ -132,12 +135,15 @@ class WithdrawDetail extends Component {
 
               switch (data.withdraw_crypto) {
                 case "0":
+                  withdraw_crypto = "KJ";
+                  break;                
+                case "1":
                   withdraw_crypto = "Bitcoin";
                   break;
-                case "1":
+                case "2":
                   withdraw_crypto = "Ethereum";
                   break;
-                case "2":
+                case "3":
                   withdraw_crypto = "JKL";
                   break;
                 default:
@@ -163,23 +169,23 @@ class WithdrawDetail extends Component {
                   }}
                   key={i}
                 >
-                  <div className="ml-2  my-auto" style={{ width: "15%" }}>
+                  <div className="ml-2  my-auto" style={{ width: "10%" }}>
                     {data.mt4_account}
                   </div>
-                  <div className="ml-2  my-auto" style={{ width: "15%" }}>
-                    <span>{withdraw_status}</span>
-                  </div>
-                  <div className="ml-2  my-auto" style={{ width: "15%" }}>
-                    <span>{withdraw_crypto}</span>
-                  </div>
-                  <div className="ml-2  my-auto" style={{ width: "15%" }}>
-                    <span>{data.crypto_address}</span>
+                  <div className="ml-2  my-auto" style={{ width: "10%" }}>
+                    <span>{currency}</span>
                   </div>
                   <div className="ml-2  my-auto" style={{ width: "10%" }}>
                     <span>{data.crypto_amount}</span>
                   </div>
-                  <div className="ml-2  my-auto" style={{ width: "15%" }}>
-                    <span>{currency}</span>
+                  <div className="ml-2  my-auto" style={{ width: "10%" }}>
+                    <span>{withdraw_crypto}</span>
+                  </div>
+                  <div className="ml-2  my-auto" style={{ width: "35%" }}>
+                    <span>{data.crypto_address}</span>
+                  </div>
+                  <div className="ml-2  my-auto" style={{ width: "10%" }}>
+                    <span>{withdraw_status}</span>
                   </div>
                   <div className="ml-2  my-auto" style={{ width: "15%" }}>
                     <span>
@@ -189,14 +195,14 @@ class WithdrawDetail extends Component {
                           className="btn rounded-pill"
                           style={buttonStyle}
                           onClick={() => {
-                            window.confirm("Are you sure you want to cancel?")
+                            window.confirm("정말 취소하시겠습니까?")
                               ? store
                                   .dispatch(deleteWithdraw(data.id))
                                   .then(() => {
                                     this.setState({
                                       isCnt: true
                                     });
-                                    alert("Canceled.");
+                                    alert("취소되었습니다.");
                                   })
                               : true;
                           }}

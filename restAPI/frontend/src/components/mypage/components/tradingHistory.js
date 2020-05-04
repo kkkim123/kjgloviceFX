@@ -69,7 +69,7 @@ class tradingHistory extends Component {
     if (prevProps.accNum !== this.props.accNum) {
       this.setState(
         {
-          acc: this.props.accNum,
+          acc: this.props.accNum
         },
         () => {
           store.dispatch(
@@ -288,9 +288,13 @@ class tradingHistory extends Component {
             data.symbol = historyRow[1][1];
             data.cmd = historyRow[2][1];
             data.volume = historyRow[3][1];
-            data.open_time = Moment(historyRow[4][1]).format("MM/DD/YYYY HH:mm");
+            data.open_time = Moment(historyRow[4][1]).format(
+              "MM/DD/YYYY HH:mm"
+            );
             data.open_price = historyRow[5][1];
-            data.close_time = Moment(historyRow[8][1]).format("MM/DD/YYYY HH:mm");
+            data.close_time = Moment(historyRow[8][1]).format(
+              "MM/DD/YYYY HH:mm"
+            );
             data.close_price = historyRow[9][1];
             data.profit = historyRow[10][1];
 
@@ -367,15 +371,17 @@ class tradingHistory extends Component {
         ) : (
           <div>No Trading History</div>
         )}
-        <div className="row justify-content-center">
-          <Pagination
-            activePage={this.state.activePage}
-            itemsCountPerPage={10}
-            totalItemsCount={this.state.totalCnt}
-            pageRangeDisplayed={5}
-            onChange={this.handlePageChange}
-          />
-        </div>
+        {this.props.history ? (
+          <div className="row justify-content-center">
+            <Pagination
+              activePage={this.state.activePage}
+              itemsCountPerPage={10}
+              totalItemsCount={this.state.totalCnt}
+              pageRangeDisplayed={5}
+              onChange={this.handlePageChange}
+            />
+          </div>
+        ) : null}
       </div>
     );
   }

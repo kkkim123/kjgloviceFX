@@ -122,7 +122,7 @@ class DocDetail extends Component {
         })
         this.props.history.push("/mypage");
       } else {
-          alert("Please check and register again.");
+        alert("Please check and register again.");
       }
     });
   };

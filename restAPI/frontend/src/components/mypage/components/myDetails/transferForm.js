@@ -14,7 +14,7 @@ class TransferForm extends Component {
   };
 
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
     if (!this.props.account) {
       store.dispatch(getAccount(this.props.auth.id));
     }
@@ -86,6 +86,11 @@ class TransferForm extends Component {
   onSubmit = formValues => {
     if(formValues.amount > this.state.from_balance) {
       alert("It cannot be larger than the amount of the sending account.")
+      return false;
+    }
+
+    if(this.state.from_balance === this.state.to_balance) {
+      alert("The exchange of the same account is impossible.")
       return false;
     }
     store.dispatch(addTransfer(formValues)).then(() => {

@@ -18,7 +18,6 @@ import { connect } from "react-redux";
 
 class MyPage extends Component {
   render() {
-    console.log(this.props.auth);
     const { user } = this.props.auth;
     return (
       <section className="container">
@@ -38,7 +37,10 @@ class MyPage extends Component {
           id=""
           content2=" Get 30% back on every deposit you make for 30days all the way up to The Big $5000! T&Cs apply"
         />
-        <UserInfo data={user} />
+        {/* <div className="d-flex justify-content-between my-5"> */}
+          <UserInfo data={user} />
+          {/* <InBox /> */}
+        {/* </div> */}
         <Account />
         <div className="d-flex justify-content-between my-5">
           <Profit />

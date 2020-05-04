@@ -22,7 +22,7 @@ class DepositDetail extends Component {
     store.dispatch(DepoistList(this.state.page));
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     if (!this.state.isCnt) {
       this.setState(
         {
@@ -60,19 +60,26 @@ class DepositDetail extends Component {
         >
           <div className="text-left mb-5">
             <h3>Deposit History</h3>
+            <div>
+             <span className="text-left" style={{fontSize: '1.2rem', fontWeight: '250'}}>
+              {this.props.wallet ? "Your KJ Balance : " + (this.props.wallet.kj_balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " KJ": null }
+             </span>
+            </div>            
             <div className="text-right my-5">
-              <Link
-                to="/mypage/deposit"
-                className="px-3 py-2 rounded-pill"
-                style={{
-                  color: "#ffffff",
-                  backgroundColor: "#006536",
-                  fontWeight: "bold",
-                  textDecoration: "none"
-                }}
-              >
-                Deposit
-              </Link>
+              {this.props.wallet && this.props.wallet.kj_balance > 0 ? (
+                <Link
+                  to="/mypage/deposit"
+                  className="px-3 py-2 rounded-pill"
+                  style={{
+                    color: "#ffffff",
+                    backgroundColor: "#006536",
+                    fontWeight: "bold",
+                    textDecoration: "none"
+                  }}
+                >
+                  Deposit
+                </Link>
+              ) : null}
             </div>
           </div>
           <div
@@ -84,30 +91,24 @@ class DepositDetail extends Component {
               padding: "0.8rem"
             }}
           >
-            <div className="ml-2" style={{ width: "15%" }}>
-              <span>Account</span>
-            </div>
-            <div className="ml-2" style={{ width: "10%" }}>
-              <span>Status</span>
-            </div>
             <div className="ml-2" style={{ width: "10%" }}>
               <span>Deposit Crypto</span>
             </div>
-            <div className="ml-2" style={{ width: "15%" }}>
-              <span>Crypto Address</span>
-            </div>
-            <div className="ml-2" style={{ width: "10%" }}>
+            <div className="ml-2" style={{ width: "20%" }}>
               <span>Crypto Amount</span>
+            </div>            
+            <div className="ml-2" style={{ width: "15%" }}>
+              <span>Account</span>
             </div>
-            <div className="ml-2" style={{ width: "10%" }}>
+            <div className="ml-2" style={{ width: "20%" }}>
               <span>Currency</span>
-            </div>
-            <div className="ml-2" style={{ width: "10%" }}>
-              <span>Exchange Rate</span>
             </div>
             <div className="ml-2" style={{ width: "10%" }}>
               <span>Amount</span>
             </div>
+            <div className="ml-2" style={{ width: "15%" }}>
+              <span>Status</span>
+            </div>            
             <div className="ml-2" style={{ width: "10%" }}>
               <span>Cancel</span>
             </div>
@@ -116,6 +117,7 @@ class DepositDetail extends Component {
             this.props.deposit.results.map((data, i) => {
               let deposit_status = "";
               let deposit_crypto = "";
+              let currency = "";
 
               switch (data.status) {
                 case "P":
@@ -136,13 +138,24 @@ class DepositDetail extends Component {
 
               switch (data.deposit_crypto) {
                 case "0":
-                  deposit_crypto = "Bitcoin";
+                  deposit_crypto = "KJ";
                   break;
                 case "1":
-                  deposit_crypto = "Ethereum";
+                  deposit_crypto = "Bitcoin";
                   break;
                 case "2":
+                  deposit_crypto = "Ethereum";
+                  break;
+                case "3":
                   deposit_crypto = "JKL";
+                  break;
+                default:
+                  break;
+              }
+
+              switch (data.currency) {
+                case "0":
+                  currency = "USD";
                   break;
                 default:
                   break;
@@ -159,30 +172,24 @@ class DepositDetail extends Component {
                   }}
                   key={i}
                 >
-                  <div className="ml-2  my-auto" style={{ width: "15%" }}>
-                    {data.mt4_account}
-                  </div>
-                  <div className="ml-2  my-auto" style={{ width: "10%" }}>
-                    <span>{deposit_status}</span>
-                  </div>
                   <div className="ml-2  my-auto" style={{ width: "10%" }}>
                     <span>{deposit_crypto}</span>
                   </div>
-                  <div className="ml-2  my-auto" style={{ width: "15%" }}>
-                    <span>{data.crypto_address}</span>
-                  </div>
-                  <div className="ml-2  my-auto" style={{ width: "10%" }}>
+                  <div className="ml-2  my-auto" style={{ width: "20%" }}>
                     <span>{data.crypto_amount}</span>
                   </div>
-                  <div className="ml-2  my-auto" style={{ width: "10%" }}>
-                    <span>{data.currency}</span>
+                  <div className="ml-2  my-auto" style={{ width: "15%" }}>
+                    {data.mt4_account}
                   </div>
-                  <div className="ml-2  my-auto" style={{ width: "10%" }}>
-                    <span>{data.exchange_rate}</span>
+                  <div className="ml-2  my-auto" style={{ width: "20%" }}>
+                    <span>{currency}</span>
                   </div>
                   <div className="ml-2  my-auto" style={{ width: "10%" }}>
                     <span>{data.amount}</span>
-                  </div>
+                  </div>                  
+                  <div className="ml-2  my-auto" style={{ width: "15%" }}>
+                    <span>{deposit_status}</span>
+                  </div>                  
                   <div className="ml-2  my-auto" style={{ width: "10%" }}>
                     <span>
                       {data.status === "P" ? (
@@ -203,7 +210,7 @@ class DepositDetail extends Component {
                               : true;
                           }}
                         >
-                          Delete
+                          Cancel
                         </button>
                       ) : null}
                     </span>
@@ -236,11 +243,11 @@ class DepositDetail extends Component {
 }
 
 const mapStateToProps = state => ({
-  account: state.mypage.account,
   auth: state.auth,
-  deposit: state.mypage.deposit
+  deposit: state.mypage.deposit,
+  wallet: state.mypage.wallet
 });
 
-export default DepositDetail = connect(mapStateToProps, { deleteDeposit })(
+export default DepositDetail = connect(mapStateToProps, { deleteDeposit,DepoistList })(
   DepositDetail
 );

@@ -34,14 +34,14 @@ class UserPwdEdit extends Component {
   };
 
   onSubmit = formValues => {
-      try {
-        store.dispatch(editPassword(formValues))
-        alert("Your password has been changed.")
-        this.props.logout()
-      } catch (error) {
-        console.log(error);
-        alert("Please try again in a few minutes.")
-      }
+    try {
+      store.dispatch(editPassword(formValues))
+      alert("Your password has been changed.")
+      this.props.logout()
+    } catch (error) {
+      console.log(error);
+      alert("Please try again in a few minutes.")
+    }
 
   };
 
