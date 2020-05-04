@@ -18,6 +18,7 @@ import { connect } from "react-redux";
 
 class MyPage extends Component {
   render() {
+    console.log(this.props.auth);
     const { user } = this.props.auth;
     return (
       <section className="container">
@@ -41,17 +42,7 @@ class MyPage extends Component {
         <Account />
         <div className="d-flex justify-content-between my-5">
           <Profit />
-          <Overview
-            balance="4526.24"
-            equity="4552.52"
-            floatingPL="-"
-            closedProfit="-"
-            freeMargin="-474.35"
-            marginInUse="0.00"
-            marginLevel="-"
-            accountType="-"
-            lastUpdate="20/11/22"
-          />
+          <Overview />
         </div>
         <TradingHistory/>
         {user && user.user_type === "I" && 

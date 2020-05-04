@@ -1,49 +1,89 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from "react-redux";
+import store from '../../../store';
+import { getOverview } from '../../../actions/mypage';
 
-const Overview = (Props) => {
-    return (
-        <div className="shadow py-4 px-4 text-left" style={{ width: "100%", borderRadius: "20px", backgroundColor: "#ffffff", color: "#000000" }}>
-            <h3>Overview</h3>
-            <br></br>
-            <br></br>
-            <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
-                <div className="ml-1"><span>Balance:</span></div>
-                <div className="text-center" ><span>{Props.balance}</span></div>
-            </div>
-            <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
-                <div className="ml-1"><span>Equity:</span></div>
-                <div className="text-center" ><span>{Props.equity}</span></div>
-            </div>
-            <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
-                <div className="ml-1"><span>Floating P/L:</span></div>
-                <div className="text-center" ><span>{Props.floatingPL}</span></div>
-            </div>
-            <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
-                <div className="ml-1"><span>Closed profit:</span></div>
-                <div className="text-center" ><span>{Props.closedProfit}</span></div>
-            </div>
-            <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
-                <div className="ml-1"><span>Free margin:</span></div>
-                <div className="text-center" ><span>{Props.freeMargin}</span></div>
-            </div>
-            <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
-                <div className="ml-1"><span>Margin in use:</span></div>
-                <div className="text-center" ><span>{Props.marginInUse}</span></div>
-            </div>
-            <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
-                <div className="ml-1"><span>Margin Level:</span></div>
-                <div className="text-center" ><span>{Props.marginLevel}</span></div>
-            </div>
-            <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
-                <div className="ml-1"><span>Account type:</span></div>
-                <div className="text-center" ><span>{Props.accountType}</span></div>
-            </div>
-            <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
-                <div className="ml-1"><span>Last Update:</span></div>
-                <div className="text-center" ><span>{Props.lastUpdate}</span></div>
-            </div>
-        </div>
-    );
-};
 
-export default Overview;
+class Overview extends Component {
+
+    state = {
+        acc: "",
+        isLoad: false
+    };
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.account && !this.state.isLoad) {
+            this.setState({
+                acc: this.props.account[0].mt4_account,
+                isLoad: true
+            },()=>{
+                this.props.getOverview(this.state.acc);
+            });
+        }
+
+        // 계좌를 클릭하였을 때
+        if (prevProps.accNum !== this.props.accNum) {
+            this.setState(
+              {
+                acc: this.props.accNum,
+              },
+              () => {this.props.getOverview(this.state.acc)}
+            );
+          }
+    }
+    
+    render() {
+        return (
+            <div className="shadow py-4 px-4 text-left" style={{ width: "100%", borderRadius: "20px", backgroundColor: "#ffffff", color: "#000000" }}>
+                <h3>Overview</h3>
+                <br></br>
+                <br></br>
+                    <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
+                        <div className="ml-1"><span>Balance:</span></div>
+                        <div className="text-center" ><span>{this.props.info ? this.props.info.balance : "-"}</span></div>
+                    </div>
+                    <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
+                        <div className="ml-1"><span>Equity:</span></div>
+                        <div className="text-center" ><span>{this.props.info? this.props.info.equity.toFixed(3) : "-"}</span></div>
+                    </div>
+                    <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
+                        <div className="ml-1"><span>Floating P/L:</span></div>
+                        <div className="text-center" ><span>{this.props.info? this.props.info.floating_profit.toFixed(3) : "-"}</span></div>
+                    </div>
+                    <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
+                        <div className="ml-1"><span>Closed profit:</span></div>
+                        <div className="text-center" ><span>{this.props.info? this.props.info.closedProfit : "-"}</span></div>
+                    </div>
+                    <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
+                        <div className="ml-1"><span>Free margin:</span></div>
+                        <div className="text-center" ><span>{this.props.info? this.props.info.freeMargin : "-"}</span></div>
+                    </div>
+                    <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
+                        <div className="ml-1"><span>Margin in use:</span></div>
+                        <div className="text-center" ><span>{this.props.info? this.props.info.margin : "-"}</span></div>
+                    </div>
+                    <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
+                        <div className="ml-1"><span>Margin Level:</span></div>
+                        <div className="text-center" ><span>{this.props.info ? this.props.info.margin_level.toFixed(3) : "-"}</span></div>
+                    </div>
+                    <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
+                        <div className="ml-1"><span>Leverage:</span></div>
+                        <div className="text-center" ><span>{this.props.info ? "1:"+this.props.info.leverage : "-"}</span></div>
+                    </div>
+                    <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
+                        <div className="ml-1"><span>Last Update:</span></div>
+                        <div className="text-center" ><span>{this.props.info? this.props.info.lastUpdate : "-"}</span></div>
+                    </div>
+                
+            </div>
+        );
+    }
+
+}
+
+const mapStateToProps = state => ({
+    account: state.mypage.account,
+    accNum: state.mypage.accNum,
+    info: state.mypage.info
+  });
+
+export default connect(mapStateToProps, {getOverview})(Overview);

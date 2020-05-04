@@ -95,6 +95,8 @@ class DepositForm extends Component {
   };
 
   render() {
+    console.log(this.props);
+    console.log(props.location.accNum);
     return (
       <section className="container">
         <div className="card card-signin my-5">

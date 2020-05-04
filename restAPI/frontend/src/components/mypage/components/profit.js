@@ -3,12 +3,11 @@ import { connect } from "react-redux";
 import store from '../../../store';
 import { getProfit } from '../../../actions/mypage';
 import { Bar } from 'react-chartjs-2';
-
 class Profit extends Component {
     state = {
         acc: "",
         isLoad: false,
-        chartData: []
+        chartData: { datasets:[], labels:[] }
     }
     chartX = [];
     chartY_1 = [];
@@ -21,9 +20,9 @@ class Profit extends Component {
             xAxes: [{
                 display: false
             }]
-        }
+        },
+        maintainAspectRatio: false
     };
-
     componentDidUpdate(prevProps, prevState) {
         // 처음 시작 시 계좌리스트의 제일 첫번째 계좌로 차트 데이터 생성
         if (this.props.account && !this.state.isLoad) {
@@ -35,7 +34,6 @@ class Profit extends Component {
             () => {store.dispatch(getProfit(this.state.acc))}
           );
         }
-    
         // 계좌를 클릭하였을 때
         if (prevProps.accNum !== this.props.accNum) {
           console.log(this.props.accNum)
@@ -46,7 +44,6 @@ class Profit extends Component {
             () => {store.dispatch(getProfit(this.state.acc))}
           );
         }
-
         //차트 데이터 생성(변경) 시 X,Y 축 데이터 삽입
         if((prevProps.data !== this.props.data) && this.state.isLoad) {
             this.chartX = [];
@@ -84,31 +81,24 @@ class Profit extends Component {
             })
         }
       }
-
       datasetKeyProvider(){ return Math.random(); }
-
-    
     render() {
         return (
-            <div className="shadow py-4 px-4 text-left mr-3" style={{ width: "100%", borderRadius: "20px", backgroundColor: "#ffffff", color: "#000000" }}>
+            <div className="shadow py-4 px-4 text-left mr-3" style={{ width: "100%", borderRadius: "20px", backgroundColor: "#FFFFFF", color: "#000000" }}>
             <h3 className="mb-5">Cumulative Profit</h3>
+            {this.state.chartData ?
             <Bar
                 datasetKeyProvider={this.datasetKeyProvider}
                 data={this.state.chartData}
                 options={this.options}
-                // width, height 값
-                // width={100}
-                // height={100}
-            />
+            /> : null}
         </div>
         );
     }
 }
-
 const mapStateToProps = state => ({
     account: state.mypage.account,
     accNum: state.mypage.accNum,
     data: state.mypage.data
   });
-  
 export default connect(mapStateToProps, { getProfit })(Profit);

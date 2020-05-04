@@ -112,7 +112,7 @@ class UserRegEdit2 extends Component {
         });
         this.props.history.push("/mypage");
       } else {
-        alert("확인 후 다시 등록해주세요.");
+        alert("Please check and register again.");
       }
     });
   };

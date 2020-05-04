@@ -189,14 +189,14 @@ class WithdrawDetail extends Component {
                           className="btn rounded-pill"
                           style={buttonStyle}
                           onClick={() => {
-                            window.confirm("정말 취소하시겠습니까?")
+                            window.confirm("Are you sure you want to cancel?")
                               ? store
                                   .dispatch(deleteWithdraw(data.id))
                                   .then(() => {
                                     this.setState({
                                       isCnt: true
                                     });
-                                    alert("취소되었습니다.");
+                                    alert("Canceled.");
                                   })
                               : true;
                           }}

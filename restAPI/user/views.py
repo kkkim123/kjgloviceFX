@@ -175,11 +175,10 @@ class QueryQuotesView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        result_data = []
-
         try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            result_data = []
+
             # main server 연결
             sock.connect(('192.109.15.27', 443))
             # quotes string 선언
@@ -212,3 +211,23 @@ class QueryQuotesView(APIView):
 
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST, data=None)
+
+
+class QueryOverViewData(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            # req = requests.get('http://localhost:9090/?account={}'.format(kwargs['account']))
+            req = requests.get('http://45.32.18.24:9292/?account={}'.format(kwargs['account']))
+            
+            result = None
+
+            if req.status_code == 200:
+                json_data = json.loads(req.content.decode('utf-8'))
+                result = json_data
+
+            return Response(status=status.HTTP_200_OK, data=result)
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=None)
+        

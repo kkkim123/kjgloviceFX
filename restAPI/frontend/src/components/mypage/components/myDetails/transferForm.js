@@ -85,18 +85,18 @@ class TransferForm extends Component {
 
   onSubmit = formValues => {
     if(formValues.amount > this.state.from_balance) {
-      alert("보내는 계좌의 금액보다 클 수 없습니다.")
+      alert("It cannot be larger than the amount of the sending account.")
       return false;
     }
     store.dispatch(addTransfer(formValues)).then(() => {
       if (this.props.status === 201) {
-        alert("Tranfer 신청 완료");
+        alert("Tranfer Application completed");
         this.setState({
           isLoad: false
         });
         this.props.history.go('/mypage/transfer/detail')
       } else {
-        alert("다시 신청해주세요");
+        alert("Please apply again.");
       }
     });
   };

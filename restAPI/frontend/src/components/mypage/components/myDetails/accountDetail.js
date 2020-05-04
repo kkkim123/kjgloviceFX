@@ -27,9 +27,9 @@ class accountDetail extends Component {
   }
 
   delAccount = id => {
-    window.confirm("정말 취소 하시겠습니까?") ? 
+    window.confirm("Are you sure you want to cancel?") ? 
     store.dispatch(delAccount(id)).then(()=>{
-      alert("취소되었습니다.");
+      alert("Canceled.");
       this.setState({isLoad: true})
     })
     : 

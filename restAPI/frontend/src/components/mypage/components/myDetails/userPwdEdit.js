@@ -36,11 +36,11 @@ class UserPwdEdit extends Component {
   onSubmit = formValues => {
       try {
         store.dispatch(editPassword(formValues))
-        alert("비밀번호가 변경되었습니다.")
+        alert("Your password has been changed.")
         this.props.logout()
       } catch (error) {
         console.log(error);
-        alert("잠시 후 다시 시도해주세요")
+        alert("Please try again in a few minutes.")
       }
 
   };
