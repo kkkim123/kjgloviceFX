@@ -570,12 +570,13 @@ export const getWallet = () => async (dispatch, getState) => {
 };
 
 // Get User Balance Info (input: user 계좌번호)
-export const getIb = () => async (dispatch, getState) => {
+export const getOverview = acc => async (dispatch, getState) => {
   const res = await axios.get(
-    ``,
+    `/user/mypage/overview/${acc}`,
     tokenConfig(getState)
   );
-  dispatch({
+  dispatch(
+    {
     type: GET_USER_BALANCE,
     payload: res.data
   });

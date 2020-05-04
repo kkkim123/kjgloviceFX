@@ -111,7 +111,7 @@ class partners extends Component {
 
   // 페이지가 변경될때
   handlePageChange = pageNumber => {
-    alert("준비 중입니다.");
+    alert("Coming soon.");
     // this.setState(
     //   {
     //     activePage: pageNumber,

@@ -43,10 +43,14 @@ class DailyTradingViewSet(viewsets.ModelViewSet):
             cursor.execute("select CLOSE_TIME as date, PROFIT as profit"
             + " from MT4_TRADES where LOGIN = '" + str(kwargs['mt4_account']) + "';")
 
-            df = pd.DataFrame(cursor.fetchall())
-            df.columns=[col[0] for col in cursor.description] 
-            df = df.set_index(['date'])
-            df.index = pd.to_datetime(df.index, unit='s')
+            
+            if cursor.fetchall():
+                df = pd.DataFrame(cursor.fetchall())
+                df.columns=[col[0] for col in cursor.description] 
+                df = df.set_index(['date'])
+                df.index = pd.to_datetime(df.index, unit='s')
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST, data=None)
 
         daily_df = df.resample('D').sum()
         daily_df.index = daily_df.index.strftime('%Y-%m-%d')

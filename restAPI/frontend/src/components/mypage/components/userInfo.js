@@ -13,7 +13,7 @@ class UserInfo extends Component {
   };
 
   handleClick = () => {
-    alert("수정 페이지로 이동합니다.");
+    alert("Go to the edit page.");
   };
 
   render() {
