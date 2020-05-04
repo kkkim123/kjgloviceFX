@@ -91,7 +91,7 @@ class Profit extends Component {
                 datasetKeyProvider={this.datasetKeyProvider}
                 data={this.state.chartData}
                 options={this.options}
-            /> : null}
+            />
         </div>
         );
     }

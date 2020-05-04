@@ -21,7 +21,7 @@ class ResetConfirm extends Component {
                 </p>
                 <p className="mb-4">
                   Please contact us at
-                  <span className="link"> support@pearlblackfs.com</span> if you
+                  <span className="link"> support@fbpasia.com</span> if you
                   do not receive it within a few minutes.
                 </p>
                 <div className="form-signin">

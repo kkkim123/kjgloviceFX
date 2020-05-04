@@ -59,9 +59,9 @@ believe this is the only right way of doing a business.'
             <div className="mt-5 py-3">
                 <p className="title">Departments Email</p>
                 <div className="content">
-                    <p>Sales Department : sales@pearlblackfs.com</p>
-                    <p>Support Department: support@pearlblackfs.com</p>
-                    <p>General Inquiries : general@pearlblackfs.com</p>
+                    <p>Sales Department : sales@fbpasia.com</p>
+                    <p>Support Department: support@fbpasia.com</p>
+                    <p>General Inquiries : general@fbpasia.com</p>
                 </div>
             </div>
             {/* <div className="row" */}

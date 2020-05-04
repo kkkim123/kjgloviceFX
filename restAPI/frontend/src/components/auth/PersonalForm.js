@@ -51,7 +51,7 @@ class PersonalForm extends Component {
       formValues = Object.assign(formValues,oriData)
       localStorage.removeItem('register');
       this.props.register(formValues).then(()=>{
-        if(this.props.status === 201) {
+        if(this.props.status === 201 || this.props.status === 200) {
           alert("회원가입이 완료되었습니다.")
           this.props.history.push("/main");
         } else {

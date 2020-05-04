@@ -4,6 +4,7 @@
 ###### https://www.valentinog.com/blog/drf/#Django_REST_with_React_Django_and_React_together
 ###### https://medium.com/technest/implement-user-auth-in-a-django-react-app-with-knox-fc56cdc9211c
 ***
+
 ### Django
 
 #### 1. python, nodejs, yarn 공식홈페이지 설치
@@ -43,7 +44,10 @@
 
 ~~4. 마이그레이션 적용
 python manage.py makemigrations
-python manage.py migrate~~
+python manage.py 
+
+#### 4. CollectStatic
+```python manage.py collectstatic```
 
 #### 5. 서버 실행 (로컬환경)
 ```python manage.py runserver```
@@ -54,12 +58,68 @@ python manage.py migrate~~
 #### restAPI/frontend 에서 front단 작업 진행
 ```npm install```
 
-#### 작업 후 빌드
-```npm run build```
+#### 작업 후 빌드 (개발용)
+```npm run dev```
 
 ##### 웹팩으로 빌드: frontend/static/frontend/main.js
 ##### 외부 script 사용시: frontend/templates/frontend/index.html
+##### App.js에 컴포넌트를 url로 연결할때: frontend/urls.py 에 추가
 
+***
+### 로컬
+#### frontend/webpack.config.js
+```
+  output: {
+    publicPath: "/static/frontend/"
+    // publicPath: "publicPath: "https://glovicefx.s3.ap-southeast-1.amazonaws.com/static/frontend/"
+  },
+```
+```npm run dev //Watch로 실시간 빌드```
+#### restAPI/settings.py
+```
+//로컬 사용
+##########
+# Local #
+##########
+.
+.
+.
+//아마존 부분 주석
+##########
+# AWS S3 #
+##########
+```
+```
+python manage.py collectstaic   // 빌드된 main.js 파일 로컬의 .static_root로 collectiong
+python manage.py runserver
+```
+***
+### 서버
+#### frontend/webpack.config.js
+```
+  output: {
+    // publicPath: "/static/frontend/"
+    publicPath: "publicPath: "https://glovicefx.s3.ap-southeast-1.amazonaws.com/static/frontend/"
+  },
+```
+```npm run build```
+#### restAPI/settings.py
+```
+//로컬 부분 주석
+##########
+# Local #
+##########
+.
+.
+.
+//아마존 부분 사용
+##########
+# AWS S3 #
+##########
+```
+```
+python manage.py collectstaic   // 빌드된 main.js 파일 아마존의 S3로 collectiong, 터미널로 서버에 접속해서 해도 상관 없음
+```
 ***
 ### AWS 환경
 
