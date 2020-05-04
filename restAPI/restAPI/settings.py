@@ -117,7 +117,7 @@ DATABASES = {
     'backOffice': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': "./backoffice.cnf",
+            'read_default_file': "./demo_backoffice.cnf",
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"',
         },
     }
