@@ -49,7 +49,7 @@ class Footer extends Component {
           <div className="item pt-2">
             <span className="register-button">
               {!isAuthenticated ? (
-                <Link to="/register/user">Register</Link>
+                <Link to="/login">Sign in</Link>
               ) : (
                 <Link onClick={this.props.logout} to="/login">Logout</Link>
                   // <a onClick={this.props.logout}>Logout</a>

@@ -37,6 +37,15 @@ class MyPage extends Component {
           id=""
           content2=" Get 30% back on every deposit you make for 30days all the way up to The Big $5000! T&Cs apply"
         />
+        {user && user.user_status >= 9 && 
+          <NoticeBox
+            title="Start Trading!"
+            subtitle=""
+            content1="You've come to the last level before you make a deal at gloviceFX!"
+            id=""
+            content2=" Please deposit the money to KJ address and finish it!"
+          />
+        }
         {/* <div className="d-flex justify-content-between my-5"> */}
           <UserInfo data={user} />
           {/* <InBox /> */}

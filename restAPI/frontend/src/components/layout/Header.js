@@ -40,7 +40,7 @@ class Header extends Component {
           <Link className="nav-link" to="/login">My Page</Link>
         </li>
         <li className="nav-item item">
-          <Link className="nav-link register-content rounded-pill" to="/register/user" >Register</Link>
+          <Link className="nav-link register-content rounded-pill" to="/login" >Sign in</Link>
         </li>
       </>      
       // <>

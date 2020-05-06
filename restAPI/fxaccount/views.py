@@ -39,6 +39,7 @@ class DailyTradingViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         permission_classes=[IsFKOwnerOnly,IsAuthenticated]
+        print(str(kwargs['mt4_account']))
         with connections['backOffice'].cursor() as cursor:
             cursor.execute("select CLOSE_TIME as date, PROFIT as profit"
             + " from MT4_TRADES where LOGIN = '" + str(kwargs['mt4_account']) + "';")

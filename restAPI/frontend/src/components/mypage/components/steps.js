@@ -23,12 +23,13 @@ class steps extends Component {
     step1Link: "#",
     step2Link: "#",
     step3Link: "#",
-    step4Link: "#",
     step1Color: emptyCircle,
     step2Color: emptyCircle,
     step3Color: emptyCircle,
     step4Color: emptyCircle
   };
+
+  myRef = React.createRef()
 
   componentDidMount() {
     if (this.props.auth.user) {
@@ -86,6 +87,7 @@ class steps extends Component {
         });
         break;
       case 8:
+      case 9:  
         this.setState({
           step1Link: "/mypage/details/employment",
           step2Link: "/mypage/details/document/detail",
@@ -95,6 +97,17 @@ class steps extends Component {
           step3Color: fullCircle
         });
         break;
+      case 10:
+        this.setState({
+          step1Link: "/mypage/details/employment",
+          step2Link: "/mypage/details/document/detail",
+          step3Link: "/mypage/details/account/detail",
+          step1Color: fullCircle,
+          step2Color: fullCircle,
+          step3Color: fullCircle,
+          step4Color: fullCircle
+        });
+        break;           
       default:
         break;
     }
@@ -108,7 +121,6 @@ class steps extends Component {
       step1Link,
       step2Link,
       step3Link,
-      step4Link,
       step1Color,
       step2Color,
       step3Color,
@@ -167,7 +179,7 @@ class steps extends Component {
               className="h-50"
               style={{ borderBottom: "2px solid #006536", width: "80px" }}
             ></div>
-            <Link style={linkHover} to={step4Link}>
+            <Link style={linkHover} to="#">
               <div
                 className="d-flex justify-content-center align-items-center rounded-circle trading"
                 style={step4Color}
