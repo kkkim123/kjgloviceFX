@@ -102,62 +102,25 @@ FxAccountView = FxAccountViewSet.as_view({
     'get': 'list',
 })
 AlterFxAccount = FxAccountViewSet.as_view({
-    #'put': 'update',
-    #'patch': 'partial_update',
     'delete' : 'destroy',
 })
-    # def get_queryset(self):
-    #     return FxAccount.objects.get(id=self.request.user
-#Person.filter(name='신사임당').exclude('male')
-#신규 요청, 요청내역 조회 , 취소
-<<<<<<< HEAD
 
-=======
->>>>>>> 84ccb1f1e1b707f4faf4f084a1d30f0f8bc3f998
+#신규 요청, 요청내역 조회 , 취소
 class FxAccountTransferViewSet(viewsets.ModelViewSet):
     permission_classes=[IsAuthenticated]  
     queryset = FxAccountTransaction.objects.all()
     serializer_class = FxAccountTransactionSerializer
     lookup_field = 'user'
-<<<<<<< HEAD
-
-=======
->>>>>>> 84ccb1f1e1b707f4faf4f084a1d30f0f8bc3f998
     def list(self, request, *args, **kwargs):
         permission_classes=[IsOwnerOnly,IsAuthenticated]
         deposit = get_list_or_404(self.queryset, user=kwargs['user'])
         page = self.paginate_queryset(deposit)
-<<<<<<< HEAD
-
-=======
->>>>>>> 84ccb1f1e1b707f4faf4f084a1d30f0f8bc3f998
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(deposit, many=True)
         return Response(serializer.data)
-<<<<<<< HEAD
-=======
-    def destroy(self, request, user, pk):   
-        permission_classes=[IsOwnerOnly,IsAuthenticated]
-        instance = FxAccountTransaction.objects.get(user=user,pk = pk)
-        if (instance.status == 'P') :
-            instance.delete()
-            serializer = FxAccountTransactionSerializer(instance)
-            return Response(status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_304_NOT_MODIFIED)
-
-Transfer = FxAccountTransferViewSet.as_view({
-    'post' : 'create',
-    'get': 'list',
-})
-AlterTransfer = FxAccountTransferViewSet.as_view({
-    #'put': 'update',
-    #'patch': 'partial_update',
-    'delete' : 'destroy',
-})
->>>>>>> 84ccb1f1e1b707f4faf4f084a1d30f0f8bc3f998
-
+        
     def destroy(self, request, user, pk):   
         permission_classes=[IsOwnerOnly,IsAuthenticated]
         instance = FxAccountTransaction.objects.get(user=user,pk = pk)
@@ -173,42 +136,8 @@ Transfer = FxAccountTransferViewSet.as_view({
     'get': 'list',
 })
 AlterTransfer = FxAccountTransferViewSet.as_view({
-    #'put': 'update',
-    #'patch': 'partial_update',
     'delete' : 'destroy',
 })
-# class TradingHistoryViewSet(viewsets.ModelViewSet):
-#     #permission_classes=[IsFKOwnerOnly,IsAuthenticated]
-#     def get(self,request,*args, **kwargs):
-#         #permission_classes=[IsFKOwnerOnly,IsAuthenticated]
-#         from_date = request.data['from_date']
-#         to_date = request.data['to_date']
-
-#         queryset = FxAccount.objects.filter(fxuser = kwargs['user'])
-#         #serializer_class = FxAccountSerializerkwargs['user']
-#         #accRows = queryset
-#         #print(queryset[0].mt4_account)
-#         historyRows = []
-#         for acc in queryset : 
-#             with connections['backOffice'].cursor() as cursor:
-#                 cursor.execute("set @CumSum := 0;")
-#                 cursor.execute("select LOGIN as mt4_account, SYMBOL, CMD, VOLUME, OPEN_TIME, OPEN_PRICE, SL, TP, CLOSE_TIME, CLOSE_PRICE, PROFIT,"
-#                 + "(@CumSum := @CumSum + PROFIT) as TOT_PROFIT from MT4_TRADES where LOGIN = " + acc.mt4_account 
-#                 +" AND OPEN_TIME >=" + from_date  
-#                 +" AND OPEN_TIME <=" + to_date  
-#                 +" AND CMD < 5 order by OPEN_TIME;")
-#                 #print(cursor.description)
-#                 columns = [col[0] for col in cursor.description]
-#                 historyRows += [list(zip(columns, row)) for row in cursor.fetchall()]
-#                 #historyRows.update(historyRows2)  SUM ('PROFIT') OVER (ORDER BY 'TICKET' ASC) as TOT_PROFIT
-#         json_val = json.dumps(historyRows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
-
-#         return HttpResponse(json_val)
-
-# TradingHistory = TradingHistoryViewSet.as_view({
-#     'post' : 'create',
-#     'get': 'list',
-# })
 
 #조회
 class TradingHistoryViews(generics.ListAPIView):
