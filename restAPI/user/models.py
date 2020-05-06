@@ -282,6 +282,7 @@ class ApplyIntroducingBroker(models.Model):
     fxuser = models.OneToOneField(FxUser, on_delete=models.CASCADE)
     company_idx = models.IntegerField(default = 1, blank=True, null=True)
     parent_idx = models.IntegerField(default = 69, blank=True, null=True)
+    parent_name = models.CharField(blank=True, max_length=128, null=True)
     ib_code = models.IntegerField(blank=True, null=True)
     ib_name = models.CharField(blank=True, max_length=36)
     point = models.IntegerField(blank=True, null=True)

@@ -242,7 +242,7 @@ class ApplyIBAdmin(admin.ModelAdmin):
     form = ApplyIBForm
     
     actions = ['chkIBinfoBackoffice','addIBtoBackoffice',]
-    list_display = ('_fxuser', 'ib_code','ib_name',
+    list_display = ('parent_name', '_fxuser', 'ib_code','ib_name',
     'point', 'live_yn', 'send_report','referralurl','status',)
     list_filter = ('status',)
     list_editable = ('ib_code','ib_name','live_yn','send_report','status',)
@@ -371,6 +371,7 @@ class ApplyIBAdmin(admin.ModelAdmin):
             cursor.execute("select IDX, IB_NAME from IB_STRUCTURE where IB_LOGIN = '" + str(user.referral_code) +"';")
             for row in cursor.fetchall():
                 queryset.update(parent_idx=row[0])
+                queryset.update(parent_name=row[1]) 
                 self.message_user(request, 'Get Parent Info   {}'.format(row[1]))
 
             cursor.nextset()

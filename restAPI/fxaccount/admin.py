@@ -55,9 +55,23 @@ class FxAccountAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         fxuser = FxUser.objects.get(id = obj.user_id)
         #print(len(obj.mt4_account))
-        if(len(obj.mt4_account) > 4 and 8 > int(fxuser.user_status)):
+        if(len(obj.mt4_account) > 4 and 8 > int(fxuser.user_status)):          
             fxuser.user_status = '8'     
             fxuser.save()    
+                                            # IN i_company_id int, 
+											# IN i_account int ,
+											# IN i_seq int,
+											# IN i_ib_login int,
+											# IN i_ib_point int ,
+											# IN i_live_yn char(1) )
+            #작업 IB_COMMISSION_STRUTURE SP_IB_COMMISSION_STRUCTURE_SAVE
+            #i_seq 70001064 2080 1  70001064 2016 2 70001064 2200 3
+            cursor =  connections['backOffice'].cursor()
+            cursor.callproc("SP_IB_COMMISSION_STRUCTURE_SAVE", ('1',obj.mt4_account,'1',obj.referral_code,obj.ib_commission,'Y'))
+            results = list(cursor.fetchall())
+            print(results)
+
+
         # else if(len(obj.mt4_account) > 0) :
         #     fxuser.user_status = '7'     
         #     fxuser.save()       
