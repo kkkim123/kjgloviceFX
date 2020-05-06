@@ -64,7 +64,7 @@ class IBAdmin(DjangoMpttAdmin):
     form = IBForm
     tree_auto_open = 0
     # actions = ['updateIBtoBackoffice','moveIBtoBackoffice',]
-    list_display = ('id', 'fxuser', 'ib_code','ib_name','point',
+    list_display = ( 'fxuser', 'ib_code','ib_name','point',
     'live_yn', 'send_report', 'referralurl','shortcut_ib_website','status')
     #list_filter = ('status',)
     #list_filter = (IBFilter,)
@@ -75,7 +75,7 @@ class IBAdmin(DjangoMpttAdmin):
     fieldsets = (
         ('', {
             "fields": (
-                'fxuser', 'ib_code', 'ib_name', 'live_yn','status'
+                'id','fxuser', 'ib_code', 'ib_name', 'live_yn','status'
             ),
         }),
     )
@@ -241,7 +241,7 @@ class ApplyIBForm(forms.ModelForm):
 class ApplyIBAdmin(admin.ModelAdmin):
     form = ApplyIBForm
     
-    actions = ['addIBtoBackoffice',]
+    actions = ['chkIBinfoBackoffice','addIBtoBackoffice',]
     list_display = ('_fxuser', 'ib_code','ib_name',
     'point', 'live_yn', 'send_report','referralurl','status',)
     list_filter = ('status',)
@@ -353,7 +353,36 @@ class ApplyIBAdmin(admin.ModelAdmin):
                         return
                     self.message_user(request, '{}'.format(row))
         
-    addIBtoBackoffice.short_description = "add IB to Backoffice"
+    addIBtoBackoffice.short_description = "2. Save IB to Backoffice"
+
+    def chkIBinfoBackoffice(self, request, queryset):
+        if queryset.count() != 1:
+            self.message_user(request, 'Let\'s do it slowly one by one')
+            return
+        ibs = queryset.values_list('company_idx','fxuser_id')
+        #ibs = FxUser.objects.get(id = queryset.user_id)
+
+
+        cursor =  connections['backOffice'].cursor()
+        for ib in ibs:           
+            #print(ib[0])
+            user = FxUser.objects.get(id = ib[1])
+            #print(user.referral_code)
+            cursor.execute("select IDX, IB_NAME from IB_STRUCTURE where IB_LOGIN = '" + str(user.referral_code) +"';")
+            for row in cursor.fetchall():
+                queryset.update(parent_idx=row[0])
+                self.message_user(request, 'Get Parent Info   {}'.format(row[1]))
+
+            cursor.nextset()
+            cursor.execute("select MAX(IB_LOGIN) from IB_STRUCTURE where COMPANY_IDX = '" + str(ib[0]) +"';")
+
+            for row in cursor.fetchall():
+                queryset.update(ib_code=int(row[0]) + 1)
+                #queryset.save()
+
+    chkIBinfoBackoffice.short_description = "1. Check IB STRUCTURE in Backoffice"
+
+
     # get_parent_idx.short_description = "User IB Code"
     _fxuser.short_description = "User Email"
 

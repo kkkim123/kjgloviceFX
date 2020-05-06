@@ -314,7 +314,7 @@ class IntroducingBroker(MPTTModel):
     status = models.CharField(default='P', max_length=1, blank=True, choices=IB_STATUS,null=True)
     parent = TreeForeignKey(
         'self',
-        default = 69,
+        #default = 69,
         null=True,
         blank=True,
         related_name='children',
