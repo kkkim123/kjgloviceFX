@@ -8,7 +8,6 @@ import iconFacebook from "../../images/icon_facebook.png";
 import iconInstagram from "../../images/icon_instagram.png";
 import iconYoutube from "../../images/icon_youtube.png";
 import iconGoogle from "../../images/icon_google.png";
-
 import { getMetaQuotes } from "../../actions/footer"; 
 
 class Footer extends Component {

@@ -61,7 +61,7 @@ class ServiceInfo extends Component {
             </div>
           </div>
         </div>
-        <div className="row justify-content-center">
+        <div className="row justify-content-center my-5 ">
           <div className="col">
               <div className={cx("title")}>
             <h4 className="mt-5">MAM/PAMM Features</h4>

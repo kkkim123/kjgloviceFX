@@ -25,16 +25,6 @@ class EcnomicCalendars extends Component {
               </div>
               <iframe src="https://www.mql5.com/en/economic-calendar/widget?mode=2&amp;dateFormat=DMY" width="90%" height="600px" id="widgetPreview"></iframe>
             </div>
-            <div className="form-signin">
-              <Link to="/trading/calendar">
-              <button
-                className="btn btn-lg btn-primary content-center  mt-5"
-                type="button"
-              >
-                Read More
-              </button>
-              </Link>
-            </div>
           </div>
         </div>
       </div>

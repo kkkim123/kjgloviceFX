@@ -84,16 +84,11 @@ class Header extends Component {
                   <Link className="dropdown-item" to="/market/crypto">Crypto</Link>                  
                 </div>
               </li>
-              <li className="nav-item dropdown item">
-                  <Link className="nav-link dropdown-toggle" to="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Trading
-                  </Link>
-                  <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <Link className="dropdown-item" to="/trading">Trading</Link>
-                    <Link className="dropdown-item" to="/trading/info">MT4</Link>
-                    <Link className="dropdown-item" to="/trading/calendar">Calendars</Link>            
-                  </div>
-              </li>
+              <li className="nav-item item">
+                <Link className="nav-link" to="/trading">
+                Trading
+                </Link>
+              </li>              
               <li className="nav-item dropdown item">
                   <Link className="nav-link dropdown-toggle" to="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Company
