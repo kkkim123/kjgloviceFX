@@ -42,7 +42,7 @@ class IBEditForm extends Component {
             send_report: this.props.ib.send_report,
             ib_website: this.props.ib.ib_website,
             ib_code: this.props.ib.ib_code,
-            referralurl: this.props.ib.referralurl.replace(/(\s*)/g, ""),
+            referralurl: this.props.ib.referralurl ? this.props.ib.referralurl.replace(/(\s*)/g, "") : '-',
         });
         this.setState({
             isEdit: false

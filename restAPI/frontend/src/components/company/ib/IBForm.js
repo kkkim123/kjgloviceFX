@@ -53,6 +53,9 @@ class IBForm extends Component {
   };
 
   render() {
+    if (!this.props.auth.token && !this.props.auth.isAuthenticated) {
+      return <Redirect to="/login" />;
+    }
     return (
       <section className="container">
         <div className="row">
@@ -110,6 +113,8 @@ class IBForm extends Component {
 const required = value => (value ? undefined : "Required");
 
 const mapStateToProps = state => ({
+  auth: state.auth,
+  status: state.mypage.msg
 });
 
 IBForm = connect(mapStateToProps, { addIb })(IBForm);

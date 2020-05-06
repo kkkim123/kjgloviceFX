@@ -111,12 +111,12 @@ class IBInfo extends Component {
                 <CopyToClipboard
                   onCopy={this.onCopy}
                   text={
-                    this.props.data &&
+                    this.props.data && this.props.data.referralurl &&
                     this.props.data.referralurl.replace(/(\s*)/g, "")
                   }
                 >
                   <span style={{ fontSize: "1.0rem", fontWeight: "300", cursor: "pointer" }}>
-                    {this.props.data && this.props.data.referralurl ? " Copy" : null}
+                    {this.props.data && this.props.data.referralurl && this.props.data.referralurl ? " Copy" : null}
                   </span>
                 </CopyToClipboard>
               )}
