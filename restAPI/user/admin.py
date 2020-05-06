@@ -432,7 +432,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
     def save_model(self, request, obj, form, change):
-        if(obj.user_status >= '6' and obj.kj_address == ''):
+        if(int(obj.user_status) >= 6 and obj.kj_address == ''):
             URL = 'http://3.0.181.55:3000/kj/fx/getaddress/' + str(obj.id)
             response = requests.get(URL)
             jsresponse = response.json()
