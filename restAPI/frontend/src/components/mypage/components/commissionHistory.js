@@ -30,7 +30,11 @@ class partners extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     // 처음 시작 시 계좌리스트의 제일 첫번째 파트너계좌로 거래 내역 조회 -> this.props.comHistory 생성시킴
-    if (this.props.partAcc && this.props.partAcc.length > 0 && !this.state.isLoad) {
+    if (
+      this.props.partAcc &&
+      this.props.partAcc.length > 0 &&
+      !this.state.isLoad
+    ) {
       this.setState(
         {
           acc: this.props.partAcc[0][2][1],
@@ -141,7 +145,9 @@ class partners extends Component {
         }}
       >
         <div className="text-left mb-5">
-          <h3>{this.state.acc === 1 ? null : this.state.acc} Commission History</h3>
+          <h3>
+            {this.state.acc === 1 ? null : this.state.acc} Commission History
+          </h3>
           <div className="d-flex justify-content-end my-5">
             <div className="form-span date-input">
               <DatePicker
@@ -229,15 +235,17 @@ class partners extends Component {
         ) : (
           <div>No Commission History</div>
         )}
-        <div className="row justify-content-center">
-          <Pagination
-            activePage={this.state.activePage}
-            itemsCountPerPage={10}
-            totalItemsCount={this.state.totalCnt}
-            pageRangeDisplayed={5}
-            onChange={this.handlePageChange}
-          />
-        </div>
+        {this.props.comHistory && this.props.comHistory.length > 0 ? (
+          <div className="row justify-content-center">
+            <Pagination
+              activePage={this.state.activePage}
+              itemsCountPerPage={10}
+              totalItemsCount={this.state.totalCnt}
+              pageRangeDisplayed={5}
+              onChange={this.handlePageChange}
+            />
+          </div>
+        ) : null}
       </div>
     );
   }

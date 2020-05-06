@@ -1,33 +1,46 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
-import { WithdrawRegist } from "../../../../actions/mypage";
+import { WithdrawRegist, getAccount } from "../../../../actions/mypage";
 import "../../../../styles/auth/form.css";
 import store from "../../../../store";
 
 class WithdrawForm extends Component {
   state = {
     isEdit: true,
+    isAccount: true,
     account: this.props.accNum
       ? this.props.accNum
       : localStorage.getItem("mt4_account"),
-    page: 1
   };
 
   componentDidMount() {
     // refresh 시 사라지는거 방지
     localStorage.setItem("mt4_account", this.state.account);
+    store.dispatch(getAccount(this.props.auth.id));
   }
 
   componentDidUpdate() {
-    if (
-      (this.props.accNum || localStorage.getItem("mt4_account")) &&
-      this.state.isEdit
-    ) {
+    //My page - main에서 withdraw 버튼 클릭하여 진입 시
+    if (this.props.accNum && this.state.isAccount) {
+      this.setState({
+        account: this.props.accNum,
+        isAccount: false
+      });
+    }
+
+    //없을 때
+    if (!this.props.accNum && this.state.isAccount) {
+      this.setState({
+        account: localStorage.getItem("mt4_account"),
+        isAccount: false
+      });
+    }
+
+    //계좌, 지갑주소
+    if (this.props.auth && this.state.account && this.state.isEdit) {
       this.props.initialize({
-        mt4_account: this.props.accNum
-          ? this.props.accNum
-          : localStorage.getItem("mt4_account"),
+        mt4_account: this.state.account,
         crypto_address: this.props.auth.kj_address
       });
       this.setState({
@@ -64,7 +77,6 @@ class WithdrawForm extends Component {
     input,
     placeholder,
     index,
-    disabled,
     meta: { touched, error }
   }) => {
     const optList =
@@ -81,7 +93,7 @@ class WithdrawForm extends Component {
         className={`form-label-group
             ${touched && error ? "error" : ""}`}
       >
-        <select {...input} className="form-control" disabled={disabled}>
+        <select {...input} className="form-control">
           <option>{placeholder}</option>
           {optList}
         </select>
@@ -90,9 +102,36 @@ class WithdrawForm extends Component {
     );
   };
 
+  selectField2 = ({ input, placeholder, label, meta: { touched, error } }) => {
+    const accList =
+      this.props.account &&
+      this.props.account.map((acc, i) => {
+        if (acc.balance > 0) {
+          return (
+            <option value={acc.mt4_account} key={i}>
+              {acc.mt4_account}
+            </option>
+          );
+        }
+      });
+    return (
+      <div
+        className={`form-label-group
+            ${touched && error ? "error" : ""}`}
+      >
+        <label>{label}</label>
+        <select {...input} className="form-control">
+          <option>{placeholder}</option>
+          {accList}
+        </select>
+        {touched && error && <span className="">{error}</span>}
+      </div>
+    );
+  };
+
   onSubmit = formValues => {
     store.dispatch(WithdrawRegist(formValues));
-    this.props.history.push("/mypage/deposit/detail");
+    this.props.history.push("/mypage/withdraw/detail");
   };
 
   render() {
@@ -109,10 +148,16 @@ class WithdrawForm extends Component {
               <Field
                 name="mt4_account"
                 type="text"
-                component={this.renderField}
+                component={this.selectField2}
                 placeholder="Account*"
                 is_required={true}
-                writeOnce={true}
+              />
+              <Field
+                name="crypto_address"
+                type="text"
+                component={this.renderField}
+                placeholder="Crypto Address*"
+                is_required={true}
               />
               <Field
                 name="currency"
@@ -125,13 +170,6 @@ class WithdrawForm extends Component {
                 component={this.selectField}
                 placeholder="Withdraw Crypto*"
                 index="4"
-              />
-              <Field
-                name="crypto_address"
-                type="text"
-                component={this.renderField}
-                placeholder="Crypto Address*"
-                is_required={true}
               />
               <Field
                 name="amount"
@@ -165,7 +203,9 @@ const required = value => (value ? undefined : "Required");
 
 const mapStateToProps = state => ({
   options: state.mypage.accOption,
-  auth: state.auth
+  auth: state.auth,
+  accNum: state.mypage.accNum,
+  account: state.mypage.account
 });
 
 WithdrawForm = connect(mapStateToProps, { WithdrawRegist })(WithdrawForm);

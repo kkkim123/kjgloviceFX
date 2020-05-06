@@ -32,7 +32,7 @@ class DocForm extends Component {
       if (this.props.status === 201) {
         this.props.history.push("/mypage");
       } else {
-        alert("확인 후 다시 등록해주세요.");
+        alert("Please check and register again.");
       }
     });
   };

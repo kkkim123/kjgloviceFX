@@ -25,8 +25,8 @@ class account extends Component {
       >
         <div className="text-left mb-5">
           <h3>
-            <Link to="/mypage/details/account/detail">Account </Link>
-           <span style={{fontSize: '1.2rem', fontWeight: '300'}}>Clcik Your Account Number!</span>
+            Account
+           <span style={{fontSize: '1.2rem', fontWeight: '300'}}> Clcik Your Account Number!</span>
           </h3>
           <div className="d-flex justify-content-between text-center my-5">
             <div>
@@ -36,7 +36,7 @@ class account extends Component {
             </div>
             <div>
               <Link
-                  to="/mypage/details/account"
+                  to="/mypage/details/account/detail"
                   className="px-3 py-2 rounded-pill"
                   style={{
                       color: "#ffffff",
@@ -45,8 +45,32 @@ class account extends Component {
                       textDecoration: "none"
                   }}
               >
-                  Add Account
+                  Account List
               </Link>
+              <Link
+                  to="/mypage/deposit/detail"
+                  className="px-3 py-2 rounded-pill ml-3"
+                  style={{
+                      color: "#ffffff",
+                      backgroundColor: "#006536",
+                      fontWeight: "bold",
+                      textDecoration: "none"
+                  }}
+              >
+                  Deposit List
+              </Link>
+              <Link
+                  to="/mypage/withdraw/detail"
+                  className="px-3 py-2 rounded-pill ml-3"
+                  style={{
+                      color: "#ffffff",
+                      backgroundColor: "#006536",
+                      fontWeight: "bold",
+                      textDecoration: "none"
+                  }}
+              >
+                  Withdraw List
+              </Link>                            
               <Link
                   to="/mypage/transfer/detail"
                   className="px-3 py-2 rounded-pill mx-3"
@@ -57,9 +81,9 @@ class account extends Component {
                       textDecoration: "none"
                   }}
               >
-                  Transfer
-              </Link>  
-              </div>            
+                  Transfer List
+              </Link>
+              </div>
           </div>
         </div>
         <div
@@ -67,7 +91,7 @@ class account extends Component {
           style={{
             borderTop: "1px solid #000000",
             color: "#929292",
-            fontSize: "1.2rem",
+            fontSize: "1.0rem",
             padding: "0.8rem"
           }}
         >
@@ -135,7 +159,7 @@ class account extends Component {
                   style={{
                     borderTop: "1px solid #000000",
                     color: "#929292",
-                    fontSize: "1.2rem",
+                    fontSize: "1.0rem",
                     padding: "0.8rem"
                   }}
                   key={i}
@@ -143,7 +167,7 @@ class account extends Component {
                   <div className="ml-2" style={{ width: "15%" }}>
                     {account_type}
                   </div>
-                  <div className="ml-2" style={{ width: "15%" }} onClick={()=>this.handleClick(rowData.mt4_account)}>
+                  <div className="ml-2" style={{ width: "15%", cursor: "pointer" }} onClick={()=>this.handleClick(rowData.mt4_account)}>
                     <span>{rowData.mt4_account}</span>
                   </div>
                   <div className="ml-2" style={{ width: "10%" }}>
@@ -156,8 +180,9 @@ class account extends Component {
                     <span>{rowData.kj_balance ? (rowData.kj_balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0}</span>
                   </div>                  
                   <div className="ml-2" style={{ width: "20%" }}>
-                    {this.props.wallet.kj_balance > 0 ? (<Link
-                      to="/mypage/deposit/detail"
+                    {//wallet에 담긴 kj balance
+                      this.props.wallet.kj_balance > 0 ? (<Link
+                      to="/mypage/deposit"
                       className="px-3 py-2 rounded-pill"
                       style={{
                         color: "#ffffff",
@@ -171,9 +196,10 @@ class account extends Component {
                     </Link>) : null}
                   </div>
                   <div className="ml-2" style={{ width: "20%" }}>
-                    {rowData.kj_balance > 0 ? (
+                    {//mt4 에서 받아논 허용된 balance
+                      rowData.available > 0 ? (
                       <Link
-                        to="/mypage/withdraw/detail"
+                        to="/mypage/withdraw"
                         className="px-3 py-2 rounded-pill"
                         style={{
                           color: "#ffffff",

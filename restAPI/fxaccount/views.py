@@ -43,6 +43,14 @@ class DailyTradingViewSet(viewsets.ModelViewSet):
             cursor.execute("select CLOSE_TIME as date, PROFIT as profit"
             + " from MT4_TRADES where LOGIN = '" + str(kwargs['mt4_account']) + "';")
 
+            # if cursor.fetchall():
+            #     df = pd.DataFrame(cursor.fetchall())
+            #     df.columns=[col[0] for col in cursor.description] 
+            #     df = df.set_index(['date'])
+            #     df.index = pd.to_datetime(df.index, unit='s')
+            # else:
+            #     return Response(status=status.HTTP_400_BAD_REQUEST, data=None)
+            
             df = pd.DataFrame(cursor.fetchall())
             df.columns=[col[0] for col in cursor.description] 
             df = df.set_index(['date'])
@@ -102,23 +110,53 @@ AlterFxAccount = FxAccountViewSet.as_view({
     #     return FxAccount.objects.get(id=self.request.user
 #Person.filter(name='신사임당').exclude('male')
 #신규 요청, 요청내역 조회 , 취소
+<<<<<<< HEAD
 
+=======
+>>>>>>> 84ccb1f1e1b707f4faf4f084a1d30f0f8bc3f998
 class FxAccountTransferViewSet(viewsets.ModelViewSet):
     permission_classes=[IsAuthenticated]  
     queryset = FxAccountTransaction.objects.all()
     serializer_class = FxAccountTransactionSerializer
     lookup_field = 'user'
+<<<<<<< HEAD
 
+=======
+>>>>>>> 84ccb1f1e1b707f4faf4f084a1d30f0f8bc3f998
     def list(self, request, *args, **kwargs):
         permission_classes=[IsOwnerOnly,IsAuthenticated]
         deposit = get_list_or_404(self.queryset, user=kwargs['user'])
         page = self.paginate_queryset(deposit)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 84ccb1f1e1b707f4faf4f084a1d30f0f8bc3f998
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(deposit, many=True)
         return Response(serializer.data)
+<<<<<<< HEAD
+=======
+    def destroy(self, request, user, pk):   
+        permission_classes=[IsOwnerOnly,IsAuthenticated]
+        instance = FxAccountTransaction.objects.get(user=user,pk = pk)
+        if (instance.status == 'P') :
+            instance.delete()
+            serializer = FxAccountTransactionSerializer(instance)
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_304_NOT_MODIFIED)
+
+Transfer = FxAccountTransferViewSet.as_view({
+    'post' : 'create',
+    'get': 'list',
+})
+AlterTransfer = FxAccountTransferViewSet.as_view({
+    #'put': 'update',
+    #'patch': 'partial_update',
+    'delete' : 'destroy',
+})
+>>>>>>> 84ccb1f1e1b707f4faf4f084a1d30f0f8bc3f998
 
     def destroy(self, request, user, pk):   
         permission_classes=[IsOwnerOnly,IsAuthenticated]

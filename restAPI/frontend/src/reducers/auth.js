@@ -24,6 +24,7 @@ const initialState = {
   user: null,
   token: localStorage.getItem("token"),
   id: localStorage.getItem("id"),
+  kj_address: localStorage.getItem("kj_address"),
   msg: null
 };
 
@@ -41,7 +42,8 @@ export default function(state = initialState, action) {
         isLoading: false,
         isAuthenticated: true,
         user: action.payload,
-        id: action.payload.id
+        id: action.payload.id,
+        kj_address: action.payload.kj_address
       };
     case REGISTER_SUCCESS:
       return {
@@ -56,17 +58,20 @@ export default function(state = initialState, action) {
         isAuthenticated: true,
         user: action.payload,
         id: action.payload.id,
+        kj_address: action.payload.kj_address,
         msg: action.status
       };
     case LOGIN_SUCCESS:
       localStorage.setItem("token", action.payload.token);
       localStorage.setItem("id", action.payload.id);
+      localStorage.setItem("kj_address", action.payload.kj_address);
       return {
         ...state,
         isLoading: false,
         isAuthenticated: true,
         user: action.payload,
         token: action.payload.token,
+        kj_address: action.payload.kj_address,
         id: action.payload.id
       };
     case RESET_SEND_SUCCESS:
@@ -83,6 +88,7 @@ export default function(state = initialState, action) {
     case LOGOUT_SUCCESS:
       localStorage.removeItem("token");
       localStorage.removeItem("id");
+      localStorage.removeItem("kj_address");
       return {
         ...state,
         isLoading: false,
@@ -90,6 +96,8 @@ export default function(state = initialState, action) {
         user: null,
         token: null,
         id: null,
+        kj_address: null,
+        msg: null
       };
     default:
       return state;

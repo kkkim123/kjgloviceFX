@@ -15,7 +15,6 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
         state: { from: props.location}}}/>;
       } else {
         <Component {...props}/>
-        console.log(props.location)
         // return <Redirect to={{
         //   pathname: '/main',
         // state: { from: props.location}}}/>;

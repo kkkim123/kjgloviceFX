@@ -286,81 +286,81 @@ export const partCommision = ({from_date, to_date, acc}) => async (dispatch, get
   });
 };
 
-// Add Deposit
-export const addDeposit = () => async (dispatch, getState) => {
-  const res = await axios.post(
-    `/fxaccount/deposit/${getState().auth.id}`,
-    tokenConfig(getState)
-  );
-  dispatch({
-    type: GET_USER_OPTION,
-    payload: res.data
-  });
-};
+// // Add Deposit
+// export const addDeposit = () => async (dispatch, getState) => {
+//   const res = await axios.post(
+//     `/fxaccount/deposit/${getState().auth.id}`,
+//     tokenConfig(getState)
+//   );
+//   dispatch({
+//     type: GET_USER_OPTION,
+//     payload: res.data
+//   });
+// };
 
-// Get Deposit
-export const getDeposit = () => async (dispatch, getState) => {
-  const res = await axios.get(
-    `/fxaccount/deposit/${getState().auth.id}`,
-    tokenConfig(getState)
-  );
-  dispatch({
-    type: GET_USER_OPTION,
-    payload: res.data
-  });
-};
+// // Get Deposit
+// export const getDeposit = () => async (dispatch, getState) => {
+//   const res = await axios.get(
+//     `/fxaccount/deposit/${getState().auth.id}`,
+//     tokenConfig(getState)
+//   );
+//   dispatch({
+//     type: GET_USER_OPTION,
+//     payload: res.data
+//   });
+// };
 
-// Delete Deposit
-export const delDeposit = () => async (dispatch, getState) => {
-  const res = await axios.delete(
-    `/fxaccount/deposit/${getState().auth.id}/${deposit_pk}`,
-    tokenConfig(getState)
-  );
-  dispatch({
-    type: GET_USER_OPTION,
-    payload: res.data
-  });
-};
+// // Delete Deposit
+// export const delDeposit = () => async (dispatch, getState) => {
+//   const res = await axios.delete(
+//     `/fxaccount/deposit/${getState().auth.id}/${deposit_pk}`,
+//     tokenConfig(getState)
+//   );
+//   dispatch({
+//     type: GET_USER_OPTION,
+//     payload: res.data
+//   });
+// };
 
-// Add withdraw
-export const addWithdraw = () => async (dispatch, getState) => {
-  const res = await axios.post(
-    `/fxaccount/withdraw/${getState().auth.id}`,
-    tokenConfig(getState)
-  );
-  dispatch({
-    type: GET_USER_OPTION,
-    payload: res.data
-  });
-};
+// // Add withdraw
+// export const addWithdraw = () => async (dispatch, getState) => {
+//   const res = await axios.post(
+//     `/fxaccount/withdraw/${getState().auth.id}`,
+//     tokenConfig(getState)
+//   );
+//   dispatch({
+//     type: GET_USER_OPTION,
+//     payload: res.data
+//   });
+// };
 
-// Get Withdraw
-export const getWithdraw = () => async (dispatch, getState) => {
-  const res = await axios.get(
-    `/fxaccount/withdraw/${getState().auth.id}`,
-    tokenConfig(getState)
-  );
-  dispatch({
-    type: GET_USER_OPTION,
-    payload: res.data
-  });
-};
+// // Get Withdraw
+// export const getWithdraw = () => async (dispatch, getState) => {
+//   const res = await axios.get(
+//     `/fxaccount/withdraw/${getState().auth.id}`,
+//     tokenConfig(getState)
+//   );
+//   dispatch({
+//     type: GET_USER_OPTION,
+//     payload: res.data
+//   });
+// };
 
-// Delete withdraw
-export const delWithdraw = () => async (dispatch, getState) => {
-  const res = await axios.get(
-    `/fxaccount/withdraw/${getState().auth.id}/${withdraw_pk}`,
-    tokenConfig(getState)
-  );
-  dispatch({
-    type: GET_USER_OPTION,
-    payload: res.data
-  });
-};
+// // Delete withdraw
+// export const delWithdraw = () => async (dispatch, getState) => {
+//   const res = await axios.get(
+//     `/fxaccount/withdraw/${getState().auth.id}/${withdraw_pk}`,
+//     tokenConfig(getState)
+//   );
+//   dispatch({
+//     type: GET_USER_OPTION,
+//     payload: res.data
+//   });
+// };
 
 // Get transfer
 export const getTransfer = () => async (dispatch, getState) => {
-  const res = await axios.get(`/fxaccount/transfer`, tokenConfig(getState));
+  const res = await axios.get(`/fxaccount/transfer/${getState().auth.id}`, tokenConfig(getState));
   dispatch({
     type: GET_TRANSFER,
     payload: res.data
@@ -371,7 +371,7 @@ export const getTransfer = () => async (dispatch, getState) => {
 export const addTransfer = (formValues) => async (dispatch, getState) => {
   formValues.user = getState().auth.id;
 
-  const res = await axios.post(`/fxaccount/transfer`,formValues, tokenConfig(getState));
+  const res = await axios.post(`/fxaccount/transfer/${getState().auth.id}`,formValues, tokenConfig(getState));
   dispatch({
     type: ADD_TRANSFER,
     payload: res.status
@@ -380,9 +380,7 @@ export const addTransfer = (formValues) => async (dispatch, getState) => {
 
 // Delete transfer
 export const delTransfer = id => async (dispatch, getState) => {
-  console.log(id);
-  return false;
-  const res = await axios.delete(`/fxaccount/transfer`, tokenConfig(getState));
+  const res = await axios.delete(`/fxaccount/transfer/${getState().auth.id}/${id}`, tokenConfig(getState));
   dispatch({
     type: DELETE_TRANSFER,
     payload: res.data
@@ -562,20 +560,26 @@ export const getWallet = () => async (dispatch, getState) => {
 
  // Get Chart Data
  export const getProfit = acc => async (dispatch, getState) => {
-   const res = await axios.get(`/fxaccount/dailytrading/${getState().auth.id}/${acc}`, tokenConfig(getState));
-   dispatch({
-     type: GET_CHART,
-     payload: res.data.data
-   });
+   try {
+    const res = await axios.get(`/fxaccount/dailytrading/${getState().auth.id}/${acc}`, tokenConfig(getState));
+    dispatch({
+      type: GET_CHART,
+      payload: res.data.data
+    });
+  } catch (err) {
+    dispatch({
+      type: FAIL
+    })
+  }
 };
-
 // Get User Balance Info (input: user 계좌번호)
-export const getIb = () => async (dispatch, getState) => {
+export const getOverview = acc => async (dispatch, getState) => {
   const res = await axios.get(
-    ``,
+    `/user/mypage/overview/${acc}`,
     tokenConfig(getState)
   );
-  dispatch({
+  dispatch(
+    {
     type: GET_USER_BALANCE,
     payload: res.data
   });

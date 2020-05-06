@@ -1,32 +1,45 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
-import { DepositRegist } from "../../../../actions/mypage";
+import { DepositRegist, getAccount } from "../../../../actions/mypage";
 import "../../../../styles/auth/form.css";
 import store from "../../../../store";
 
 class DepositForm extends Component {
-    state = {
-      isEdit: true,
-      account: this.props.accNum
-        ? this.props.accNum
-        : localStorage.getItem("mt4_account"),
-      page: 1
-    };
+  state = {
+    isEdit: true,
+    isAccount: true,
+    account: this.props.accNum
+      ? this.props.accNum
+      : localStorage.getItem("mt4_account"),
+  };
 
   componentDidMount() {
     localStorage.setItem("mt4_account", this.state.account);
+    store.dispatch(getAccount(this.props.auth.id));
   }
 
   componentDidUpdate() {
-    if (
-      (this.props.accNum || localStorage.getItem("mt4_account")) &&
-      this.state.isEdit
-    ) {
+    //My page - main에서 deposit 버튼 클릭하여 진입 시
+    if (this.props.accNum && this.state.isAccount) {
+      this.setState({
+        account: this.props.accNum,
+        isAccount: false
+      });
+    }
+
+    //없을 때
+    if (!this.props.accNum && this.state.isAccount) {
+      this.setState({
+        account: localStorage.getItem("mt4_account"),
+        isAccount: false
+      });
+    }
+
+    //계좌, 지갑주소
+    if (this.props.auth && this.state.account && this.state.isEdit) {
       this.props.initialize({
-        mt4_account: this.props.accNum
-          ? this.props.accNum
-          : localStorage.getItem("mt4_account"),
+        mt4_account: this.state.account,
         crypto_address: this.props.auth.kj_address
       });
       this.setState({
@@ -37,9 +50,10 @@ class DepositForm extends Component {
 
   renderField = ({
     input,
-    writeOnce,
     placeholder,
     type,
+    label,
+    writeOnce,
     meta: { touched, error }
   }) => {
     return (
@@ -47,12 +61,13 @@ class DepositForm extends Component {
         className={`form-label-group
             ${touched && error ? "error" : ""}`}
       >
+        <label>{label}</label>
         <input
           {...input}
           type={type}
-          disabled={writeOnce}
           className="form-control"
           placeholder={placeholder}
+          disabled={writeOnce}
         />
         {touched && error && <span className="">{error}</span>}
       </div>
@@ -63,7 +78,7 @@ class DepositForm extends Component {
     input,
     placeholder,
     index,
-    disabled,
+    label,
     meta: { touched, error }
   }) => {
     const optList =
@@ -80,9 +95,37 @@ class DepositForm extends Component {
         className={`form-label-group
             ${touched && error ? "error" : ""}`}
       >
-        <select {...input} className="form-control" disabled={disabled}>
+        <label>{label}</label>
+        <select {...input} className="form-control">
           <option>{placeholder}</option>
           {optList}
+        </select>
+        {touched && error && <span className="">{error}</span>}
+      </div>
+    );
+  };
+
+  selectField2 = ({ input, placeholder, label, meta: { touched, error } }) => {
+    const accList =
+      this.props.account &&
+      this.props.account.map((acc, i) => {
+        if (acc.balance > 0) {
+          return (
+            <option value={acc.mt4_account} key={i}>
+              {acc.mt4_account}
+            </option>
+          );
+        }
+      });
+    return (
+      <div
+        className={`form-label-group
+            ${touched && error ? "error" : ""}`}
+      >
+        <label>{label}</label>
+        <select {...input} className="form-control">
+          <option>{placeholder}</option>
+          {accList}
         </select>
         {touched && error && <span className="">{error}</span>}
       </div>
@@ -108,8 +151,17 @@ class DepositForm extends Component {
               <Field
                 name="mt4_account"
                 type="text"
-                component={this.renderField}
+                component={this.selectField2}
                 placeholder="Account*"
+                label="Account"
+                is_required={true}
+              />
+              <Field
+                name="crypto_address"
+                type="text"
+                label="Crypto Address"
+                component={this.renderField}
+                placeholder="Crypto Address*"
                 writeOnce={true}
                 is_required={true}
               />
@@ -117,26 +169,22 @@ class DepositForm extends Component {
                 name="currency"
                 component={this.selectField}
                 placeholder="Currency*"
+                label="Currency"
                 index="1"
               />
               <Field
                 name="deposit_crypto"
                 component={this.selectField}
                 placeholder="Deposit Crypto*"
+                label="Deposit Crypto"
                 index="4"
-              />
-              <Field
-                name="crypto_address"
-                type="text"
-                component={this.renderField}
-                placeholder="Crypto Address*"
-                is_required={true}
               />
               <Field
                 name="crypto_amount"
                 type="text"
                 component={this.renderField}
                 placeholder="Crypto Amount*"
+                label="Crypto Amount"
                 is_required={true}
               />
               <Field
@@ -144,6 +192,7 @@ class DepositForm extends Component {
                 type="text"
                 component={this.renderField}
                 placeholder="CellPhone Number*"
+                label="CellPhone Number"
                 is_required={true}
               />
               <button
@@ -164,10 +213,12 @@ const required = value => (value ? undefined : "Required");
 
 const mapStateToProps = state => ({
   options: state.mypage.accOption,
-  auth: state.auth
+  auth: state.auth,
+  accNum: state.mypage.accNum,
+  account: state.mypage.account
 });
 
-DepositForm = connect(mapStateToProps, {DepositRegist})(DepositForm);
+DepositForm = connect(mapStateToProps, { DepositRegist })(DepositForm);
 
 export default reduxForm({
   form: "DepositForm"
