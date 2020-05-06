@@ -165,7 +165,8 @@ class IBAdmin(DjangoMpttAdmin):
         if self.trigger_save_after_move:
             instance.save()
 
-
+    def has_add_permission(self, request):
+        return False
 
 
 
@@ -377,7 +378,7 @@ class UserForm(forms.ModelForm):
 class UserAdmin(admin.ModelAdmin):
     form = UserForm
     list_display = ('id','email', 'first_name', 'last_name', 'user_type','kj_address','referral_code','user_status')
-    list_filter = ('is_admin',)
+    list_filter = ('user_type','user_status',)
     list_editable = ('user_status','referral_code')
     search_fields = ('email',)
     ordering = ('email',)

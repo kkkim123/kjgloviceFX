@@ -258,7 +258,7 @@ class DepositTransaction(BaseTransaction):
 
     created_at = models.DateTimeField( auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
-    #REQUIRED_FIELDS = ['user','mt4_account','currency','crypto_sender_address','crypto_amount','']
+    REQUIRED_FIELDS = ['user','mt4_account','currency','crypto_sender_address','crypto_amount','']
 
     class Meta:
         verbose_name = "Request Deposit"
@@ -271,10 +271,10 @@ class WithdrawTransaction(BaseTransaction):
     currency = models.CharField( default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)
     amount = models.FloatField( default=0.0, blank=True)
 
-    withdraw_crypto = models.CharField(default='', max_length=2, blank=True, choices=WITHDRAW_CRYPTO_CHOICE)
     crypto_address = models.CharField(default='', max_length=64, blank=True)
-    #출금된 암호화폐 수량
+    withdraw_crypto = models.CharField(default='', max_length=2, blank=True, choices=WITHDRAW_CRYPTO_CHOICE)
     crypto_amount = models.CharField(default='', max_length=64, blank=True, null=True)
+
     cellphone_number = models.CharField(default='', max_length=30, blank=True)  
 
     status = models.CharField(default='P', max_length=1, blank=False, choices=DEPOSIT_WITHDRAW_TRANSACTION_STATUS)
@@ -282,6 +282,7 @@ class WithdrawTransaction(BaseTransaction):
     created_at = models.DateTimeField( auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
 
+    REQUIRED_FIELDS = ['user','mt4_account','amount','crypto_address','crypto_amount',]
     class Meta:
         verbose_name = "Request Withdraw"
         verbose_name_plural = "Request Withdraw"

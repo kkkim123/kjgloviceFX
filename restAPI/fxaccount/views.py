@@ -56,7 +56,6 @@ class DailyTradingViewSet(viewsets.ModelViewSet):
         json_val = json.dumps(parsed,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
         return HttpResponse(json_val)
 
-
 DailyTradingView = DailyTradingViewSet.as_view({
     'get': 'list',
 })
@@ -103,11 +102,43 @@ AlterFxAccount = FxAccountViewSet.as_view({
     #     return FxAccount.objects.get(id=self.request.user
 #Person.filter(name='신사임당').exclude('male')
 #신규 요청, 요청내역 조회 , 취소
-class FxAccountTransferViews(generics.ListCreateAPIView,generics.DestroyAPIView):
-    permission_classes=[IsAuthenticated]
+
+class FxAccountTransferViewSet(viewsets.ModelViewSet):
+    permission_classes=[IsAuthenticated]  
     queryset = FxAccountTransaction.objects.all()
     serializer_class = FxAccountTransactionSerializer
+    lookup_field = 'user'
 
+    def list(self, request, *args, **kwargs):
+        permission_classes=[IsOwnerOnly,IsAuthenticated]
+        deposit = get_list_or_404(self.queryset, user=kwargs['user'])
+        page = self.paginate_queryset(deposit)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(deposit, many=True)
+        return Response(serializer.data)
+
+    def destroy(self, request, user, pk):   
+        permission_classes=[IsOwnerOnly,IsAuthenticated]
+        instance = FxAccountTransaction.objects.get(user=user,pk = pk)
+        if (instance.status == 'P') :
+            instance.delete()
+            serializer = FxAccountTransactionSerializer(instance)
+            return Response(status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_304_NOT_MODIFIED)
+
+Transfer = FxAccountTransferViewSet.as_view({
+    'post' : 'create',
+    'get': 'list',
+})
+AlterTransfer = FxAccountTransferViewSet.as_view({
+    #'put': 'update',
+    #'patch': 'partial_update',
+    'delete' : 'destroy',
+})
 # class TradingHistoryViewSet(viewsets.ModelViewSet):
 #     #permission_classes=[IsFKOwnerOnly,IsAuthenticated]
 #     def get(self,request,*args, **kwargs):

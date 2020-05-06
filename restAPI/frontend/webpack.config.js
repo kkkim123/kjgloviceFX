@@ -1,8 +1,8 @@
 module.exports = {
   mode: "production",
   output: {
-    // publicPath: "/static/frontend/"
-    publicPath: "https://glovicefx.s3.ap-southeast-1.amazonaws.com/static/frontend/"
+    publicPath: "/static/frontend/"
+    //publicPath: "https://glovicefx.s3.ap-southeast-1.amazonaws.com/static/frontend/"
   },
   module: {
     rules: [

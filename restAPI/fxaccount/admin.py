@@ -35,7 +35,7 @@ class FxAccountAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_editable = ('status',)
     search_fields = ('user','mt4_account','referral_code',)
-    readonly_fields = ('mt4_account','ib_commission', 'balance')
+    readonly_fields = ('ib_commission', 'balance')
 
     fieldsets = (
         (None, {
@@ -48,7 +48,7 @@ class FxAccountAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         if obj: # obj is not None, so this is an edit
-           return ['mt4_account','ib_commission', 'balance'] # Return a list or tuple of readonly fields' names
+           return ['ib_commission', 'balance'] # Return a list or tuple of readonly fields' names
         else: # This is an addition
             return []
     
@@ -71,12 +71,12 @@ class FxAccountTransactionAdmin(admin.ModelAdmin):
     list_display = (
       'id', 'user', 'from_account', 'to_account','currency','amount','status','created_at','updated_at',
     )
-    # search_fields = ('mt4_account', 'fxuser')
-    # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
+
+    list_filter = ('status',)
 
     list_per_page = 10
     list_editable = ('status',)
-    search_fields = ('user','from_account','to_account','referral_code',)
+    search_fields = ('user','from_account','to_account',)
     readonly_fields = ('from_account', 'to_account',)
 
     fieldsets = (
@@ -192,7 +192,7 @@ class DepositTransAdmin(admin.ModelAdmin):
 admin.site.register(DepositTransaction,DepositTransAdmin)
 
 
-class DepositTransForm(forms.ModelForm):
+class WithdrawTransForm(forms.ModelForm):
     class Meta:
         model = WithdrawTransaction
         fields = '__all__'
@@ -203,41 +203,31 @@ class DepositTransForm(forms.ModelForm):
 
 
 class WithdrawTransAdmin(admin.ModelAdmin):
-    form = DepositTransForm
+    form = WithdrawTransForm
     list_display = (
-        'mt4_account', 'currency','amount', 'crypto_address','withdraw_crypto','crypto_amount',
+        'user','mt4_account', 'currency','amount', 'crypto_address','withdraw_crypto','crypto_amount',
         'created_at','updated_at','status',
     )
     # search_fields = ('mt4_account', 'fxuser')'user',
     # list_filter = ('account_type', 'account_status', 'fxuser', 'base_currency')
-    # mt4_account = models.CharField( default='', max_length=36, blank=True)
-
-    # currency = models.CharField( default='1', max_length=1, blank=True, choices=ACCOUNT_BASE_CURRENCY_CHOICE)
-    # amount = models.FloatField( default=0.0, blank=True)
-
-    # withdraw_crypto = models.CharField(default='', max_length=2, blank=True, choices=WITHDRAW_CRYPTO_CHOICE)
-    # crypto_address = models.CharField(default='', max_length=64, blank=True)
-    # #출금된 암호화폐 수량
-    # crypto_amount = models.CharField(default='', max_length=64, blank=True, null=True)
-    # cellphone_number = models.CharField(default='', max_length=30, blank=True)  
 
     list_per_page = 10
     list_editable = ('status',)
     search_fields = ('status',)
-    readonly_fields = ('mt4_account', 'currency','amount', 'crypto_address','withdraw_crypto','crypto_amount',)
+    #readonly_fields = ('mt4_account', 'currency','amount', 'crypto_address','withdraw_crypto','crypto_amount',)
 
 
     fieldsets = (
         (None, {
             "fields": (
-                'mt4_account', 'currency','amount', 'crypto_address','withdraw_crypto','crypto_amount', 'status'
+                'user','mt4_account', 'currency','amount', 'crypto_address','withdraw_crypto','crypto_amount', 'status'
             ),
         }),
     )
 
     def get_readonly_fields(self, request, obj=None):
         if obj: # obj is not None, so this is an edit
-           return ['mt4_account', 'currency','amount', 'crypto_address','withdraw_crypto','crypto_amount'] # Return a list or tuple of readonly fields' names
+           return ['user','mt4_account', 'currency','amount', 'crypto_address','withdraw_crypto','crypto_amount'] # Return a list or tuple of readonly fields' names
         else: # This is an addition
             return []
     
