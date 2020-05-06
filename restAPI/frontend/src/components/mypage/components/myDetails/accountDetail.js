@@ -18,7 +18,7 @@ class accountDetail extends Component {
   }
 
   componentDidUpdate() {
-    if (this.state.isLoad) {
+    if (this.state.isLoad && !this.props.account) {
       store.dispatch(getAccount(this.props.auth.id));
       this.setState({
         isLoad: false,

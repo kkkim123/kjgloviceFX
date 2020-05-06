@@ -43,11 +43,11 @@ class Overview extends Component {
                     </div>
                     <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
                         <div className="ml-1"><span>Equity:</span></div>
-                        <div className="text-center" ><span>{this.props.info? this.props.info.equity.toFixed(3) : "-"}</span></div>
+                        <div className="text-center" ><span>{this.props.info && this.props.info.equity ? this.props.info.equity.toFixed(3) : "-"}</span></div>
                     </div>
                     <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
                         <div className="ml-1"><span>Floating P/L:</span></div>
-                        <div className="text-center" ><span>{this.props.info? this.props.info.floating_profit.toFixed(3) : "-"}</span></div>
+                        <div className="text-center" ><span>{this.props.info && this.props.info.floating_profit ? this.props.info.floating_profit.toFixed(3) : "-"}</span></div>
                     </div>
                     <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
                         <div className="ml-1"><span>Closed profit:</span></div>
@@ -63,7 +63,7 @@ class Overview extends Component {
                     </div>
                     <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
                         <div className="ml-1"><span>Margin Level:</span></div>
-                        <div className="text-center" ><span>{this.props.info ? this.props.info.margin_level.toFixed(3) : "-"}</span></div>
+                        <div className="text-center" ><span>{this.props.info && this.props.info.margin_level ? this.props.info.margin_level.toFixed(3) : "-"}</span></div>
                     </div>
                     <div className="d-flex justify-content-between" style={{ borderTop: "1px solid #000000", color: "#929292", fontSize:"1.2rem", padding:"0.8rem"}}>
                         <div className="ml-1"><span>Leverage:</span></div>

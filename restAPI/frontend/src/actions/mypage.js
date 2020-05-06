@@ -567,9 +567,10 @@ export const getWallet = () => async (dispatch, getState) => {
       payload: res.data.data
     });
   } catch (err) {
-    dispatch({
-      type: FAIL
-    })
+    return false
+    // dispatch({
+    //   type: FAIL
+    // })
   }
 };
 // Get User Balance Info (input: user 계좌번호)

@@ -117,7 +117,7 @@ class account extends Component {
             <span>Withdraw</span>
           </div>
         </div>
-        {this.props.account && this.props.wallet ?
+        {this.props.account ?
           this.props.account.map((rowData,i) => {
             if(rowData.status === "A" || rowData.status === "S") {
               let account_type = "";
@@ -181,7 +181,7 @@ class account extends Component {
                   </div>                  
                   <div className="ml-2" style={{ width: "20%" }}>
                     {//wallet에 담긴 kj balance
-                      this.props.wallet.kj_balance > 0 ? (<Link
+                      this.props.wallet && this.props.wallet.kj_balance > 0 ? (<Link
                       to="/mypage/deposit"
                       className="px-3 py-2 rounded-pill"
                       style={{
