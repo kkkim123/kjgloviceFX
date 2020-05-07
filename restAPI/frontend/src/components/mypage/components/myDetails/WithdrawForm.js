@@ -106,13 +106,11 @@ class WithdrawForm extends Component {
     const accList =
       this.props.account &&
       this.props.account.map((acc, i) => {
-        if (acc.balance > 0) {
           return (
             <option value={acc.mt4_account} key={i}>
               {acc.mt4_account}
             </option>
           );
-        }
       });
     return (
       <div

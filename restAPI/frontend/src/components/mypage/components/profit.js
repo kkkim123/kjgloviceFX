@@ -107,11 +107,13 @@ class Profit extends Component {
         }}
       >
         <h3 className="mb-5">Cumulative Profit</h3>
-          <Bar
-            datasetKeyProvider={this.datasetKeyProvider}
-            data={this.state.chartData}
-            options={this.options}
-          />
+          <div className="chart-container" style={{position:"relative", margin:"auto", height:"57vh", width:"40vw"}}>
+            <Bar
+              datasetKeyProvider={this.datasetKeyProvider}
+              data={this.state.chartData}
+              options={this.options}
+            />
+          </div>
       </div>
     );
   }

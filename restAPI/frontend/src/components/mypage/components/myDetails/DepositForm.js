@@ -109,13 +109,11 @@ class DepositForm extends Component {
     const accList =
       this.props.account &&
       this.props.account.map((acc, i) => {
-        if (acc.balance > 0) {
           return (
             <option value={acc.mt4_account} key={i}>
               {acc.mt4_account}
             </option>
           );
-        }
       });
     return (
       <div
@@ -138,6 +136,8 @@ class DepositForm extends Component {
   };
 
   render() {
+    console.log(this.props.accNum)
+    console.log(this.props.account)
     return (
       <section className="container">
         <div className="card card-signin my-5">

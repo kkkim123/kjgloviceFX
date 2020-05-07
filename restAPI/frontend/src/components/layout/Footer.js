@@ -8,20 +8,37 @@ import iconFacebook from "../../images/icon_facebook.png";
 import iconInstagram from "../../images/icon_instagram.png";
 import iconYoutube from "../../images/icon_youtube.png";
 import iconGoogle from "../../images/icon_google.png";
-
 import { getMetaQuotes } from "../../actions/footer"; 
 
 class Footer extends Component {
-  constructor(props) {
-    super(props);
-  }
   componentDidMount() {
     this.props.getMetaQuotes();
   }
 
   render() {
-    const { isAuthenticated, data } = this.props;
+    const { isAuthenticated } = this.props.auth;
 
+    const userLinks = (
+      <>
+        <li className="nav-item item">
+          <Link className="nav-link" to="/mypage">My Page</Link>
+        </li>
+        <li className="nav-item item">
+          <Link className="nav-link" to="#" onClick={this.props.logout}>Logout</Link>
+        </li>
+      </>
+    );
+
+    const guestLinks = (
+      <>
+        <li className="nav-item item">
+          <Link className="nav-link" to="/login">My Page</Link>
+        </li>
+        <li className="nav-item item">
+          <Link className="nav-link register-content rounded-pill" to="/login" >Sign in</Link>
+        </li>
+      </>      
+    );
     return (
       <div className="footer">
         <div className="d-flex justify-content-center align-content-center flex-wrap ft1">
@@ -49,7 +66,7 @@ class Footer extends Component {
           <div className="item pt-2">
             <span className="register-button">
               {!isAuthenticated ? (
-                <Link to="/register/user">Register</Link>
+                <Link to="/login">Sign in</Link>
               ) : (
                 <Link onClick={this.props.logout} to="/login">Logout</Link>
                   // <a onClick={this.props.logout}>Logout</a>
