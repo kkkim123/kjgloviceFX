@@ -3,6 +3,7 @@ import Title from './components/title'
 import SubmitPair from './components/submitPair'
 import MostChoose from './components/mostChoose'
 import LookingFor from './components/lookingFor'
+import DownloadMT4 from "../trade/DownloadMT4";
 
 const Indices = () => {
     const titleProps = {
@@ -43,6 +44,7 @@ const Indices = () => {
                     </div>
                 </div>
             </div>
+            <DownloadMT4 />
             <LookingFor />
         </section>
     );

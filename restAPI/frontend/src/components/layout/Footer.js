@@ -68,8 +68,7 @@ class Footer extends Component {
               {!isAuthenticated ? (
                 <Link to="/login">Sign in</Link>
               ) : (
-                <Link onClick={this.props.logout} to="/login">Logout</Link>
-                  // <a onClick={this.props.logout}>Logout</a>
+                <Link onClick={this.props.logout} to="#">Logout</Link>
               )}
             </span>
           </div>
@@ -110,7 +109,9 @@ class Footer extends Component {
           </div>
 
           <div className="item">
-            <span className="name">SITE MAP</span>
+            <Link to="/site">
+              <span className="name">SITE MAP</span>
+            </Link>
           </div>
 
           <div></div>
@@ -126,5 +127,5 @@ const mapStateToProps = state => ({
   data: state.footer.quotes
 });
 
-export default connect(mapStateToProps, { getMetaQuotes })(Footer);
+export default connect(mapStateToProps, { getMetaQuotes, logout })(Footer);
 // export default Footer;

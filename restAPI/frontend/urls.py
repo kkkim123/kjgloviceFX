@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.index),
     path('login', views.index),
     path('main', views.index),
+    path('site', views.index),
     re_path('auth/users/activation/', views.index),
     re_path('auth/users/password/reset/confirm/', views.index),
     re_path('register/', views.index),

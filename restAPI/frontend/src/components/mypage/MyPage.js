@@ -21,8 +21,9 @@ class MyPage extends Component {
     const { user } = this.props.auth;
     return (
       <section className="container">
-        {/* <MpHeader /> */}
-        <Steps />
+        {user && user.user_status === 10 && 
+          <Steps />
+        }
         <NoticeBox
           title="Welcome to gloviceFX"
           subtitle=" - your personal client area"
@@ -50,11 +51,11 @@ class MyPage extends Component {
           <UserInfo data={user} />
           {/* <InBox /> */}
         {/* </div> */}
-        <Account />
         <div className="d-flex justify-content-between my-5">
           <Profit />
           <Overview />
         </div>
+        <Account />
         <TradingHistory/>
         {user && user.user_type === "I" && 
           <>

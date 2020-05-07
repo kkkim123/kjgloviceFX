@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 const HelpCenter = () => {
     return (
-        <div className="container hc">
+        <div className="hc">
             <div className="my-5">
                 <h2>GloviceFX Help Center</h2>
             </div>

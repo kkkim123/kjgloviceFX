@@ -4,6 +4,7 @@ import SubmitPair from './components/submitPair'
 import MostChoose from './components/mostChoose'
 import LookingFor from './components/lookingFor'
 import check from '../../images/check.png'
+import DownloadMT4 from "../trade/DownloadMT4";
 
 const Crypto = () => {
     const titleProps = {
@@ -79,6 +80,7 @@ const Crypto = () => {
                     </div>
                 </div>
             </div>
+            <DownloadMT4 />
             <LookingFor />
         </section>
     );

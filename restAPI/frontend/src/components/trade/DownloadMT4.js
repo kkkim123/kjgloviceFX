@@ -4,6 +4,7 @@ import styles from "../../styles/trade/download.module.css";
 import download_google from "../../images/download_google.png";
 import download_apple from "../../images/download_apple.png";
 import phone from "../../images/trading_phone.png";
+import { Link } from 'react-router-dom'
 const cx = classNames.bind(styles);
 
 class DownloadMT4 extends Component {
@@ -26,13 +27,15 @@ class DownloadMT4 extends Component {
                 </p>
                 <p>Try and make your own automated Trading bot!</p>
                 <div className="form-signin">
-                <button
-                  type="button"
-                  className="btn btn-secondary mx-5 btn-lg"
-                  >
-                    Download MT4 for Windows
-                  </button>
-                  </div>    
+                  <a href="https://download.mql5.com/cdn/web/fbp.limited/mt4/fbplimited4setup.exe">
+                    <button
+                      type="button"
+                      className="btn btn-secondary mx-5 btn-lg"
+                      >
+                      Download MT4 for Windows
+                    </button>
+                  </a>
+                </div>    
               </div>
             </div>
             <div className="p-5">

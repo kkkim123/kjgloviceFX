@@ -122,7 +122,7 @@ class RegisterForm extends Component {
                   <div className="form-label-group text-center p-2 p-gray">
                     <p className="">
                       By registering you agree to our
-                      <Link to="#" className="link">
+                      <Link to="/company" className="link">
                         {" "}
                         privacy policy
                       </Link>
