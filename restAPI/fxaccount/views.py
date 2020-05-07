@@ -39,19 +39,11 @@ class DailyTradingViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         permission_classes=[IsFKOwnerOnly,IsAuthenticated]
-        print(str(kwargs['mt4_account']))
+
         with connections['backOffice'].cursor() as cursor:
             cursor.execute("select CLOSE_TIME as date, PROFIT as profit"
-            + " from MT4_TRADES where LOGIN = '" + str(kwargs['mt4_account']) + "';")
+            + " from MT4_TRADES where LOGIN = '" + str(kwargs['mt4_account']) + "' and book_type ='C';")
 
-            # if cursor.fetchall():
-            #     df = pd.DataFrame(cursor.fetchall())
-            #     df.columns=[col[0] for col in cursor.description] 
-            #     df = df.set_index(['date'])
-            #     df.index = pd.to_datetime(df.index, unit='s')
-            # else:
-            #     return Response(status=status.HTTP_400_BAD_REQUEST, data=None)
-            
             df = pd.DataFrame(cursor.fetchall())
             df.columns=[col[0] for col in cursor.description] 
             df = df.set_index(['date'])
@@ -178,24 +170,28 @@ class TradingHistoryViews(generics.ListAPIView):
                 cursor.execute("select LOGIN as mt4_account, SYMBOL, CMD, VOLUME, OPEN_TIME, OPEN_PRICE, SL, TP, CLOSE_TIME, CLOSE_PRICE, PROFIT"
                 +" from MT4_TRADES where LOGIN = " + acc.mt4_account 
                 +" AND OPEN_TIME >= '" + from_date + " 0:0:0' "
-                +" AND OPEN_TIME <= '" + to_date  + " 23:59:59' "
+                +" AND CLOSE_TIME <= '" + to_date  + " 23:59:59' "
                 + searchQuery
-                +" AND CMD < 5 order by OPEN_TIME LIMIT " + str(page) + ",10;")
+                +" AND CMD < 5" 
+                +" AND book_type ='C'"
+                +" order by CLOSE_TIME DESC LIMIT " + str(page) + ",10;")
         
                 #print(cursor.description)(@CumSum := @CumSum + PROFIT) as TOT_PROFIT
                 columns = [col[0] for col in cursor.description]
                 historyRows += [list(zip(columns, row)) for row in cursor.fetchall()]
                 #historyRows.update(historyRows2)  SUM ('PROFIT') OVER (ORDER BY 'TICKET' ASC) as TOT_PROFIT
 
-                
+
         for acc in queryset : 
             with connections['backOffice'].cursor() as cursor:
                 cursor.execute("select COUNT(*)"
                 + "from MT4_TRADES where LOGIN = " + acc.mt4_account 
                 +" AND OPEN_TIME >= '" + from_date + " 0:0:0' "
-                +" AND OPEN_TIME <= '" + to_date  + " 23:59:59' "
+                +" AND CLOSE_TIME <= '" + to_date  + " 23:59:59' "
                 + searchQuery
-                +" AND CMD < 5 order by OPEN_TIME;")      
+                +" AND CMD < 5"
+                +" AND book_type ='C'" 
+                +" order by CLOSE_TIME;")      
                 #print(cursor.description)
                 columns = [col[0] for col in cursor.description]
                 # print(cursor.fetchall())
