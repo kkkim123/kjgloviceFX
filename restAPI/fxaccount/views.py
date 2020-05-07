@@ -120,7 +120,7 @@ class FxAccountTransferViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(deposit, many=True)
         return Response(serializer.data)
-        
+
     def destroy(self, request, user, pk):   
         permission_classes=[IsOwnerOnly,IsAuthenticated]
         instance = FxAccountTransaction.objects.get(user=user,pk = pk)
@@ -185,8 +185,8 @@ class TradingHistoryViews(generics.ListAPIView):
                 columns = [col[0] for col in cursor.description]
                 historyRows += [list(zip(columns, row)) for row in cursor.fetchall()]
                 #historyRows.update(historyRows2)  SUM ('PROFIT') OVER (ORDER BY 'TICKET' ASC) as TOT_PROFIT
-        
 
+                
         for acc in queryset : 
             with connections['backOffice'].cursor() as cursor:
                 cursor.execute("select COUNT(*)"
