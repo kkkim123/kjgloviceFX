@@ -3,6 +3,7 @@ import Title from './components/title'
 import SubmitPair from './components/submitPair'
 import MostChoose from './components/mostChoose'
 import LookingFor from './components/lookingFor'
+import DownloadMT4 from "../trade/DownloadMT4";
 
 const Energies = () => {
     const titleProps = {
@@ -28,6 +29,7 @@ const Energies = () => {
                     <p>Energies are digital, decentralized currencies that were created to work as a medium of exchange. The Energies market offers traders a new way of investing; free from intermediaries such as governments or rating agencies. Hence, price movements on cryptos is driven by a multitude of factors such as market demand and relative news.</p>
                 </div>
             </div>
+            <DownloadMT4 />
             <LookingFor />
         </section>
     );

@@ -203,11 +203,13 @@ class tradingHistory extends Component {
               <DatePicker
                 selected={this.state.from_date}
                 onChange={this.handleFromChange}
+                dateFormat="yyyy-MM-dd"
               />
               <label>-</label>
               <DatePicker
                 selected={this.state.to_date}
                 onChange={this.handleToChange}
+                dateFormat="yyyy-MM-dd"
               />
             </div>
             <div>
@@ -289,11 +291,11 @@ class tradingHistory extends Component {
             data.cmd = historyRow[2][1];
             data.volume = historyRow[3][1];
             data.open_time = Moment(historyRow[4][1]).format(
-              "MM/DD/YYYY HH:mm"
+              "YYYY-MM-DD HH:mm"
             );
             data.open_price = historyRow[5][1];
             data.close_time = Moment(historyRow[8][1]).format(
-              "MM/DD/YYYY HH:mm"
+              "YYYY-MM-DD HH:mm"
             );
             data.close_price = historyRow[9][1];
             data.profit = historyRow[10][1];

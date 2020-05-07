@@ -1,8 +1,11 @@
 import React from "react";
 import mainBanner from "../../../images/main/mainBanner.png";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-const MainBanner = () => {
+const MainBanner = (props) => {
+  const { user } = props.auth;
+  let link = user ? "/mypage" : "/login"  
   return (
     <div className="bgImg">
       <div
@@ -32,7 +35,7 @@ const MainBanner = () => {
             <br></br>
             <br></br>
             <Link
-              to="/trading"
+              to={link}
               className="rounded-pill px-5 py-3 my-5"
               style={{
                 color: "#ffffff",
@@ -49,4 +52,8 @@ const MainBanner = () => {
   );
 };
 
-export default MainBanner;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(MainBanner);

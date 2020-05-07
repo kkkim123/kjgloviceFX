@@ -3,6 +3,7 @@ import Title from './components/title'
 import SubmitPair from './components/submitPair'
 import MostChoose from './components/mostChoose'
 import LookingFor from './components/lookingFor'
+import DownloadMT4 from "../trade/DownloadMT4";
 
 const Metals = () => {
     const titleProps = {
@@ -38,6 +39,7 @@ const Metals = () => {
                     <p>Platinum has specific properties that keep this metal in demand in many industries, although, approximately 40% of it is used in automobile production.</p>
                 </div>
             </div>
+            <DownloadMT4 />
             <LookingFor />
         </section>
     );

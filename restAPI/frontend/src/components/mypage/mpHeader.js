@@ -106,12 +106,16 @@ class MpHeader extends Component {
       // </div>
       <nav className="navbar navbar-expand-lg fixed-top navbar-dark header" style={{backgroundColor: "#0e112c"}}>
         <div className="container">
+          <div className="w-50">
             <Link to="/mypage" className="navbar-brand">
               <img src={MY_LOGO} style={{width:"100%", height:"100%"}}/>
             </Link>
-          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
+            </div>
+          <div className="w-auto">
+            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+              <span className="navbar-toggler-icon"></span>
+            </button>
+          </div>
           <div className="collapse navbar-collapse" id="navbarResponsive">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item item">

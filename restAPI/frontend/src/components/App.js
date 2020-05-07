@@ -62,6 +62,7 @@ import TransferDetail from "./mypage/components/myDetails/transferDetail";
 import DepositDetail from "./mypage/components/myDetails/depositDetail";
 import WithdrawDetail from "./mypage/components/myDetails/withdrawDetail";
 import ScrollToTop from "./common/ScrollToTop";
+import SitetMap from "./layout/siteMap";
 
 class App extends Component {
   componentDidMount() {
@@ -85,6 +86,7 @@ class App extends Component {
           <Switch>
             <PrivateRoute exact path="/" />
             <Route exact path="/main" component={Main} />
+            <Route exact path="/site" component={SitetMap} />
             <Route exact path="/login" component={LoginForm} />
             <Route exact path="/register/user" component={RegisterForm} />
             <Route exact path="/reset" component={ResetForm} />

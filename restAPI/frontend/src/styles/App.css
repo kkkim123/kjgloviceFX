@@ -62,9 +62,9 @@ html, body, #root, #app  {
 }
 
 section.container {
-  padding: 70px 0px 0px 0px;
+  padding: 100px 0px 0px 0px;
+  min-height: 100%;
 }
-
 
 .bgImg {
   padding: 60px 0px 0px 0px
@@ -107,4 +107,9 @@ a:hover {
 /* 부트스트랩 드롭다운 토글 화살표  */
 .dropdown-toggle::after {
   display: none;
+}
+
+.title-line {
+  border-style:none;
+  border-bottom:solid 1px #006536;
 }
