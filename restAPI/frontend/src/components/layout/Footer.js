@@ -11,8 +11,18 @@ import iconGoogle from "../../images/icon_google.png";
 import { getMetaQuotes } from "../../actions/footer"; 
 
 class Footer extends Component {
+
+  // 10초 interval로 footer 호출
   componentDidMount() {
-    this.props.getMetaQuotes();
+    this.props.getMetaQuotes('footer');
+    this.timerID = setInterval(
+      () => this.props.getMetaQuotes('footer'), 10000
+    );
+  }
+
+  // interval 제거
+  componentWillUnmount() {
+    clearInterval(this.timerID);
   }
 
   render() {
@@ -42,7 +52,7 @@ class Footer extends Component {
     return (
       <div className="footer">
         <div className="d-flex justify-content-center align-content-center flex-wrap ft1">
-          {this.props.data ? (this.props.data && this.props.data.map((item, i) => (
+          {this.props.footer ? (this.props.footer && this.props.footer.map((item, i) => (
           <div className="item" key={i}>
             <span className="name">{item.key}</span>
             <br></br>
@@ -123,7 +133,7 @@ class Footer extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  data: state.footer.quotes
+  footer: state.footer.quotes
 });
 
 export default connect(mapStateToProps, { getMetaQuotes })(Footer);

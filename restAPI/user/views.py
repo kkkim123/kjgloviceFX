@@ -176,13 +176,31 @@ class QueryQuotesView(APIView):
 
     def get(self, request):
         try:
+            symbol = request.GET.get('symbol', '')
+            
+            quotes_str = None
+
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             result_data = []
 
             # main server 연결
             sock.connect(('192.109.15.27', 443))
             # quotes string 선언
-            quotes_str = 'EURUSD,GBPUSD,USDJPY,AUDUSD'
+            if symbol == 'forex':
+                quotes_str = 'AUDUSD,CADCHF,CADJPY,CHFJPY,EURCAD,EURCHF,EURGBP,EURJPY,EURUSD,GBPCAD,GBPCHF,GBPJPY,GBPUSD,USDCAD,USDCHF,USDJPY'
+            elif symbol == 'indices':
+                quotes_str = 'AUS200,DE30,HK50,ES35,F40,JP225,N25,STOXX50.c,SWI20.c,UK100.c,USTEC.c,US500.c,DJ30.c'
+            elif symbol == 'metals':
+                quotes_str = 'XAGUSD,XAUUSD,XPDUSD,XPTUSD'
+            elif symbol == 'energies':
+                quotes_str = 'WTI_OIL,UKOIL.c'
+            elif symbol == 'crypto':
+                quotes_str = 'BTCUSD,ETHUSD,LTCUSD,DSHUSD,XRPUSD'
+            elif symbol == 'commodity':
+                quotes_str = 'UKOIL.f,USOIL.f,NGAS.f,DE30.f,DJ30.f,DX.f,US500.f,USTEC.f,CC.f,KC.f,CT.f,SB.f'
+            elif symbol == 'footer':
+                quotes_str = 'EURUSD,GBPUSD,GOLD,USOIL,S&P500,BTCUSD'
+            
             send_data = 'WWAPQUOTES-{}'.format(quotes_str)+'\n'
             sock.send(send_data.encode('utf-8'))
 
@@ -201,10 +219,18 @@ class QueryQuotesView(APIView):
                     if data.startswith(quote.lower()):
                         split_data = data.split(' ')
                         tmp['key'] = quote
-                        # 기존에 뒤에값이 3자리로 들어오는 만큼 앞의값과 치환해서 자리수 맞춰 출력
                         quotes_value = split_data[1].split('/')
-                        tmp['value'] = '{}/{}'.format(
-                            quotes_value[0], quotes_value[0][0:-len(quotes_value[1])] + quotes_value[1])
+                        
+                        if symbol == 'footer':
+                            # footer 에서 호출한 경우, bid 값만 출력
+                            tmp['value'] = quotes_value[0]
+                        else:
+                            # footer 외에서 호출한 경우, 기존에 뒤에값이 3자리로 들어오는 만큼 앞의값과 치환해서 자리수 맞춰 출력
+                            tmp['sell'] = quotes_value[0]
+                            tmp['buy'] = quotes_value[0][0:-len(quotes_value[1])] + quotes_value[1]
+                            del tmp['value']
+                            # tmp['value'] = '{}/{}'.format(
+                            # quotes_value[0], quotes_value[0][0:-len(quotes_value[1])] + quotes_value[1])
                         result_data.append(tmp)
 
             return Response(status=status.HTTP_200_OK, data=result_data)
@@ -230,4 +256,3 @@ class QueryOverViewData(APIView):
             return Response(status=status.HTTP_200_OK, data=result)
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST, data=None)
-        

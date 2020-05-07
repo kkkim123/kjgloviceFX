@@ -71,3 +71,4 @@ export const GET_WALLET = 'GET_WALLET';
 export const GET_CHART = 'GET_CHART';
 //USER Balance 데이터 조회
 export const GET_USER_BALANCE = 'GET_USER_BALANCE';
+export const GET_FOREX_QUOTE = 'GET_FOREX_QUOTE';
