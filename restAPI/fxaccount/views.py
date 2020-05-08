@@ -220,7 +220,44 @@ class ClientAccountListViews(generics.ListAPIView):
 
         json_val = json.dumps(rows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
         return HttpResponse(json_val)
-#조회
+
+
+class CommissionSummaryViews(generics.ListAPIView):   
+    permission_classes=[IsAuthenticated]
+    def get(self,request,*args, **kwargs ):
+        permission_classes=[IsAuthenticated]
+        from_date = request.GET['from_date']
+        to_date = request.GET['to_date']
+        queryset = IntroducingBroker.objects.filter(fxuser = kwargs['user'])
+        rows = []
+        for ib in queryset : 
+            print(ib.ib_code)
+            with connections['backOffice'].cursor() as cursor:
+                cursor.callproc("SP_IB_COMMISSION_HISTORY_SUMMARY", (ib.company_idx,ib.id,'Y',from_date,to_date,ib.ib_code,'',))
+                # cursor.callproc("SP_IB_COMMISSION_HISTORY_LIST", (ib.company_idx,283,'Y',from_date,to_date,0,'','','',))
+                columns = [col[0] for col in cursor.description]
+                rows += [list(zip(columns, row)) for row in cursor.fetchall()]
+
+        json_val = json.dumps(rows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
+        return HttpResponse(json_val)
+
+class CommissionMonthlyViews(generics.ListAPIView):   
+    permission_classes=[IsAuthenticated]
+    def get(self,request,*args, **kwargs ):
+        permission_classes=[IsAuthenticated]
+        queryset = IntroducingBroker.objects.filter(fxuser = kwargs['user'])
+        rows = []
+        for ib in queryset : 
+            print(ib.ib_code)
+            with connections['backOffice'].cursor() as cursor:
+                cursor.callproc("SP_IB_LIST_MONTHLY_SUMMARY", (ib.ib_code,'Y'))
+                columns = [col[0] for col in cursor.description]
+                rows += [list(zip(columns, row)) for row in cursor.fetchall()]
+
+        json_val = json.dumps(rows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
+        return HttpResponse(json_val)
+
+
 class CommissionHistoryViews(generics.ListAPIView):   
     permission_classes=[IsAuthenticated]
     def get(self,request,*args, **kwargs ):
