@@ -258,6 +258,38 @@ class CommissionMonthlyViews(generics.ListAPIView):
         return HttpResponse(json_val)
 
 
+class ClientsCommissionHistoryViews(generics.ListAPIView):   
+    permission_classes=[IsAuthenticated]
+    def get(self,request,*args, **kwargs ):
+        permission_classes=[IsAuthenticated]
+        from_date = request.GET['from_date']
+        to_date = request.GET['to_date']
+        queryset = IntroducingBroker.objects.filter(fxuser = kwargs['user'])
+        rows = []
+        ib_codes = []
+        historyRows = []
+        for ib in queryset : 
+            print(ib.ib_code)
+            ib_codes.append(ib.ib_code)
+            ib_codes.append(2200)
+            child = ib.get_descendants(include_self=False)
+            for childIb in list(child):
+                ib_codes.append(childIb.ib_code)
+            
+            with connections['backOffice'].cursor() as cursor:
+                t = tuple(ib_codes)
+                params = {'t': t}
+                print(t)
+                query= "SELECT * FROM IB_COMMISSION_HISTORY WHERE ORDER_DATE >= '" + from_date + " 00:00:00' AND ORDER_DATE <= '" + to_date  + " 23:59:59' AND IB_LOGIN IN %(t)s order by ORDER_DATE DESC;"
+                cursor.execute(query,params)
+
+                columns = [col[0] for col in cursor.description]
+                historyRows += [list(zip(columns, row)) for row in cursor.fetchall()]
+
+        json_val = json.dumps(historyRows,sort_keys=True,indent=1,cls=DjangoJSONEncoder)
+        return HttpResponse(json_val)
+
+
 class CommissionHistoryViews(generics.ListAPIView):   
     permission_classes=[IsAuthenticated]
     def get(self,request,*args, **kwargs ):

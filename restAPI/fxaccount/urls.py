@@ -22,6 +22,8 @@ urlpatterns = [
 
     path('commissionsummary/<int:user>', views.CommissionSummaryViews.as_view()),
     path('commissionmonthlysummary/<int:user>', views.CommissionMonthlyViews.as_view()),
+    path('clientscommissionhistory/<int:user>', views.ClientsCommissionHistoryViews.as_view()),
+
 
     path('commissionhistory/<int:user>', views.CommissionHistoryViews.as_view()),
     path('commissionhistory/<int:user>/<int:mt4_login>', views.CommissionHistoryViewsDetail.as_view()),
