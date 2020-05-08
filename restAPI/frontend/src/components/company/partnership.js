@@ -6,10 +6,11 @@ import icon_affiliate from '../../images/icon_affiliate.png'
 import submit from '../../images/submit.png'
 import check from '../../images/check.png'
 import '../../styles/company/partnership.css'
+import ExplanNonbox from '../explannonbox';
 
 const Card = (props) => {
     return (
-        <div className="col-xs-12 col-sm-3 mb-3 partnership">
+        <div className="partnership p-partnership-wrap mb-2 p-3">
             <div className="box p-4">
                 <div className="summary mb-4">
                     <img className="ps-icon mb-2" src={props.icon} alt={props.name}></img>
@@ -42,13 +43,10 @@ const Card = (props) => {
 const Partnership = () => {
     return (
         <section className="container">
-            <div className="my-5 py-3">
-                <p className="title">Choose Your Partnership Scheme</p>
-                <div className="ps-content">
-                    <p>We offer various partnership schemes to suit your individual preferences.</p>
-                </div>
-            </div>
-            <div className="row justify-content-center mb-5 pb-5">
+            <ExplanNonbox pageTitle={"Choose Your Partnership Scheme"} TitleColor={"#000"}
+            pageDesc={"<p>We offer various partnership schemes to suit your individual preferences.</p>"}/>
+            
+            <div className="row d-flex flex-wrap p-3 justify-content-center mb-5 pb-5">
                 <Card
                     icon={icon_broker}
                     name="White Label Broker"

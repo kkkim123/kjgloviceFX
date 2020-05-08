@@ -22,7 +22,7 @@ const Energies = () => {
             <MostChoose />
             <SubmitPair />
 
-            <div className="p-5 mb-5" style={{ color: "#959595" }}>
+            <div className="p-4 mb-5" style={{ color: "#959595" }}>
                 <h4 style={{ color: "#000000" }}>What Are Energies?</h4>
                 <div className="text-left">
                     <br></br>

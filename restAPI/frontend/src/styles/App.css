@@ -109,6 +109,9 @@ a:hover {
   display: none;
 }
 
+.cursor-pointer{
+  cursor: pointer;
+}
 .title-line {
   border-style:none;
   border-bottom:solid 1px #006536;
