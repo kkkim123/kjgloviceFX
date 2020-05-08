@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import FxAccount, DepositTransaction, WithdrawTransaction,FxAccountTransaction
 #,DailyTradingHistory
 class FxAccountSerializer(serializers.ModelSerializer):
+    available = serializers.FloatField()
+
     class Meta:
         model = FxAccount
         fields = "__all__"

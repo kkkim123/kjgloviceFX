@@ -11,10 +11,10 @@ class Header extends Component {
 
     const userLinks = (
       <>
-        <li className="nav-item item">
+        <li className="nav-item item" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <Link className="nav-link" to="/mypage">My Page</Link>
         </li>
-        <li className="nav-item item">
+        <li className="nav-item item" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <Link className="nav-link" to="#" onClick={this.props.logout}>Logout</Link>
         </li>
       </>
@@ -36,10 +36,10 @@ class Header extends Component {
 
     const guestLinks = (
       <>
-        <li className="nav-item item">
+        <li className="nav-item item" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <Link className="nav-link" to="/login">My Page</Link>
         </li>
-        <li className="nav-item item">
+        <li className="nav-item item" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <Link className="nav-link register-content rounded-pill" to="/login" >Sign in</Link>
         </li>
       </>      
@@ -79,7 +79,7 @@ class Header extends Component {
                 <Link className="nav-link dropdown-toggle" to="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Market
                 </Link>
-                <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                   <Link className="dropdown-item" to="/market/forex">Forex</Link>
                   <Link className="dropdown-item" to="/market/commodity">Commodity</Link>
                   <Link className="dropdown-item" to="/market/indices">Indices</Link>
@@ -88,7 +88,7 @@ class Header extends Component {
                   <Link className="dropdown-item" to="/market/crypto">Crypto</Link>                  
                 </div>
               </li>
-              <li className="nav-item item">
+              <li className="nav-item item" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <Link className="nav-link" to="/trading">
                 Trading
                 </Link>
@@ -97,7 +97,7 @@ class Header extends Component {
                   <Link className="nav-link dropdown-toggle" to="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Company
                   </Link>
-                  <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     <Link className="dropdown-item" to="/company">Company</Link>
                     <Link className="dropdown-item" to="/company/about">About</Link>
                     <Link className="dropdown-item" to="/company/partnership">Partnership</Link>

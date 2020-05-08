@@ -1,5 +1,5 @@
 import React from "react";
-import mainBanner from "../../../images/main/mainBanner.png";
+// import mainBanner from "../../../images/main/glovicefx_main_mobile.png";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -10,7 +10,7 @@ const MainBanner = (props) => {
     <div className="bgImg">
       <div
         style={{
-          backgroundImage: `url(${mainBanner})`,
+          backgroundImage: `url(${props.mainBanner})`,
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           padding: "250px 0"

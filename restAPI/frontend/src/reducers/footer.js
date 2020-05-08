@@ -1,5 +1,6 @@
 import {
-    FOOTER_LOADING
+    FOOTER_LOADING,
+    GET_FOREX_QUOTE
 } from "../actions/types";
 
 export default (state = {}, action) => {
@@ -8,6 +9,10 @@ export default (state = {}, action) => {
             return {
                 ...state,
                 quotes: action.payload
+            }
+        case GET_FOREX_QUOTE:
+            return {
+                markets: action.payload
             }
         default:
             return state;

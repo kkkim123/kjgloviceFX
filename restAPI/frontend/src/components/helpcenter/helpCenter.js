@@ -10,7 +10,7 @@ const HelpCenter = () => {
                 <h2>GloviceFX Help Center</h2>
             </div>
             <div className="hc-usual row my-3">
-                <div className="col-xs-12 col-sm-4 p-3 my-3">
+                <div className="col-xs-12 col-sm-4 px-4 py-3 my-3">
                     <a className="d-flex" href="#">
                         <div className="mr-3">
                             <img className="check-img mt-2" src={check} alt=""></img>
@@ -21,7 +21,7 @@ const HelpCenter = () => {
                         </div>
                     </a>
                 </div>
-                <div className="col-xs-12 col-sm-4 p-3 my-3">
+                <div className="col-xs-12 col-sm-4 px-4 py-3 my-3">
                     <a className="d-flex" href="#">
                         <div className="mr-3">
                             <img className="check-img mt-2" src={check} alt=""></img>
@@ -32,7 +32,7 @@ const HelpCenter = () => {
                         </div>
                     </a>
                 </div>
-                <div className="col-xs-12 col-sm-4 p-3 my-3">
+                <div className="col-xs-12 col-sm-4 px-4 py-3 my-3">
                     <a className="d-flex" href="#">
                         <div className="mr-3">
                             <img className="check-img mt-2" src={check} alt=""></img>
@@ -43,7 +43,7 @@ const HelpCenter = () => {
                         </div>
                     </a>
                 </div>
-                <div className="col-xs-12 col-sm-4 p-3 my-3">
+                <div className="col-xs-12 col-sm-4 px-4 py-3 my-3">
                     <a className="d-flex" href="#">
                         <div className="mr-3">
                             <img className="check-img mt-2" src={check} alt=""></img>
@@ -54,7 +54,7 @@ const HelpCenter = () => {
                         </div>
                     </a>
                 </div>
-                <div className="col-xs-12 col-sm-4 p-3 my-3">
+                <div className="col-xs-12 col-sm-4 px-4 py-3 my-3">
                     <a className="d-flex" href="#">
                         <div className="mr-3">
                             <img className="check-img mt-2" src={check} alt=""></img>
@@ -65,7 +65,7 @@ const HelpCenter = () => {
                         </div>
                     </a>
                 </div>
-                <div className="col-xs-12 col-sm-4 p-3 my-3">
+                <div className="col-xs-12 col-sm-4 px-4 py-3 my-3">
                     <a className="d-flex" href="#">
                         <div className="mr-3">
                             <img className="check-img mt-2" src={check} alt=""></img>
@@ -76,7 +76,7 @@ const HelpCenter = () => {
                         </div>
                     </a>
                 </div>
-                <div className="col-xs-12 col-sm-4 p-3 my-3">
+                <div className="col-xs-12 col-sm-4 px-4 py-3 my-3">
                     <a className="d-flex" href="#">
                         <div className="mr-3">
                             <img className="check-img mt-2" src={check} alt=""></img>
@@ -87,7 +87,7 @@ const HelpCenter = () => {
                         </div>
                     </a>
                 </div>
-                <div className="col-xs-12 col-sm-4 p-3 my-3">
+                <div className="col-xs-12 col-sm-4 px-4 py-3 my-3">
                     <a className="d-flex" href="#">
                         <div className="mr-3">
                             <img className="check-img mt-2" src={check} alt=""></img>
@@ -99,15 +99,15 @@ const HelpCenter = () => {
                     </a>
                 </div>
             </div>
-            <div className="cant-find-text my-5">
+            <div className="my-5" style={{color:"#959595"}}>
                 <p>Can’t find what you need?</p>
                 <p>Please contact us. We are with you all the time!</p>
             </div>
-            <div className="hc-submit my-5 pb-5">
-                <Link to="#" className="live-chat-button rounded-pill px-5 py-3 mx-3" onClick={()=> alert('준비 중입니다.')} >
+            <div className="d-flex flex-wrap p-3 justify-content-center ">
+                <Link to="#" className="live-chat-button rounded-pill px-5 py-3 mx-3 p-btn" onClick={()=> alert('comming soon')} >
                     LiveChat
                 </Link>
-                <Link className="request-button rounded-pill px-4 py-3 mx-3" to="#" onClick={()=> alert('준비 중입니다.')} >
+                <Link className="request-button rounded-pill px-4 py-3 mx-3 p-btn" to="#" onClick={()=> alert('comming soon')} >
                     Request a call back
                 </Link>
             </div>
