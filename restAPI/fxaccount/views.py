@@ -293,9 +293,9 @@ class ClientsCommissionHistoryViews(generics.ListAPIView):
         historyRows = []
         for ib in queryset : 
             print(ib.ib_code)
-            ib_codes.append(ib.ib_code)
+            #ib_codes.append(ib.ib_code)
             #ib_codes.append(2200)
-            child = ib.get_descendants(include_self=False)
+            child = ib.get_descendants(include_self=True)
             for childIb in list(child):
                 ib_codes.append(childIb.ib_code)
             

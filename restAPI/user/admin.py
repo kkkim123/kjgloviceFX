@@ -161,7 +161,11 @@ class IBAdmin(DjangoMpttAdmin):
                 status = old_ib.status,
                 parent_id = old_ib.parent_id
             )
-
+            parent_ib_code = ib.get_ancestors(ascending=True, include_self=False)[0].ib_code
+            fxuser = FxUser.objects.get(id = ib.fxuser_id)
+            print(fxuser)
+            fxuser.referral_code = parent_ib_code     
+            fxuser.save()  
         if self.trigger_save_after_move:
             instance.save()
 
