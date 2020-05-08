@@ -153,11 +153,13 @@ class partners extends Component {
               <DatePicker
                 selected={this.state.from_date}
                 onChange={this.handleFromChange}
+                dateFormat="yyyy-MM-dd"
               />
               <label>-</label>
               <DatePicker
                 selected={this.state.to_date}
                 onChange={this.handleToChange}
+                dateFormat="yyyy-MM-dd"
               />
             </div>
           </div>

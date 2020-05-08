@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import classNames from 'classnames/bind';
 import styles from "../../styles/trade/trade.module.css";
 const cx = classNames.bind(styles);
 
 class TradingMain extends Component {
   render() {
+    const { user } = this.props.auth;
+    let link = user ? "/mypage" : "/login"
+    
     return (
       <div className={cx("bgImg", "text-center","main")}>
         <div className="row justify-content">
@@ -27,7 +31,7 @@ class TradingMain extends Component {
             </p>
             <p>assets, place orders and manage positions.</p>
             <div className="form-signin">
-            <Link to="/trading/info">
+            <Link to={link}>
               <button className="btn btn-lg btn-primary mt-10" type="button">
                 Start Trading Now
               </button>
@@ -40,4 +44,8 @@ class TradingMain extends Component {
   }
 }
 
-export default TradingMain;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(TradingMain);

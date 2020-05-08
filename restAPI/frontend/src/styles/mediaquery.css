@@ -1,0 +1,115 @@
+    /* phone */
+    @media (max-width: 578px) {
+        .phone{
+            width: 50%;
+        }
+        .phone-padding{
+            padding:14px;
+        }
+        .market-size {
+            min-width: 230px;
+            width: 100%;
+        }
+        .square_wrap {
+            width: 97%;
+            position: relative;
+            margin: 3%;
+        }
+        .phone-oneblock {
+            min-width: 230px;
+            width: 100%;
+        }
+        .mp-5{
+            padding-top: 2rem
+        }
+        .p-partnership-wrap {
+            max-width: 400px;
+        }
+        .p-btn{
+            display: block;
+            display: block;
+            width: 100%;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+    }
+    /* tablet */
+    @media (min-width: 579px) and (max-width: 1024px) {
+        .web{
+            width: 33%;
+        }
+        .web-padding{
+            padding:30px;
+        }
+        .market-size {
+            min-width: 230px;
+            width: 50%;
+        }
+        .square_wrap {
+            width:30%;
+            position: relative;
+            margin: 3%;
+        }
+        .teblet-twoblock {
+            min-width: 230px;
+            width: 50%;
+        }
+        .mp-5{
+            padding-top: 3rem
+        }
+        .p-partnership-wrap {
+            max-width: 51%;
+        }
+        .p-btn{
+            min-width: 200px;
+        }
+        
+    }
+    /* pc */
+    @media (min-width: 1025px) {
+        .web{
+            width: 33%;
+        }
+        .web-padding{
+            padding:30px;
+        }
+        .market-size {
+            width: 33%;
+            min-width: 340px;
+        }
+        .square_wrap {
+            width: 30%;
+            position: relative;
+            margin: 3%;
+        }
+        .web-twoblock {
+            min-width: 230px;
+            width: 50%;
+        }
+        .mp-5{
+            padding-top: 1rem
+        }
+        .p-partnership-wrap {
+            max-width: 358px;
+        }
+        .p-btn{
+            min-width: 200px;
+        }
+    }
+
+
+    
+.square_wrap:before {
+    content: "";
+    display: block;
+    padding-top: 100%; /* 1:1 비율 */
+}
+    
+.square {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+

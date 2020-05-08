@@ -4,6 +4,7 @@ import SubmitPair from './components/submitPair';
 import MostChoose from './components/mostChoose';
 import LookingFor from './components/lookingFor';
 import Quotes from './components/Quotes';
+import DownloadMT4 from "../trade/DownloadMT4";
 import { connect } from 'react-redux';
 import { getMarketQuotes } from "../../actions/footer"; 
 
@@ -70,6 +71,7 @@ class Energies extends Component {
                         <p>Energies are digital, decentralized currencies that were created to work as a medium of exchange. The Energies market offers traders a new way of investing; free from intermediaries such as governments or rating agencies. Hence, price movements on cryptos is driven by a multitude of factors such as market demand and relative news.</p>
                     </div>
                 </div>
+                <DownloadMT4 />
                 <LookingFor />
             </section>
         );

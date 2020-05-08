@@ -4,6 +4,8 @@ import SubmitPair from './components/submitPair';
 import MostChoose from './components/mostChoose';
 import LookingFor from './components/lookingFor';
 import Quotes from './components/Quotes';
+import ExplanNonbox from '../explannonbox';
+import DownloadMT4 from "../trade/DownloadMT4";
 import { connect } from 'react-redux';
 import { getMarketQuotes } from "../../actions/footer"; 
 
@@ -65,12 +67,10 @@ class Commodity extends Component {
     
                 <MostChoose />
                 <SubmitPair />
-                <div className="my-5 py-5" style={{ color: "#959595" }}>
-                    <h3 style={{ color: "#000000" }}>What Are Commodity Futures?</h3>
-                    <br></br>
-                    <p className="text-left">Futures are financial contracts for the specific asset to be bought or sold at a set time in the future. The final price level is determined by both parties, a buyer and a seller, and is known as the forward price. The specified date of the future payment is known as the expiration date.</p>
-                    <p className="text-left">Contract for difference (CFD) on commodity futures allow for trade on the price fluctuations of a wide range of assets: commodities. If investors make a forecast about the quotes increase, they open a Buy position on the trading platform. If they think the chart will move down, they make an online order to Sell.</p>
-                </div>
+                <ExplanNonbox pageTitle={"What Are Commodity Futures?"} TitleColor={"#000"} 
+                  pageDesc={"<p>Futures are financial contracts for the specific asset to be bought or sold at a set time in the future. The final price level is determined by both parties, a buyer and a seller, and is known as the forward price. The specified date of the future payment is known as the expiration date.</p>\
+                  <p>Contract for difference (CFD) on commodity futures allow for trade on the price fluctuations of a wide range of assets: commodities. If investors make a forecast about the quotes increase, they open a Buy position on the trading platform. If they think the chart will move down, they make an online order to Sell.</p>"}/>
+                  <DownloadMT4 />
                 <LookingFor />
             </section>
         );
@@ -83,3 +83,4 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {getMarketQuotes})(Commodity);
+

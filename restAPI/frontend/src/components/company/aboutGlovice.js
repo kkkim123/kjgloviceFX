@@ -5,7 +5,7 @@ import '../../styles/company/aboutGlovice.css'
 
 const AboutGlovice = () => {
     return (
-        <section className="container">
+        <section className="container mt-5 p-3">
             <div className="text-left my-5">
                 <img className="icon" src={icon_about} alt=""></img>
                 <span className="ag-title ml-2"><strong>About GloviceFX</strong></span>

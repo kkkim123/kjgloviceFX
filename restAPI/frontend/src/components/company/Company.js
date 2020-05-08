@@ -9,15 +9,15 @@ import icon_terms from '../../images/icon_terms.png'
 
 const Card = (props) => {
     return (
-        <div className="col-xs-12 col-sm-4 mr-4">
-            <div className="text-left mb-4">
+        <div className="my-3 px-4 pt-4 text-left web-twoblock phone-oneblock teblet-twoblock">
+            <div className="h-60 text-left mb-4">
                 <img className="icon" src={props.icon} alt={props.name}></img>
                 <span className="title ml-2">{props.name}</span>
             </div>
             <div className="content text-left">
                 {props.text}
             </div>
-            <Link to={props.link} className="learn-more text-right"><p>Learn more</p></Link>
+            <Link to={props.link} className="learn-more text-right"><p className={"mp-5"}>Learn more</p></Link>
             {/* <a className="learn-more text-right" href="#"><p>Learn more</p></a> */}
         </div>
     );
@@ -26,7 +26,7 @@ const Card = (props) => {
 const Company = () => {
     return (
         <>
-            <div className="row justify-content-center mt-5">
+            <div className="row d-flex flex-wrap p-3 justify-content-center mt-5">
                 <Card
                     name='About GloviceFX'
                     icon={icon_about}
@@ -40,9 +40,6 @@ believe this is the only right way of doing a business.'
                     text='Protecting the privacy and safeguarding the personal and financial information of our clients and website visitors is one of our highest priorities. The following Privacy Statement explains how GloviceFX collects and protects your personal information. References to "GloviceFX" in this Privacy Statement include all GloviceFX companies and divisions.'
                     link="/company/privacy"
                 />
-            </div>
-            <div className="row justify-content-center mt-5">
-
                 <Card
                     name='AML Policy'
                     icon={icon_policy}

@@ -4,6 +4,8 @@ import SubmitPair from './components/submitPair';
 import MostChoose from './components/mostChoose';
 import LookingFor from './components/lookingFor';
 import Quotes from './components/Quotes';
+import Explanbox from '../explanbox';
+import DownloadMT4 from "../trade/DownloadMT4";
 import check from '../../images/check.png';
 import { connect } from 'react-redux';
 import { getMarketQuotes } from "../../actions/footer"; 
@@ -122,6 +124,7 @@ class Crypto extends Component {
                         </div>
                     </div>
                 </div>
+                <DownloadMT4 />
                 <LookingFor />
             </section>
         );

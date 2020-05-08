@@ -407,7 +407,7 @@ class UserForm(forms.ModelForm):
 
 class UserAdmin(admin.ModelAdmin):
     form = UserForm
-    list_display = ('id','email', 'first_name', 'last_name', 'user_type','kj_address','referral_code','user_status')
+    list_display = ('id','email', 'first_name', 'last_name', 'user_type','shortcut_kjaddress','referral_code','user_status')
     list_filter = ('user_type','user_status',)
     list_editable = ('user_status','referral_code')
     search_fields = ('email',)
@@ -438,6 +438,13 @@ class UserAdmin(admin.ModelAdmin):
             ),
         }),
         )
+    def shortcut_kjaddress(self, obj):
+        kj_address = None
+
+        if obj.kj_address:
+            kj_address = obj.kj_address[:7]+ '...' + obj.kj_address[-7:]
+
+        return kj_address
 
     def has_add_permission(self, request):
         return False
@@ -460,7 +467,7 @@ class UserAdmin(admin.ModelAdmin):
         return super().changelist_view(request, extra_context=extra_context)
 
 
-
+    
     def save_model(self, request, obj, form, change):
         if(int(obj.user_status) >= 6 and obj.kj_address == ''):
             URL = 'http://3.0.181.55:3000/kj/fx/getaddress/' + str(obj.id)
@@ -474,7 +481,7 @@ class UserAdmin(admin.ModelAdmin):
                 address = obj.kj_address, 
             )
         super().save_model(request, obj, form, change)
-    
+    shortcut_kjaddress.short_description = "kj address"
 admin.site.register(FxUser, UserAdmin)
 
 

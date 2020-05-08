@@ -36,5 +36,4 @@ export const getMarketQuotes = (symbol) => async (dispatch, getState) => {
     } catch (err) {
         // dispatch(stopSubmit("Quotes", err.response.data));
     }
-    
 };

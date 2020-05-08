@@ -9,7 +9,7 @@ import requests
 
 config = configparser.ConfigParser()
 config.read('common/config/config.ini')
-
+div = 1000000000000000000
 
 class WalletForm(forms.ModelForm):
     class Meta:
@@ -44,17 +44,13 @@ class WalletAdmin(admin.ModelAdmin):
         #wallet = Wallet.objects.get(id = wallets.fxuser_id)
 
         for wallet in wallets:
-            #print(wallet[0])
             URL = 'http://3.0.181.55:3000/kj/fx/getbalance/' + str(wallet[0])
-            response = requests.get(URL)
-            jsresponse = response.json()
-            #print(jsresponse['balnace'])
-            queryset.update(kj_balance=jsresponse['balnace'])
+            kj_balance = float(requests.get(URL).json()['balnace'])
+            queryset.update(kj_balance= 0 if kj_balance == 0 else kj_balance/div)
+
             URL = 'http://3.0.181.55:3000/eth/fx/getbalance/' + str(wallet[0])
-            response = requests.get(URL)
-            jsresponse = response.json()
-            #print(jsresponse['balnace'])
-            queryset.update(eth_balance=jsresponse['balnace'])
+            eth_balance = float(requests.get(URL).json()['balnace'])
+            queryset.update(eth_balance= 0 if eth_balance == 0 else eth_balance/div)
            
     getBalance.short_description = "getBalance"
 
