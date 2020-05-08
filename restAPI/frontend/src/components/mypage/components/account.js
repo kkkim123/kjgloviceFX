@@ -6,12 +6,12 @@ import store from "../../../store";
 
 class account extends Component {
   componentDidMount() {
-    store.dispatch(getAccount(this.props.auth.id))
+    store.dispatch(getAccount(this.props.auth.id));
   }
 
-  handleClick = (data) => {
-    this.props.changeAcc(data)
-  }
+  handleClick = data => {
+    this.props.changeAcc(data);
+  };
 
   render() {
     return (
@@ -26,66 +26,101 @@ class account extends Component {
         <div className="text-left mb-5">
           <h3>
             Account
-           <span style={{fontSize: '1.2rem', fontWeight: '300'}}> Clcik Your Account Number!</span>
+            <span style={{ fontSize: "1.2rem", fontWeight: "300" }}>
+              {" "}
+              Clcik Your Account Number!
+            </span>
           </h3>
           <div className="d-flex justify-content-between text-center my-5">
             <div>
-             <span className="text-left" style={{fontSize: '1.2rem', fontWeight: '250'}}>
-              {this.props.wallet ? "Your KJ Balance : " + (this.props.wallet.kj_balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " KJ": null }
-             </span>
+              <span
+                className="text-left"
+                style={{ fontSize: "1.2rem", fontWeight: "250" }}
+              >
+                {this.props.wallet
+                  ? "Your KJ Balance : " +
+                    this.props.wallet.kj_balance
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                    " KJ"
+                  : null}
+              </span>
             </div>
             <div>
-              <Link
-                  to="/mypage/details/account/detail"
-                  className="px-3 py-2 rounded-pill"
-                  style={{
+              {this.props.auth &&
+              this.props.auth.user &&
+              this.props.auth.user.user_status > 5 ? (
+                <>
+                  <Link
+                    to="/mypage/details/account/detail"
+                    className="px-3 py-2 rounded-pill"
+                    style={{
                       color: "#ffffff",
                       backgroundColor: "#006536",
                       fontWeight: "bold",
                       textDecoration: "none"
-                  }}
-              >
-                  Account List
-              </Link>
-              <Link
-                  to="/mypage/deposit/detail"
-                  className="px-3 py-2 rounded-pill ml-3"
-                  style={{
+                    }}
+                  >
+                    Account List
+                  </Link>
+                  <Link
+                    to="/mypage/deposit/detail"
+                    className="px-3 py-2 rounded-pill ml-3"
+                    style={{
                       color: "#ffffff",
                       backgroundColor: "#006536",
                       fontWeight: "bold",
                       textDecoration: "none"
-                  }}
-              >
-                  Deposit List
-              </Link>
-              <Link
-                  to="/mypage/withdraw/detail"
-                  className="px-3 py-2 rounded-pill ml-3"
-                  style={{
+                    }}
+                  >
+                    Deposit List
+                  </Link>
+                  <Link
+                    to="/mypage/withdraw/detail"
+                    className="px-3 py-2 rounded-pill ml-3"
+                    style={{
                       color: "#ffffff",
                       backgroundColor: "#006536",
                       fontWeight: "bold",
                       textDecoration: "none"
-                  }}
-              >
-                  Withdraw List
-              </Link>                            
-              <Link
-                  to="/mypage/transfer/detail"
+                    }}
+                  >
+                    Withdraw List
+                  </Link>
+                  <Link
+                    to="/mypage/transfer/detail"
+                    className="px-3 py-2 rounded-pill mx-3"
+                    style={{
+                      color: "#ffffff",
+                      backgroundColor: "#006536",
+                      fontWeight: "bold",
+                      textDecoration: "none"
+                    }}
+                  >
+                    Transfer List
+                  </Link>
+                </>
+              ) : (
+                <Link
+                  to="#"
                   className="px-3 py-2 rounded-pill mx-3"
                   style={{
-                      color: "#ffffff",
-                      backgroundColor: "#006536",
-                      fontWeight: "bold",
-                      textDecoration: "none"
+                    color: "#ffffff",
+                    backgroundColor: "#006536",
+                    fontWeight: "bold",
+                    textDecoration: "none"
                   }}
-              >
-                  Transfer List
-              </Link>
-              </div>
+                  onClick={() =>
+                    alert("Please finish the previous step first.")
+                  }
+                >
+                  Account List
+                </Link>
+              )}
+            </div>
           </div>
         </div>
+        <div className="xScroll">
         <div
           className="d-flex justify-content-between"
           style={{
@@ -109,7 +144,7 @@ class account extends Component {
           </div>
           <div className="ml-2" style={{ width: "10%" }}>
             <span>Available</span>
-          </div>          
+          </div>
           <div className="ml-2" style={{ width: "20%" }}>
             <span>Deposit</span>
           </div>
@@ -117,9 +152,9 @@ class account extends Component {
             <span>Withdraw</span>
           </div>
         </div>
-        {this.props.account ?
-          this.props.account.map((rowData,i) => {
-            if(rowData.status === "A" || rowData.status === "S") {
+        {this.props.account ? (
+          this.props.account.map((rowData, i) => {
+            if (rowData.status === "A" || rowData.status === "S") {
               let account_type = "";
               let base_currency = "";
               switch (Number(rowData.account_type)) {
@@ -129,7 +164,7 @@ class account extends Component {
                 default:
                   break;
               }
-  
+
               switch (Number(rowData.base_currency)) {
                 case 0:
                   base_currency = "USD";
@@ -152,7 +187,7 @@ class account extends Component {
                 default:
                   break;
               }
-  
+
               return (
                 <div
                   className="d-flex justify-content-between"
@@ -167,37 +202,53 @@ class account extends Component {
                   <div className="ml-2" style={{ width: "15%" }}>
                     {account_type}
                   </div>
-                  <div className="ml-2" style={{ width: "15%", cursor: "pointer" }} onClick={()=>this.handleClick(rowData.mt4_account)}>
+                  <div
+                    className="ml-2"
+                    style={{ width: "15%", cursor: "pointer" }}
+                    onClick={() => this.handleClick(rowData.mt4_account)}
+                  >
                     <span>{rowData.mt4_account}</span>
                   </div>
                   <div className="ml-2" style={{ width: "10%" }}>
                     <span>{base_currency}</span>
                   </div>
                   <div className="ml-2" style={{ width: "10%" }}>
-                    <span>{(rowData.balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
+                    <span>
+                      {rowData.balance
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                    </span>
                   </div>
                   <div className="ml-2" style={{ width: "10%" }}>
-                    <span>{rowData.kj_balance ? (rowData.kj_balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0}</span>
-                  </div>                  
+                    <span>
+                      {rowData.kj_balance
+                        ? rowData.kj_balance
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        : 0}
+                    </span>
+                  </div>
                   <div className="ml-2" style={{ width: "20%" }}>
                     {//wallet에 담긴 kj balance
-                      this.props.wallet && this.props.wallet.kj_balance > 0 ? (<Link
-                      to="/mypage/deposit"
-                      className="px-3 py-2 rounded-pill"
-                      style={{
-                        color: "#ffffff",
-                        backgroundColor: "#006536",
-                        fontWeight: "bold",
-                        textDecoration: "none"
-                      }}
-                      onClick={()=>this.handleClick(rowData.mt4_account)}
-                    >
-                      Deposit
-                    </Link>) : null}
+                    this.props.wallet && this.props.wallet.kj_balance > 0 ? (
+                      <Link
+                        to="/mypage/deposit"
+                        className="px-3 py-2 rounded-pill"
+                        style={{
+                          color: "#ffffff",
+                          backgroundColor: "#006536",
+                          fontWeight: "bold",
+                          textDecoration: "none"
+                        }}
+                        onClick={() => this.handleClick(rowData.mt4_account)}
+                      >
+                        Deposit
+                      </Link>
+                    ) : null}
                   </div>
                   <div className="ml-2" style={{ width: "20%" }}>
                     {//mt4 에서 받아논 허용된 balance
-                      rowData.available > 0 ? (
+                    rowData.available > 0 ? (
                       <Link
                         to="/mypage/withdraw"
                         className="px-3 py-2 rounded-pill"
@@ -207,7 +258,7 @@ class account extends Component {
                           fontWeight: "bold",
                           textDecoration: "none"
                         }}
-                        onClick={()=>this.handleClick(rowData.mt4_account)}
+                        onClick={() => this.handleClick(rowData.mt4_account)}
                       >
                         Withdraw
                       </Link>
@@ -215,17 +266,21 @@ class account extends Component {
                   </div>
                 </div>
               );
-            } 
-            if(rowData.status === "P" || rowData.status === "D" ) {
+            }
+            if (rowData.status === "P" || rowData.status === "D") {
               return (
                 <div key={i}>
-                  <Link to="/mypage/details/account/detail">Pending or Decline Account</Link>
+                  <Link to="/mypage/details/account/detail">
+                    Pending or Decline Account
+                  </Link>
                 </div>
-              )
+              );
             }
-          }) : (
-            <div>No Account</div>
-          )}
+          })
+        ) : (
+          <div>No Account</div>
+        )}
+        </div>
       </div>
     );
   }
