@@ -12,7 +12,12 @@ import { getMarketQuotes } from "../../actions/footer";
 class Forex extends Component {
     componentDidMount() {
         this.props.getMarketQuotes('forex');
-        this.timerID = setInterval(() => this.props.getMarketQuotes('forex'), 5500);
+        if (this.timerID === undefined) {
+            this.timerID = setInterval(() => this.props.getMarketQuotes('forex'), 11000); 
+        } else {
+            clearInterval(this.timerID);
+        }
+        
     }
 
     componentWillUnmount() {
@@ -21,7 +26,6 @@ class Forex extends Component {
 
     render() {
         // const quotesProps = this.props.data;
-
         const titleProps = {
             pageTitle: "Forex",
             pageDesc: "Foreign exchange trading involves trading one currency pair against another, predicting that one currency will rise or fall against another. Currencies are traded in pairs, like the Euro versus the US Dollar (EUR/USD).",
@@ -54,10 +58,8 @@ class Forex extends Component {
                 </div>
             </div>
             {this.props.data ? (this.props.data && this.props.data.map((item, i) => (
-                    <Quotes idx={i} markets={item.key} market_sell={item.sell} market_buy={item.buy} />
+                    <Quotes key={item.key} markets={item.key} market_sell={item.sell} market_buy={item.buy} />
                     ))): <div className="item">
-                        <span className="name">No Data</span>
-                        <br></br>
                         <span className="desc">
                             No forex quotes Information
                         </span>
@@ -157,7 +159,7 @@ class Forex extends Component {
 }
 
 const mapStateToProps = state => ({
-    data: state.footer.quotes
+    data: state.footer.markets
 });
 
 export default connect(mapStateToProps, {getMarketQuotes})(Forex);

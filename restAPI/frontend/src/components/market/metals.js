@@ -11,14 +11,18 @@ import { getMarketQuotes } from "../../actions/footer";
 class Metals extends Component {
     componentDidMount() {
         this.props.getMarketQuotes('metals');
-        this.timerID = setInterval(() => this.props.getMarketQuotes('metals'), 5500);
+        if (this.timerID === undefined) {
+            this.timerID = setInterval(() => this.props.getMarketQuotes('metals'), 11000);
+        } else {
+            clearInterval(this.timerID);
+        }
     }
 
     componentWillUnmount() {
         clearInterval(this.timerID);
     }
+
     render() {
-        console.log(this.props.data);
         const titleProps = {
             pageTitle: "Spot Metals",
             pageDesc: "The global supply and demand of Metals has a significant impact on their value. Thus, with the increase of demand, the prices of Metals rise, and vice versa – when the demand is weak, the value of Precious Metals declines. However, this effect occurs mainly in the longer term, and does not change the short-term prices.",
@@ -51,8 +55,6 @@ class Metals extends Component {
                 {this.props.data ? (this.props.data && this.props.data.map((item, i) => (
                         <Quotes idx={i} markets={item.key} market_sell={item.sell} market_buy={item.buy} />
                         ))): <div className="item">
-                    <span className="name">No Data</span>
-                    <br></br>
                     <span className="desc">
                         No Metals quotes Information
                     </span>
@@ -85,7 +87,7 @@ class Metals extends Component {
 }
 
 const mapStateToProps = state => ({
-    data: state.footer.quotes
+    data: state.footer.markets
 });
 
 export default connect(mapStateToProps, {getMarketQuotes})(Metals);

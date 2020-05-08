@@ -4,6 +4,7 @@ from .models import ACCOUNT_TYPES,ACCOUNT_BASE_CURRENCY_CHOICE,TRADING_PLATFORM_
 from user.models import IntroducingBroker
 from .serializers import FxAccountSerializer,DepositSerializer,WithdrawSerializer,WithdrawSerializer,FxAccountTransactionSerializer
 #,DailyTradingSerializer
+from rest_framework.authtoken.admin import Token
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwnerOnly,IsFKOwnerOnly
@@ -20,6 +21,8 @@ from django.views import View
 from django.db.models import Sum
 
 import pandas as pd
+import requests
+
 
 class ChoicesView(View):
     def get(self, request):
@@ -85,7 +88,27 @@ class FxAccountViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         history = get_list_or_404(self.queryset, user=kwargs['user'])
-        serializer = FxAccountSerializer(history, many=True)
+        serializer = None
+        
+        try:
+            for account in history:
+                token = Token.objects.get(user=kwargs['user'])
+                protocol = 'https://' if request.is_secure() else 'http://'
+                web_url = protocol + request.get_host()
+                get_url = web_url + '/user/mypage/overview/{}'.format(account.mt4_account)
+                res = requests.get(get_url, headers={'Authorization': 'Token {}'.format(token.key)})
+                
+                if res.status_code == 200:
+                    # print(res.content)
+                    result_content = json.loads(res.content.decode('utf-8'))
+                    account.balance = result_content['balance']
+                    account.available = result_content['withdrawal_amount']
+                
+            serializer = FxAccountSerializer(history, many=True)
+            
+        except Token.DoesNotExist:
+            return Response(data=None)
+
         return Response(serializer.data)
 
     def destroy(self, request, user, pk):   

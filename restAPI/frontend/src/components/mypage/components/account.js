@@ -6,7 +6,12 @@ import store from "../../../store";
 
 class account extends Component {
   componentDidMount() {
-    store.dispatch(getAccount(this.props.auth.id))
+    store.dispatch(getAccount(this.props.auth.id));
+    // console.log(this.props.account);
+
+    if (this.props.account !== undefined){
+      console.log(this.props.account[0])
+    }
   }
 
   handleClick = (data) => {
@@ -177,7 +182,7 @@ class account extends Component {
                     <span>{(rowData.balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</span>
                   </div>
                   <div className="ml-2" style={{ width: "10%" }}>
-                    <span>{rowData.kj_balance ? (rowData.kj_balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0}</span>
+                    <span>{rowData.available ? (rowData.available).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0}</span>
                   </div>                  
                   <div className="ml-2" style={{ width: "20%" }}>
                     {//wallet에 담긴 kj balance

@@ -11,7 +11,11 @@ import { getMarketQuotes } from "../../actions/footer";
 class Energies extends Component {
     componentDidMount() {
         this.props.getMarketQuotes('energies');
-        this.timerID = setInterval(() => this.props.getMarketQuotes('energies'), 5500);
+        if (this.timerID === undefined) {
+            this.timerID = setInterval(() => this.props.getMarketQuotes('energies'), 11000);
+        } else {
+            clearInterval(this.timerID);
+        }
     }
 
     componentWillUnmount() {
@@ -19,7 +23,6 @@ class Energies extends Component {
     }
 
     render() {
-        console.log(this.props.data);
         const titleProps = {
             pageTitle: "Energies",
             pageDesc: "Energies are volatile, unregulated, decentralized and controlled almost exclusively by retail speculators. Trade the world’s newest and most exciting asset class as CFDs with GloviceFX.",
@@ -52,8 +55,6 @@ class Energies extends Component {
                 {this.props.data ? (this.props.data && this.props.data.map((item, i) => (
                     <Quotes idx={i} markets={item.key} market_sell={item.sell} market_buy={item.buy} />
                     ))): <div className="item">
-                        <span className="name">No Data</span>
-                        <br></br>
                         <span className="desc">
                             No Energies quotes Information
                         </span>
@@ -77,7 +78,7 @@ class Energies extends Component {
 
 
 const mapStateToProps = state => ({
-    data: state.footer.quotes
+    data: state.footer.markets
 });
 
 export default connect(mapStateToProps, {getMarketQuotes})(Energies);

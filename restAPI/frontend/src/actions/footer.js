@@ -7,10 +7,11 @@ import {
     GET_FOREX_QUOTE
 } from "./types";
 
+
 // Get Footer metaquotes
-export const getMetaQuotes = (symbol) => async (dispatch, getState) => {
+export const getMetaQuotes = () => async (dispatch, getState) => {
     try {
-        const res = await axios.get(`/user/mt4/quote?symbol=${symbol}`, tokenConfig(getState));
+        const res = await axios.get(`/user/footer/quote`, tokenConfig(getState));
         dispatch({        
             type: FOOTER_LOADING,
             payload: res.data
@@ -23,6 +24,7 @@ export const getMetaQuotes = (symbol) => async (dispatch, getState) => {
     }
     
 };
+
 
 export const getMarketQuotes = (symbol) => async (dispatch, getState) => {
     try {

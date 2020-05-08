@@ -6,10 +6,9 @@ const Quotes = (props) => {
         <div
             className="d-flex justify-content-between"
             style={{
-            borderTop: "1px solid #000000",
-            color: "#929292",
-            fontSize: "1rem",
-            padding: "0.8rem"
+                borderTop: "1px solid #000000",
+                fontSize: "1rem",
+                padding: "0.8rem"
             }}
             key={props.idx}
         >

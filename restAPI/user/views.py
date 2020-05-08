@@ -19,6 +19,49 @@ import json
 import socket
 from django.http import HttpResponse, JsonResponse
 
+indices_dict = {
+    'AUS200':'Australia 200',
+    'DE30':'Germany 30',
+    'HK50':'Hong Kong 50',
+    'ES35':'Spain 35',
+    'F40':'France 40',
+    'JP225':'Japan 225',
+    'N25':'Netherlands 25',
+    'STOXX50.c':'Euro 50',
+    'SWI20.c':'Switzerland 20',
+    'UK100.c':'UK 100',
+    'USTEC.c':'Nasdaq 100',
+    'US500.c':'S&P 500',
+    'DJ30.c':'Dow Jones 30'
+}
+
+metals_dict = {
+    'XAGUSD':'Silver USD',
+    'XAUUSD':'Gold USD',
+    'XPDUSD':'Palladium USD',
+    'XPTUSD':'Platinium USD'
+}
+
+energies_dict = {
+    'WTI_OIL': 'Crude Oil',
+    'UKOIL.c': 'Brent Oil'
+}
+
+commodity_dict = {
+    'UKOIL.f': 'Brent Oil',
+    'USOIL.f': 'Crude Oil',
+    'NGAS.f': 'Natural Gas',
+    'DE30.f': 'Germany 30',
+    'DJ30.f': 'Dow Jones 30',
+    'DX.f': 'Dollar Index',
+    'US500.f': 'S&P 500',
+    'USTEC.f': 'Nasdaq 100',
+    'CC.f': 'US Cocoa',
+    'KC.f': 'US Coffee',
+    'CT.f': 'US Cotton',
+    'SB.f': 'US Sugar'
+}
+
 
 class ChoicesView(View):
     def get(self, request):
@@ -171,6 +214,41 @@ class UserResetPasswordView(APIView):
         print(uid, token)
 
 
+class QueryFooterQuotesView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            result_data = []
+
+            sock.connect(('192.109.15.27', 443))
+            quotes_str = 'EURUSD,GBPUSD,GOLD,USOIL,S&P500,BTCUSD'
+            send_data = 'WWAPQUOTES-{}'.format(quotes_str)+'\n'
+            sock.send(send_data.encode('utf-8'))
+
+            recv = sock.recv(1024)
+
+            quote_data = recv.decode('utf-8').replace('<br/>', '').split('\r\n')
+
+            quotes = quotes_str.split(',')
+
+            for quote in quotes:
+                for data in quote_data:
+                    tmp = {'key': None, 'value': None}
+                    # 조회조건으로 조회한 socket receive 결과가 있는지 여부에 따라 최종 result_data로 저장
+                    if data.startswith(quote.lower()):
+                        split_data = data.split(' ')
+                        tmp['key'] = quote
+                        quotes_value = split_data[1].split('/')
+                        tmp['value'] = quotes_value[0]
+                        result_data.append(tmp)
+
+            return Response(status=status.HTTP_200_OK, data=result_data)
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=None)
+
+
 class QueryQuotesView(APIView):
     permission_classes = [AllowAny]
 
@@ -182,6 +260,7 @@ class QueryQuotesView(APIView):
 
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             result_data = []
+            idx = 0
 
             # main server 연결
             sock.connect(('192.109.15.27', 443))
@@ -198,8 +277,6 @@ class QueryQuotesView(APIView):
                 quotes_str = 'BTCUSD,ETHUSD,LTCUSD,DSHUSD,XRPUSD'
             elif symbol == 'commodity':
                 quotes_str = 'UKOIL.f,USOIL.f,NGAS.f,DE30.f,DJ30.f,DX.f,US500.f,USTEC.f,CC.f,KC.f,CT.f,SB.f'
-            elif symbol == 'footer':
-                quotes_str = 'EURUSD,GBPUSD,GOLD,USOIL,S&P500,BTCUSD'
             
             send_data = 'WWAPQUOTES-{}'.format(quotes_str)+'\n'
             sock.send(send_data.encode('utf-8'))
@@ -218,19 +295,26 @@ class QueryQuotesView(APIView):
                     # 조회조건으로 조회한 socket receive 결과가 있는지 여부에 따라 최종 result_data로 저장
                     if data.startswith(quote.lower()):
                         split_data = data.split(' ')
-                        tmp['key'] = quote
+                        
+                        if symbol == 'indices':
+                            tmp['key'] = indices_dict[quote]
+                        elif symbol == 'metals':
+                            tmp['key'] = metals_dict[quote]
+                        elif symbol == 'energies':
+                            tmp['key'] = energies_dict[quote]
+                        elif symbol == 'commodity':
+                            tmp['key'] = commodity_dict[quote]
+                        else:
+                            tmp['key'] = quote
+
                         quotes_value = split_data[1].split('/')
                         
-                        if symbol == 'footer':
-                            # footer 에서 호출한 경우, bid 값만 출력
-                            tmp['value'] = quotes_value[0]
-                        else:
-                            # footer 외에서 호출한 경우, 기존에 뒤에값이 3자리로 들어오는 만큼 앞의값과 치환해서 자리수 맞춰 출력
-                            tmp['sell'] = quotes_value[0]
-                            tmp['buy'] = quotes_value[0][0:-len(quotes_value[1])] + quotes_value[1]
-                            del tmp['value']
-                            # tmp['value'] = '{}/{}'.format(
-                            # quotes_value[0], quotes_value[0][0:-len(quotes_value[1])] + quotes_value[1])
+                        # footer 외에서 호출한 경우, 기존에 뒤에값이 3자리로 들어오는 만큼 앞의값과 치환해서 자리수 맞춰 출력
+                        tmp['sell'] = quotes_value[0]
+                        tmp['buy'] = quotes_value[0][0:-len(quotes_value[1])] + quotes_value[1]
+                        del tmp['value']
+                        # tmp['value'] = '{}/{}'.format(
+                        # quotes_value[0], quotes_value[0][0:-len(quotes_value[1])] + quotes_value[1])
                         result_data.append(tmp)
 
             return Response(status=status.HTTP_200_OK, data=result_data)

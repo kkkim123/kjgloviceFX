@@ -11,7 +11,11 @@ import { getMarketQuotes } from "../../actions/footer";
 class Indices extends Component {
     componentDidMount() {
         this.props.getMarketQuotes('indices');
-        this.timerID = setInterval(() => this.props.getMarketQuotes('indices'), 5500);
+        if (this.timerID === undefined) {
+            this.timerID = setInterval(() => this.props.getMarketQuotes('indices'), 11000);
+        } else {
+            clearInterval(this.timerID);
+        }
     }
 
     componentWillUnmount() {
@@ -19,7 +23,6 @@ class Indices extends Component {
     }
 
     render() {
-        console.log(this.props.data);
         const titleProps = {
             pageTitle: "Spot Indices",
             pageDesc: "Indices are the most popular form of CFDs. GloviceFX has a large range of Indices from around the world to choose from, including the Australian S&P 200 Index, UK FTSE 100 Index, US E-mini S&P 500 and US DJIA Index.",
@@ -52,8 +55,6 @@ class Indices extends Component {
                 {this.props.data ? (this.props.data && this.props.data.map((item, i) => (
                         <Quotes idx={i} markets={item.key} market_sell={item.sell} market_buy={item.buy} />
                         ))): <div className="item">
-                    <span className="name">No Data</span>
-                    <br></br>
                     <span className="desc">
                         No Indices quotes Information
                     </span>
@@ -91,7 +92,7 @@ class Indices extends Component {
 }
 
 const mapStateToProps = state => ({
-    data: state.footer.quotes
+    data: state.footer.markets
 });
 
 export default connect(mapStateToProps, {getMarketQuotes})(Indices);

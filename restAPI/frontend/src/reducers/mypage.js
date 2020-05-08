@@ -31,7 +31,7 @@ import {
   FAIL,
   GET_WALLET,
   GET_CHART,
-  GET_USER_BALANCE
+  GET_USER_BALANCE,  
 } from "../actions/types";
 
 export default (state = {}, action) => {

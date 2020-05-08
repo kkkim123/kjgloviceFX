@@ -12,7 +12,7 @@ export default (state = {}, action) => {
             }
         case GET_FOREX_QUOTE:
             return {
-                quotes: action.payload
+                markets: action.payload
             }
         default:
             return state;

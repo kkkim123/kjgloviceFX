@@ -14,7 +14,8 @@ urlpatterns = [
     path('introducingbroker/<int:fxuser>',views.AlterIntroducingBroker),
     path('myclient/<int:referral_code>', views.Client_list),
 
-    path('choices', views.ChoicesView.as_view()), 
+    path('choices', views.ChoicesView.as_view()),
+    path('footer/quote', views.QueryFooterQuotesView.as_view()),
     path('mt4/quote', views.QueryQuotesView.as_view()),
     path('mypage/overview/<int:account>', views.QueryOverViewData.as_view())
 ]

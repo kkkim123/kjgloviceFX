@@ -12,7 +12,12 @@ import { getMarketQuotes } from "../../actions/footer";
 class Crypto extends Component {
     componentDidMount() {
         this.props.getMarketQuotes('crypto');
-        this.timerID = setInterval(() => this.props.getMarketQuotes('crypto'), 5500);
+        if (this.timerID === undefined) {
+            this.timerID = setInterval(() => this.props.getMarketQuotes('crypto'), 11000);
+        } else {
+            clearInterval(this.timerID);
+        }
+        
     }
 
     componentWillUnmount() {
@@ -52,8 +57,6 @@ class Crypto extends Component {
                 {this.props.data ? (this.props.data && this.props.data.map((item, i) => (
                         <Quotes idx={i} markets={item.key} market_sell={item.sell} market_buy={item.buy} />
                         ))): <div className="item">
-                    <span className="name">No Data</span>
-                    <br></br>
                     <span className="desc">
                         No Crypto quotes Information
                     </span>
@@ -128,7 +131,7 @@ class Crypto extends Component {
 
 
 const mapStateToProps = state => ({
-    data: state.footer.quotes
+    data: state.footer.markets
 });
 
 export default connect(mapStateToProps, {getMarketQuotes})(Crypto);

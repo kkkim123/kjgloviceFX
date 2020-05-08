@@ -11,7 +11,11 @@ import { getMarketQuotes } from "../../actions/footer";
 class Commodity extends Component {
     componentDidMount() {
         this.props.getMarketQuotes('commodity');
-        this.timerID = setInterval(() => this.props.getMarketQuotes('commodity'), 5500);
+        if (this.timerID === undefined) {
+            this.timerID = setInterval(() => this.props.getMarketQuotes('commodity'), 11000);
+        } else {
+            clearInterval(this.timerID);
+        }
     }
 
     componentWillUnmount() {
@@ -75,7 +79,7 @@ class Commodity extends Component {
 
 
 const mapStateToProps = state => ({
-    data: state.footer.quotes
+    data: state.footer.markets
 });
 
 export default connect(mapStateToProps, {getMarketQuotes})(Commodity);
