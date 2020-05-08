@@ -80,6 +80,20 @@ class ChoicesView(View):
 
 # 조회 수정
 
+def id_overlap_check(request):
+    email = request.GET.get('email')
+    try:
+        # 중복 검사 실패
+        user = FxUser.objects.get(email=email)
+    except:
+        # 중복 검사 성공
+        user = None
+    if user is None:
+        overlap = "This is a possible email."
+    else:
+        overlap = "It already exists."
+    context = {'overlap': overlap}
+    return JsonResponse(context) 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = FxUser.objects.all()

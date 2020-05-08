@@ -17,7 +17,9 @@ urlpatterns = [
     path('choices', views.ChoicesView.as_view()),
     path('footer/quote', views.QueryFooterQuotesView.as_view()),
     path('mt4/quote', views.QueryQuotesView.as_view()),
-    path('mypage/overview/<int:account>', views.QueryOverViewData.as_view())
+    path('mypage/overview/<int:account>', views.QueryOverViewData.as_view()),
+
+    path('idcheck', views.id_overlap_check)
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)
 if settings.DEBUG:
