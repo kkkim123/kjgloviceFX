@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import FxUser, FxUserDocument,IntroducingBroker ,ApplyIntroducingBroker ,EMPLOYMENT_STATUS_CHOICES
+from .models import FxUser, FxUserDocument,IntroducingBroker ,ApplyIntroducingBroker ,EMPLOYMENT_STATUS_CHOICES, RequestUserCall
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -28,8 +28,9 @@ class ApplyIntroducingBrokerSerializer ( serializers.ModelSerializer ) :
     class Meta:
         model = ApplyIntroducingBroker
         fields = "__all__"
-class ClientSerializer(serializers.ModelSerializer):
+
+
+class RequestCallSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FxUser
-        fields = ('resident_country' , 'first_name','last_name',
-        'user_type' , 'user_status','is_active','created_at',)
+        model = RequestUserCall
+        fields = ('from_email', 'subject', 'mobile', 'content')

@@ -18,6 +18,9 @@ export const FOOTER_LOADING_FAIL = 'FOOTER_LOADING_FAIL';
 export const FAIL = 'FAIL';
 export const GET_USER = 'GET_USER';
 export const CHANGE_SUCCESS = 'CHANGE_SUCCESS';
+export const FX_REQUEST_CALL = 'FX_REQUEST_CALL';
+export const FX_REQUEST_CALL_FAIL = 'FX_REQUEST_CALL_FAIL';
+
 //mypage
 //select box user option
 export const GET_USER_OPTION = 'GET_USER_OPTION';
