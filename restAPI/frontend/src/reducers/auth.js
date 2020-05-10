@@ -15,7 +15,9 @@ import {
   EMAIL_ACTIVATE_FAIL,
   EMAIL_ACTIVATE,
   GET_USER,
-  CHANGE_SUCCESS
+  CHANGE_SUCCESS,
+  FX_REQUEST_CALL,
+  FX_REQUEST_CALL_FAIL
 } from "../actions/types";
 
 const initialState = {
@@ -99,6 +101,12 @@ export default function(state = initialState, action) {
         kj_address: null,
         msg: null
       };
+    case FX_REQUEST_CALL:
+      return {
+        ...action.payload,
+        msg: action.status
+      }
+    case FX_REQUEST_CALL_FAIL:
     default:
       return state;
   }

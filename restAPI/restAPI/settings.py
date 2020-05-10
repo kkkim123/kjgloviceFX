@@ -256,7 +256,7 @@ EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = config_secret['sendgrid']['api_key_id']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False   # 프로덕션에서는 True로 설정 필요
+EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = 'jhlee@fbpasia.com'
 
 

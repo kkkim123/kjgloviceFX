@@ -2,7 +2,7 @@ from .models import FxUser, FxUserDocument, IntroducingBroker,ApplyIntroducingBr
 from .models import EMPLOYMENT_STATUS_CHOICES, EMPLOYMENT_POSITION_CHOICES
 from .models import EDUCATION_LEVEL_CHOICES, EST_ANNUAL_INCOME, INCOME_OF_SOURCE, TRADING_EXPERIENCE, TRADING_PERIOD
 
-from .serializers import UserSerializer, DocumentSerializer, IntroducingBrokerSerializer, ClientSerializer, ApplyIntroducingBrokerSerializer
+from .serializers import UserSerializer, DocumentSerializer, IntroducingBrokerSerializer, ClientSerializer, ApplyIntroducingBrokerSerializer, RequestCallSerializer
 from .permissions import IsOwnerOnly, IsFKOwnerOnly
 
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
+from django.core.mail import send_mail
 from django.views import View
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_list_or_404, get_object_or_404
@@ -354,3 +355,28 @@ class QueryOverViewData(APIView):
             return Response(status=status.HTTP_200_OK, data=result)
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST, data=None)
+
+
+class RequestCallBackView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        from_email = request.POST.get('subject', '')
+        subject = request.POST.get('subject', '')
+        content = request.POST.get('content', '')
+        
+        serializer = RequestCallSerializer(data=request.data)
+        if serializer.is_valid():
+            # send_mail
+            send_mail(
+                subject,
+                content,
+                from_email,
+                ['support@fbpasia.com'],
+                # ['jhlee@fbpasia.com'],
+                fail_silently=False,
+            )
+
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

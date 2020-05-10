@@ -17,7 +17,9 @@ import {
   RESET_FAIL,
   EMAIL_ACTIVATE,
   EMAIL_ACTIVATE_FAIL,
-  GET_USER
+  GET_USER,
+  FX_REQUEST_CALL,
+  FX_REQUEST_CALL_FAIL
 } from "./types";
 
 // LOAD USER
@@ -338,4 +340,28 @@ export const tokenConfig2 = getState => {
   }
 
   return config;
+};
+
+// LOGIN USER
+export const sendmail = ({ fromemail, subject, content, mobile }) => async dispatch => {
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  // Request Body
+  const body = JSON.stringify({ fromemail, subject, content, mobile });
+
+  try {
+    const res = await axios.post("/user/help/callback", body, config);
+    
+    dispatch({
+      type: FX_REQUEST_CALL,
+      payload: res.data
+    });
+  } catch (err) {
+    // dispatch(stopSubmit("RequestCallModal", err.response.data));
+  }
 };
