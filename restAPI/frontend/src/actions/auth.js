@@ -352,14 +352,13 @@ export const sendmail = ({ fromemail, subject, content, mobile }) => async dispa
   };
 
   // Request Body
-  const body = JSON.stringify({ fromemail, subject, content, mobile });
+  const body = JSON.stringify({ from_email:fromemail, subject:subject, content:content, mobile:mobile });
 
   try {
     const res = await axios.post("/user/help/callback", body, config);
-    
     dispatch({
       type: FX_REQUEST_CALL,
-      payload: res.data
+      payload: res.status
     });
   } catch (err) {
     // dispatch(stopSubmit("RequestCallModal", err.response.data));
