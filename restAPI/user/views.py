@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
+from django.conf import settings
 from django.core.mail import send_mail
 from django.views import View
 from django.core.serializers.json import DjangoJSONEncoder
@@ -361,22 +362,31 @@ class RequestCallBackView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        from_email = request.POST.get('subject', '')
-        subject = request.POST.get('subject', '')
-        content = request.POST.get('content', '')
+        print("post : {}".format(request.data))
+        from_email = request.data.get('from_email', '')
+        subject = request.data.get('subject', '')
+        content = request.data.get('content', '')
         
         serializer = RequestCallSerializer(data=request.data)
         if serializer.is_valid():
+
+            settings.DEFAULT_FROM_EMAIL = from_email
+
             # send_mail
-            send_mail(
+            send_result = send_mail(
                 subject,
                 content,
                 from_email,
                 ['support@fbpasia.com'],
                 # ['jhlee@fbpasia.com'],
-                fail_silently=False,
+                fail_silently=True,
             )
 
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            print('send_result :', send_result)
+
+            # send success
+            if send_result != 0:
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
