@@ -15,10 +15,10 @@ class DownloadMT4 extends Component {
 
 
         <div className="d-flex row my-5">
-          <div className="col-md-7 ml-auto">
+          <div className="col-md-5 ml-auto">
             <img src={phone} style={{ width: "100%", maxWidth: "450px"}}/>
           </div>
-          <div className="col-md-5 ml-auto">
+          <div className="col-md-5 mr-auto">
             <div className="p-3">
               <div className="">
                 <h1 className="h4 text-gray-900 mb-4">GloviceFX MT4</h1>
