@@ -44,7 +44,7 @@ class LoginForm extends Component {
       <section className="container" style={{paddingTop:"100px"}}>
         <div className="row">
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-            <div className="card card-signin my-5">
+            <div className="card card-signin  m-4">
               <div className="card-body text-center p-gray">
                 <h5 className="card-title mb-5">Log in now</h5>
                 <p className="mb-4">

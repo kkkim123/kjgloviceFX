@@ -32,6 +32,9 @@
             margin-top: 5px;
             margin-bottom: 5px;
         }
+        .p-none{
+            display: none !important;
+        }
     }
     /* tablet */
     @media (min-width: 579px) and (max-width: 1024px) {
@@ -62,6 +65,9 @@
         }
         .p-btn{
             min-width: 200px;
+        }
+        .t-none{
+            display: none !important;
         }
         
     }
@@ -94,6 +100,9 @@
         }
         .p-btn{
             min-width: 200px;
+        }
+        .w-none{
+            display: none !important;
         }
     }
 

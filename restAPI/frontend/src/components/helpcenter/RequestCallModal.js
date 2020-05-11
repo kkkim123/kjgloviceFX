@@ -3,7 +3,6 @@ import { Field, reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import "../../styles/company/modal.css";
 import { sendmail } from "../../actions/auth";
-import store from "../../store";
 
 
 class RequestCallModal extends Component {
@@ -55,9 +54,7 @@ class RequestCallModal extends Component {
 
   onSubmit = formValues => {
     //
-    console.log(formValues);
-    store.dispatch(sendmail(formValues)).then(() => {
-      console.log(this.props.status);
+    this.props.sendmail(formValues).then(() => {
       if (this.props.status === 201 || this.props.status === 200) {
         alert("Send Success Request Call");
       } else {

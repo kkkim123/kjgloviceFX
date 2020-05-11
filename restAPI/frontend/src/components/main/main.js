@@ -6,11 +6,13 @@ import Classes from "../main/components/classes";
 import StartSteps from "../main/components/startSteps";
 import DownloadMT4 from "../trade/DownloadMT4";
 import GlobalMainBanner from "../global/mainTitle";
-import titleImg from "../../images/main/glovicefx_main_mobile.png";
+import phone_titleImg from "../../images/main/glovicefx_main_mobile.png";
+import web_titleImg from "../../images/main/glovicefx_main_pc.png";
+
 const Main = () => {
   return (
     <>
-      <GlobalMainBanner titleImg={titleImg} title={"\
+      <GlobalMainBanner phone_titleImg={phone_titleImg} web_titleImg={web_titleImg} title={"\
         <div className='mb-4'>\
         <h3>\
         <strong>Surplus and stable</strong>\
@@ -23,9 +25,7 @@ const Main = () => {
         </h3>\
         </div>"} titleDesc={""} btn={true}
       />
-      <section className="container">
-        <Mission />
-      </section>
+      <Mission />
       <Classes />
       <DownloadMT4 />
       <StartSteps />

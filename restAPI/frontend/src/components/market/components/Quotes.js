@@ -8,7 +8,8 @@ const Quotes = (props) => {
             style={{
                 borderTop: "1px solid #000000",
                 fontSize: "1rem",
-                padding: "0.8rem"
+                padding: "0.8rem",
+                margin: "0px 20px"
             }}
             key={props.idx}
         >

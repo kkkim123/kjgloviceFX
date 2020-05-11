@@ -45,20 +45,20 @@ class ServiceInfo extends Component {
             tion every participant gets benefits.</p>"} TitleColor={"#006536"} />
             
           <ExplanNonbox pageTitle={"MAM/PAMM Features"} TitleColor={"#006536"} pageDesc={"\
-            MAM manager to adjust trading parameter in real time<br>\
-            Unlimited trading accounts and deposit amount<br>\
-            Trades – Full, Mini & Micro Lot accounts for best allocation advantage<br>\
-            Allocations to accounts at as little as 0.01 lots (1000 units)<br>\
-            All normal order types accepted: Market, Stop, Limit<br>\
-            All unique order types accepted: Trailing Stop, Close by and Close all<br>\
-            Manage multiple master accounts having different strategies<br>\
-            Allows Expert Advisor (EA) trading of managed accounts from client side<br>\
-            Each Sub Account has an output to screen report<br>\
-            Market watch window within MAM<br>\
-            Live order management monitoring within MAM including P&L<br>\
-            STP on master account for bulk order execution, with instant allocation to sub accounts<br>\
-            Monitor commissions and performance in real time<br>\
-            Manage Monthly, Quarterly and Annual client reports through the MetaTrader Manager<br>"}/>
+            MAM manager to adjust trading parameter in real time\
+            Unlimited trading accounts and deposit amount\
+            Trades – Full, Mini & Micro Lot accounts for best allocation advantage\
+            Allocations to accounts at as little as 0.01 lots (1000 units)\
+            All normal order types accepted: Market, Stop, Limit\
+            All unique order types accepted: Trailing Stop, Close by and Close all\
+            Manage multiple master accounts having different strategies\
+            Allows Expert Advisor (EA) trading of managed accounts from client side\
+            Each Sub Account has an output to screen report\
+            Market watch window within MAM\
+            Live order management monitoring within MAM including P&L\
+            STP on master account for bulk order execution, with instant allocation to sub accounts\
+            Monitor commissions and performance in real time\
+            Manage Monthly, Quarterly and Annual client reports through the MetaTrader Manager"}/>
       </section>
     );
   }

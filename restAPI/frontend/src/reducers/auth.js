@@ -103,7 +103,8 @@ export default function(state = initialState, action) {
       };
     case FX_REQUEST_CALL:
       return {
-        msg: action.payload
+        ...action.payload,
+        msg: action.status
       }
     case FX_REQUEST_CALL_FAIL:
     default:

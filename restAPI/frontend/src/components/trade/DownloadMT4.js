@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 class DownloadMT4 extends Component {
   render() {
     return (
-      <section className="container">
+      <section className="">
         <div className={cx("text-center", "main", "my-5")}>
 
 
@@ -29,6 +29,7 @@ class DownloadMT4 extends Component {
                   <a href="https://download.mql5.com/cdn/web/fbp.limited/mt4/fbplimited4setup.exe">
                     <button
                       type="button"
+                      style={{   fontSize: "17px"}}
                       className="btn btn-secondary mx-5 btn-lg"
                       >
                       Download MT4 for Windows

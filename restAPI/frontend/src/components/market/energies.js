@@ -7,7 +7,8 @@ import Quotes from './components/Quotes';
 import DownloadMT4 from "../trade/DownloadMT4";
 import { connect } from 'react-redux';
 import { getMarketQuotes } from "../../actions/footer"; 
-
+import pageImg from "../../images/header/ENERGIES(1024).jpg"
+import NewTitle from '../global/newTitle';
 
 class Energies extends Component {
     componentDidMount() {
@@ -27,20 +28,27 @@ class Energies extends Component {
         const titleProps = {
             pageTitle: "Energies",
             pageDesc: "Energies are volatile, unregulated, decentralized and controlled almost exclusively by retail speculators. Trade the world’s newest and most exciting asset class as CFDs with GloviceFX.",
+            pageImg
         }
         return (
             <section className="container">
-                <Title
+                <NewTitle 
+                    pageImg={titleProps.pageImg} 
+                    pageTitle={titleProps.pageTitle}
+                    pageDesc={titleProps.pageDesc} 
+                />
+                {/* <Title
                     pageTitle={titleProps.pageTitle}
                     pageDesc={titleProps.pageDesc}
-                />
+                /> */}
 
                 <div className="d-flex justify-content-between"
                     style={{
                         borderTop: "1px solid #000000",
                         color: "#929292",
                         fontSize: "1.2rem",
-                        padding: "0.8rem"
+                        padding: "0.8rem",
+                        margin: "0px 20px"
                     }}
                 >
                 <div className="ml-2" style={{ width: "10%" }}>
@@ -64,7 +72,7 @@ class Energies extends Component {
                 <MostChoose />
                 <SubmitPair />
     
-                <div className="p-5 mb-5" style={{ color: "#959595" }}>
+                <div className="p-4 mb-5" style={{ color: "#959595" }}>
                     <h4 style={{ color: "#000000" }}>What Are Energies?</h4>
                     <div className="text-left">
                         <br></br>

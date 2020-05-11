@@ -8,7 +8,8 @@ import ExplanNonbox from '../explannonbox';
 import DownloadMT4 from "../trade/DownloadMT4";
 import { connect } from 'react-redux';
 import { getMarketQuotes } from "../../actions/footer"; 
-
+import NewTitle from '../global/newTitle';
+import pageImg from "../../images/header/COMMODITY(1024).jpg"
 
 class Commodity extends Component {
     componentDidMount() {
@@ -28,21 +29,28 @@ class Commodity extends Component {
         const titleProps = {
             pageTitle: "Commodity Futures",
             pageDesc: "we offer a range of soft commodity products to trade, including corn, soybeans, sugar, cocoa, coffee, and wheat as CFDs – all with low spreads and leverage up to 1:100.",
+            pageImg
         }
     
         return (
             <section className="container">
-                <Title
+                <NewTitle 
+                    pageImg={titleProps.pageImg} 
+                    pageTitle={titleProps.pageTitle}
+                    pageDesc={titleProps.pageDesc} 
+                />
+                {/* <Title
                     pageTitle={titleProps.pageTitle}
                     pageDesc={titleProps.pageDesc}
-                />
+                /> */}
     
                 <div className="d-flex justify-content-between"
                     style={{
                         borderTop: "1px solid #000000",
                         color: "#929292",
                         fontSize: "1.2rem",
-                        padding: "0.8rem"
+                        padding: "0.8rem",
+                        margin: "0px 20px"
                     }}
                 >
                     <div className="ml-2" style={{ width: "10%" }}>
