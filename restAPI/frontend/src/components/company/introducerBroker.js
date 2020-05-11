@@ -143,7 +143,7 @@ class IntroducerBroker extends Component {
           </div>
           <div className="col-xs-6 col-sm-3">
             <a className="partner-submit color-gray rounded-pill" href="#">
-              <span className="px-5">Email Us</span>
+            <a href="mailto:support@fbpasia.com"><span className="px-5">Email Us</span></a>
             </a>
           </div>
         </div>
