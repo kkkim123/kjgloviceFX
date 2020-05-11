@@ -21,6 +21,16 @@ import json
 import socket
 from django.http import HttpResponse, JsonResponse
 
+
+footer_dict = {
+    'US500.f': 'S&P 500',
+    'BTCUSD': 'BTCUSD',
+    'EURUSD': 'EURUSD',
+    'GBPUSD': 'GBPUSD',
+    'XAUUSD': 'Gold USD',
+    'USOIL': 'US Oil'
+}
+
 indices_dict = {
     'AUS200':'Australia 200',
     'DE30':'Germany 30',
@@ -239,7 +249,7 @@ class QueryFooterQuotesView(APIView):
             result_data = []
 
             sock.connect(('192.109.15.27', 443))
-            quotes_str = 'EURUSD,GBPUSD,GOLD,USOIL,S&P500,BTCUSD'
+            quotes_str = 'USOIL,US500.f,BTCUSD,EURUSD,GBPUSD,XAUUSD'
             send_data = 'WWAPQUOTES-{}'.format(quotes_str)+'\n'
             sock.send(send_data.encode('utf-8'))
 
@@ -255,7 +265,7 @@ class QueryFooterQuotesView(APIView):
                     # 조회조건으로 조회한 socket receive 결과가 있는지 여부에 따라 최종 result_data로 저장
                     if data.startswith(quote.lower()):
                         split_data = data.split(' ')
-                        tmp['key'] = quote
+                        tmp['key'] = footer_dict[quote]
                         quotes_value = split_data[1].split('/')
                         tmp['value'] = quotes_value[0]
                         result_data.append(tmp)
@@ -362,7 +372,6 @@ class RequestCallBackView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        print("post : {}".format(request.data))
         from_email = request.data.get('from_email', '')
         subject = request.data.get('subject', '')
         content = request.data.get('content', '')
