@@ -6,7 +6,8 @@ import LookingFor from './components/lookingFor';
 import Quotes from './components/Quotes';
 import { connect } from 'react-redux';
 import { getMarketQuotes } from "../../actions/footer"; 
-
+import pageImg from "../../images/header/SPOT-METALS(1024).jpg"
+import NewTitle from '../global/newTitle';
 
 class Metals extends Component {
     componentDidMount() {
@@ -26,20 +27,27 @@ class Metals extends Component {
         const titleProps = {
             pageTitle: "Spot Metals",
             pageDesc: "The global supply and demand of Metals has a significant impact on their value. Thus, with the increase of demand, the prices of Metals rise, and vice versa – when the demand is weak, the value of Precious Metals declines. However, this effect occurs mainly in the longer term, and does not change the short-term prices.",
+            pageImg
         }
         return (
             <section className="container">
-                <Title
+                <NewTitle 
+                    pageImg={titleProps.pageImg} 
+                    pageTitle={titleProps.pageTitle}
+                    pageDesc={titleProps.pageDesc} 
+                />
+                {/* <Title
                     pageTitle={titleProps.pageTitle}
                     pageDesc={titleProps.pageDesc}
-                />
+                /> */}
     
                 <div className="d-flex justify-content-between"
                     style={{
                         borderTop: "1px solid #000000",
                         color: "#929292",
                         fontSize: "1.2rem",
-                        padding: "0.8rem"
+                        padding: "0.8rem",
+                        margin: "0px 20px"
                     }}
                 >
                     <div className="ml-2" style={{ width: "10%" }}>

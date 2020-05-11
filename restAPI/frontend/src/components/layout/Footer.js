@@ -87,7 +87,7 @@ class Footer extends Component {
               <span className="value">{item.value}</span>
             </div>
           ))}
-          <div className="item">
+          <div className="item p-none">
             <span className="name">Invest Responsibly:</span>
             <br></br>
             <span className="desc">
@@ -95,7 +95,7 @@ class Footer extends Component {
             </span>
             <br></br>
           </div>
-          <div className="item pt-2">
+          <div className="item pt-2 p-none">
             <span className="register-button">
               {!isAuthenticated ? (
                 <Link to="/login">Sign in</Link>
@@ -106,7 +106,7 @@ class Footer extends Component {
             </span>
           </div>
         </div>
-        <div className="d-flex justify-content-around align-content-center flex-wrap ft2">
+        <div className="d-flex justify-content-around align-content-center flex-wrap ft2 p-none t-none">
           <div></div>
           <div></div>
 

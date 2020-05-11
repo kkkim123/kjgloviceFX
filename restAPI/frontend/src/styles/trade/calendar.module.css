@@ -4,10 +4,10 @@
 }
 
 .calendar {
-    background-color: #006536;
-    box-shadow: 0 0 10px #013a1f;
+    /* background-color: #006536;
+    box-shadow: 0 0 10px #013a1f; */
     border: 0;
-    border-radius: 4%;
+    /* border-radius: 4%; */
     height: 800px;
   }
   

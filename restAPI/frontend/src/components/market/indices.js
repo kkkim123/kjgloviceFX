@@ -6,7 +6,9 @@ import LookingFor from './components/lookingFor';
 import Quotes from './components/Quotes';
 import { connect } from 'react-redux';
 import { getMarketQuotes } from "../../actions/footer"; 
-
+import pageImg from "../../images/header/SPOT-INDICES(1024).jpg"
+import NewTitle from '../global/newTitle';
+import Explanbox from '../explanbox';
 
 class Indices extends Component {
     componentDidMount() {
@@ -26,20 +28,27 @@ class Indices extends Component {
         const titleProps = {
             pageTitle: "Spot Indices",
             pageDesc: "Indices are the most popular form of CFDs. GloviceFX has a large range of Indices from around the world to choose from, including the Australian S&P 200 Index, UK FTSE 100 Index, US E-mini S&P 500 and US DJIA Index.",
+            pageImg
         }
         return (
             <section className="container">
-                <Title
+                <NewTitle 
+                    pageImg={titleProps.pageImg} 
+                    pageTitle={titleProps.pageTitle}
+                    pageDesc={titleProps.pageDesc} 
+                />
+                {/* <Title
                     pageTitle={titleProps.pageTitle}
                     pageDesc={titleProps.pageDesc}
-                />
+                /> */}
     
                 <div className="d-flex justify-content-between"
                     style={{
                         borderTop: "1px solid #000000",
                         color: "#929292",
                         fontSize: "1.2rem",
-                        padding: "0.8rem"
+                        padding: "0.8rem",
+                        margin: "0px 20px"
                     }}
                 >
                     <div className="ml-2" style={{ width: "10%" }}>
@@ -63,28 +72,14 @@ class Indices extends Component {
                 <MostChoose />
                 <SubmitPair />
     
-                <div className="row">
-                    <div className="col-xs-12 col-sm-12">
-                    <div className="m-card shadow bg-white p-5 mb-3" style={{ borderRadius: "5%", color: "#959595", width:"80%", margin:"0 auto"}}>
-                            <h4 style={{ color: "#000000" }}>What Are Spot  Indices?</h4>
-                            <br></br>
-                            <p>A stock index is a good indicative measure of market performance. Indices such as the FTSE 100 and DJIA Index are baskets of blue chip stocks listed on the exchange and are generally a good measure of the current market sentiment. A change in the performance of any constituent stock in an index is reflected in a change in the overall value of that index.</p>
-                            <br></br>
-                            <p>Indices have the advantage of allowing traders to take a wider view of a basket of stocks rather than taking a view on one individual stock alone. Online CFD and futures based indices are offered on GloviceFX’s MetaTrader 4 Platforms.</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-xs-12 col-sm-12">
-                        <div className="m-card shadow bg-white p-5 mb-3" style={{ borderRadius: "5%", color: "#959595", width:"80%", margin:"0 auto"}}>
-                            <h4 style={{ color: "#000000" }}>HOW TO DETERMINE IF A CLIENT IS ENTITLED DIVIDEND FROM INDEX AUS200?</h4>
-                            <br></br>
-                            <p>From the above example, let us assume that the ex-dividend date for Index AUS200 is on the of 18th August 2016. Therefore, a client must have an open position for Index AUS200 before the 18th of August 2016 and it must remain open until the 18th August 2016, in order to have the dividend adjustment of $2.44 per lot. To determine if the dividend adjustment is added or deducted to the client’s account, will depend on whether it is a SELL or BUY on AUS200. If the client has 1 lot of BUY for AUS200, the client will be entitled $2.44 per lot. However, if it is a SELL of AUS200, the client will be deducted $2.44 per lot. The amount $2.44 per lot will be converted to the client’s base currency, before it is being deducted.</p>
-                            <br></br>
-                            <p>Since this is from index AUS200, the dividend adjustment will be AUD$2.44 per lot. Alternatively, if the index is US500, the dividend adjustment would be USD$2.44 per lot. GloviceFX EX- Dividends Excel sheet shows the expected Indices that will have their index points adjusted for the given week and the actual ex-dividend adjustment amount for each indices will be updated regularly on our blog, Ex- Dividends Adjustments.</p>
-                        </div>
-                    </div>
-                </div>
+
+
+                <Explanbox  pageTitle={"What Are Spot  Indices?"}  TitleColor={"#000"} pageDesc={"\
+                <p>A stock index is a good indicative measure of market performance. Indices such as the FTSE 100 and DJIA Index are baskets of blue chip stocks listed on the exchange and are generally a good measure of the current market sentiment. A change in the performance of any constituent stock in an index is reflected in a change in the overall value of that index.</p>\
+                <p>Indices have the advantage of allowing traders to take a wider view of a basket of stocks rather than taking a view on one individual stock alone. Online CFD and futures based indices are offered on GloviceFX’s MetaTrader 4 Platforms.</p>"}/>
+                <Explanbox  pageTitle={"HOW TO DETERMINE IF A CLIENT IS ENTITLED DIVIDEND FROM INDEX AUS200?"}  TitleColor={"#000"} pageDesc={"\
+                <p>From the above example, let us assume that the ex-dividend date for Index AUS200 is on the of 18th August 2016. Therefore, a client must have an open position for Index AUS200 before the 18th of August 2016 and it must remain open until the 18th August 2016, in order to have the dividend adjustment of $2.44 per lot. To determine if the dividend adjustment is added or deducted to the client’s account, will depend on whether it is a SELL or BUY on AUS200. If the client has 1 lot of BUY for AUS200, the client will be entitled $2.44 per lot. However, if it is a SELL of AUS200, the client will be deducted $2.44 per lot. The amount $2.44 per lot will be converted to the client’s base currency, before it is being deducted.</p>\
+                <p>Since this is from index AUS200, the dividend adjustment will be AUD$2.44 per lot. Alternatively, if the index is US500, the dividend adjustment would be USD$2.44 per lot. GloviceFX EX- Dividends Excel sheet shows the expected Indices that will have their index points adjusted for the given week and the actual ex-dividend adjustment amount for each indices will be updated regularly on our blog, Ex- Dividends Adjustments.</p>"}/>
                 <LookingFor />
             </section>
         );

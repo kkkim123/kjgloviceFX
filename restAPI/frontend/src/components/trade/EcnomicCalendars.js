@@ -16,9 +16,9 @@ class EcnomicCalendars extends Component {
 
   render() {
     return (
-      <div className={cx("bgImg", "text-center", "main")}>
+      <div className={cx( "text-center", "main")}>
         <div className="row justify-content-center">
-          <div className="col my-5">
+          <div className="col">
             <div className={cx("calendar", "cal-signin")}>
               <div className={cx("cal-body", "text-center")}>
                 <h5 className={cx("cal-title")}>Ecnomic Calendars</h5>
