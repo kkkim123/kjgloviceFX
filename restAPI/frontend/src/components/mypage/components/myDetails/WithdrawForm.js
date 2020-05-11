@@ -6,18 +6,34 @@ import "../../../../styles/auth/form.css";
 import store from "../../../../store";
 
 class WithdrawForm extends Component {
-  state = {
-    isEdit: true,
-    isAccount: true,
-    account: this.props.accNum
-      ? this.props.accNum
-      : localStorage.getItem("mt4_account"),
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isEdit: true,
+      isAccount: true,
+      account: this.props.accNum
+        ? this.props.accNum
+        : localStorage.getItem("mt4_account"),
+      available: null
+    };
+  }
+  
 
   componentDidMount() {
     // refresh 시 사라지는거 방지
     localStorage.setItem("mt4_account", this.state.account);
     store.dispatch(getAccount(this.props.auth.id));
+  }
+
+  handleChange(event) {
+    let availableValue = event.target[event.target.selectedIndex].getAttribute('data-value');
+    
+    this.setState({
+      available: availableValue
+    },()=>{
+      // console.log(this.state.available);
+    });
+
   }
 
   componentDidUpdate() {
@@ -107,7 +123,7 @@ class WithdrawForm extends Component {
       this.props.account &&
       this.props.account.map((acc, i) => {
           return (
-            <option value={acc.mt4_account} key={i}>
+            <option value={acc.mt4_account} key={i} data-value={acc.available}>
               {acc.mt4_account}
             </option>
           );
@@ -128,6 +144,13 @@ class WithdrawForm extends Component {
   };
 
   onSubmit = formValues => {
+    console.log(Number(this.state.available));
+    if (Number(formValues.amount) > Number(this.state.available)) {
+      alert("Check your available withdraw amount.");
+      return false;
+    }
+    //formValues.value = this.state.available
+    
     store.dispatch(WithdrawRegist(formValues));
     this.props.history.push("/mypage/withdraw/detail");
   };
@@ -143,12 +166,23 @@ class WithdrawForm extends Component {
               className="form-signin text-left"
               onSubmit={this.props.handleSubmit(this.onSubmit)}
             >
+              <div className='form-label-group'>
+              <label>Available Amount</label>
+                <input
+                  type='text'
+                  name="available"
+                  className="form-control"
+                  value={this.state.available ? this.state.available : "Available"}
+                  readOnly
+                />
+              </div>
               <Field
                 name="mt4_account"
                 type="text"
                 component={this.selectField2}
                 placeholder="Account*"
                 is_required={true}
+                onChange={this.handleChange.bind(this)}
               />
               <Field
                 name="crypto_address"
@@ -203,7 +237,7 @@ const mapStateToProps = state => ({
   options: state.mypage.accOption,
   auth: state.auth,
   accNum: state.mypage.accNum,
-  account: state.mypage.account
+  account: state.mypage.account,
 });
 
 WithdrawForm = connect(mapStateToProps, { WithdrawRegist })(WithdrawForm);
