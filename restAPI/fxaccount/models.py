@@ -215,6 +215,7 @@ class FxAccount(models.Model):
 
     user = models.ForeignKey(FxUser,on_delete=models.CASCADE)
     status = models.CharField(default='P', max_length=1, blank=False, choices=ACCOUNT_STATUS)
+    pre_status = models.CharField(default='P', max_length=1, blank=False, choices=ACCOUNT_STATUS)
     ib_status = models.BooleanField(default=False, blank=True, choices=IB_STATUS_CHOICES)
     referral_code = models.CharField(default='2002', max_length=6, blank=True)
     ib_commission = models.FloatField(default=0.0, blank=True)
