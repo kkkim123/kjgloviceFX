@@ -30,7 +30,6 @@ class Footer extends Component {
       this.footerTimerId = setInterval(
         () => this.props.getMetaQuotes(), 6500
       );
-    } else {
       clearInterval(this.footerTimerId);
     }
   }
@@ -142,7 +141,10 @@ class Footer extends Component {
           </div>
 
           <div className="item">
+            <Link to="/site">
             <span className="name">SITE MAP</span>
+            </Link>
+            
           </div>
 
           <div></div>

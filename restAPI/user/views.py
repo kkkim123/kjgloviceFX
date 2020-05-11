@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
+from django.conf import settings
 from django.core.mail import send_mail
 from django.views import View
 from django.core.serializers.json import DjangoJSONEncoder
@@ -19,6 +20,16 @@ import requests
 import json
 import socket
 from django.http import HttpResponse, JsonResponse
+
+
+footer_dict = {
+    'US500.f': 'S&P 500',
+    'BTCUSD': 'BTCUSD',
+    'EURUSD': 'EURUSD',
+    'GBPUSD': 'GBPUSD',
+    'XAUUSD': 'Gold USD',
+    'USOIL': 'US Oil'
+}
 
 indices_dict = {
     'AUS200':'Australia 200',
@@ -238,7 +249,7 @@ class QueryFooterQuotesView(APIView):
             result_data = []
 
             sock.connect(('192.109.15.27', 443))
-            quotes_str = 'EURUSD,GBPUSD,GOLD,USOIL,S&P500,BTCUSD'
+            quotes_str = 'USOIL,US500.f,BTCUSD,EURUSD,GBPUSD,XAUUSD'
             send_data = 'WWAPQUOTES-{}'.format(quotes_str)+'\n'
             sock.send(send_data.encode('utf-8'))
 
@@ -254,7 +265,7 @@ class QueryFooterQuotesView(APIView):
                     # 조회조건으로 조회한 socket receive 결과가 있는지 여부에 따라 최종 result_data로 저장
                     if data.startswith(quote.lower()):
                         split_data = data.split(' ')
-                        tmp['key'] = quote
+                        tmp['key'] = footer_dict[quote]
                         quotes_value = split_data[1].split('/')
                         tmp['value'] = quotes_value[0]
                         result_data.append(tmp)
@@ -361,22 +372,30 @@ class RequestCallBackView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        from_email = request.POST.get('subject', '')
-        subject = request.POST.get('subject', '')
-        content = request.POST.get('content', '')
+        from_email = request.data.get('from_email', '')
+        subject = request.data.get('subject', '')
+        content = request.data.get('content', '')
         
         serializer = RequestCallSerializer(data=request.data)
         if serializer.is_valid():
+
+            settings.DEFAULT_FROM_EMAIL = from_email
+
             # send_mail
-            send_mail(
+            send_result = send_mail(
                 subject,
                 content,
                 from_email,
                 ['support@fbpasia.com'],
                 # ['jhlee@fbpasia.com'],
-                fail_silently=False,
+                fail_silently=True,
             )
 
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            print('send_result :', send_result)
+
+            # send success
+            if send_result != 0:
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

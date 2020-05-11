@@ -136,9 +136,9 @@ class HelpCenter extends Component {
                     <Link to="#" className="live-chat-button rounded-pill px-5 py-3 mx-3 p-btn" onClick={()=> alert('comming soon')} >
                         LiveChat
                     </Link>
-                    <Link className="request-button rounded-pill px-4 py-3 mx-3 p-btn" to="#" onClick={this.openRequestCallModal.bind(this)} >
+                    <a className="request-button rounded-pill px-4 py-3 mx-3 p-btn" href="mailto:support@fbpasia.com" >
                         Request a call back
-                    </Link>
+                    </a>
                     <RequestCallModal 
                         isOpen={this.state.isModalOpen} 
                         close={this.closeRequestCallModal.bind(this)}

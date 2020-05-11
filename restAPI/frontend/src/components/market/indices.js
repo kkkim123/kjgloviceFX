@@ -9,7 +9,6 @@ import { getMarketQuotes } from "../../actions/footer";
 import pageImg from "../../images/header/SPOT-INDICES(1024).jpg"
 import NewTitle from '../global/newTitle';
 import Explanbox from '../explanbox';
-import favicon from "../../images/favicon.ico"
 
 class Indices extends Component {
     componentDidMount() {
@@ -66,8 +65,6 @@ class Indices extends Component {
                     pageTitle={titleProps.pageTitle}
                     pageDesc={titleProps.pageDesc}
                 /> */}
-                {/* <img src={favicon} /> */}
-
     
                 <div className="d-flex justify-content-between"
                     style={{
