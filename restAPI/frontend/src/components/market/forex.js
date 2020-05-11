@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import { getMarketQuotes } from "../../actions/footer"; 
 import pageImg from "../../images/header/FOREX1024.jpg"
 import NewTitle from '../global/newTitle';
-
+import forexSymbol from "../../images/market/forexsymbol/KJ GLOVICE_National Flag (Forex) _AUDJPY.svg"
 class Forex extends Component {
     componentDidMount() {
         this.props.getMarketQuotes('forex');
@@ -23,7 +23,7 @@ class Forex extends Component {
         } else {
             clearInterval(this.timerID);
         }
-        
+
     }
 
     componentWillUnmount() {
@@ -31,6 +31,8 @@ class Forex extends Component {
     }
 
     render() {
+        console.log(forexSymbol);
+        const data = [{"key":"AUDUSD","sell":"0.65181","buy":"0.65194"},{"key":"CADCHF","sell":"0.69733","buy":"0.69750"},{"key":"CADJPY","sell":"76.880","buy":"76.897"},{"key":"CHFJPY","sell":"110.239","buy":"110.259"},{"key":"EURCAD","sell":"1.50903","buy":"1.50924"},{"key":"EURCHF","sell":"1.05244","buy":"1.05259"},{"key":"EURGBP","sell":"0.87542","buy":"0.87558"},{"key":"EURJPY","sell":"116.029","buy":"116.043"},{"key":"EURUSD","sell":"1.08221","buy":"1.08230"},{"key":"GBPCAD","sell":"1.72362","buy":"1.72387"},{"key":"GBPCHF","sell":"1.20209","buy":"1.20228"},{"key":"GBPJPY","sell":"132.530","buy":"132.547"},{"key":"GBPUSD","sell":"1.23609","buy":"1.23623"},{"key":"USDCAD","sell":"1.39435","buy":"1.39452"},{"key":"USDCHF","sell":"0.97242","buy":"0.97257"}];
         // const quotesProps = this.props.data;
         const titleProps = {
             pageTitle: "Forex",
@@ -47,6 +49,7 @@ class Forex extends Component {
                     pageTitle={titleProps.pageTitle}
                     pageDesc={titleProps.pageDesc} 
                 />
+                
                 {/* <Title
                     pageTitle={titleProps.pageTitle}
                     pageDesc={titleProps.pageDesc}
@@ -73,7 +76,7 @@ class Forex extends Component {
                     </div>
                 </div>
                 {this.props.data ? (this.props.data && this.props.data.map((item, i) => (
-                        <Quotes key={item.key} markets={item.key} market_sell={item.sell} market_buy={item.buy} />
+                        <Quotes key={item.key} markets={item.key} market_sell={item.sell} market_buy={item.buy} type={"forex"}/>
                         ))): <div className="item">
                             <span className="desc">
                                 No forex quotes Information

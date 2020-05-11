@@ -11,6 +11,7 @@ const GlobalMainBanner = (props) => {
   useEffect(() => {
     if(window.innerWidth > 425){
       setDeviceType(props.web_titleImg);
+      // console.log(deviceType)
     } else{
       setDeviceType(props.phone_titleImg);
     }

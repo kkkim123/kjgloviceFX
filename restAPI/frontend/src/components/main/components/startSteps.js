@@ -33,7 +33,7 @@ const StartSteps = (props) => {
                 <Link to={link}>
                     <img className="mb-4" alt="" src={fund} style={{ width: "50px" }}></img>
                         <h4 style={{ color: "#006536" }} className="pb-2">Fund ▶</h4>
-                    <span style={{ fontSize: "0.9rem" }}>Login to FxPro Direct and fund your account</span>
+                    <span style={{ fontSize: "0.9rem" }}>Login to Glovice FX Direct and fund your account</span>
                     </Link>
                 </div>                                
                 <div className="col-md-3 col-sm-10 px-4 pb-5" style={{ color: "#959595"}}>

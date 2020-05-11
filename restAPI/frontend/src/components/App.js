@@ -67,6 +67,7 @@ import SitetMap from "./layout/siteMap";
 class App extends Component {
   componentDidMount() {
     store.dispatch(loadUser());
+    document.getElementById("app").scrollTo(0, 0);
   }
 
   render() {

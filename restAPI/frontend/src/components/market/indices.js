@@ -9,6 +9,7 @@ import { getMarketQuotes } from "../../actions/footer";
 import pageImg from "../../images/header/SPOT-INDICES(1024).jpg"
 import NewTitle from '../global/newTitle';
 import Explanbox from '../explanbox';
+import favicon from "../../images/favicon.ico"
 
 class Indices extends Component {
     componentDidMount() {
@@ -30,6 +31,30 @@ class Indices extends Component {
             pageDesc: "Indices are the most popular form of CFDs. GloviceFX has a large range of Indices from around the world to choose from, including the Australian S&P 200 Index, UK FTSE 100 Index, US E-mini S&P 500 and US DJIA Index.",
             pageImg
         }
+        const data = [
+            {
+                "key": "Australia 200",
+                "sell": "5448.50",
+                "buy": "5448.40"
+            },
+            {
+                "key": "Hong Kong 50",
+                "sell": "24576.30",
+                "buy": "24576.60"
+            },
+            {
+                "key": "Spain 35",
+                "sell": "6759.50",
+                "buy": "6759.50"
+            },
+            {
+                "key": "Netherlands 25",
+                "sell": "518.67",
+                "buy": "518.94"
+            }
+        ];
+
+        
         return (
             <section className="container">
                 <NewTitle 
@@ -41,6 +66,8 @@ class Indices extends Component {
                     pageTitle={titleProps.pageTitle}
                     pageDesc={titleProps.pageDesc}
                 /> */}
+                {/* <img src={favicon} /> */}
+
     
                 <div className="d-flex justify-content-between"
                     style={{
@@ -62,7 +89,7 @@ class Indices extends Component {
                     </div>
                 </div>
                 {this.props.data ? (this.props.data && this.props.data.map((item, i) => (
-                        <Quotes idx={i} markets={item.key} market_sell={item.sell} market_buy={item.buy} />
+                        <Quotes idx={i} key={i} markets={item.key} market_sell={item.sell} market_buy={item.buy} type={"indices"}/>
                         ))): <div className="item">
                     <span className="desc">
                         No Indices quotes Information
