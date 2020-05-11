@@ -20,13 +20,12 @@ const TradingMain = (props) => {
         setDeviceType(props.web_titleImg);
       }
       } else{
-      if(deviceType !== props.web_titleImg){
+      if(deviceType !== props.phone_titleImg){
         setDeviceType(props.phone_titleImg);
       }
       }
     });
-    console.log(deviceType);
-  });
+});
 
 
 
@@ -65,10 +64,9 @@ const TradingMain = (props) => {
         assets, place orders and manage positions.</p>
       </div>  
 			  {props.btn &&
-
         <Link
         to={link}
-        className="rounded-pill px-5 py-3 mt-2"
+        className="rounded-pill px-5 py-3"
         style={{
           color: "#ffffff",
           backgroundColor: "#006536",

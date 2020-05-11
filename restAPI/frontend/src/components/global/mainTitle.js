@@ -20,7 +20,7 @@ const GlobalMainBanner = (props) => {
           setDeviceType(props.web_titleImg);
         }
       } else{
-        if(deviceType !== props.web_titleImg){
+        if(deviceType !== props.phone_titleImg){
           setDeviceType(props.phone_titleImg);
         }
       }
