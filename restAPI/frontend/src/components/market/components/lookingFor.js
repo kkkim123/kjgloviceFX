@@ -1,12 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
 import icon_commodity from '../../../images/market/icon_commodity.png'
 import icon_energy from '../../../images/market/icon_energy.png'
 import icon_crypto from '../../../images/market/icon_crypto.png'
 import icon_indices from '../../../images/market/icon_indices.png'
 import icon_metals from '../../../images/market/icon_metals.png'
-
 const LookingFor = () => {
     console.log(`${window.location.protocol}//${window.location.host}`);
     return (
@@ -55,5 +53,4 @@ const LookingFor = () => {
         </div>
     );
 };
-
 export default LookingFor;
